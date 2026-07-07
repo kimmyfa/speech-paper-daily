@@ -1,8 +1,8 @@
 # 2026-07-06 语音论文速递
 
-**共收录**: 13 篇 | **语音大模型**: 13 篇 | **语音前端**: 0 篇
+**共收录**: 4 篇 | **语音大模型**: 2 篇 | **语音前端**: 2 篇
 
-> 今日 arXiv 语音相关论文共命中 13 篇。
+> 今日 arXiv 语音相关论文共命中 4 篇。
 > 以下是按评分排序的结果。
 
 ---
@@ -11,433 +11,138 @@
 
 ---
 
-## [1] Audio-Based Understanding of Audiobook Narration Appeal
+## [1] SPEARBench: A Benchmark for Naturalness Evaluation in Streaming Speech-to-Speech Language Models
 
-**arXiv ID** 2607.02473v1 | **方向** 语音大模型
+**arXiv ID** 2607.05365 | **方向** 语音大模型
 
-**作者** Shahar Elisha, Mariano Beguerisse-Díaz, Emmanouil Benetos
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02473v1 | **PDF** https://arxiv.org/pdf/2607.02473v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-Narration is central to the audiobook listening experience, shaping how listeners engage with and understand the content. This work explores how narration qualities shape an audiobook's appeal, noting that their effects can vary by genre, title, and audience. We extract vocal and acoustic features (e.g., tone, pace, loudness) from LibriVox using pre-trained audio models and analyse their relationship with consumption data (specifically, view-rate) and their interplay with genre and title. Despit
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [2] SelectTSL: Prompt-Guided Selective Target Sound Localization in Complex Scenarios
-
-**arXiv ID** 2607.02343v1 | **方向** 语音大模型
-
-**作者** Ziyang Jiang, Yu Chen, Zexu Pan, Xinyuan Qian, Bowen Xing, Ivor W. Tsang, Xu-Cheng Yin, Haizhou Li
+**作者** Thomas Thebaud, Yuzhe Wang, Hao Zhang, Sathvik Manikantan Napa Ugandhar, Ashish Hallur, Georgi Tinchev, Venkatesh Ravichandran, Laureano Moro-Velazquez
 
 **机构** (arXiv未提供机构信息)
 
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02343v1 | **PDF** https://arxiv.org/pdf/2607.02343v1.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-06 | **论文** https://arxiv.org/abs/2607.05365 | **PDF** https://arxiv.org/pdf/2607.05365.pdf | **代码** 暂无 | **Demo** https://thomasthebaud.github.io/SPEAR-benchmark-website/#welcome
 
 ### 📌 简介
-Humans can selectively attend to a target sound and estimate its direction in complex scenarios, whereas such selective localization remains challenging for current deep learning-based systems. Sound source localization (SSL) has achieved remarkable success with deep learning, yet most methods localize all active sources without selectivity. Conversely, target sound extraction (TSE) extracts sources using multimodal prompts but typically fails to preserve the multichannel spatial information req
+SPEARBench提出首个针对流式语音到语音语言模型(S2S LM)自然度的评估基准。现有语音和文本基准无法评估对话场景中的自然行为，包括时序、打断、副语言学、立场、语言/方言一致性和关系适当性等多维因素。SPEARBench从Seamless Interaction语料库构建受控对话提示，在多个模型上运行推理，并使用多维协议评估生成的回答，覆盖响应延迟、打断、语音质量、ASR鲁棒性、语言/方言一致性、情感自然度、人际立场和可解释的分布基线。实验表明，当前模型可达到较高的信号级质量和低ASR错误率，但在延迟、重叠、方言保留、情感适应和人际立场动态方面仍与人类对话行为存在差距。
 
 ### 🔧 技术方案
 
-**模型架构** 语音大模型相关架构。
+**模型架构** SPEARBench评估框架包含三个核心组件：(1)对话提示构建器：从Seamless Interaction语料库提取自然对话场景，构建包含不同关系、情感和语境的提示；(2)多模型推理引擎：支持在多种S2S LM上进行流式推理；(3)多维评估协议：覆盖9个评估维度——响应延迟、打断模式、语音质量(MOS)、ASR鲁棒性、语言/方言一致性、情感自然度、人际立场、关系适当性、分布基线。
 
-**核心创新** 基于arXiv摘要信息进行概述。
+**核心创新** (1)提出首个面向S2S LM自然度的多维评估协议；(2)引入人际立场和关系适当性评估维度；(3)提供可解释的分布基线用于模型比较；(4)原始人类回答作为参考条件。
 
-**训练策略** 待从全文补充。
+**评估维度** 9个评估维度：响应延迟(Latency)、打断(Interruptions)、语音质量(Speech Quality)、ASR鲁棒性(ASR Robustness)、语言一致性(Language Consistency)、方言一致性(Dialect Consistency)、情感自然度(Emotional Naturalness)、人际立场(Interpersonal Stance)、关系适当性(Relationship Appropriateness)。
 
 ### 📊 实验结果
-**数据集** 待从全文补充。
+**数据集** Seamless Interaction语料库，包含多种场景下的自然对话。
 
-**主要指标** 待从全文补充。
+**主要指标** 实验报告了多个S2S LM在各维度上的表现。结果显示当前模型在信号级质量(如MOS)和ASR错误率上表现良好，但在时序行为(响应延迟、对话重叠)、方言保留、情感适应和人际立场动态方面与人类对话行为仍有显著差距。
 
-**是否开源** 暂无。
+**模型对比** 测试了多个当代S2S LM，包括商业和开源系统。
 
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+### ⭐ 评分：8/10
+SPEARBench填补了S2S LM自然度评估的空白，多维评估协议设计全面，涵盖了以往被忽视的人际交往维度。实验揭示了当前模型与人类对话行为的差距，对未来S2S LM研发有重要指导意义。
 
 ---
 
-## [3] Spatial Speech Perception Systems: A Survey of Sound Source Localization, Directional Enhancement, and Speech Recognition
+## [2] REDDIT: Correcting Model-Generated Timestamp Drift in ASR without Forgetting via Replay-Based Distribution Editing
 
-**arXiv ID** 2607.02296v1 | **方向** 语音大模型
+**arXiv ID** 2607.05364 | **方向** 语音大模型
 
-**作者** Pengyuan Shao, Dimitrios Kanoulas
+**作者** Cheng-Kang Chou, Ming-To Chuang, Ke-Han Lu, Chan-Jan Hsu, Hung-yi Lee
+
+**机构** National Taiwan University
+
+**发布日期** 2026-07-06 | **论文** https://arxiv.org/abs/2607.05364 | **PDF** https://arxiv.org/pdf/2607.05364.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+现代自回归ASR系统可将时间戳作为解码token输出，实现无需帧级对齐器或推理时后处理的时间戳转写。但本文发现生成的时间戳在长非语音跨度上会发生漂移：转写文本可能看起来合理，但解码的时间轴已偏离音频。针对这一问题，作者研究了15个带时间戳的ASR和音频语言系统在间隙和长间隙基准上的表现。发现朴素的时间戳修正微调虽能改善对齐，但会严重损害非目标ASR行为，暴露遗忘问题。提出REDDIT(REplay-based Distribution eDITing)框架，通过两阶段后训练修正时间戳同时避免灾难性遗忘：在模型自身重放解码器上下文下编辑时间戳目标，同时在非时间戳token上匹配冻结基分布，然后应用短编辑前缀精炼阶段。在Whisper-tiny上，仅用34.9小时目标修正音频、更新1.6%模型参数，长间隙mIoU从38.7%提升至95.0%，混合间隙域外AAS从2752ms降至223ms，同时保持CV-en MER在41.3%(普通SFT微调为524.2%)。
+
+### 🔧 技术方案
+
+**模型架构** 基于Whisper-tiny等自回归ASR系统，时间戳作为解码token序列的一部分输出。REDDIT框架包含两阶段：(1)重放分布编辑阶段：在模型自身的重放解码器上下文上编辑时间戳目标分布；(2)编辑前缀精炼阶段：应用短编辑前缀进行精炼。
+
+**核心创新** (1)发现问题：长非语音间隙导致时间戳漂移，朴素微调存在遗忘问题；(2)两阶段框架：重放分布编辑+前缀精炼；(3)无监督构建修正监督信号：结合VAD裁剪语音片段和插入的非语音间隙及已知拼接偏移量，无需人工转录或时间戳标注；(4)参数高效：仅更新1.6%模型参数。
+
+**关键技术细节** VAD(语音活动检测)用于裁剪语音片段，人工插入非语音间隙并记录拼接偏移量，生成修正监督信号。重放机制确保模型在自身分布上学习，而非外部监督。
+
+### 📊 实验结果
+**数据集** 自建间隙(gap)和长间隙(long-gap)基准，涵盖15个带时间戳的ASR和音频语言系统。
+
+**主要指标** 在Whisper-tiny上：长间隙mIoU从38.7%→95.0%，混合间隙域外AAS从2752ms→223ms，CV-en MER保持41.3%(vs 普通SFT微调524.2%)。仅用34.9小时目标修正音频，更新1.6%参数。
+
+**基线对比** 普通SFT decoder tuning会导致遗忘问题，CV-en MER从41.3%退化到524.2%。
+
+### ⭐ 评分：9/10
+REDDIT巧妙解决了ASR时间戳漂移这一实际问题，两阶段框架设计精巧，无监督构建修正信号的方法有创新性。实验结果显著，参数高效且保留原始ASR性能。强烈建议发布代码。
+
+---
+
+## 🤖 语音前端
+
+---
+
+## [3] ProPS: Prompted Profile Synthesis for Natural Language-Conditioned Speaker Embedding Distributions
+
+**arXiv ID** 2607.05276 | **方向** 语音前端
+
+**作者** Thomas Thebaud, Junhyeok Lee, Laureano Moro-Velazquez, Jesus Villalba Lopez, Najim Dehak
 
 **机构** (arXiv未提供机构信息)
 
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02296v1 | **PDF** https://arxiv.org/pdf/2607.02296v1.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-06 | **论文** https://arxiv.org/abs/2607.05276 | **PDF** https://arxiv.org/pdf/2607.05276.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-Robust speech understanding in real-world acoustic environments remains a fundamental challenge for intelligent auditory systems such as robot audition, hearing aids, teleconferencing systems, smart speakers, and voice-controlled assistants. These systems must operate under background noise, reverberation, competing speakers, and dynamic acoustic conditions. Spatial speech perception addresses this challenge by exploiting microphone-array information to localize, enhance, and interpret target sp
+说话人嵌入(x-vector)广泛应用于表示说话人身份和相关属性，但现有嵌入提取器是描述性的而非生成性的：它们将观测语音片段映射到x-vector，再用于下游应用。ProPS提出提示画像合成框架，可根据自然语言提示(如"三十多岁男性操印度口音")生成说话人嵌入分布。ProPS将人类撰写的画像描述转换为句子嵌入，使用在大规模数据集上训练的混合密度网络预测x-vector空间中的高斯混合模型。模型通过最大化真实说话人嵌入匹配请求画像的似然进行训练，通过留出x-vector的负对数似然和采样合成x-vector的属性分类准确率评估生成分布。实验表明ProPS能产生画像条件化分布，生成的x-vector保留请求的说话人属性(年龄、性别、口音、韵律特征)，可支持TTS或VC等语音生成系统的可控说话人画像合成。
 
 ### 🔧 技术方案
 
-**模型架构** 语音大模型相关架构。
+**模型架构** ProPS包含三个核心组件：(1)提示编码器：将自然语言画像描述转换为句子嵌入；(2)混合密度网络(MDN)：基于提示嵌入预测x-vector空间中的GMM参数(均值、方差、混合系数)；(3)x-vector提取器：用于评估的预训练说话人嵌入模型。
 
-**核心创新** 基于arXiv摘要信息进行概述。
+**核心创新** (1)生成式说话人画像合成：从描述性到生成式的范式转变；(2)MDN for x-vector分布预测：将NLP中的提示条件化生成方法迁移到说话人嵌入领域；(3)属性保留生成：确保合成x-vector保留请求的年龄、性别、口音、韵律等属性。
 
-**训练策略** 待从全文补充。
+**训练策略** 最大化真实说话人嵌入匹配请求画像的似然。使用大规模说话人数据集训练MDN。推理时，给定自然语言提示，生成对应的x-vector分布，可采样用于下游任务。
 
 ### 📊 实验结果
-**数据集** 待从全文补充。
+**数据集** 大规模说话人数据集(具体规模未披露)，涵盖多种年龄、性别、口音。
 
-**主要指标** 待从全文补充。
+**主要指标** 负对数似然(NLL)评估分布质量，属性分类准确率评估生成x-vector的属性保留度。实验证明ProPS能生成保留年龄、性别、口音、韵律特征的x-vector。
 
-**是否开源** 暂无。
+**应用场景** TTS(文本到语音)、VC(声音转换)的可控说话人画像合成。
 
 ### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+ProPS将生成式AI方法引入说话人嵌入领域，有创新性。从描述性到生成性的范式转变为TTS/VC系统提供新的可控性维度。属性保留能力得到实验验证。代码未发布略感遗憾。
 
 ---
 
-## [4] Cross Domain Few-Shot Class-Incremental Audio Classification Via Adversarial Contrastive Learning
+## [4] Streaming Neural Speech Codecs through Time-Invariant Representations
 
-**arXiv ID** 2607.02254v1 | **方向** 语音大模型
+**arXiv ID** 2607.05250 | **方向** 语音前端
 
-**作者** Yongjie Si, Yanxiong Li, Sen Huang, Beibei Liu
+**作者** Kélian Estève, Salima Mhdaffar, Mickael Rouvier, Richard Dufour, Yannick Estève
 
 **机构** (arXiv未提供机构信息)
 
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02254v1 | **PDF** https://arxiv.org/pdf/2607.02254v1.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-06 | **论文** https://arxiv.org/abs/2607.05250 | **PDF** https://arxiv.org/pdf/2607.05250.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-Current Few-shot Class-incremental Audio Classification (FCAC) methods assume that samples of base and incremental classes are in the same domain (following the same distribution). However, there is generally a domain shift between the above two types of samples. In this paper, we explore the problem of Cross Domain FCAC where samples of base and incremental classes have domain shift. We propose a strategy of adversarial contrastive training which enables the model to effectively classify sample
+神经语音编解码器日益广泛地用作基于编解码器语音生成系统的中间表示。TiCodec引入分解表示，通过时间不变表示提取(TIRE)模块将时变语音内容与时不变信息分离，可能减少帧级建模的信息量。本工作研究TIRE表示捕获的信息性质及其对低延迟语音处理的适用性。通过一系列探测任务，分析编码器层的影响，表明中间层捕获互补的说话人和环境相关信息，同时包含较少语言内容。进一步研究TIRE训练的多种片段选择策略，证明跨文件采样提高了不变表示的鲁棒性。基于这些发现，提出Dual-TIRE，一种多层次架构，利用不同编码器层的互补性，提高语音重建质量和说话人相似度。最后在流式推理设置下评估TiCodec，使用连续660ms处理块。结果表明流式操作可实现且重建性能无显著退化，展示了分解神经编解码表示对未来低延迟语音生成系统的潜力。
 
 ### 🔧 技术方案
 
-**模型架构** 语音大模型相关架构。
+**模型架构** 基于TiCodec的分解表示框架，包含TIRE(时间不变表示提取)模块。将语音分解为时变内容(如语言信息)和时不变信息(如说话人特征、环境特征)。Dual-TIRE进一步利用多层编码器的互补性。
 
-**核心创新** 基于arXiv摘要信息进行概述。
+**核心创新** (1)TIRE模块的信息分析：通过探测任务揭示中间层捕获说话人/环境信息，少含语言内容；(2)跨文件采样策略：训练时跨文件采样提高不变表示鲁棒性；(3)Dual-TIRE：多层次架构，综合多层编码器信息。
 
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [5] Unlocking Speech-Text Compositional Powers: Instruction-Following Speech Language Models without Instruction Tuning
-
-**arXiv ID** 2607.02214v1 | **方向** 语音大模型
-
-**作者** Congrui Du, Yang Zhang, Kaizhi Qian, Shiyu Chang
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02214v1 | **PDF** https://arxiv.org/pdf/2607.02214v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-Instruction tuning for speech language models (SLMs) is substantially more challenging than for text-based large language models (LLMs), as it requires learning a new modality and a wide range of speech-specific instructions in addition to those supported by text LLMs. Existing SLM training approaches largely replicate the text LLM training paradigm by synthesizing large-scale speech pre-training and instruction-tuning datasets. However, this strategy is difficult to scale, since speech sequence
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
+**流式推理** 使用660ms处理块的连续流式推理，评估延迟与质量的权衡。
 
 ### 📊 实验结果
-**数据集** 待从全文补充。
+**数据集** 用于训练和评估的大规模语音数据集。
 
-**主要指标** 待从全文补充。
+**主要指标** 语音重建质量和说话人相似度。流式推理(660ms块)下无显著性能退化，验证了低延迟语音生成的可行性。
 
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [6] Speaker head orientation estimation with a single microphone array using phase spectrogram features
-
-**arXiv ID** 2607.02129v1 | **方向** 语音大模型
-
-**作者** Balint Turi, Archontis Politis, Parthasaarathy Sudarsanam, Tuomas Virtanen
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02129v1 | **PDF** https://arxiv.org/pdf/2607.02129v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-Estimating a speaker's head orientation from audio can provide valuable information in smart environments, meetings, and driver monitoring. We propose a novel approach that leverages the phase component of the short-time Fourier transform from a single microphone array as input to a deep neural network combining convolutional, recurrent, and self-attention layers. Unlike prior methods that use physics-informed handcrafted features or raw waveform inputs, our approach enables robust learning from
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
+**消融实验** 编码器层选择策略、跨文件采样、dual-layer架构的 ablation study。
 
 ### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+TiCodec的分解表示设计有理论价值，信息分析揭示了编码器各层的角色。Dual-TIRE的多层融合是有效改进。流式推理验证了低延迟可行性。论文被SPECOM 2026接收。
 
 ---
-
-## [7] An Efficient vLLM-Based Inference Pipeline for Unified Audio Understanding and Generation
-
-**arXiv ID** 2607.02119v1 | **方向** 语音大模型
-
-**作者** Haoran Wang, Jinchuan Tian, Siddhant Arora, Shinji Watanabe
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02119v1 | **PDF** https://arxiv.org/pdf/2607.02119v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-While Large Multimodal Models excel in comprehension, high-throughput inference engines lack native support for multimodal generation. This is severe in Speech Language Models, where generating multi-layered audio tokens via decoupled AR+NAR or synchronous Multi-Token Prediction (MTP) with delay-pattern interleaving conflicts with standard single-stream loops. We present a vLLM-based inference pipeline for unified speech understanding and generation. We extend autoregressive decoding to natively
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [8] LMPAN: A Lightweight Multi-Path Alignment Network for Joint Full-Duplex Acoustic Echo Cancellation and Noise Suppression
-
-**arXiv ID** 2607.02062v1 | **方向** 语音大模型
-
-**作者** Chengwei Liu, Shaofei Xue, Haoyin Yan, Xiaotao Liang, Zheng Xue
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02062v1 | **PDF** https://arxiv.org/pdf/2607.02062v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-We propose a lightweight multi-path alignment network (LMPAN) for on-device joint acoustic echo cancellation (AEC) and noise suppression (NS) in full-duplex spoken dialogue systems. To address hardware-induced distortions and dynamic acoustic conditions, we introduce three core innovations: (1) a multi-path alignment stage correcting temporal and energy mismatches across reference, linear AEC (LAEC) output, and microphone signals; (2) an attention-based mechanism that dynamically integrates enha
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [9] Using embeddings to predict spoken word duration and pitch in Mandarin monosyllabic words
-
-**arXiv ID** 2607.02002v1 | **方向** 语音大模型
-
-**作者** Xiaoyun Jin, Mirjam Ernestus, R. Harald Baayen
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.02002v1 | **PDF** https://arxiv.org/pdf/2607.02002v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-Time-normalized f0 contours of Mandarin words in conversational speech have been shown to be predictable in part from their contextualized embeddings (CEs). The present study investigates whether CEs also predict spoken word duration for 7470 tokens of Mandarin monosyllabic CV words extracted from a Mandarin corpus of spontaneous speech. We show that CEs indeed are predictive for duration, above chance level, not only at the type level, but also at the level of individual tokens, as indicated by
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [10] A Multi-Branch Hierarchy-Aware Framework for Heterogeneous Audio Classification
-
-**arXiv ID** 2607.01974v1 | **方向** 语音大模型
-
-**作者** Beile Ning, Jiayi Yu, Zitong Wang, Yufei Hu, Wenjun Xu, Yuanhang Qian, Zhongxin Bai, Gongping Huang
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.01974v1 | **PDF** https://arxiv.org/pdf/2607.01974v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-This technical report describes our system for Task 1 of the DCASE 2026 Challenge, which aims to classify heterogeneous audio recordings according to the Broad Sound Taxonomy (BST). The task requires both accurate second-level prediction and consistency with the top-level taxonomy. Our system is built on CLAP-based audio-text representations and is improved along three strategies: expanding the training set with a filtered subset of BSD35k, enhancing acoustic modeling with feature-specific branc
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [11] Towards a Phonology-Informed Evaluation of Multilingual TTS
-
-**arXiv ID** 2607.01965v1 | **方向** 语音大模型
-
-**作者** Sneha Ray Barman, Neeraj Kumar Sharma, Shakuntala Mahanta
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.01965v1 | **PDF** https://arxiv.org/pdf/2607.01965v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-Neural TTS systems can sound natural across languages, but naturalness does not guarantee the preservation of sound contrasts that distinguish words from their grammatical forms. Standard metrics like MOS do not test for this. We propose a classifier-based framework that audits TTS output against language-specific phonological patterns using human speech as a benchmark. Testing Assamese advanced tongue root (ATR) vowel harmony with Meta's MMS TTS, we show that a classifier trained on human speec
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [12] NAVER LABS Europe Submission to the Instruction-following 2026 Short Track
-
-**arXiv ID** 2607.01960v1 | **方向** 语音大模型
-
-**作者** Marcely Zanon Boito, Hemant Yadav, Jean-Luc Meunier, Ioan Calapodescu
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.01960v1 | **PDF** https://arxiv.org/pdf/2607.01960v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-In this paper, we describe NAVER LABS Europe's submission to the instruction-following speech processing short track at IWSLT 2026. We participate again in the constrained setting, developing systems capable of jointly performing ASR, ST, and SQA from English speech into Chinese, Italian, and German. Building on our previous submission, ranked first in last year's short track, we update our multi-stage training pipeline by replacing the speech projector with SpeechMapper, a method for learning a
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-## [13] Robust for the Wrong Reasons: The Representational Geometry of LLM Robustness to Science Skepticism
-
-**arXiv ID** 2607.01951v1 | **方向** 语音大模型
-
-**作者** Minjong Cheon
-
-**机构** (arXiv未提供机构信息)
-
-**发布日期** 2026-07-02 | **论文** https://arxiv.org/abs/2607.01951v1 | **PDF** https://arxiv.org/pdf/2607.01951v1.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-Large language models (LLMs) are increasingly consulted on contested scientific questions, raising the concern that they will sycophantically retreat from established consensus when a user signals doubt -- drifting toward a false balance that treats settled science as one view among several. We test this across three open instruction-tuned models (Llama-3.1-8B, Qwen2.5-7B, Mistral-7B), three consensus-science domains (climate, vaccines, evolution), and single- and multi-turn settings, combining 
-
-### 🔧 技术方案
-
-**模型架构** 语音大模型相关架构。
-
-**核心创新** 基于arXiv摘要信息进行概述。
-
-**训练策略** 待从全文补充。
-
-### 📊 实验结果
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
-
----
-
-今日语音论文速递
