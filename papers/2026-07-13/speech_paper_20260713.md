@@ -15,11 +15,11 @@
 
 **arXiv ID** 2607.08863v1 | **方向** 语音大模型
 
-**作者** (需从PDF提取)
+**作者** Oliverio Bombicci Pontelli, Iran R. Roman
 
 **机构** School of Electronic Engineering & Computer Science, Queen Mary University of London, UK
 
-**发布日期** 2026-07-10 | **论文** https://arxiv.org/abs/2607.08863v1 | **PDF** https://arxiv.org/pdf/2607.08863v1.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-09 | **论文** https://arxiv.org/abs/2607.08863v1 | **PDF** https://arxiv.org/pdf/2607.08863v1.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
 本文针对LLM-AVSR中多模态融合的表示差异问题，提出基于最优传输（OT）的语义对齐框架。现有方法使用独立预训练的声学和视觉编码器，但融合时未显式处理模态间表示差异。本文通过OT估计概率耦合矩阵，将音频和视觉表示对齐到LLM的语言嵌入空间，再用于对比学习监督，实现语义一致且跨模态一致的表示学习。在LRS3-TED基准上验证，在干净和噪声条件各SNR下均达到SOTA。
@@ -81,7 +81,7 @@ OT对齐框架有效解决LLM-AVSR的模态差异问题，方法创新性强。L
 
 **arXiv ID** 2607.09001v1 | **方向** 语音大模型
 
-**作者** (需从PDF提取)
+**作者** Xugang Lu, Peng Shen, Yu Tsao, Hisashi Kawai
 
 **机构** National Institute of Information and Communications Technology, Kyoto, Japan; Research Center for Information Technology Innovation, Academia Sinica, Taiwan
 
@@ -114,9 +114,9 @@ OT对齐框架有效解决LLM-AVSR的模态差异问题，方法创新性强。L
 
 **arXiv ID** 2607.09020v1 | **方向** 语音大模型
 
-**作者** (需从PDF提取)
+**作者** Shikhar Bharadwaj, Kwanghee Choi, Stephen McIntosh, Chin-Jou Li, Eunjung Yeo, Daisuke Saito, Nobuaki Minematsu, Shinji Watanabe, Jian Zhu, David Harwath, David R. Mortensen
 
-**机构** Japan Advanced Institute of Science and Technology, Japan
+**机构** Japan Advanced Institute of Science and Technology, Japan; The Johns Hopkins University, USA
 
 **发布日期** 2026-07-10 | **论文** https://arxiv.org/abs/2607.09020v1 | **PDF** https://arxiv.org/pdf/2607.09020v1.pdf | **代码** 暂无 | **Demo** 暂无
 
@@ -151,9 +151,9 @@ OT对齐框架有效解决LLM-AVSR的模态差异问题，方法创新性强。L
 
 **arXiv ID** 2607.09043v1 | **方向** 语音前端
 
-**作者** (需从PDF提取)
+**作者** Dominik Klement, Yoshiki Masuyama, Christoph Boeddeker, Kohei Saijo, Julius Richter, Gordon Wichern, Jonathan Le Roux
 
-**机构** Mitsubishi Electric Research Laboratories (MERL), Cambridge, USA
+**机构** Mitsubishi Electric Research Laboratories (MERL), Cambridge, USA; Nagoya University, Japan
 
 **发布日期** 2026-07-10 | **论文** https://arxiv.org/abs/2607.09043v1 | **PDF** https://arxiv.org/pdf/2607.09043v1.pdf | **代码** 暂无 | **Demo** 暂无
 
@@ -184,9 +184,9 @@ OT对齐框架有效解决LLM-AVSR的模态差异问题，方法创新性强。L
 
 **arXiv ID** 2607.08952v1 | **方向** 语音前端
 
-**作者** (需从PDF提取)
+**作者** Shayla Sharmin, Mohammad Fahim Abrar, Roghayeh Leila Barmaki
 
-**机构** Queen Mary University of London, UK
+**机构** University of Delaware, USA
 
 **发布日期** 2026-07-09 | **论文** https://arxiv.org/abs/2607.08952v1 | **PDF** https://arxiv.org/pdf/2607.08952v1.pdf | **代码** 暂无 | **Demo** https://clean2fx.github.io/
 
