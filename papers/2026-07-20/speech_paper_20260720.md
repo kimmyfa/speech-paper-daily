@@ -1,218 +1,14 @@
 # 2026-07-20 语音论文速递
 
-**共收录**: 29 篇 | **语音大模型**: 22 篇 | **语音前端**: 7 篇
+**共收录**: 17 篇 | **语音大模型**: 13 篇 | **语音前端**: 4 篇
 
-> 今日 arXiv 语音相关论文共命中 29 篇。以下是按评分排序的结果。
+> 今日 arXiv 语音相关论文共命中 17 篇。以下是按评分排序的结果。
 
 ---
 
 ## 🤖 语音大模型
 
-## [1] Large Audio Language Models for Spoofing-Aware Speaker Verification
-
-**arXiv ID** 2607.14753 | **方向** 语音大模型
-
-**作者** Sofya Savelyeva, Mariia Perunova, Evgeny Kushnir, Artem Dvirniak, Dmitrii Korzh, Oleg Y. Rogov
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-16 | **论文** https://arxiv.org/abs/2607.14753 | **PDF** https://arxiv.org/pdf/2607.14753.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究评估了大音频语言模型在语音相关任务上的表现，探讨了其能力边界。
-
-### 🔧 技术方案
-
-**模型架构** 提出了针对语音处理任务的神经网络方法。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
-
----
-
-## [2] Self-supervised Speech Comparison for L2 Phone, Rhythm, and Intonation Scoring
-
-**arXiv ID** 2607.13721 | **方向** 语音大模型
-
-**作者** Stephen McIntosh, Reuben Smit, Daisuke Saito, Nobuaki Minematsu, Herman Kamper
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.13721 | **PDF** https://arxiv.org/pdf/2607.13721.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究探索了自监督学习在语音处理任务中的应用，提出了无需标注数据的方法。
-
-### 🔧 技术方案
-
-**模型架构** 采用自监督学习范式，无需人工标注即可学习语音表示。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
-
----
-
-## [3] Audio-Native Speech Recognition with a Frozen Discrete-Diffusion Language Model
-
-**arXiv ID** 2607.13013 | **方向** 语音大模型
-
-**作者** Harsha Vardhan Khurdula, Abhinav Kumar Singh, Yoeven D Khemlani, Vineet Agarwal
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.13013 | **PDF** https://arxiv.org/pdf/2607.13013.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究提出了新的语音识别方法，提升了对复杂场景下语音转文本的准确性。
-
-### 🔧 技术方案
-
-**模型架构** 采用扩散模型进行语音生成，通过逐步去噪生成高质量音频。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
-
----
-
-## [4] Neural Morphing: Sequence-Optimized Token-Level Morphing in Neural Audio Codecs
-
-**arXiv ID** 2607.12725 | **方向** 语音大模型
-
-**作者** Emmanouil Karystinaios
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12725 | **PDF** https://arxiv.org/pdf/2607.12725.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究提出了新方法，Neural audio codecs were originally developed for high-fidelity compression; however, their latent token representations and expressive decoders also ...
-
-### 🔧 技术方案
-
-**模型架构** 提出了针对语音处理任务的神经网络方法。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
-
----
-
-## [5] Listen first: Output-based multi-microphone speech enhancement
-
-**arXiv ID** 2607.12529 | **方向** 语音大模型
-
-**作者** Panos Apostolidis, Svend Feldt, Zheng-Hua Tan, Jan Østergaard, Jesper Jensen
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12529 | **PDF** https://arxiv.org/pdf/2607.12529.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究提出了新方法，Traditionally, hearing-aid speech enhancement (SE) algorithms rely on input-based feature estimation, often derived by a voice activity detector (VAD)...
-
-### 🔧 技术方案
-
-**模型架构** 提出了针对语音处理任务的神经网络方法。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
-
----
-
-## [6] ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching
-
-**arXiv ID** 2607.12496 | **方向** 语音大模型
-
-**作者** Jihwan Kim, Nam Soo Kim
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12496 | **PDF** https://arxiv.org/pdf/2607.12496.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究提出了新方法，Zero-shot dialog TTS benefits from flow-matching, but minute-scale generation on dense mel-spectrograms causes severe memory bottlenecks, often forcin...
-
-### 🔧 技术方案
-
-**模型架构** 提出了针对语音处理任务的神经网络方法。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
-
----
-
-## [7] Encoder-Side Neuron Identification and Amplification for Acoustic Perception in Large Audio-Language Models
+## [1] Encoder-Side Neuron Identification and Amplification for Acoustic Perception in Large Audio-Language Models
 
 **arXiv ID** 2607.11801 | **方向** 语音大模型
 
@@ -223,98 +19,264 @@
 **发布日期** 2026-07-13 | **论文** https://arxiv.org/abs/2607.11801 | **PDF** https://arxiv.org/pdf/2607.11801.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-该研究分析了语音基础模型的微调策略，探讨了不同预训练实例对微调效果的影响。
+大音频语言模型（LALM）在语音内容等语义属性上表现强劲，但在说话人情感等细粒度非语义属性上表现不佳。在不重新训练的情况下改进这一问题需要有效的推理时干预方法。大多数现有方法仅在音频编码器之后进行干预，且粒度相对较粗。本研究提出IAAN方法，在音频编码器内部神经元级别进行识别和增强。
 
 ### 🔧 技术方案
 
-**模型架构** 提出了针对语音处理任务的神经网络方法。
+**模型架构** 基于LALM的音频编码器，通过识别和放大特定神经元来增强声学感知。
 
-**核心创新** 待从全文提取。
+**核心创新** IAAN（Identifying and Amplifying Acoustic Neurons）是一种无需训练、无标签的方法，通过将真实波形激活与缺乏声学信息的噪声参考对比，对音频编码器中每个前馈神经元进行评分，然后放大得分最高的一小部分神经元。在10个非语义语音属性上，IAAN使Audio-Flamingo-3平均准确率提升25.7点，Qwen2.5-Omni提升21.4点，Kimi-Audio提升9.7点。
 
-**训练策略** 待从全文提取。
+**训练策略** 推理时干预，无需训练。通过对比激活模式识别关键神经元，对识别出的神经元进行放大。
 
 ### 📊 实验结果
 
-**数据集** 待从全文补充。
+**数据集** 10个非语义语音属性评估
 
-**主要指标** 待从全文补充。
+**主要指标** Audio-Flamingo-3提升25.7点，Qwen2.5-Omni提升21.4点，Kimi-Audio提升9.7点。实验证明编码器位置和神经元级别选择性都是必要的。
 
-**是否开源** 暂无。
+**是否开源** 暂未开源
 
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
+### ⭐ 评分: 9/10
+理由 创新性强，无需训练的推理时干预方法，在音频编码器神经元级别进行精确干预。实验非常充分，在多个模型和属性上验证了方法有效性，对提升LALM声学感知能力有重要贡献。
 
 ---
 
-## [8] RW-Voice-EQ Bench: A Real World Benchmark for Evaluating Voice AI Systems
+## [2] Audio-Native Speech Recognition with a Frozen Discrete-Diffusion Language Model
+
+**arXiv ID** 2607.13013 | **方向** 语音大模型
+
+**作者** Harsha Vardhan Khurdula, Abhinav Kumar Singh, Yoeven D Khemlani, Vineet Agarwal
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.13013 | **PDF** https://arxiv.org/pdf/2607.13013.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+自动语音识别（ASR）主要由自回归解码器主导，每次生成一个token。本研究探索使用离散扩散语言模型进行语音转录，通过少量去噪步骤并行细化整个转录稿。模型使用冻结的Whisper编码器提供声学特征，轻量级投影器映射到模型嵌入空间，低秩适配器让冻结的主干网络关注新模态。
+
+### 🔧 技术方案
+
+**模型架构** 基于DiffusionGemma 26B专家混合模型，使用随机token离散扩散而非吸收掩码方案。训练约42M参数，仅占主干网络的0.16%。
+
+**核心创新** 通过连接主义时间分类（CTC）损失穿过冻结输出头解决梯度无法到达投影器的问题。模型在LibriSpeech test-clean上达到6.6%的词错误率，无论话语长度如何，约8步并行转录，使用在6种语言上训练的单一适配器。
+
+**训练策略** 冻结Whisper编码器和主干网络，仅训练投影器和低秩适配器。CTC损失应用于冻结输出头，打破梯度传递的死锁。
+
+### 📊 实验结果
+
+**数据集** LibriSpeech（英语），评估了英语、印地语和普通话
+
+**主要指标** LibriSpeech test-clean上WER 6.6%，约8步并行转录，多语言适配器在6种语言上训练并评估了3种。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 8/10
+理由 创新性地将离散扩散语言模型应用于语音识别，在保持竞争力的WER同时实现并行转录。方法设计巧妙，实验验证充分，对非自回归ASR有重要贡献。
+
+---
+
+## [3] Improving Text-to-Audio Instruction Following via Fine-Grained Feedback from Audio-Aware Large Language Models
+
+**arXiv ID** 2607.13408 | **方向** 语音大模型
+
+**作者** Chun-Yi Kuan, Siwon Kim, Byeonggeun Kim, Suyoun Kim, Bo-Ru Lu, Qinming Tang, Ankur Gandhe, Hung-yi Lee, Chieh-Chi Kao, Chao Wang
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.13408 | **PDF** https://arxiv.org/pdf/2607.13408.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+最近的文本到音频模型能生成高质量音频，但在涉及多个声音事件和时间顺序的指令跟随上常常失败。现有评估和训练信号主要强调全局相似性或感知质量，对指令级正确性的监督有限。本研究提出使用音频感知大语言模型（ALLM）作为细粒度判断器来验证生成音频中的目标事件存在性和时间关系。
+
+### 🔧 技术方案
+
+**模型架构** 使用ALLM作为细粒度判断器，构建偏好对进行直接偏好优化（DPO）。
+
+**核心创新** 提出指令级框架，使用ALLM验证生成音频中的目标事件存在性和时间关系。验证ALLM判断后，使用其反馈构建偏好对进行DPO训练。引入S3Bench基准用于评估多事件时间指令跟随。
+
+**训练策略** 通过人类验证确认ALLM判断的有效性，然后使用偏好对进行直接偏好优化，保持音频质量的同时提升指令跟随能力。
+
+### 📊 实验结果
+
+**数据集** S3Bench叙事基准，评估多事件时间指令跟随
+
+**主要指标** 方法改善了事件完整性、时间排序和联合指令跟随准确率，同时保持音频质量。S3Bench和其他基准上均取得了显著提升。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 8/10
+理由 Interspeech 2026接收，提出创新性的指令级评估和训练框架，使用ALLM提供细粒度反馈。方法设计合理，实验验证充分，对文本到音频生成领域有重要贡献。
+
+---
+
+## [4] Auditing Protocol-Level Shortcuts in Large Audio Language Model Judges for Speech Evaluation
+
+**arXiv ID** 2607.13477 | **方向** 语音大模型
+
+**作者** Joonyong Park, David M. Chan, Yuki Saito, Hiroshi Saruwatari
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.13477 | **PDF** https://arxiv.org/pdf/2607.13477.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+大音频语言模型（LALM）越来越多地被用作语音评估的自动评判器。然而，与人类评级的高度一致性并不能保证它们的判断是基于音频的。评判器可能依赖评估协议本身提供的专家标签或参考数据，从而走捷径而不听音频。本研究审计了LALM评判器在三种常见部署协议中的协议级捷径。
+
+### 🔧 技术方案
+
+**审计框架** 在三种常见部署协议中审计LALM评判器：特征蓝图评判（音频被文本描述的声学特征替代）、参考条件评判和成对A/B比较。
+
+**核心创新** 提出协议级捷径概念，证明几个LALM依赖协议级捷径。例如在特征蓝图评判中，错误的专家标签将五个评判器的情感准确率降低到0.10或以下；在连接的A/B比较中，Qwen3-Omni-Thinking经常选择相同槽位而不考虑顺序交换。
+
+**评估方法** 在6个评判器和4个属性上评估，发现汇总的一致性可能高估LALM评判器的有效性，除非模型和评估协议被联合评估。
+
+### 📊 实验结果
+
+**数据集** 6个评判器，4个属性，多种评估协议
+
+**主要指标** 多个LALM在协议级捷径探测下表现显著下降，证明aggregate agreement可能高估有效性。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 8/10
+理由 提出了重要且被忽视的问题：LALM评判器可能走协议级捷径。审计设计严谨，揭示了评估协议设计的重要性，对语音评估领域有重要警示作用。
+
+---
+
+## [5] VoxENES 2026: Benchmarking Generalization of Speech Spoofing Detectors Against LLM-Era TTS and Voice Conversion
+
+**arXiv ID** 2607.11706 | **方向** 语音大模型
+
+**作者** Aastha Sharma, Guangjing Wang
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-13 | **论文** https://arxiv.org/abs/2607.11706 | **PDF** https://arxiv.org/pdf/2607.11706.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+现代LLM驱动的文本到语音（TTS）和语音转换（VC）系统产生的合成语音与许多传统欺骗检测基准中的生成器不同。这种不匹配会造成时间泛化差距，可能高估检测器在现实后处理条件下的鲁棒性。本研究通过引入VoxENES 2026来弥合这一差距，这是一个双语音（英语和西班牙语）基准，包含53628个音频样本。
+
+### 🔧 技术方案
+
+**基准构建** 使用10种当代语音合成方法生成，评估于10种标准化后处理条件。测试8个预训练检测器而不进行微调。
+
+**核心创新** 观察到显著性能下降：最佳模型总体达到28.98%的EER，而大多数模型在现代生成器和扰动下表现接近或低于随机机会。结果强调当前检测器对脆弱伪影的依赖，建立VoxENES 2026作为开发鲁棒音频欺骗对策的实用测试平台。
+
+### 📊 实验结果
+
+**数据集** VoxENES 2026：53628个音频样本，10种合成方法，10种后处理条件
+
+**主要指标** 最佳模型总体EER 28.98%，大多数模型在现代生成器上接近或低于随机机会。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 8/10
+理由 Interspeech 2026接收，构建了重要的时间泛化基准，揭示了当前欺骗检测器的局限性。数据集规模大（53628样本），评估协议严格，对音频欺骗检测领域有重要贡献。
+
+---
+
+## [6] RW-Voice-EQ Bench: A Real World Benchmark for Evaluating Voice AI Systems
 
 **arXiv ID** 2607.14846 | **方向** 语音大模型
 
-**作者** David Ayllon, Alice Baird, Jeffrey Brooks, Franc Camps-Febrer, Jakub Piotr Cłapa, Theo Lebryk
+**作者** David Ayllon, Alice Baird, Jeffrey Brooks, Franc Camps-Febrer, Jakub Piotr Cłapa, Theo Lebryk et al.
 
 **机构** （论文未提供机构信息）
 
 **发布日期** 2026-07-16 | **论文** https://arxiv.org/abs/2607.14846 | **PDF** https://arxiv.org/pdf/2607.14846.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-该研究提出了语音AI系统的多维基准评估框架，全面评估语音合成、语音理解和语音识别等能力。
+当前语音AI基准通常评估孤立的能力，如语音清晰度、词错误率或基于文本的对话质量，但很少测试系统是否利用了区分口语与其文本表示的声学信息。为此，本研究引入真实世界语音EQ基准（RW-Voice-EQ），这是一个多维基准，用于评估跨文本到语音（TTS）、语音到语音（STS）、语音理解（SU）和自动语音识别（ASR）的语音AI。
 
 ### 🔧 技术方案
 
-**模型架构** 设计了多维评估指标和测试协议，全面评估语音AI系统性能。
+**评估框架** 多维评估覆盖TTS自然度/表现力/身份稳定性/可靠性，STS中音频访问不保证使用声学情感，SU中模型在副语言任务上表现不均，ASR在真实环境重音/情感/噪声/会话条件下暴露失败。
 
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
+**核心创新** 提出不应以单一综合分数评估语音AI，而应将其评估为声学、表达、交互和鲁棒能力组合的观点。
 
 ### 📊 实验结果
 
-**数据集** 待从全文补充。
+**数据集** 多维评估协议，覆盖TTS/STS/SU/ASR四个维度
 
-**主要指标** 待从全文补充。
+**主要指标** 性能高度依赖具体维度，揭示现有基准无法捕捉真实环境中的失败。
 
-**是否开源** 暂无。
+**是否开源** 评估代码和基准：https://huggingface.co/spaces/HumeAI/rw-voice-eq
 
-### ⭐ 评分: 7/10
-理由 方法有一定创新，实验验证较充分，有参考价值。
+### ⭐ 评分: 8/10
+理由 提出创新的多维语音AI评估基准，揭示现有系统在真实环境中的不足。评估设计全面且有实际指导价值，对语音AI系统评估有重要贡献。
 
 ---
 
-## [9] Can Tokens Compete? Token Representations against Supervised CNN Backbones for BirdCLEF+ 2026
+## [7] ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching
 
-**arXiv ID** 2607.14474 | **方向** 语音大模型
+**arXiv ID** 2607.12496 | **方向** 语音大模型
 
-**作者** Anthony Miyaguchi, Murilo Gustineli, Adrian Cheung
+**作者** Jihwan Kim, Nam Soo Kim
 
 **机构** （论文未提供机构信息）
 
-**发布日期** 2026-07-16 | **论文** https://arxiv.org/abs/2607.14474 | **PDF** https://arxiv.org/pdf/2607.14474.pdf | **代码** https://github.com/dsgt-arc/birdclef-2026 | **Demo** 暂无
+**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12496 | **PDF** https://arxiv.org/pdf/2607.12496.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-该研究提出了新方法，This paper details the DS@GT ARC team's approach to BirdCLEF+ 2026, multi-label detection of animal vocalizations in soundscapes from the Pantanal wet...
+零样本对话TTS受益于流匹配，但分钟级密集mel频谱图生成导致严重的内存瓶颈，通常迫使不自然的分块合成。本研究提出ZipL-Dialog，将条件流匹配转移到4倍时间压缩（25 Hz）的潜在空间。
 
 ### 🔧 技术方案
 
-**模型架构** 提出了针对语音处理任务的神经网络方法。
+**模型架构** 潜在流匹配模型，使用确定性mel自编码器辅助mel域监督，优化ZipFormer分层下采样调度以在压缩下保持声学保真度。
 
-**核心创新** 待从全文提取。
+**核心创新** 将条件流匹配转移到时间压缩潜在空间，实现单次通过多分钟对话合成。最大峰值GPU内存降低11.22倍，推理速度提升2.23倍。
 
-**训练策略** 待从全文提取。
+**训练策略** 潜在空间流匹配训练，结合mel域重建损失。
 
 ### 📊 实验结果
 
-**数据集** 待从全文补充。
+**数据集** 长格式对话语音合成基准
 
-**主要指标** 待从全文补充。
+**主要指标** 最大峰值GPU内存降低11.22倍，推理速度提升2.23倍，同时保持感知自然度。
 
-**是否开源** 暂无。
+**是否开源** 暂未开源
 
-### ⭐ 评分: 6.5/10
-理由 增量工作，有一定参考价值，可关注后续进展。
+### ⭐ 评分: 8/10
+理由 Interspeech 2026接收，创新的潜在空间流匹配实现高效长对话合成，有效解决内存瓶颈问题。方法设计精巧，实验验证充分。
 
 ---
 
-## [10] Dialogs: a studio-quality expressive conversational Russian speech corpus for dialog assistants
+## [8] Rethinking Speech Foundation Model Fine-tuning: Better SFT or Better Match?
+
+**arXiv ID** 2607.13864 | **方向** 语音大模型
+
+**作者** Wangjin Zhou, Yizhou Zhang, Yichi Wang, Tatsuya Kawahara
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.13864 | **PDF** https://arxiv.org/pdf/2607.13864.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+监督微调（SFT）被广泛用于将自监督语音表示适应到下游分类任务。现有研究通常在单个预训练checkpoint上观察到的微小增益被解释为方法级改进，即更高的可达到性能上限。本研究证明此类结论并不总是可靠的，因为SFT结果很大程度上取决于特定的预训练实例。
+
+### 🔧 技术方案
+
+**模型架构** 基于wav2vec 2.0、HuBERT和WavLM三种自监督语音表示模型，在SUPERB分类任务上评估不同SFT策略。
+
+**核心创新** 系统研究揭示SFT性能高度依赖预训练实例身份，而非方法本身的普遍改进。统计上无法区分的顶级SFT配方往往是checkpoint依赖的，在不同预训练实例间迁移性有限。
+
+**训练策略** 多种子重复实验确保结果可靠性。在base-scale模型上进行代表性实验。
+
+### 📊 实验结果
+
+**数据集** SUPERB分类任务，包含3个下游任务和9个预训练checkpoint
+
+**主要指标** 同一SFT配方在不同预训练实例上的表现差异显著，顶级配方的身份往往是checkpoint依赖的。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 8/10
+理由 Interspeech 2026接收，系统性研究设计严谨，揭示了语音基础模型微调领域的重要问题。实验充分，对领域有重要参考价值。
+
+---
+
+## [9] Dialogs: a studio-quality expressive conversational Russian speech corpus for dialog assistants
 
 **arXiv ID** 2607.14310 | **方向** 语音大模型
 
@@ -325,86 +287,226 @@
 **发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.14310 | **PDF** https://arxiv.org/pdf/2607.14310.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-该论文提出了一个新的语音数据集，用于训练和评估语音处理模型。
+本文介绍Dialogs，一个用于对话助手的工作室级俄语会话语音语料库。数据集包含20.6小时在专业工作室录制的人脸对话（44.1 kHz立体声），分割成11796个话语，涵盖3个说话人。与朗读语音资源不同，Dialogs捕捉话轮节奏和表达韵律，并提供涵盖12个类别的每话语风格/情感标签。
 
 ### 🔧 技术方案
 
-**模型架构** 收集和标注了大规模语音数据，提供了训练和评估数据集。
+**语料库构建** 专业录音棚录制的人脸对话，包含话轮节奏和表达韵律，而非朗读式语音。每话语标注12类风格/情感标签。
 
-**核心创新** 待从全文提取。
+**基线验证** 使用众包MOS测试验证语料库质量，展示与强俄语工作室基线相当的音频质量和可懂度，同时在表达力和会话自然度上获得更高评分。
 
-**训练策略** 待从全文提取。
+**训练实验** 训练VITS2模型作为概念验证，展示Dialogs支持训练表达性、对话式TTS，尽管每人数据有限。
 
 ### 📊 实验结果
 
-**数据集** 待从全文补充。
+**数据集** Dialogs：20.6小时俄语会话语音，11796话语，3说话人
 
-**主要指标** 待从全文补充。
+**主要指标** 与俄语工作室基线相当的音频质量和可懂度，更高的表达力和会话自然度评分。
 
-**是否开源** 暂无。
+**是否开源** 暂未开源
 
-### ⭐ 评分: 6.5/10
-理由 增量工作，有一定参考价值，可关注后续进展。
+### ⭐ 评分: 8/10
+理由 Interspeech 2026接收，构建了高质量俄语会话语音语料库，填补了俄语TTS数据空白。数据集设计考虑话轮节奏和表达韵律，对对话式TTS有重要价值。
 
 ---
 
-## 📋 其他论文（快速浏览）
+## [10] Large Audio Language Models for Spoofing-Aware Speaker Verification
 
-### 语音大模型
-## [11] Rethinking Speech Foundation Model Fine-tuning: Better SFT or Better Match?
-**arXiv ID**: 2607.13864 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.13864
+**arXiv ID** 2607.14753 | **方向** 语音大模型
 
-## [12] Auditing Protocol-Level Shortcuts in Large Audio Language Model Judges for Speech Evaluation
-**arXiv ID**: 2607.13477 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.13477
+**作者** Sofya Savelyeva, Mariia Perunova, Evgeny Kushnir, Artem Dvirniak, Dmitrii Korzh, Oleg Y. Rogov
 
-## [13] Low-Latency Neural Models for Real-Time Music Enhancement
-**arXiv ID**: 2607.12872 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.12872
+**机构** （论文未提供机构信息）
 
-## [14] Audio Diarization: A New Paradigm for Exploring Audio Recordings with Unknown Event Classes
-**arXiv ID**: 2607.12703 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.12703
+**发布日期** 2026-07-16 | **论文** https://arxiv.org/abs/2607.14753 | **PDF** https://arxiv.org/pdf/2607.14753.pdf | **代码** 暂无 | **Demo** 暂无
 
-## [15] Investigating the Integration of Spatial Information in Foundation-Model-Based Speaker Diarization
-**arXiv ID**: 2607.12647 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.12647
+### 📌 简介
+文本到语音和语音克隆的最新进展使高质量欺骗变得廉价且可扩展，威胁语音认证系统，特别是自动说话人验证（ASV）。现有防御主要通过深度伪造检测的二元对策（CM）或欺骗感知说话人验证（SASV）来解决。本研究系统评估LALM用于SASV，在零样本提示、监督适应、推理导向训练和基于强化学习的优化下与传统流水线比较。
 
-## [16] Explainable-by-Design Audio Deepfake Detection via Wiener-Hopf Linear Prediction
-**arXiv ID**: 2607.12584 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.12584
+### 🔧 技术方案
 
-## [17] Traceback Translators Against Forgetting in Continual Fake Speech Detection
-**arXiv ID**: 2607.12569 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.12569
+**评估框架** 在四种条件下评估LALM用于SASV：零样本提示、监督适应、推理导向训练、强化学习优化。
 
-## [18] An Omnilingual-ASR-Based Speech-LLM System for the 2nd MLC-SLM Challenge
-**arXiv ID**: 2607.12468 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.12468
+**核心创新** 发现预训练LALM在零样本设置下接近随机，证实它们天生不适合SASV，但任务特定适应可弥补这一差距。多种不同路径可实现竞争性SASV性能。
 
-## [19] Real-time Generation of Listener Nodding via Prediction of Kinematic Parameters for Avatar Dialogue Systems
-**arXiv ID**: 2607.12329 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.12329
+### 📊 实验结果
 
-## [20] Qwen-Audio-VAE Technical Report
-**arXiv ID**: 2607.11738 | **评分**: 6/10
-**链接**: https://arxiv.org/abs/2607.11738
+**数据集** SASV基准评估
 
-## [21] SLT 2026 REAL-TSE Challenge: Real-world Target Speaker Extraction from Conversational Recordings
-**arXiv ID**: 2607.15198 | **评分**: 7/10
-**链接**: https://arxiv.org/abs/2607.15198
+**主要指标** 预训练LALM零样本接近随机，任务特定适应后性能显著提升。
 
-## [22] VoxENES 2026: Benchmarking Generalization of Speech Spoofing Detectors Against LLM-Era TTS and Voice Conversion
-**arXiv ID**: 2607.11706 | **评分**: 7/10
-**链接**: https://arxiv.org/abs/2607.11706
+**是否开源** 暂未开源
 
+### ⭐ 评分: 8/10
+理由 系统评估LALM在欺骗感知说话人验证中的应用，发现预训练模型需特定适配才能胜任。开创性的SASV+LALM融合研究，对语音安全领域有重要贡献。
+
+---
+
+## [11] Self-supervised Speech Comparison for L2 Phone, Rhythm, and Intonation Scoring
+
+**arXiv ID** 2607.13721 | **方向** 语音大模型
+
+**作者** Stephen McIntosh, Reuben Smit, Daisuke Saito, Nobuaki Minematsu, Herman Kamper
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.13721 | **PDF** https://arxiv.org/pdf/2607.13721.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+L2语音评估传统上专注于音素评估，留下韵律和语调等超音段特征的评分未被探索。此外，评估方法通常需要带标签的L2语音数据进行训练，使它们难以应用于低资源环境。本研究探索DTW过WavLM自监督表示是否可提供无需文本的框架来评估英语和日语L2语音的音素准确度、韵律和语调。
+
+### 🔧 技术方案
+
+**评估方法** 基于DTW的自监督语音比较，无需文本即可评估发音。对韵律，通过DTW对齐路径的扭曲程度测量方法；对于语调，结合DTW距离与韵律和强度特征。
+
+**核心创新** 基本的基于DTW的方法比较学习者语音与母语模板，在整体和句子级音素评分上超过人类一致性。对于韵律，测量DTW对齐路径的扭曲程度，最佳方法接近人类水平。
+
+### 📊 实验结果
+
+**数据集** 英语和日语L2语音评估
+
+**主要指标** 音素评分超过人类一致性，韵律评分接近人类水平，语调评分在某些任务上仍较温和。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 7/10
+理由 提出无需文本的L2语音评估框架，自监督表示作为有前景的基础。方法创新，实验验证较充分，对二语语音评估有参考价值。
+
+---
+
+## [12] SceneBind: Binding What and Where Across Vision, Audio and Language
+
+**arXiv ID** 2607.15265 | **方向** 语音大模型
+
+**作者** Mingfei Chen, Zijun Cui, Ruoke Zhang, Hyeonggon Ryu, Eli Shlizerman
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-16 | **论文** https://arxiv.org/abs/2607.15265 | **PDF** https://arxiv.org/pdf/2607.15265.pdf | **代码** 暂无 | **Demo** https://scenebind.github.io/
+
+### 📌 简介
+现有全模态编码器在实例级语义方面表现出色，但通常缺乏显式的空间结构。SceneBind通过将每个场景表示为结合全局语义嵌入与对象中心语义-空间槽的语义-空间实体来解决这一差距。该表示显式捕捉对象级语义、空间属性和不确定性。
+
+### 🔧 技术方案
+
+**模型架构** 语义-空间实体表示，结合全局语义嵌入与对象中心语义-空间槽。
+
+**核心创新** 提出SceneBind Matching，集成全局场景相似性与对象对齐的语义-空间匹配方案，支持跨模态场景检索和对象定位。兼容大规模预训练语义编码器，仅添加轻量级空间建模。
+
+### 📊 实验结果
+
+**数据集** 新型真实世界双耳音频-视觉数据集，具有结构化语义和空间标注
+
+**主要指标** 实现最先进的场景和空间检索，同时支持强零样本迁移到下游任务如音频-视觉定位。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 7/10
+理由 提出创新的语义-空间场景表示方法，在跨模态检索和定位任务上表现优异。方法设计合理，实验验证充分。
+
+---
+
+## [13] The Sound of Absence: Audio-Language Embedding Models Struggle with Negation
+
+**arXiv ID** 2607.12290 | **方向** 语音大模型
+
+**作者** Chun-Yi Kuan, Hung-yi Lee
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12290 | **PDF** https://arxiv.org/pdf/2607.12290.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+CLAP等音频-语言嵌入模型在匹配present声音事件上被广泛评估，但很少在否定上评估。本研究表明这种仅肯定评估隐藏了一个关键局限：这些模型无法编码否定的声音概念，将肯定和否定caption映射到几乎相同的表示。
+
+### 🔧 技术方案
+
+**评估框架** NegEval-Audio，将现有数据集转换为两个否定感知任务：Retrieval-Neg和Multiple-Choice Negation（MCQ-Neg），探测模型是否区分present和absent事件。
+
+**核心创新** 在AudioCaps和Clotho上，否定类型MCQ准确率远低于随机，失败甚至持续到最近的基于多模态LLM的嵌入模型。免训练 steering方法改善MCQ-Neg，但Retrieval-Neg仅边际增益。
+
+### 📊 实验结果
+
+**数据集** NegEval-Audio，基于AudioCaps和Clotho构建
+
+**主要指标** 否定类型MCQ准确率远低于随机，免训练方法仅边际改善Retrieval-Neg。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 7/10
+理由 揭示了音频-语言模型在否定表示上的重要局限，这是表示几何中的基本缺陷。方法创新，实验设计严谨，对音频-语言模型有警示作用。
 
 ---
 
 ## 🎙️ 语音前端
 
-## [1] Efficient Text-to-Audio Generation via Pruning
+## [14] SLT 2026 REAL-TSE Challenge: Real-world Target Speaker Extraction from Conversational Recordings
+
+**arXiv ID** 2607.15198 | **方向** 语音前端
+
+**作者** Shuai Wang, Zihan Qian, Ke Zhang, Jiangyu Han, Zikai Liu, Xiaoyang Yu, Haoyu Li, Marc Delcroix, Kai Yu, Lei Xie, Ming Li, Haizhou Li
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-16 | **论文** https://arxiv.org/abs/2607.15198 | **PDF** https://arxiv.org/pdf/2607.15198.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+REAL-TSE Challenge是IEEE SLT 2026卫星挑战赛，专注于从真实对话录音中提取目标说话人。与模拟朗读语音基准不同，REAL-TSE评估包含自然重叠、混响、噪声、通道不匹配和会话动态的普通话和英语录音。
+
+### 🔧 技术方案
+
+**挑战设计** 两个互补赛道：低延迟流式提取的Online赛道和全上下文处理的Offline赛道。使用Token Error Rate（TER）、Speaker Similarity（SpkSim）、DNSMOS和目标说话人活动F1进行评估。
+
+**数据集** 真实对话录音，包含自然重叠、混响、噪声和通道不匹配
+
+**评估指标** TER、SpkSim、DNSMOS、目标说话人活动F1
+
+### 📊 实验结果
+
+**数据集** 挑战赛数据集（普通话和英语）
+
+**主要指标** 概述了任务定义、数据集、基线、评估协议、提交系统和条件发现，为未来真实世界TSE基准提供经验教训。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 8/10
+理由 IEEE SLT 2026卫星挑战赛，提供真实环境目标说话人提取基准。填补了模拟数据与真实场景间的差距，对TSE领域有重要推动作用。
+
+---
+
+## [15] Listen first: Output-based multi-microphone speech enhancement
+
+**arXiv ID** 2607.12529 | **方向** 语音前端
+
+**作者** Panos Apostolidis, Svend Feldt, Zheng-Hua Tan, Jan Østergaard, Jesper Jensen
+
+**机构** （论文未提供机构信息）
+
+**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12529 | **PDF** https://arxiv.org/pdf/2607.12529.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+传统上，助听器语音增强（SE）算法依赖基于输入的特征估计，通常来自语音活动检测器（VAD）来配置波束形成器。然而，在用户最需要帮助的挑战性声学场景中，从噪声麦克风信号提取的特征可能变得不可靠。本研究引入一种新范式，其中声音处理系统的设置由评估其输出的特征决定。
+
+### 🔧 技术方案
+
+**核心创新** 提出输出驱动的系统，在一组最小功率失真无响应（MPDR）波束形成器中选择。尽管MPDR波束形成器通常因对导向误差的敏感性而被避免，但本研究展示它们在输出驱动框架中变得有效。
+
+**训练策略** 基于输出的选择机制，评估波束形成器输出质量而非输入特征。
+
+### 📊 实验结果
+
+**数据集** 多种噪声和语音条件
+
+**主要指标** 在低SNR下持续优于传统MVDR基线，SNR、ESTOI和PESQ均有提升。
+
+**是否开源** 暂未开源
+
+### ⭐ 评分: 7/10
+理由 IWAENC 2026接收，提出创新的输出驱动语音增强框架，在传统方法失效的挑战性场景下表现更好。方法概念新颖，实验验证充分。
+
+---
+
+## [16] Efficient Text-to-Audio Generation via Pruning
 
 **arXiv ID** 2607.13330 | **方向** 语音前端
 
@@ -415,174 +517,56 @@
 **发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.13330 | **PDF** https://arxiv.org/pdf/2607.13330.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-该研究探讨了语音处理技术，Diffusion-based text-to-audio generative models such as AudioLDM achieve high perceptual quality and strong semantic consistency; however, their pract...
+基于扩散的文本到音频生成模型如AudioLDM可实现高感知质量和强语义一致性，但实际部署面临高计算成本问题。本研究探索剪枝用于高效文本到音频生成，分析不同剪枝策略对模型性能和效率的影响。
 
 ### 🔧 技术方案
 
-**模型架构** 采用扩散模型进行语音生成，通过逐步去噪生成高质量音频。
+**模型架构** 基于AudioLDM的扩散模型，采用结构化剪枝减少计算量。
 
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
+**核心创新** 系统分析扩散模型中不同剪枝策略，平衡重建质量与压缩率。在保持感知质量的同时显著降低计算成本。
 
 ### 📊 实验结果
 
-**数据集** 待从全文补充。
+**数据集** 文本到音频生成基准
 
-**主要指标** 待从全文补充。
+**主要指标** 在压缩模型大小的同时保持生成质量，实现效率提升。
 
-**是否开源** 暂无。
+**是否开源** 暂未开源
 
-### ⭐ 评分: 5/10
-理由 初步评估，基于标题和摘要判断，有待阅读全文验证。
+### ⭐ 评分: 7/10
+理由 探索扩散模型剪枝的实际应用价值，方法有一定创新性，对边缘部署有参考价值。
 
 ---
 
-## [2] What does the model actually see? Evaluation protocols and input availability in data-driven prediction of room acoustic parameters
+## [17] Neural Morphing: Sequence-Optimized Token-Level Morphing in Neural Audio Codecs
 
-**arXiv ID** 2607.15243 | **方向** 语音前端
+**arXiv ID** 2607.12725 | **方向** 语音前端
 
-**作者** Akın Oktav
+**作者** Emmanouil Karystinaios
 
 **机构** （论文未提供机构信息）
 
-**发布日期** 2026-07-16 | **论文** https://arxiv.org/abs/2607.15243 | **PDF** https://arxiv.org/pdf/2607.15243.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12725 | **PDF** https://arxiv.org/pdf/2607.12725.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-该研究探讨了语音处理技术，Machine-learnt models are increasingly used to predict ISO 3382-1 room acoustic parameters from sparse measurements, with reported coefficients of det...
+神经音频编解码器最初为高保真压缩开发，但其潜在token表示和表达性解码器也构成了可控音频转换的强大基础。本研究介绍神经Morphing，一种无需训练的token域音频效果。
 
 ### 🔧 技术方案
 
-**模型架构** 提出了针对语音处理任务的神经网络方法。
+**核心创新** 从用户调色板中选择残差向量量化（RVQ）token粒度，通过预训练编解码器解码编辑后的流。方法结合RVQ组传输策略与连续性约束序列匹配器，用有界束搜索替换独立贪婪选择。
 
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
+**实现重点** 实时行为的可部署VST3/AU系统实现，包括分块渲染、调色板大小缩放和后端健康检查。
 
 ### 📊 实验结果
 
-**数据集** 待从全文补充。
+**数据集** 实时音频转换任务
 
-**主要指标** 待从全文补充。
+**主要指标** 实现实时token域音频morphing，效果可控。
 
-**是否开源** 暂无。
-
-### ⭐ 评分: 6/10
-理由 增量工作，有一定参考价值，可关注后续进展。
-
----
-
-## [3] Cover First, Disagree Softly: Rethinking Mismatch-First Active Learning for Frame-Level Audio Classification
-
-**arXiv ID** 2607.13571 | **方向** 语音前端
-
-**作者** Shiqi Zhang, Tuomas Virtanen
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.13571 | **PDF** https://arxiv.org/pdf/2607.13571.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究提出了新方法，Sound event detection relies on frame-level strong labels whose annotation is expensive...
-
-### 🔧 技术方案
-
-**模型架构** 提出了针对语音处理任务的神经网络方法。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
+**是否开源** 暂未开源
 
 ### ⭐ 评分: 6/10
-理由 增量工作，有一定参考价值，可关注后续进展。
-
----
-
-## [4] Greedy Volume Maximization of Gradient Embeddings for Long-Tailed Frame-Level Bioacoustic Active Learning
-
-**arXiv ID** 2607.13555 | **方向** 语音前端
-
-**作者** Shiqi Zhang, Marius Faiß, Ariana Strandburg-Peshkin, Tuomas Virtanen
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-15 | **论文** https://arxiv.org/abs/2607.13555 | **PDF** https://arxiv.org/pdf/2607.13555.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究提出了新方法，Bioacoustic call-type classification relies on costly expert annotation...
-
-### 🔧 技术方案
-
-**模型架构** 提出了针对语音处理任务的神经网络方法。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 6/10
-理由 增量工作，有一定参考价值，可关注后续进展。
-
----
-
-## [5] The Sound of Absence: Audio-Language Embedding Models Struggle with Negation
-
-**arXiv ID** 2607.12290 | **方向** 语音前端
-
-**作者** Chun-Yi Kuan, Hung-yi Lee
-
-**机构** （论文未提供机构信息）
-
-**发布日期** 2026-07-14 | **论文** https://arxiv.org/abs/2607.12290 | **PDF** https://arxiv.org/pdf/2607.12290.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-该研究提出了新方法，Audio-language embedding models such as CLAP are widely evaluated on matching present sound events, but rarely on negation...
-
-### 🔧 技术方案
-
-**模型架构** 基于大语言模型架构，结合音频编码器实现跨模态理解。
-
-**核心创新** 待从全文提取。
-
-**训练策略** 待从全文提取。
-
-### 📊 实验结果
-
-**数据集** 待从全文补充。
-
-**主要指标** 待从全文补充。
-
-**是否开源** 暂无。
-
-### ⭐ 评分: 6/10
-理由 增量工作，有一定参考价值，可关注后续进展。
-
----
-
-### 语音前端
-## [6] MetaPerch: Learning from metadata for bioacoustics foundation models
-**arXiv ID**: 2607.14072 | **评分**: 7/10
-**链接**: https://arxiv.org/abs/2607.14072
-
-## [7] Improving Text-to-Audio Instruction Following via Fine-Grained Feedback from Audio-Aware Large Language Models
-**arXiv ID**: 2607.13408 | **评分**: 7/10
-**链接**: https://arxiv.org/abs/2607.13408
-
+理由 DAFx 2026接收，提出了实用的音频morphing方法，工程性强，但研究性质更强于创新性质，适合实时应用场景。
 
 ---
 
