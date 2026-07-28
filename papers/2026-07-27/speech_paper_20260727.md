@@ -275,27 +275,36 @@ Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠
 
 ---
 
-## [9] Optimising Neural Speech Codecs for 300bps Communication using Reinforcement Learning
+## [9] Local Multimodal Music Alignment from Global Supervision
 
 **arXiv ID** 2607.10023 | **方向** 语音前端
 
-**作者** 暂未获取到详细信息
+**作者** 暂未从摘要提取到
 
-**机构** 暂未获取到详细信息
+**机构** 暂未从摘要提取到
 
-**发布日期** 2026-07-24 | **论文** https://arxiv.org/abs/2607.10023 | **PDF** https://arxiv.org/pdf/2607.10023.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-10 | **论文** https://arxiv.org/abs/2607.10023 | **PDF** https://arxiv.org/pdf/2607.10023.pdf | **代码** https://github.com/irmakbky/fusili | **Demo** https://irmakbky.github.io/fusili/
 
 ### 📌 简介
-暂未获取到详细信息
+理解音乐需要理解数据模态之间的局部对应关系，例如表演音频中的时间如何映射到乐谱图像中的位置。然而，获取这类局部对应的监督信号很困难——实践中通常只有更粗粒度的全局监督（如配对的音频和图像片段）。本文提出FuSiLi（Fused Sinkhorn-Localized Similarity），一种用于多模态对比学习的相似度分数，通过基于Sinkhorn的软对齐直接在局部图像块和音频帧特征上操作。
 
 ### 🔧 技术方案
-暂未获取到详细信息
+
+**模型架构** 微调预训练的CLIP图像编码器和CLAP音频编码器。使用ViT图像编码器和LAION-CLAP HTSAT音频编码器。
+
+**核心创新** 提出"fuse-then-pool"范式替代传统的"pool-then-fuse"。计算帧级特征之间的成对余弦相似度，使用Sinkhorn导出的软对齐加权，然后池化为标量相似度分数。
+
+**训练策略** 使用混合对比目标，结合FuSiLi和传统全局相似度。α控制局部/全局损失平衡。
 
 ### 📊 实验结果
-暂未获取到详细信息
+**数据集** PDMX（约40K乐曲片段）、MSMD（合成数据集）、YTSV（室外人类表演）
 
-### ⭐ 评分：5/10
-信息不足，无法完整评估
+**主要指标** 在局部对齐任务上，FuSiLi达到30% top-1准确率，相比全局基线的16%几乎翻倍。点&检索任务上，I2A方向提升超过10倍（13.91% vs 1.33%）。全局检索保持竞争力（PDMX上MRR约0.83-0.86）。
+
+**是否开源** 代码：https://github.com/irmakbky/fusili
+
+### ⭐ 评分：7/10
+方法创新性强，解决了从全局监督学习局部对齐的核心问题。Sinkhorn软对齐是巧妙的设计。实验在多个数据集上验证。但目前仅在合成数据上训练。
 
 ---
 
