@@ -1,6 +1,6 @@
 # 2026-07-27 语音论文速递
 
-**共收录**: 9 篇 | **语音大模型**: 6 篇 | **语音前端**: 3 篇
+**共收录**: 9 篇 | **语音大模型**: 5 篇 | **语音前端**: 4 篇
 
 > 今日 arXiv 语音相关论文共命中 9 篇。
 > 以下是按评分排序的结果。
@@ -33,7 +33,7 @@
 ### 📊 实验结果
 **数据集** IEMOCAP（情感4类）、MELD（情感7类/情感3类）、MUSTARD（讽刺二分类）、VCTK（口音3类）、专有英语临床语料库（抑郁/焦虑二分类）、专有日语临床语料库。
 
-**主要指标** 在Repeat条件下，前5个模型保留了超过90%的信号（P≥0.90）。E2-TTS、OpenAudio、MaskGCT、CosyVoice3、F5-TTS的平均性能下降为-1.7pp到-4.9pp。在跨语言任务中，OpenAudio在抑郁检测上提升+3.3pp，CosyVoice3在焦虑检测上提升+4.0pp，均显著优于原始跨语言基线。
+**主要指标** 在Repeat条件下，前5个模型保留了超过90%的信号（P≥0.90）。E2-TTS、OpenAudio、MaskGCT、CosyVoice3，F5-TTS的平均性能下降为-1.7pp到-4.9pp。在跨语言任务中，OpenAudio在抑郁检测上提升+3.3pp，CosyVoice3在焦虑检测上提升+4.0pp，均显著优于原始跨语言基线。
 
 **是否开源** 部分模型开源
 
@@ -64,7 +64,7 @@ Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠
 **训练策略** 使用LoRA进行监督微调（rank=16，α=32），然后进行GDPO（Group Reward-Decoupled Policy Optimization）训练，单独归一化格式、门控和转录奖励。
 
 ### 📊 实验结果
-**数据集** Context-Speech Bench (CSB)：13255训练样本和1525评估样本，涵盖重叠、噪音、会议、流式线索和门控。
+**数据集** Context-Speech Bench (CSB)：13255训练样本和1525评估样本，涵盖重叠、噪音、会议，流式线索和门控。
 
 **主要指标** 在重叠+噪音条件下，无线索的capped mean mpWER从25%-71%降至9%-15%。最难1/3样本上，从50%-96%降至13%-17%。门控GDPO达到timeline F1 0.753-0.803，延迟约0.2s。
 
@@ -119,11 +119,11 @@ Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠
 **发布日期** 2026-07-23 | **论文** https://arxiv.org/abs/2607.21857 | **PDF** https://arxiv.org/pdf/2607.21857.pdf | **代码** 即将发布 | **Demo** https://haozhang6720.github.io/SoundscapeAgentDemoPage/
 
 ### 📌 简介
-本文提出智能音景构建框架，用于可控的组合音频生成。该框架使场景规划、源选择、时间布局和渲染步骤显式化，而不是像单shot文本到音频模型那样隐式处理。LLM代理将用户意图转换为可执行场景计划，通过检索和按需生成获取资产，渲染可控多事件混合，并导出对齐的场景元数据。
+本文提出智能音景构建框架，用于可控的组合音频生成。该框架使场景规划、源选择，时间布局和渲染步骤显式化，而不是像单shot文本到音频模型那样隐式处理。LLM代理将用户意图转换为可执行场景计划，通过检索和按需生成获取资产，渲染可控多事件混合，并导出对齐的场景元数据。
 
 ### 🔧 技术方案
 
-**模型架构** LLM代理层+渲染层双耦合架构。代理层解释用户意图并生成场景计划，渲染层执行确定性时间线调度、波形的Post-processing和导出。
+**模型架构** LLM代理层+渲染层双耦合架构。代理层解释用户意图并生成场景计划，渲染层执行确定性时间线调度，波形的Post-processing和导出。
 
 **核心创新** 提出智能音景构建框架，将组合音景生成作为智能体引导的构建问题，而非从文本到波形的单shot映射。支持离线先验模式进行大规模语料库构建。
 
@@ -141,7 +141,42 @@ Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠
 
 ---
 
-## [5] Probing Speaker Identity Sensitivity in Audio Deepfake Detectors
+## [5] Reflector: Arrangement-Aware Harmonic Retrieval for Sample-Based Composition
+
+**arXiv ID** 2607.22413 | **方向** 语音大模型
+
+**作者** Austin Rockman
+
+**机构** Independent Researcher
+
+**发布日期** 2026-07-24 | **论文** https://arxiv.org/abs/2607.22413 | **PDF** https://arxiv.org/pdf/2607.22413.pdf | **代码** https://github.com/austinrockman/reflector | **Demo** 暂无
+
+### 📌 简介
+样本检索工具可以帮助作曲者找到和谐兼容的材料，但随着编曲演进和每个音乐决定的谐波上下文变化，从固定参考样本查询变得不那么有效。本文提出Reflector，一个交互式音频工作站，跟踪谐波组合随着作曲者时间线上的积累而变化，并随着编曲发展调整检索。
+
+### 🔧 技术方案
+
+**模型架构** 核心是手工设计的12×12间隔类权重表，作为固定间隔类oracle。一个完全在合成音频上训练的编码器学习在128维嵌入空间中近似oracle，其中点积代替交互速度下的兼容性评分。
+
+**核心创新** 提出排列感知检索系统，跟踪多轨道时间线上的谐波组合。将oracle蒸馏到编码器中，通过InfoNCE优化点积几何。使用sweep-line分析发现共响区域，计算oracle加权质心。
+
+**训练策略** 两阶段训练：Stage A生成基于音阶集合的轨迹，Stage B将每个轨迹渲染成音频（加法合成、域随机化），然后用CQT重新提取色度。编码器在合成数据上训练，无需版权录音。
+
+### 📊 实验结果
+**数据集** 631个样本的工作语料库（电子、原声、实地录音等）
+
+**主要指标** 学习到的嵌入保留oracle的成对判断，同时覆盖整个库。NDCG@10达到0.85。直接内核评分覆盖率仅64个样本（崩溃到通用donor），但学习嵌入覆盖625个样本。相似度和兼容性几乎相反——相似回答"什么相似"，兼容性回答"什么组合"。
+
+**是否开源** 免费macOS应用，训练pipeline开源
+
+### ⭐ 评分：7/10
+系统性强，设计决策有详细说明。实验揭示了oracle蒸馏作为多样性控制的作用。无需版权训练数据是重要优点。
+
+---
+
+## 🎙️ 语音前端
+
+## [6] Probing Speaker Identity Sensitivity in Audio Deepfake Detectors
 
 **arXiv ID** 2607.21820 | **方向** 语音前端
 
@@ -174,7 +209,7 @@ Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠
 
 ---
 
-## [6] CODA: Cascaded Online Discontinuity-Aware Alignment for Real-Time Image-Based Score Following
+## [7] CODA: Cascaded Online Discontinuity-Aware Alignment for Real-Time Image-Based Score Following
 
 **arXiv ID** 2607.21899 | **方向** 语音前端
 
@@ -189,7 +224,7 @@ Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠
 
 ### 🔧 技术方案
 
-**模型架构** 因果Mamba音频编码器+共享CNN视觉主干+三个级联阶段（系统选择、小节选择、音符定位）+带学习时间先验的Beam Search。
+**模型架构** 因果Mamba音频编码器+共享CNN视觉主干+三个级联阶段（系统选择，小节选择、音符定位）+带学习时间先验的Beam Search。
 
 **核心创新** 级联选择-回归公式强制几何一致性。静音驱动的跳转检测和恢复机制处理乐谱不连续性（重复、Da Capo、coda跳转）。
 
@@ -207,65 +242,48 @@ Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠
 
 ---
 
-## 🎙️ 语音前端
+## [8] Kutti AI: A Voice-First, Offline-Capable Learning Companion with Real-Time Struggle Detection for Visually-Impaired Children
 
-## [7] MEUSLI: a Multilingual Projector for LLM-based ASR and Beyond
+**arXiv ID** 2607.22377 | **方向** 语音前端
 
-**arXiv ID** 2607.21857 | **方向** 语音前端
+**作者** Kadharmoideen Fadurudeen
 
-**作者** 暂未从摘要提取到
+**机构** Independent Researcher
 
-**机构** 暂未从摘要提取到
-
-**发布日期** 2026-07-24 | **论文** https://arxiv.org/abs/2607.21857 | **PDF** https://arxiv.org/pdf/2607.21857.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-24 | **论文** https://arxiv.org/abs/2607.22377 | **PDF** https://arxiv.org/pdf/2607.22377.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
-暂未获取到详细信息
+大多数面向儿童的教育技术都围绕视觉界面构建，这让全球数百万视力障碍儿童被排斥在外。本文提出Kutti AI，一个语音优先的学习伴侣，设计上让音频成为主要且足够的界面：孩子通过口语对话学习课程内容，通过说话回应，并获得口语反馈，不依赖视觉元素。
 
 ### 🔧 技术方案
-暂未获取到详细信息
+
+**模型架构** 跨平台移动应用，使用React Native (Expo)和TypeScript构建。语音识别使用设备端Whisper ASR模型实现离线转录。语音合成使用平台TTS引擎。
+
+**核心创新** 多信号挣扎检测引擎，融合三个独立信号：响应延迟分析、错误尝试跟踪、基于关键词的犹豫检测。跨语言答案匹配管道，结合语言感知翻译/音译、Levenshtein模糊匹配和文本规范化。
+
+**训练策略** 设备端运行的 Whisper 模型用于语音识别，无需网络连接。课程内容本地缓存，离线优先设计。
 
 ### 📊 实验结果
-暂未获取到详细信息
+**数据集** 支持英语和泰米尔语，原型在Half Baked hackathon演示
 
-### ⭐ 评分：5/10
-信息不足，无法完整评估
+**主要指标** 响应延迟阈值2.5秒触发提示；错误尝试阈值2次触发简化问题；模糊匹配相似度阈值0.6；跨语言匹配容忍code-switching和发音变化。
+
+**是否开源** 暂无
+
+### ⭐ 评分：6/10
+面向视障儿童的教育技术创新性强，实用价值高。离线优先设计对欠发达地区有重要意义。但目前只有hackathon原型演示，定量评估不足。
 
 ---
 
-## [8] MemNMF: Memory-Augmented NMF on LPC Spectra for Anomalous Sound Detection
+## [9] Optimising Neural Speech Codecs for 300bps Communication using Reinforcement Learning
 
-**arXiv ID** 2607.21943 | **方向** 语音前端
+**arXiv ID** 2607.10023 | **方向** 语音前端
 
-**作者** 暂未从摘要提取到
+**作者** 暂未获取到详细信息
 
-**机构** 暂未从摘要提取到
+**机构** 暂未获取到详细信息
 
-**发布日期** 2026-07-24 | **论文** https://arxiv.org/abs/2607.21943 | **PDF** https://arxiv.org/pdf/2607.21943.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-暂未获取到详细信息
-
-### 🔧 技术方案
-暂未获取到详细信息
-
-### 📊 实验结果
-暂未获取到详细信息
-
-### ⭐ 评分：5/10
-信息不足，无法完整评估
-
----
-
-## [9] Kutti AI: A Voice-First, Offline-Capable Learning Companion with Real-Time Struggle Detection for Visually-Impaired Children
-
-**arXiv ID** 2607.22000 | **方向** 语音前端
-
-**作者** 暂未从摘要提取到
-
-**机构** 暂未从摘要提取到
-
-**发布日期** 2026-07-24 | **论文** https://arxiv.org/abs/2607.22000 | **PDF** https://arxiv.org/pdf/2607.22000.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期** 2026-07-24 | **论文** https://arxiv.org/abs/2607.10023 | **PDF** https://arxiv.org/pdf/2607.10023.pdf | **代码** 暂无 | **Demo** 暂无
 
 ### 📌 简介
 暂未获取到详细信息
