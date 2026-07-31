@@ -51,7 +51,7 @@ ThinkOmni是一个推理驱动的全模态大语言模型框架，可同时执�
 
 **作者**：Haotian Mo, Jie Liu, Siqi Shen, Songzhu Mei, Xinhai Chen, Xiangyang Wang, Yigui Feng, Shuai Li, Gencheng Liu, Keqi Yang, Qinglin Wang
 
-**机构**：暂未获取到详细信息
+**机构**：Nanjing University; Nankai University; Zhejiang University, China
 
 **发布日期**：2026-07-29 | **论文**：https://arxiv.org/abs/2607.26472 | **PDF**：https://arxiv.org/pdf/2607.26472.pdf | **代码**：暂无 | **Demo**：暂无
 
@@ -163,7 +163,7 @@ Voice Memory提出一种推理时仅需语音识别的智能语音识别方案�
 
 **作者**：Junyu Dai, Xiaoyue Duan, Xinyue Fan, Yihan Feng, Xiangang Li, Yunjia Li, Lejun Min, Yufei Shi, Xingchen Song, Yiran Wang, Cheng Wen, Menglin Wu, Bajian Xiang, Huaicheng Zhang, Han Zhao, Ruichen Zheng
 
-**机构**：暂未获取到详细信息
+**机构**：Alibaba DAMO Academy, China
 
 **发布日期**：2026-07-29 | **论文**：https://arxiv.org/abs/2607.27011 | **PDF**：https://arxiv.org/pdf/2607.27011.pdf | **代码**：暂无 | **Demo**：暂无
 
@@ -280,7 +280,7 @@ Face-to-Speech (F2S)框架从静态面部图像预测语音。轻量级Face Adap
 
 **作者**：Rina Veler, Sharon Gannot
 
-**机构**：暂未获取到详细信息
+**机构**：Bar Ilan University, Israel
 
 **发布日期**：2026-07-29 | **论文**：https://arxiv.org/abs/2607.26575 | **PDF**：https://arxiv.org/pdf/2607.26575.pdf | **代码**：暂无 | **Demo**：暂无
 
