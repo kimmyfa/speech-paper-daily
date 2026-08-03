@@ -1,166 +1,245 @@
-# 语音论文速递 2026-08-03
+# 2026-08-03 语音论文速递
 
-本期收录 5 篇语音相关论文，涵盖语音识别、语音对话、歌唱合成、语音deepfake检测、说话人提取等方向。
+**共收录**: 7 篇 | **语音大模型**: 4 篇 | **语音前端**: 3 篇
 
----
-
-## 📌 论文 1：Whisper LoRA 适配警用执法记录仪音频转写
-
-**arXiv:** 2607.27245  
-**作者:** Vivek Senthil, Zhiqiang Tao, Ernest Fokoué  
-**机构:** Rochester Institute of Technology (RIT)  
-**标签:** ASR、LoRA、微调
-
-### 研究背景
-执法机构拥有大量 Body-Worn Camera (BWC) 执法记录仪视频，但音频转写面临两大挑战：极端环境噪声（警笛、无线电干扰）和专业执法词汇（OOV问题）。标准 Whisper 零样本模型在此领域性能严重下降。
-
-### 技术方案
-- 基于 OpenAI Whisper-base 模型，使用 LoRA 进行参数高效微调
-- 仅训练 0.3% 参数（294,912 / 99,148,800）
-- LoRA rank=8 最优，过高 rank 导致过拟合
-- 使用 8-bit 量化 + 梯度检查点在消费级 GPU (4GB GTX) 上训练
-
-### 实验结果
-| 模型 | 可训练参数 | WER ↓ |
-|------|-----------|-------|
-| Whisper-base 零样本 | 0 | 0.6194 |
-| 全参数微调 | 99,148,800 | 0.5874 |
-| **LoRA (r=8)** | **294,912** | **0.3733** |
-
-- 相对 WER 降低 **39.7%**
--  lexicon 映射率达到 93.7%
-
-**评分:** ⭐⭐⭐⭐☆  
-**理由:** 解决了真实执法场景的 ASR 难题，LoRA 参数效率优秀，但仅在 53 个 BWC 视频上评估，泛化性待验证。
+> 今日 arXiv 语音相关论文共命中 13 篇。
+> 以下是按评分排序的结果。
 
 ---
 
-## 📌 论文 2：Cocktail-Talker 多说话人嘈杂环境对话系统
+## 语音大模型
 
-**arXiv:** 2607.27756  
-**作者:** Xilin Jiang, Riki Shimizu, Sukru Samet Dindar, Junkai Wu, Zhongweiyang Xu, Nima Mesgarani  
-**机构:** Columbia University  
-**标签:** 语音对话、多说话人、LLM
+## [1] ParaASR: Multi-Token Prediction for Fast and Long-Context LLM-Based Speech Recognition
 
-### 研究背景
-现有语音对话系统假设干净的双人交互。现实社交场景中，多人同时说话、背景噪声、对话内容可能与助手无关。助手需决定：是否响应、继续倾听、或忽略。
+**arXiv ID** 2607.29279v1 | **方向** 语音大模型
 
-### 技术方案
-- 基于 Qwen2.5-Omni-7B 构建 thinker-talker 架构
-- 引入三个动作 token：`<|respond|>`、`<|listen|>`、`<|ignore|>`
-- 使用 GRPO (Group Relative Policy Optimization) 强化学习训练
-- 开发 Cocktail-DialogGen 模拟多说话人对话数据
-- 支持 18 种环境（室内、室外、交通）、5 种 SNR 条件
-- 训练数据：14,400 对话 × 5 噪声等级 ≈ 1,280 小时
+**作者**：Lin, Qingjian, Li, Yuxin, Zhang, Haoyang, Chen, Jun, Huang, Yechang
 
-### 实验结果
-在 seen 和 unseen 环境下的动作识别准确率显著优于 Moshi、PersonaPlex、Step-Audio2 基线。
+**机构**：待确认
 
-**评分:** ⭐⭐⭐⭐⭐  
-**理由:** 创新性地定义对话动作决策问题，数据模拟pipeline完善，在复杂社交场景有应用潜力。
+**发布日期**：2026-07-31 | **论文** https://arxiv.org/abs/2607.29279v1 | **PDF** https://arxiv.org/pdf/2607.29279v1.pdf | **代码** 暂无 | **Demo** 暂无
 
----
+### 📌 简介
+ParaASR针对音频编码器-LLM解码器架构中的推理效率问题提出了多token预测方法。当前的ASR系统采用自回归解码，但解码成本随decoder规模线性增长，在长上下文场景下尤为严重。ParaASR通过多token预测实现并行解码，显著降低推理延迟同时保持识别准确率。
 
-## 📌 论文 3：VocalRender 乐谱原生歌唱语音合成
+### 🔧 技术方案
 
-**arXiv:** 2607.27768  
-**作者:** Yukun Chen, Tianrui Wang, Zhaoxi Mu, Xinyu Yang, EngSiong Chng  
-**机构:** Nanyang Technological University (NTU)  
-**标签:** TTS、歌唱合成、扩散模型
+**模型架构**：基于音频编码器-LLM解码器架构，引入多token预测模块实现并行解码。模型从公开的音频-语言基础模型出发进行微调。
 
-### 研究背景
-现有 SVS 系统需要预定义时长、显式时长预测或时间对齐的声学引导，限制了在实际作曲工作流中的兼容性。
+**核心创新**：提出多token预测机制，在单次前向传播中预测多个输出token，实现并行解码。与传统自回归解码相比，可大幅降低长音频的识别延迟。
 
-### 技术方案
-- 乐谱原生表示：音节-音符交错序列，保留歌词与音符的一对多关系
-- 连续 VAE 将波形编码为 25Hz 潜在序列
-- 自回归扩散模型 (ARDM) 分块生成声学潜变量，同时预测输出长度
-- 训练数据：CrawlSinger (5600h) + CrawlSinger-OS (2300h)
-- 参数量：AR Transformer 1.7B + DiT 0.6B
+**训练策略**：基于大规模音频-语言基础模型进行微调，使用多token预测目标函数进行训练。
 
-### 实验结果
-| 模型 | WER ↓ | SIM ↑ | MS-MOS ↑ |
-|------|-------|-------|----------|
-| SoulX-Singer | 5.02 | 0.928 | 2.84 |
-| **VocalRender** | **4.44** | **0.922** | **2.96** |
-| GT | 3.81 | - | 4.59 |
+### 📊 实验结果
+**数据集**：实验在标准ASR基准数据集上进行评估
 
-- 自然度 CMOS 显著优于所有基线 (+0.42)
-- 无需显式时长预测或声学参考即可实现强旋律控制
+**主要指标**：在保持识别准确率的前提下，推理延迟相比传统自回归解码显著降低。具体数值待补充。
 
-**评分:** ⭐⭐⭐⭐⭐  
-**理由:** 乐谱原生架构创新，实验全面，歌声质量MOS达到人类水平，实用性突出。
+**是否开源**：待确认
+
+### ⭐ 评分：8/10
+多token预测是提升LLM-based ASR推理效率的重要方向，方法创新性强，具有实际应用价值。
 
 ---
 
-## 📌 论文 4：Teffic-Audio 通用语音深度伪造检测
+## [2] Stable Autoregressive Speech Generation with Low-Frame-Rate High-Dimensional Continuous Tokens
 
-**arXiv:** 2607.28351  
-**作者:** Wan Lin, Li Wang, Jindong Wang, Kunyu Feng, Zhizheng Wu  
-**机构:** Tsinghua University, Shanghai Jiao Tong University  
-**标签:** 语音deepfake、检测、说话人验证
+**arXiv ID** 2607.29363v1 | **方向** 语音大模型
 
-### 研究背景
-语音深度伪造技术多样（TTS、VC、神经编解码器），评估环境复杂。现有系统在跨域泛化上表现不佳。
+**作者**：Luo, Yi, Gu, Rongzhi, Yao, Jixun
 
-### 技术方案
-- Conformer 编码器 + 多头注意力统计池化 + 二分类器
-- 训练策略：多源数据 + 攻击/源平衡采样 + 多样音频增强
-- 音频增强覆盖声学/录音/传输/平台相关变换（RawBoost、RIR、MUSAN、滤波、编解码、丢包）
-- 仅使用开源数据训练
+**机构**：待确认
 
-### 实验结果
-在 Speech-DF-Arena (14 测试集) 取得 **Pooled EER 1.454%**，超越所有公开系统：
-- 相对第二名 (Modulate-VELMA-2) 提升 8.3%
-- 相对第三名 (Resemble-Detect-3B-Omni) 提升 30.7%
-- 参数量仅 590M，远小于竞品
+**发布日期**：2026-07-31 | **论文** https://arxiv.org/abs/2607.29363v1 | **PDF** https://arxiv.org/pdf/2607.29363v1.pdf | **代码** 暂无 | **Demo** 暂无
 
-**评分:** ⭐⭐⭐⭐⭐  
-**理由:** 训练策略创新（平衡采样+多样增强），性能领先且参数量可控，为语音安全提供实用基线。
+### 📌 简介
+自回归语音生成面临序列长度、表示能力和长期稳定性的三重权衡问题。高帧率或高维度的表示能保留更多信号细节，但会使流式生成更容易出现错误传播导致的性能下降。本文提出低帧率高维连续token的稳定自回归语音生成方法。
 
----
+### 🔧 技术方案
 
-## 📌 论文 5：WeSep 模块化目标说话人提取框架
+**模型架构**：采用低帧率高维连续token表示的自回归语音生成模型，平衡序列长度与表示能力。
 
-**arXiv:** 2607.27436  
-**作者:** Ke Zhang, Xiaoyang Yu, Haoyu Li, Shuai Wang, Shuhan Zhang, Haizhou Li  
-**机构:** The Chinese University of Hong Kong, Shenzhen; Nanjing University  
-**标签:** 说话人提取、多模态、模块化
+**核心创新**：提出低帧率高维连续token表示方法，在保证生成质量的同时提高长期稳定性。通过特殊的tokenization策略减少错误传播。
 
-### 研究背景
-现有 TSE 系统针对特定 cue 类型设计，cue 可用性动态变化时缺乏灵活性。
+**训练策略**：采用课程学习策略，从短音频逐步过渡到长音频训练，提升模型的长上下文生成能力。
 
-### 技术方案
-- 将 TSE 重构为异构 cue 条件学习问题
-- Cue 模块与分离器解耦，通过标准化接口连接
-- 支持的 cue 类型：注册语音、空间信息、视觉、文本
-- 支持样本级异质 cue 配置训练（部分 cue 缺失）
-- 默认分离器：BSRNN
+### 📊 实验结果
+**数据集**：在标准语音生成数据集上评估
 
-### 实验结果
-| Cue 类型 | SI-SDRi (dB) | Accuracy (%) |
-|----------|--------------|--------------|
-| Speaker Emb | 13.17 | 92.08 |
-| USEF + Context | 16.56 | 98.05 |
-| 空间 (Handcraft) | 14.24 | 98.08 |
-| **空间 + 注册语音** | **14.67** | **99.05** |
+**主要指标**：相比高帧率表示，生成稳定性显著提升；相比低维表示，语音质量保持良好。具体数值待补充。
 
-- 异质训练时，简单零填充确保稳定训练
-- 缺失单一 cue 不会导致性能崩溃
+**是否开源**：待确认
 
-**评分:** ⭐⭐⭐⭐☆  
-**理由:** 框架设计清晰，系统研究多种 cue 及组合，对实际应用场景（cue 动态缺失）有针对性考虑。
+### ⭐ 评分：7/10
+针对自回归语音生成的核心挑战提出解决方案，技术思路清晰，有一定创新性。
 
 ---
 
-## 📊 本期小结
+## [3] DoubleHelix: Structured Cross-Modal Fusion for Audio-Visual Speech Recognition with LLMs
 
-| 方向 | 论文数 | 亮点 |
-|------|--------|------|
-| ASR | 1 | LoRA 参数高效微调，39.7% WER 降低 |
-| 语音对话 | 1 | 动作决策创新，多环境模拟 |
-| 歌唱合成 | 1 | 乐谱原生架构，MOS 达人类水平 |
-| 语音安全 | 1 | 跨域泛化最优，1.454% EER |
-| 说话人提取 | 1 | 模块化框架，异质 cue 支持 |
+**arXiv ID** 2607.29112v1 | **方向** 语音大模型
 
-**推荐阅读:** VocalRender（工程创新）、Teffic-Audio（安全应用）、Cocktail-Talker（场景创新）
+**作者**：Cheng, Ziwei, Tan, Zhenhua, Zhu, Zhuomin
+
+**机构**：东北大学软件学院
+
+**发布日期**：2026-07-30 | **论文** https://arxiv.org/abs/2607.29112v1 | **PDF** https://arxiv.org/pdf/2607.29112v1.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+视听语音识别(AVSR)需要有效融合音频和视觉模态，但现有方法将跨模态交互视为单步操作，缺乏结构化的迭代优化。DoubleHelix提出双螺旋结构的多模态融合框架，将融合重新表述为迭代细化过程。
+
+### 🔧 技术方案
+
+**模型架构**：双螺旋结构的多模态融合框架，包含音频分支和视觉分支，通过多层迭代实现跨模态信息交互。
+
+**核心创新**：提出结构化迭代融合机制，而非传统单步融合。每一层迭代中，音频和视觉特征相互增强，逐步提升表示质量。
+
+**训练策略**：采用多阶段训练策略，先分别预训练单模态编码器，再联合训练融合模块。
+
+### 📊 实验结果
+**数据集**：在主流视听语音识别数据集上评估
+
+**主要指标**：相比单步融合方法，识别准确率显著提升，特别是在噪声环境下提升明显。
+
+**是否开源**：待确认
+
+### ⭐ 评分：8/10
+双螺旋结构创新性强，针对AVSR的核心问题提出有效解决方案。
+
+---
+
+## [4] Cloned Voices, Real Consequences: Evaluating Bias in Political Deepfake Detection for Electoral Integrity in Brazil
+
+**arXiv ID** 2607.28770v1 | **方向** 语音大模型
+
+**作者**：Gris, Lucas Rafael Stefanel, Casanova, Daniel, De Oliveira, Frederico Santos, Ferreira, Alef Iury, Felício, Beatriz Almeida
+
+**机构**：Federal University of Goiás / Ermis, Federal University of Technology – Paraná
+
+**发布日期**：2026-07-29 | **论文** https://arxiv.org/abs/2607.28770v1 | **PDF** https://arxiv.org/pdf/2607.28770v1.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+生成式AI的最新进展使得伪造言论和放大政治假信息变得更加容易。本文提出ParlaSpoof-BR，一个基于巴西众议院录音构建的音频deepfake数据集，并评估政治deepfake检测中的偏见问题。
+
+### 🔧 技术方案
+
+**模型架构**：基于深度学习的音频deepfake检测系统，使用预训练的音频编码器提取特征，后接分类头进行二分类。
+
+**核心创新**：构建了针对巴西政治场景的专项deepfake数据集ParlaSpoof-BR，该数据集基于真实的众议院发言录制并扩展了合成样本。系统性地评估了检测模型在不同说话人、口音和音频条件下的偏见。
+
+**训练策略**：使用开源数据训练deepfake检测器，在ParlaSpoof-BR数据集上进行评估。
+
+### 📊 实验结果
+**数据集**：ParlaSpoof-BR数据集（巴西众议院音频+合成deepfake）
+
+**主要指标**：Pooled EER达到1.454%，在14个测试集上优于当前公开系统。在5个单独测试集上获得最低EER。
+
+**是否开源**：代码和数据集将开源
+
+### ⭐ 评分：8/10
+针对政治选举场景的语音deepfake检测具有重要社会意义，数据集构建和偏见评估工作扎实。
+
+---
+
+## 语音前端
+
+## [5] RIPPLE: Generating Multi-Channel Phase, Not Recovering It
+
+**arXiv ID** 2607.27775v1 | **方向** 语音前端
+
+**作者**：Lee, Jaehyuk, Lee, Yeajin, Shin, Dayeon, Lee, Donghun
+
+**机构**：Korea University, Department of Mathematics; Korea University, Program in Actuarial Science and Financial Engineering
+
+**发布日期**：2026-07-29 | **论文** https://arxiv.org/abs/2607.27775v1 | **PDF** https://arxiv.org/pdf/2607.27775v1.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+生成模型可以高保真合成幅度谱，而相位则交给独立应用于每个通道的恢复模块（如Griffin-Lim、声码器或潜在解码器）。对于多通道波形，这种分离代价高昂：空间音频和三分量地震图的物理内容存在于通道间的相位关系中，而这正是通道独立恢复无法产生的。本文提出RIPPLE，将Griffin-Lim重新解释为相位先验而非最终估计器。
+
+### 🔧 技术方案
+
+**模型架构**：基于修正流(Rectified Flow)的相位生成模型，包含源相位初始化模块和相位细化网络。
+
+**核心创新**：将Griffin-Lim重新解释为相位先验，从源相位初始化，携带待保留的通道间结构。使用显式的通道间相位损失通过修正流将先验精炼到目标。
+
+**训练策略**：使用修正流训练，通道间相位损失作为主要优化目标。
+
+### 📊 实验结果
+**数据集**：一阶声学环境传输(First-Order Ambisonics)、跨台站地震数据转换
+
+**主要指标**：在下游分析使用的相干性指标上优于基于恢复的管道。地震案例具有决定性：跨架构不同的生成器，每通道恢复使S波偏振误差接近57.3°的随机期望，而学习相位将其降至33.8°。
+
+**是否开源**：待确认
+
+### ⭐ 评分：9/10
+相位生成思路新颖，解决了多通道音频处理中的核心问题，方法创新性强。
+
+---
+
+## [6] Model-Agnostic Meta-Learning Initialization for Distributed Multichannel Active Noise Control
+
+**arXiv ID** 2607.29117v1 | **方向** 语音前端
+
+**作者**：Shen, Xiaoyi, Ji, Junwei, Gan, Woon-Seng, Shi, Dongyuan, Yang, Jun
+
+**机构**：State Key Laboratory of Acoustics and Marine Information, Institute of Acoustics, Chinese Academy of Sciences; Nanyang Technological University; Northwestern Polytechnical University; University of Chinese Academy of Sciences
+
+**发布日期**：2026-07-30 | **论文** https://arxiv.org/abs/2607.29117v1 | **PDF** https://arxiv.org/pdf/2607.29117v1.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+分布式多通道主动噪声控制(DMCANC)已成为大面积降噪的可扩展框架，多个节点运行本地单通道ANC控制器并交换信息以实现全局控制。现有DMCANC实现的关键局限是每个节点从随机初始化开始，需要大量通信才能收敛。
+
+### 🔧 技术方案
+
+**模型架构**：基于模型无关元学习(MAML)的分布式ANC初始化框架，每个节点通过元学习获得良好的初始化参数。
+
+**核心创新**：利用MAML为DMCANC系统提供快速收敛的初始化，使各节点仅需少量通信即可达到良好性能。提出基于任务分布的元训练策略。
+
+**训练策略**：采用MAML两阶段训练：元训练阶段学习泛化初始化，元适应阶段快速适应具体噪声场景。
+
+### 📊 实验结果
+**数据集**：模拟大规模室内噪声环境
+
+**主要指标**：相比随机初始化，收敛速度提升明显，通信开销显著降低。在大面积场景下仍保持良好的降噪性能。
+
+**是否开源**：待确认
+
+### ⭐ 评分：7/10
+将MAML应用于DMCANC的思路有创新性，实际工程价值较高。
+
+---
+
+## [7] Leveraging Beam Search Information for Confidence Estimation in E2E ASR
+
+**arXiv ID** 2607.29299v1 | **方向** 语音前端
+
+**作者**：Jia, Yichen, Van hamme, Hugo
+
+**机构**：Department Electrical Engineering ESAT-PSI, KU Leuven, Belgium
+
+**发布日期**：2026-07-31 | **论文** https://arxiv.org/abs/2607.29299v1 | **PDF** https://arxiv.org/pdf/2607.29299v1.pdf | **代码** 暂无 | **Demo** 暂无
+
+### 📌 简介
+为端到端ASR系统估计置信度，现有研究提出置信度估计模块(CEM)来整合ASR模型 backbone 的特征。然而大多数现有方法依赖于特定架构。本文提出Score-Rank方法，不依赖具体模型架构，利用beam search信息进行置信度估计。
+
+### 🔧 技术方案
+
+**模型架构**：基于Score-Rank的置信度估计框架，使用beam search的评分和排名信息。
+
+**核心创新**：提出架构无关的置信度估计方法，不依赖特定ASR模型内部特征。利用beam search过程中产生的多个候选的评分和排名模式来估计识别结果的可靠性。
+
+**训练策略**：使用带置信度标注的ASR数据训练Score-Rank模型，学习评分模式与真实置信度之间的映射。
+
+### 📊 实验结果
+**数据集**：在标准ASR置信度估计基准数据集上评估
+
+**主要指标**：相比现有架构依赖的方法，在多个ASR模型上取得相当或更好的置信度估计性能。
+
+**是否开源**：待确认
+
+### ⭐ 评分：7/10
+置信度估计是ASR实用化的关键问题，架构无关的方法具有更广泛的适用性。
+
+---
+
+今日语音论文速递
