@@ -94,7 +94,7 @@ ParaASR是一个基于LLM的ASR系统，利用多Token预测（MTP）技术让4B
 
 **作者**：Ziwei Cheng, Zhenhua Tan, Zhuomin Zhu
 
-**机构**：暂未获取到详细信息
+**机构**：东北大学 (Northeastern University, China)
 
 **发布日期**：2026-07-31 | **论文** https://arxiv.org/abs/2607.29112 | **PDF** https://arxiv.org/pdf/2607.29112.pdf | **代码** 暂无 | **Demo** 暂无
 
@@ -132,7 +132,7 @@ ACM MM2026接收。迭代跨模态交互的设计思路新颖，退化感知门�
 
 **作者**：Yichen Jia, Hugo Van hamme
 
-**机构**：暂未获取到详细信息
+**机构**：KU Leuven (鲁汶大学, 比利时)
 
 **发布日期**：2026-07-31 | **论文** https://arxiv.org/abs/2607.29299 | **PDF** https://arxiv.org/pdf/2607.29299.pdf | **代码** 暂无 | **Demo** 暂无
 
