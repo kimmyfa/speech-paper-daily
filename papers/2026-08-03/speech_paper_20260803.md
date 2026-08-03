@@ -171,7 +171,7 @@ ICASSP 2026发表。SR-CEM在降低最大校准误差（MCE）方面表现突出
 
 **作者**：Lucas Rafael Stefanel Gris, Daniel Casanova, Frederico Santos De Oliveira, Alef Iury Ferreira, Beatriz Almeida Felício, Raul César Reis Mata, Anderson da Silva Soares
 
-**机构**：暂未获取到详细信息
+**机构**：巴西研究机构（具体信息待补充）
 
 **发布日期**：2026-07-30 | **论文** https://arxiv.org/abs/2607.28770 | **PDF** https://arxiv.org/pdf/2607.28770.pdf | **代码** https://huggingface.co/datasets/freds0/ParlaSpoof-BR | **Demo** https://ermisai.github.io/parlaspoof-br-demo
 
