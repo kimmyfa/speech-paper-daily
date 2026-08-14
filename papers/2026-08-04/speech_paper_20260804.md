@@ -1,492 +1,525 @@
 # 2026-08-04 语音论文速递
 
-**共收录**: 13 篇 | **TTS**: 4 篇 | **ASR**: 2 篇 | **安全**: 3 篇 | **增强**: 2 篇 | **其他**: 2 篇
+**共收录**: 13 篇 | **语音大模型**: 7 篇 | **语音前端**: 6 篇
 
 > 今日 arXiv 语音相关论文共命中 13 篇。
-> 以下是按评分排序的结果。
 
 ---
 
-## 🤖 TTS
+## 语音大模型
 
 ---
 
-## [1] JoyAI-Talker: Full-Duplex Speech Interactive Large Model Built for Empathetic Voice Agents
+## [1] JoyAI-Talker: Full-Duplex Speech Interactive Large Model for Empathetic Voice Agents
 
-**arXiv ID** 2608.01119 | **方向** TTS
+**arXiv ID**: 2608.01119 | **方向**: 语音大模型
 
-**作者**：Yinhao Bai, Jinming Chen, et al.
+**作者**: Yinhao Bai, Jinming Chen, et al.
 
-**机构**：JD.com
+**机构**: JD.com (京东)
 
-**发布日期**：2026-08-04 | **论文** https://arxiv.org/abs/2608.01119 | **PDF** https://arxiv.org/pdf/2608.01119.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.01119 | **PDF**: https://arxiv.org/pdf/2608.01119.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-JoyAI-Talker是京东推出的全双工语音对话系统，在保持强大基础模型能力的同时实现共情交互和语音代理智能。该系统采用模块化的Thinker-Talker架构，将认知规划、对话状态协调和语音生成解耦，并实现了统一的语音-文本联合训练流程以缓解常见的"认知退化"瓶颈，从而在将模型能力扩展到语音交互的同时保持其核心文本推理、STEM和逻辑能力。
+京东提出JoyAI-Talker，一个全双工语音对话系统，采用模块化Thinker-Talker架构将认知规划、对话状态协调和语音生成解耦。通过统一的语音-文本联合训练流程缓解"认知退化"问题，在MATH基准上达到94.62%的推理准确率，同时在全双工交互中实现0.88的响应率和极低误触发率。PAER框架从音频中提取说话人属性（性别、年龄、情绪）并结合CoT推理生成共情响应。
 
 ### 🔧 技术方案
 
-**模型架构**：Thinker-Talker模块化架构，Thinker负责推理和共情，Talker负责语音生成。
+**问题背景：** 现有语音对话系统将语音交互作为独立模块附加在LLM后，导致模型在扩展到语音模态时出现"认知退化"——核心文本推理、STEM和逻辑能力显著下降。全双工交互中的打断、插话等复杂对话管理尚未得到系统解决。
 
-**核心创新**：1）统一语音-文本联合训练流程，从预训练中期开始融合；2）PAER（人格适应共情响应）框架，从音频中提取说话人属性（性别、年龄、情绪），结合CoT推理生成共情响应；3）Joy-Duplex基于状态的全双工交互框架。
+**模型架构：** Thinker-Talker双模块架构。Thinker基于JD自研大语言模型，负责自然语言理解、推理、共情响应生成和对话状态管理；Talker基于ToyTalk-1B的指令可控表达性语音生成模型，支持Text-to-Speech和Speech-to-Speech两种模式。Duplex模块采用Joy-Duplex状态驱动的语义门控全双工交互框架，通过交错序列建模和交互状态词汇表管理对话轮次，支持打断、监听和自适应切换。
 
-**训练策略**：多阶段训练，包括预训练、联合训练和微调。
+**核心创新：** (1) Thinker-Talker解耦架构将认知推理与语音生成分离，Thinker在文本空间保持完整推理能力，Talker专注于表达性语音合成，避免了端到端多模态模型常见的模态竞争导致的认知退化。(2) PAER（Persona-Adaptive Empathetic Response）框架，通过层次化认知流水线从音频中提取非语言说话人线索（性别、年龄、情绪状态），注入Thinker的CoT推理，生成语义和副语言层面都自适应的共情响应。(3) Joy-Duplex基于状态的全双工交互框架，定义交互状态词汇表（如倾听、准备响应、被打断），通过语义门控机制决定何时产生backchannel、何时生成响应，相比传统的VAD+打断检测方案更鲁棒。
+
+**训练策略：** 多阶段训练：(1) 预训练阶段：Thinker在大量文本和语音-文本配对数据上预训练；(2) 统一语音-文本联合训练：从预训练中期开始将语音token序列与文本token混合训练，保持核心能力的同时学习语音交互；(3) 微调阶段：使用PAER框架进行共情对话微调，结合音频理解、CoT推理和共情响应生成的联合优化。
 
 ### 📊 实验结果
-**数据集**：T2T基准、S2T基准、Full-Duplex-Bench v1.5、MATH
+**数据集**: T2T基准、S2T基准、Full-Duplex-Bench v1.5/v2.5、MATH
 
-**主要指标**：
+**主要指标**:
+- MATH基准: 94.62%（保持接近纯文本模型的推理能力）
+- Full-Duplex-Bench v2.5: 响应率0.88，误触发率极低
 - T2T和S2T基准：达到竞争力性能
-- MATH基准：94.62%
-- Full-Duplex-Bench v2.5：响应率0.88，误触发率极低
+- 共情对话评估：PAER框架显著提升响应相关性和自然度
 
-**是否开源**：暂无
-
-### ⭐ 评分：9/10
-首个展示全双工语音交互能力的国产大模型，架构设计清晰，实验充分。解决了语音交互中的核心挑战——如何在保持推理能力的同时实现自然的全双工对话。
-
----
-
-## [2] Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-Based Text-to-Speech
-
-**arXiv ID** 2608.00722 | **方向** TTS
-
-**作者**：Chenlin Liu, Minghui Fang, Zhonghao Bi, Zekai Su, Rong Wang, Jiqing Han
-
-**机构**：Harbin Institute of Technology, Zhejiang University
-
-**发布日期**：2026-08-03 | **论文** https://arxiv.org/abs/2608.00722 | **PDF** https://arxiv.org/pdf/2608.00722.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-基于语言模型的文本转语音（LM-based TTS）容易受到语音幻觉的影响，即生成的语音偏离目标文本。现有缓解方法主要依赖架构改变或额外训练，而解码时控制仍缺乏探索。本文提出条件信息视角，区分来自文本的对齐信息和来自声学上下文及学习到的语音规律的经验信息。本文假设一类重要的幻觉始于所选token的对齐支持不足。通过使用有无文本条件的同一语音LM的预测，提出经验校准对比解码（ECCD），这是一种训练-free方法，可在保留有用经验信息的同时增强对齐支持。
-
-### 🔧 技术方案
-
-**模型架构**：基于LM的TTS系统，结合文本条件编码器。
-
-**核心创新**：1）条件信息视角区分文本对齐信息和经验信息；2）ECCD在不解码时控制幻觉；3）经验兼容性系数（ECC）动态调整增强强度。
-
-**训练策略**：训练-free方法，无需额外训练即可应用。
-
-### 📊 实验结果
-**数据集**：SeedTTS-Eval, CV3-Eval
-
-**主要指标**：
-- SeedTTS-Eval：四个模型WER/CER最多降低55.6%
-- CV3-Eval：25个多语言设置中24个取得改进
-- 主观评测：CMOS +0.644，同时保持说话人相似度
-
-**是否开源**：暂无
+**是否开源**: 暂无
 
 ### ⭐ 评分：9/10
-首个TTS解码时的条件信息分析方法，无需训练即可缓解幻觉。方法创新性强，对LM-based TTS有重要实用价值。
+评分理由：首个展示全双工语音交互能力的国产工业级大模型，Thinker-Talker架构设计清晰实用，解决了语音交互中的核心挑战——如何在保持推理能力的同时实现自然的全双工对话。PAER共情框架和Joy-Duplex交互管理均有实质性创新。实验充分覆盖推理、对话、共情和全双工多个维度。
 
 ---
 
-## [3] Beyond One-Size-Fits-All: Personalized and Culturally Adaptive Emotional TTS via Interactive Optimization of Individual Emotion Perception Spaces
+## [2] Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS
 
-**arXiv ID** 2608.00998 | **方向** TTS
+**arXiv ID**: 2608.00722 | **方向**: 语音大模型
 
-**作者**：Wangzixi Zhou, Bagus Tris Atmaja, Sakriani Sakti
+**作者**: Chenlin Liu, Minghui Fang, Zhonghao Bi, Zekai Su, Rong Wang, Jiqing Han
 
-**机构**：Nara Institute of Science and Technology, Japan
+**机构**: 哈尔滨工业大学 (HIT), 浙江大学 (Zhejiang University)
 
-**发布日期**：2026-08-03 | **论文** https://arxiv.org/abs/2608.00998 | **PDF** https://arxiv.org/pdf/2608.00998.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00722 | **PDF**: https://arxiv.org/pdf/2608.00722.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-对话AI的兴趣增加推动了对情感TTS的研究。大多数系统依赖离散情感标签，无法捕捉人类情感的细微差别。近期模型采用Russell的唤醒度-效价（A-V）维度表示，但情感感知因人而异，这可能导致建模情感与感知情感不匹配。本文提出个性化和文化自适应的情感TTS框架，通过交互遗传算法对个性化A-V感知空间进行交互优化。
+基于语言模型的TTS（LM-based TTS）生成的语音可能偏离目标文本（语音幻觉）。本文提出条件信息视角，区分来自文本的"对齐信息"和来自声学上下文及学习规律的"经验信息"，并提出ECCD（Experience-Calibrated Contrastive Decoding），一种无需训练的解码时控制方法。ECCD通过对比同一语音LM在有/无文本条件下的预测分布，增强对齐支持同时保留有用经验信息。在四个模型上WER/CER最多降低55.6%，25个多语言设置中24个取得改进，CMOS增益+0.644。
 
 ### 🔧 技术方案
 
-**模型架构**：交互式遗传算法（IGA）+ 情感控制器。
+**问题背景：** LM-based TTS（如VALL-E、SeedTTS）在解码时可能生成与目标文本不一致的语音内容，即语音幻觉。现有方法依赖架构改动或额外训练（如外部对齐模块、重训练），解码时控制（decoding-time control）仍缺乏探索。核心挑战在于如何在保持语音自然度的同时抑制幻觉。
 
-**核心创新**：1）将情感个性化定义为低维感知优化问题；2）交互遗传算法根据用户偏好反馈迭代优化A-V坐标；3）为每个听众获得个性化的Russell环效模型变体。
+**模型架构：** 基于标准LM-based TTS系统，包含文本条件编码器和声学解码器。ECCD作为解码时后处理模块，无需修改模型架构。具体地，使用同一语音LM的两种预测模式：有文本条件的预测（提供对齐信息）和无文本条件的预测（仅依赖经验信息）。
 
-**训练策略**：用户交互反馈驱动的在线优化，无需修改骨干声学模型。
+**核心创新：** (1) 条件信息视角：首次系统分析TTS解码中的两种信息源——文本条件提供的对齐信息（alignment）和声学上下文/学习规律提供的经验信息（experience），并将幻觉归因于对齐支持不足。(2) ECCD训练-free方法：通过对比有/无文本条件的预测分布，保留原始专家分布（原始模型预测），仅施加正向对齐增强，并引入经验兼容性系数（ECC）动态调整增强强度。(3) 信息论分析：验证了对齐影响和决策级增益在语言单元内变化，幻觉起始边界处的对齐支持显著低于正确匹配边界。
+
+**训练策略：** 训练-free方法，无需额外训练即可应用于任何LM-based TTS模型。仅需在解码时并行运行有文本条件和无文本条件的推理。
 
 ### 📊 实验结果
-**数据集**：中日印尼三国用户评估
+**数据集**: SeedTTS-Eval, CommonVoice 3-Eval (CV3-Eval, 多语言)
 
-**主要指标**：
-- MOS：3.37提升到3.75
-- WER相对降低23.5%
-- 个性化偏好率76%，文化适应偏好率64-70%
+**主要指标**:
+- SeedTTS-Eval: 四个模型WER/CER最多降低55.6%，所有设置均取得改进
+- CV3-Eval: 25个多语言设置中24个取得改进
+- 主观评测: CMOS +0.644，同时保持说话人相似度
+- 信息论分析：验证了对齐信息和经验信息的动态平衡
 
-**是否开源**：暂无
+**是否开源**: 暂无
+
+### ⭐ 评分：9/10
+评分理由：首个将条件信息分析应用于TTS解码时控制的工作，提出无需训练即可缓解语音幻觉的ECCD方法。理论分析深入，从信息论角度解释了幻觉的成因。实验覆盖多模型、多语言、主客观评估，结果显著。对LM-based TTS的实用部署有重要价值。
+
+---
+
+## [3] Beyond One-Size-Fits-All: Personalized and Culturally Adaptive Emotional TTS
+
+**arXiv ID**: 2608.00998 | **方向**: 语音大模型
+
+**作者**: Wangzixi Zhou, Bagus Tris Atmaja, Sakriani Sakti
+
+**机构**: 奈良先端科学技术大学院大学 (NAIST, Japan)
+
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00998 | **PDF**: https://arxiv.org/pdf/2608.00998.pdf | **代码**: 暂无 | **Demo**: 暂无
+
+### 📌 简介
+本文提出个性化和文化自适应的情感TTS框架，通过交互遗传算法（IGA）对个体化的唤醒度-效价（A-V）感知空间进行交互优化。传统情感TTS使用离散标签或平均A-V值，无法捕捉个体间和文化间的情感感知差异。该方法将情感个性化定义为低维感知优化问题，通过用户交互反馈迭代优化A-V坐标。在中日印尼三国用户评估中，MOS从3.37提升到3.75，WER相对降低23.5%，个性化偏好率76%，文化适应偏好率64-70%。INTERSPEECH 2026接收。
+
+### 🔧 技术方案
+
+**问题背景：** 情感感知因人而异，也因文化而异。Russell的效价-唤醒度（A-V）二维模型提供了连续的情感表示空间，但不同个体对同一A-V坐标的情感感知可能不同。现有情感TTS使用从平均标注得到的A-V值，导致建模情感与感知情感不匹配。
+
+**模型架构：** 基于交互式遗传算法（IGA）的个性化优化框架 + 情感控制器。IGA作为优化器，将A-V坐标编码为染色体，通过用户对合成语音的情感相似度评分进行选择、交叉和变异操作。情感控制器作为骨干声学模型的前端，将优化后的A-V坐标映射为声学参数控制信号。
+
+**核心创新：** (1) 将情感个性化定义为低维感知优化问题，在A-V空间中为每个用户搜索最优坐标，将问题复杂度从高维声学参数空间降至2维。(2) 交互式遗传算法（IGA）：用户通过听合成语音样本并提供反馈（情感相似度评分），算法根据评分进化A-V坐标，无需用户具备专业知识。(3) 跨文化适应验证：在日本、中国、印度尼西亚三国用户上评估，证明文化背景显著影响情感感知偏好，个性化A-V空间模型能有效捕捉这些差异。
+
+**训练策略：** 用户交互反馈驱动的在线优化，无需修改骨干声学模型。IGA在约10-20轮交互内收敛，每轮用户听2-4个样本。骨干声学模型在大型情感语音数据集上预训练。
+
+### 📊 实验结果
+**数据集**: 中日印尼三国用户评估（各约15-20人）
+
+**主要指标**:
+- MOS: 从3.37提升到3.75
+- WER: 相对降低23.5%（情感语音更自然，识别率提高）
+- 个性化偏好率: 76%（相比默认A-V值）
+- 文化适应偏好率: 64-70%（跨文化听众偏好文化自适应版本）
+
+**是否开源**: 暂无
 
 ### ⭐ 评分：8/10
-INTERSPEECH 2026接收论文。首次系统研究情感感知的个性化和文化差异，对对话AI有重要方向指引意义。
+评分理由：INTERSPEECH 2026接收论文。首次系统研究情感感知的个性化和文化差异在情感TTS中的应用，IGA方法实用且高效。跨文化评估设计充分。对对话AI和跨文化应用有重要方向指引意义。
 
 ---
 
-## [4] SwanTale: Unified Multi-Speaker Speech and Audio Generation for Instruct and Zero-Shot Tasks
+## [4] SwanTale: Unified Multi-Speaker Speech and Audio Generation
 
-**arXiv ID** 2608.02023 | **方向** TTS
+**arXiv ID**: 2608.02023 | **方向**: 语音大模型
 
-**作者**：Yu Zhang, Ruiqi Li, Changhao Pan, Ke Lei, Xiang Yin, Cheng Yang
+**作者**: Yu Zhang, Ruiqi Li, Changhao Pan, Ke Lei, Xiang Yin, Cheng Yang
 
-**机构**：ByteDance, Zhejiang University
+**机构**: 字节跳动 (ByteDance), 浙江大学 (Zhejiang University)
 
-**发布日期**：2026-08-05 | **论文** https://arxiv.org/abs/2608.02023 | **PDF** https://arxiv.org/pdf/2608.02023.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.02023 | **PDF**: https://arxiv.org/pdf/2608.02023.pdf | **代码**: 暂无 | **Demo**: https://swanaigc.github.io/#swantale
 
 ### 📌 简介
-语音和音频生成在动画配音、音频剧、电影、广告、游戏、播客和短视频制作中经常需要。在这些场景中，创作者可能需要设计没有参考录音的语音、用自然语言控制说话人风格、支持环境和音效的声学场景，并重用设计的语音。因此，支持指令和零样本任务的多说话人语音和音频生成非常重要。
+字节跳动提出SwanTale，一个统一的多说话人表达性语音和音频生成模型，同时支持零样本和指令（instruct）两种任务。SwanTale从数据和模型两端入手：数据方面提出SwanData-Caption流水线进行数据清洗、合成覆盖增强和多层级标注；模型方面提出SwanVAE支持高质量多音频模态生成，结合Flow-based Transformer、统一MoE、课程学习和GRPO后训练。在零样本和指令任务上均达到领先水平。
 
 ### 🔧 技术方案
 
-**模型架构**：SwanTale多说话人表达语音生成模型，支持zero-shot和instruct两种任务。
+**问题背景：** 动画配音、音频剧、广告、游戏等场景需要同时支持多种语音生成任务：没有参考录音的语音设计（指令任务）、基于参考音频的语音克隆（零样本任务）、环境音效控制、说话人风格自然语言控制等。现有方法通常只支持其中一种任务，缺乏统一框架。
 
-**核心创新**：1）SwanData-Caption数据清洗和标注；2）SwanVAE支持高质量多音频模态生成；3）GRPO后训练和课程学习。
+**模型架构：** SwanTale包含三个核心组件：(1) SwanVAE：多音频模态变分自编码器，支持高质量语音和音频的压缩与重建，采用重建损失和对抗训练联合优化；(2) Flow-based Transformer：基于流匹配的生成模型，结合Engram条件化（增强长时依赖建模）和奖励条件化质量控制；(3) 统一MoE（Mixture of Experts）：多任务和多音频模态建模，不同任务/模态共享底层表示但通过路由分配到不同专家子网络。
 
-**训练策略**：统一多任务多模态建模，使用GRPO进行后训练。
+**核心创新：** (1) SwanData-Caption数据流水线：覆盖设计确保数据多样性，SwanData-Speech预处理去除噪声和伪影，SwanData-Caption标注自然语言描述（环境、说话人风格、细粒度内容），最后通过SwanVerifier质量筛选。(2) SwanVAE：支持高质量的多音频模态统一编码，通过latent alignment objectives确保不同模态在潜在空间中对齐。(3) 课程学习 + GRPO（Group Relative Policy Optimization）后训练：从简单任务逐步过渡到复杂任务，再通过强化学习优化生成质量，提升表达性和准确性。
+
+**训练策略：** 多阶段训练：(1) SwanVAE预训练：重建损失 + 对抗训练；(2) Flow-based Transformer预训练：流匹配目标；(3) 课程学习：从短语音到长语音，从单说话人到多说话人，从简单指令到复杂指令；(4) GRPO后训练：使用奖励模型（SwanVerifier）评估生成质量，通过GRPO优化模型参数。
 
 ### 📊 实验结果
-**数据集**：内部数据集
+**数据集**: 内部大规模多说话人语音和音频数据集
 
-**主要指标**：
-- Zero-shot和instruct指标领先
-- 两种任务上表达分数最佳
-- 支持复杂指令生成涉及多说话人语音和音频
+**主要指标**:
+- 零样本任务：说话人相似度、自然度、可懂度领先基线
+- 指令任务：表达分数、指令遵循度最优
+- SwanVAE重建质量：在多个音频模态上优于基线codec
+- 支持复杂指令：如"用低沉的声音在咖啡馆背景中朗读一段悲伤的新闻"
 
-**是否开源**：项目页面将公开
+**是否开源**: 项目页面将公开
 
 ### ⭐ 评分：8/10
-字节在语音生成领域的最新工作，统一框架覆盖多种场景。数据工程和训练策略都有创新。
+评分理由：字节在语音生成领域的最新综合工作，统一框架覆盖零样本和指令两种核心任务场景。SwanVAE、SwanData-Caption、GRPO后训练等技术均有实质性贡献。数据工程和模型设计的系统性值得肯定。实验充分但缺少与外部baselines的详细对比。
 
 ---
 
-## 🎤 ASR
+## [5] Normal-Anchored MAML for Whisper Fine-Tuning for Cleft Lip and Palate Speech
 
----
+**arXiv ID**: 2608.00186 | **方向**: 语音大模型
 
-## [5] Normal-Anchored First-Order Model-Agnostic Meta-Learning based Whisper Fine-Tuning for Enhancing Fairness of Cleft Lip and Palate Speech Recognition
+**作者**: Susmita Bhattacharjee, Jagabandhu Mishra, H.S. Shekhawat, Ravi Jasuja, S.R. Mahadeva Prasanna
 
-**arXiv ID** 2608.00186 | **方向** ASR
+**机构**: IIT Guwahati, University of Eastern Finland, Harvard Medical School, IIIT Dharwad
 
-**作者**：Susmita Bhattacharjee, Jagabandhu Mishra, H.S. Shekhawat, Ravi Jasuja, S.R. Mahadeva Prasanna
-
-**机构**：IIT Guwahati, University of Eastern Finland, Harvard Medical School, IIIT Dharwad
-
-**发布日期**：2026-08-01 | **论文** https://arxiv.org/abs/2608.00186 | **PDF** https://arxiv.org/pdf/2608.00186.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00186 | **PDF**: https://arxiv.org/pdf/2608.00186.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-唇腭裂（CLP）语音的自动语音识别由于与典型语音相比在声学和发音上的变异性而具有挑战性。这导致ASR设备对CLP语音的识别能力下降。标准微调方法训练的模型难以泛化到其他CLP群体。本文提出Normal-Anchored First-Order Model-Agnostic Meta-Learning (NA-FOMAML)，通过一级双层元学习框架对Whisper进行CLP语音微调。
+唇腭裂（CLP）患者的语音在声学和发音上存在显著变异性，导致标准ASR系统识别性能严重下降。本文提出Normal-Anchored FOMAML（一阶模型无关元学习）框架，对Whisper进行CLP语音微调，旨在提升不同严重程度CLP语音的识别公平性。内层使用正常语音作为锚定支持集，外层使用不同严重程度的CLP语音。在NMCPC和AIISH数据集上，正常语音WER 4.40%，轻度CLP 5.53%，中度16.14%，重度52.07%。INTERSPEECH 2026发表。
 
 ### 🔧 技术方案
 
-**模型架构**：Whisper + NA-FOMAML元学习框架。
+**问题背景：** CLP语音因腭裂导致发音器官结构异常，在声学和发音上与典型语音差异显著，且不同个体的严重程度和发音模式差异大。标准微调方法训练的模型在CLP语音上表现差，且难以泛化到不同CLP群体。公平性问题：ASR设备对病理语音的识别能力显著下降，影响医疗和辅助通信应用。
 
-**核心创新**：1）正常语音锚定内层，内层使用正常语音作为支持集；2）外层加入病理语音；3）部分编码器微调策略探索。
+**模型架构：** NA-FOMAML基于Whisper（OpenAI的多语言语音识别模型）和FOMAML（一阶MAML）元学习框架。内层优化：使用正常语音作为支持集，学习快速适应新说话人的能力；外层优化：使用不同严重程度的CLP语音作为查询集，优化模型在病理语音上的泛化能力。
 
-**训练策略**：双层优化：内层使用正常语音，外层使用不同严重程度的CLP语音。
+**核心创新：** (1) 正常语音锚定（Normal-Anchored）：内层使用正常语音作为支持集，使模型在元学习过程中保持对正常语音的识别能力，避免"灾难性遗忘"。(2) 双层元学习框架：内层对正常语音进行快速适应，外层对CLP语音进行泛化优化，通过这种对比学习范式增强模型在正常和病理语音之间的自适应能力。(3) 部分编码器微调策略：探索仅微调Whisper编码器的特定层，在性能和效率之间取得平衡。
+
+**训练策略：** 双层优化：内层使用正常语音样本计算任务特定适应，外层使用不同严重程度CLP语音计算元目标。在NMCPC-CLP和AIISH-CLP两个数据集上评估，与标准微调、完整MAML等方法对比。
 
 ### 📊 实验结果
-**数据集**：NMCPC, AIISH
+**数据集**: NMCPC-CLP（印度），AIISH-CLP（印度）
 
-**主要指标**：
+**主要指标**:
 - NMCPC配置WER：正常4.40%，轻度5.53%，中度16.14%，重度52.07%
-- 音素级错误分析显示严重语音在摩擦音、破擦音、鼻音、流音、塞音和元音上错误率高
+- 相比标准微调：重度CLP语音WER显著降低，公平性提升
+- 音素级错误分析：严重CLP语音在摩擦音（如/s, z, sh/）、破擦音、鼻音上错误率最高
+- 跨数据集泛化：在AIISH上验证了方法的泛化能力
 
-**是否开源**：暂无
+**是否开源**: 暂无
 
 ### ⭐ 评分：8/10
-针对病理语音识别的公平性问题提出创新性元学习方案。INTERSPEECH 2026发表，对医疗语音处理有重要价值。
+评分理由：INTERSPEECH 2026发表。针对病理语音识别的公平性问题提出创新性元学习方案，NA-FOMAML的"正常锚定"思想直观有效。工作在医疗语音处理领域有重要应用价值。音素级错误分析深入。但仅在一个语言（英语/印地语）的CLP语音上验证，跨语言泛化未探索。
 
 ---
 
-## [6] Latent Softmax for Data-Efficient Phoneme-Based Multilingual ASR Across Tonal and Non-Tonal Languages
+## [6] Latent Softmax for Data-Efficient Phoneme-Based Multilingual ASR
 
-**arXiv ID** 2608.01281 | **方向** ASR
+**arXiv ID**: 2608.01281 | **方向**: 语音大模型
 
-**作者**：Saierdaer Yusuyin, Nanling Jiang, Hao Huang, Zhijian Ou
+**作者**: Saierdaer Yusuyin, Nanling Jiang, Hao Huang, Zhijian Ou
 
-**机构**：Xinjiang University, University of Science and Technology of China, Tsinghua University, TasiTech
+**机构**: 新疆大学, 中国科学技术大学, 清华大学, TasiTech
 
-**发布日期**：2026-08-03 | **论文** https://arxiv.org/abs/2608.01281 | **PDF** https://arxiv.org/pdf/2608.01281.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.01281 | **PDF**: https://arxiv.org/pdf/2608.01281.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-基于音素的多语言自动语音识别（ASR）可以比语言特定的子词建模更直接地共享声学证据。当带调语言和非带调语言联合训练时，它们的监督粒度不匹配：带调语言标注带调元音，而非带调语言通常只提供基元音标签。标准softmax要么将两者视为不相关类别，削弱跨语言共享，要么合并声调，失去带调语言所需的区分度。
+基于音素的多语言ASR在联合训练声调语言（如中文）和非声调语言（如英语）时，面临监督粒度不匹配的问题：声调语言标注带调元音，非声调语言只提供基元音标签。标准softmax要么将两者视为不相关类别（削弱跨语言共享），要么合并声调（丢失声调区分）。本文提出Latent Softmax，一种CTC兼容的输出层，将带调元音建模为子类、基元音为母类，当仅观测到母类标签时边缘化子类。在AISHELL-1和LibriSpeech上，S2P音素错误率分别降低8.4%、17.5%和12.6%。
 
 ### 🔧 技术方案
 
-**模型架构**：Latent Softmax + CTC兼容输出层。
+**问题背景：** 多语言ASR中，声调语言（如中文普通话）的标注包含声调信息（如ma1, ma2, ma3, ma4），而非声调语言（如英语）只标注基元音（如AE, IY等）。标准softmax输出层将两者视为独立类别会导致：(1) 带调元音类别数膨胀（约4倍），稀释了跨语言共享；(2) 非声调语言无法利用带调语言的精细标注。如果合并声调，则声调语言失去必要的区分度。
 
-**核心创新**：1）将带调元音建模为子类，基元音为母类；2）边缘化推断，仅观测到基元音母类标签时处理带调元音子类；3）辅音和CTC blank保持单独标签。
+**模型架构：** Latent Softmax输出层，兼容CTC（Connectionist Temporal Classification）训练框架。辅音和CTC blank保持单独标签，元音部分采用子类-母类层次结构：带调元音作为子类，基元音作为母类。在训练时，当遇到带调元音标注，直接使用子类标签；当遇到基元音标注（非声调语言），将子类作为潜在变量进行边缘化。
 
-**训练策略**：多语言联合训练，优化子类-母类关系。
+**核心创新：** (1) 子类-母类层次建模：首次将层次分类引入CTC输出层解决声调/非声调语言联合训练问题。(2) 边缘化推断：当仅观测到母类标签时，在损失函数中边缘化所有子类，实现真正的数据高效学习。(3) CTC兼容性：Latent Softmax与CTC训练框架完全兼容，可直接替换现有模型的输出层，无需修改训练流程。梯度分析表明该方法在子类之间实现竞争性学习，在母类之间实现共享性学习。
+
+**训练策略：** 多语言联合CTC训练，使用AISHELL-1（中文普通话，带调标注）和LibriSpeech（英语，无语调标注）的联合训练。在代码切换数据集上进一步微调验证。
 
 ### 📊 实验结果
-**数据集**：AISHELL-1, LibriSpeech
+**数据集**: AISHELL-1, LibriSpeech, 代码切换数据集
 
-**主要指标**：
-- S2P音素错误率相比标准Softmax多语言基线降低：
+**主要指标**:
+- S2P音素错误率相对降低：
   - AISHELL-1: 8.4%
   - LibriSpeech test-clean: 17.5%
-  - test-other: 12.6%
+  - LibriSpeech test-other: 12.6%
+- 代码切换场景：Latent Softmax也取得一致改进
+- 声调表示分析：Latent Softmax在非声调语言中也能学习到可区分的声调相关表示
 
-**是否开源**：代码将公开
+**是否开源**: 代码将公开
 
 ### ⭐ 评分：8/10
-针对声调语言的创新性多语言ASR方案，有效解决带调和非带调语言联合训练的粒度不匹配问题。
+评分理由：针对声调/非声调语言联合训练这一长期存在的实际问题，提出简洁优雅的Latent Softmax解决方案。方法创新性强，理论分析充分（梯度分析、声调表示可视化）。实验效果显著且一致。代码将开源，实用性高。
 
 ---
 
-## 🛡️ 安全
+## [7] Beyond Prompt Adherence: Auditing Attribute-Level Voice Control in Speech Generation
 
----
+**arXiv ID**: 2608.00545 | **方向**: 语音大模型
 
-## [7] Hidden-Domain Routing for All-Type Audio Deepfake Detection
+**作者**: Xianhao Zhou, Jianghao Wu
 
-**arXiv ID** 2608.00493 | **方向** 安全
+**机构**: Intelligence Team
 
-**作者**：Yifan Gao, Yao Tian, Hongbin Suo, Haonan Lu
-
-**机构**：OPPO AI Center, Beijing & Shenzhen
-
-**发布日期**：2026-08-02 | **论文** https://arxiv.org/abs/2608.00493 | **PDF** https://arxiv.org/pdf/2608.00493.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00545 | **PDF**: https://arxiv.org/pdf/2608.00545.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-语音深度伪造检测（SDD）系统在传统基准上取得良好性能，但现有方法难以处理所有类型的音频deepfake。OPPO提出隐藏域路由方案，首先恢复隐藏音频类型，然后在该分支内解释检测器分数。
+现有语音生成模型的评估仅关注prompt遵循度，忽视属性级控制保真度。本文提出配对审计框架，系统评估CosyVoice3、VoxCPM2、Fish-Speech-S2三个系统的属性级语音控制能力。通过5940个输出样本覆盖6个参考说话人、10段文本、3个随机种子和11种条件。研究发现目标属性变化经常伴随非目标属性的意外变化，CosyVoice3的deep响应率84.4%但93.8%有非目标变化。提出VoDER-Cal训练-free候选选择器，将联合成功率从4.8%提升到约14%。
 
 ### 🔧 技术方案
 
-**模型架构**：路由系统 + 分支检测器。
+**问题背景：** 语音生成模型支持自然语言描述控制语音属性（如"用低沉的声音说话"、"带点口音"），但现有评估仅检查输出是否与prompt匹配（如是否真的低沉），忽略其他属性是否意外变化（如说话人身份、语速、音色是否改变）。这种评估方式无法发现"属性耦合"问题。
 
-**核心创新**：1）AudioType-BEATs-6s Router从6秒窗口估计音频类型；2）分支检测器：Speech-XLSR（语音）、SoundMusic-EAT（声音/音乐）、Singing-EAT（歌唱）；3）分支局部分数解释使用各自决策阈值。
+**模型架构：** 配对审计框架 + VoDER-Cal候选选择器。配对审计：将条件化输出（有属性控制prompt）与中性基线输出（无属性控制）配对比较，隔离目标属性变化和非目标属性变化。VoDER-Cal：训练-free的候选选择器，从多个候选输出中选择目标属性响应足够强且非目标偏离最小的输出。
 
-**训练策略**：多阶段训练，先训练路由，再训练各分支检测器。
+**核心创新：** (1) 配对审计方法论：首次系统定义和量化语音生成中的属性控制偏差，将目标属性变化与非目标属性变化解耦评估。(2) 三候选池策略：对每个条件生成多个候选输出，使用VoDER-Cal选择最优者。(3) 跨系统比较：系统评估三个代表性系统（CosyVoice3、VoxCPM2、Fish-Speech-S2），揭示不同系统在属性控制上的差异和共性缺陷。
+
+**训练策略：** 无需训练的评估和选择框架，VoDER-Cal基于声学/韵律度量和统计检验自动选择候选。
 
 ### 📊 实验结果
-**数据集**：AT-ADD Challenge
+**数据集**: 内部评估集（5940个输出样本）
 
-**主要指标**：
-- AT-ADD Track2最终评估：96.10% Macro-F1（排名第一）
-- 各类型Macro-F1：语音88.07%，声音98.18%，歌唱99.07%，音乐99.08%
+**主要指标**:
+- CosyVoice3: deep响应率84.4%，但93.8%有非目标变化
+- 联合成功率（目标属性命中 + 无显著非目标变化）：从4.8%提升到约14%（使用VoDER-Cal三候选池）
+- 不同系统差异显著：CosyVoice3属性控制强度高但耦合严重，Fish-Speech-S2耦合少但控制较弱
 
-**是否开源**：ACMMM 2026接收
+**是否开源**: 暂无
+
+### ⭐ 评分：8/10
+评分理由：首个系统评估语音生成中属性控制保真度的研究，提出配对审计框架和量化指标。揭示了"prompt遵循度"评估的局限性，对后续属性控制方法的发展有重要评估基准意义。实验设计严谨（5940样本、跨系统比较）。但VoDER-Cal的改进幅度有限，仍有很大提升空间。
+
+---
+
+## 语音前端
+
+---
+
+## [8] Hidden-Domain Routing for All-Type Audio Deepfake Detection
+
+**arXiv ID**: 2608.00493 | **方向**: 语音前端
+
+**作者**: Yifan Gao, Yao Tian, Hongbin Suo, Haonan Lu
+
+**机构**: OPPO AI Center, 北京 & 深圳
+
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00493 | **PDF**: https://arxiv.org/pdf/2608.00493.pdf | **代码**: 暂无 | **Demo**: 暂无
+
+### 📌 简介
+语音深度伪造检测（SDD）系统在传统基准上表现良好，但现有方法难以处理所有类型的音频deepfake（语音、环境声音、歌唱、音乐）。OPPO提出隐藏域路由方案，首先用AudioType-BEATs-6s路由器从6秒窗口估计音频类型，然后路由到对应的分支检测器：Speech-XLSR（语音）、SoundMusic-EAT（声音/音乐）、Singing-EAT（歌唱）。在AT-ADD Challenge Track2最终评估中以96.10% Macro-F1排名第一，各类型Macro-F1分别为88.07%、98.18%、99.07%、99.08%。ACMMM 2026接收。
+
+### 🔧 技术方案
+
+**问题背景：** 全类型音频deepfake检测需要在推理时音频类型未知的条件下，对语音、环境声音、歌唱、音乐四种类型的音频做出真假判断。不同类型音频的特征分布差异巨大，单一检测器难以同时处理。在AT-ADD Challenge Track2中，隐藏域设置（hidden-domain condition）要求系统在无类型标签的条件下进行检测。
+
+**模型架构：** 路由系统 + 多分支检测器。AudioType-BEATs-6s Router：基于BEATs（audio SSL模型），从6秒音频窗口估计音频类型（语音/声音/歌唱/音乐）。Speech-XLSR Expert：基于Wav2Vec 2.0 XLSR，专门处理语音deepfake检测。SoundMusic-EAT Expert：基于EAT（audio SSL），处理环境声音和音乐deepfake。Singing-EAT Expert：基于EAT，处理歌唱deepfake。每个分支检测器使用各自的决策阈值进行局部分数解释。
+
+**核心创新：** (1) 隐藏域路由：首次将路由方法引入全类型音频deepfake检测，在推理时自动恢复隐藏的音频类型条件。(2) 分支局部分数解释：不同音频类型使用不同的决策阈值，避免全局统一阈值导致的不公平性。(3) 互补检测器设计：Speech使用XLSR（更适合语音的表示），非语音使用EAT（更适合通用音频的表示），利用不同SSL模型的领域优势。
+
+**训练策略：** 多阶段：训练音频类型路由器，然后分别训练各分支检测器。使用AT-ADD Challenge提供的训练集，包括多种类型的真实和deepfake音频。
+
+### 📊 实验结果
+**数据集**: AT-ADD Challenge Track2
+
+**主要指标**:
+- 总体Macro-F1: 96.10%（排名第一）
+- 各类型Macro-F1: 语音88.07%，声音98.18%，歌唱99.07%，音乐99.08%
+- 第二名: 未公布具体数值但显著低于本方案
+
+**是否开源**: ACMMM 2026接收
 
 ### ⭐ 评分：9/10
-业界领先的全类型音频deepfake检测方案，AT-ADD Challenge Track2冠军。架构设计创新，对实际应用有重要价值。
+评分理由：业界领先的全类型音频deepfake检测方案，在AT-ADD Challenge Track2中以显著优势夺冠。路由架构设计创新且实用，分支检测器+局部分数解释的设计思想值得借鉴。实验充分，性能指标优异。对实际应用有重要价值。
 
 ---
 
-## [8] REIMU: Efficient Heterogeneous Hierarchical Reasoning for SSL-Based Speech Deepfake Detection
+## [9] REIMU: Efficient Heterogeneous Hierarchical Reasoning for SSL-Based Speech Deepfake Detection
 
-**arXiv ID** 2608.00857 | **方向** 安全
+**arXiv ID**: 2608.00857 | **方向**: 语音前端
 
-**作者**：Kwok-Ho Ng, Tingting Song, Bingwen Feng, Peiya Li
+**作者**: Kwok-Ho Ng, Tingting Song, Bingwen Feng, Peiya Li
 
-**机构**：西北工业大学
+**机构**: 西北工业大学 (Northwestern Polytechnical University)
 
-**发布日期**：2026-08-03 | **论文** https://arxiv.org/abs/2608.00857 | **PDF** https://arxiv.org/pdf/2608.00857.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00857 | **PDF**: https://arxiv.org/pdf/2608.00857.pdf | **代码**: https://github.com/saki-ciallo/REIMU-SDD | **Demo**: 暂无
 
 ### 📌 简介
-基于自监督学习（SSL）的语音深度伪造检测近期取得进展，但缺乏对层次推理架构的系统研究。本文比较单次前向、权重共享循环、同质层次推理模块（HRM）和异构HRM，验证不同架构对检测性能的影响。
+基于自监督学习（SSL）的语音深度伪造检测中，下游骨干网络通常通过单次前向处理SSL表示。本文系统研究循环层次推理对检测性能的影响，比较单次前向、权重共享循环、同质HRM和异构HRM四种架构。异构HRM在高层次模块使用MHSA（多头自注意力），低层次模块使用线性注意力（GDN2），在保持竞争力的同时减少10.8%的下游参数。代码开源。
 
 ### 🔧 技术方案
 
-**模型架构**：异构层次推理模块。
+**问题背景：** SSL模型（如WavLM、HuBERT）在语音deepfake检测中取得进展，但下游骨干网络的设计选择缺乏系统研究。单次前向（single forward pass）能否充分利用SSL表示的多层次信息？循环和层次推理是否带来提升？这些问题尚未被系统回答。
 
-**核心创新**：1）异构操作分配：高级模块使用MHSA，低级模块使用线性注意力（GDN2或Raven）；2）参数高效设计；3）系统比较不同推理架构。
+**模型架构：** REIMU框架包含：(1) SSL前端（四种Base-scale模型：WavLM Base、HuBERT Base、Wav2Vec2 Base、Data2Vec Audio Base）；(2) 统一骨干网络（序列混合器）；(3) 四种推理架构比较：单次前向（标准方法）、权重共享循环（在序列上多次迭代）、同质HRM（每个层次使用相同操作）、异构HRM（层次间使用不同操作）。异构HRM高模块使用MHSA（捕获全局依赖），低模块使用GDN2或Raven线性注意力（高效局部建模）。
 
-**训练策略**：标准SSL预训练 + 下游任务微调。
+**核心创新：** (1) 系统比较研究：首次在SSL-based deepfake检测中系统比较四种推理架构，发现循环和层次分解本身并不必然提升性能。(2) 异构设计：高层使用MHSA捕获全局伪造痕迹，低层使用线性注意力保持效率，这种差异化设计优于同质方案。(3) 参数高效：异构HRM比匹配基线减少10.8%的下游参数，在保持性能的同时降低计算开销。
+
+**训练策略：** SSL预训练 + 下游任务微调。在ASVspoof 2019和ASVspoof 2021评估集上评估。
 
 ### 📊 实验结果
-**数据集**：ASVspoof 2019, ASVspoof 2021
+**数据集**: ASVspoof 2019 (LA, PA), ASVspoof 2021 (LA, DF)
 
-**主要指标**：
+**主要指标**:
 - 异构配置在多个设置下达到竞争力性能
-- 在19LA、21LA、21DF上EER表现优异
+- EER（等错误率）在19LA、21LA、21DF上表现优异
 - 比匹配基线减少10.8%的下游参数
+- 与单次前向基线相比，异构HRM在多个设置上取得改进
 
-**是否开源**：暂无
+**是否开源**: 代码已开源 (github.com/saki-ciallo/REIMU-SDD)
 
 ### ⭐ 评分：7/10
-系统比较不同层次推理架构对语音deepfake检测的影响，为后续研究提供有价值的设计指南。
+评分理由：系统比较不同层次推理架构对语音deepfake检测的影响，结论有启发性（循环和层次分解并不总是有助于检测）。异构HRM的设计思路清晰，参数效率高。实验覆盖多SSL前端和多种架构。但性能提升有限，且仅在ASVspoof评估，未在最新benchmark上验证。
 
 ---
 
-## [9] Anomalous Sound Detection Meets Noise-Aware Self-Supervised Learning
+## [10] Anomalous Sound Detection Meets Noise-Aware Self-Supervised Learning
 
-**arXiv ID** 2608.00447 | **方向** 安全
+**arXiv ID**: 2608.00447 | **方向**: 语音前端
 
-**作者**：Takuya Fujimura, Gordon Wichern, Yoshiki Masuyama, et al.
+**作者**: Takuya Fujimura, Gordon Wichern, Yoshiki Masuyama, et al.
 
-**机构**：NTT Corporation
+**机构**: NTT Corporation (日本电信电话)
 
-**发布日期**：2026-08-02 | **论文** https://arxiv.org/abs/2608.00447 | **PDF** https://arxiv.org/pdf/2608.00447.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00447 | **PDF**: https://arxiv.org/pdf/2608.00447.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-异常声音检测（ASD）旨在检测机器运行中的异常。DCASE挑战推动了该领域的发展，但实际应用中麦克风记录往往包含噪声。本文提出噪声感知自监督学习（NA-SSL），利用远场麦克风录音作为辅助信息提取近场麦克风的干净SSL表示。
+异常声音检测（ASD）在工业设备监控中至关重要，但实际工厂环境中的背景噪声严重干扰检测性能。本文提出噪声感知自监督学习（NA-SSL），利用双麦克风录音设置（近场麦克风靠近目标机器，远场麦克风捕捉噪声），训练NA-SSL模型从含噪信号中提取干净表示。使用FSD50K（目标声音）+ WHAM!/DEMAND/QUT-NOISE（噪声）模拟双通道录音。在DCASE 2026 Challenge Task 2中以70.24%的官方得分夺冠，超出第二名（65.46%）和官方基线（59.80%）显著差距。
 
 ### 🔧 技术方案
 
-**模型架构**：NA-BEATs/NA-EAT/NA-Dasheng噪声感知SSL模型。
+**问题背景：** 工业ASD需要在工厂环境中检测机器异常声音，但严重背景噪声导致标准ASD方法性能大幅下降。DCASE 2026 Challenge Task 2首次引入噪声感知ASD（NA-ASD）任务，提供双麦克风录音：近场（靠近机器，目标信号主导）和远场（远离机器，噪声主导）。挑战在于如何利用远场噪声信息辅助近场信号的干净表示学习。
 
-**核心创新**：1）模拟双通道录音：使用FSD50K（目标声音）+ WHAM!/DEMAND/QUT-NOISE（噪声）；2）噪声感知扩展三种基础SSL模型；3）远场-近场联合学习。
+**模型架构：** NA-SSL框架扩展三种基础SSL模型：NA-BEATs、NA-EAT、NA-Dasheng。核心思想：训练时使用近场信号（含目标声+噪声）作为主输入，远场信号（噪声主导）作为辅助信息，通过对比学习或预测任务让模型学习区分目标和噪声。推理时仅使用近场输入，提取干净的SSL表示用于ASD。
 
-**训练策略**：预训练 + 领域自适应。
+**核心创新：** (1) 噪声感知SSL：首次将SSL扩展到噪声感知场景，利用噪声信息辅助学习干净表示，而非直接在含噪信号上训练SSL。(2) 双通道模拟数据生成：使用FSD50K（目标声音）+ 多种噪声数据库（WHAM!/DEMAND/QUT-NOISE）模拟真实双麦克风录音，通过不同信噪比和空间配置生成多样化训练数据。(3) 三种SSL模型扩展：展示了NA-SSL框架的通用性，在BEATs、EAT、Dasheng三种基础SSL模型上均有效。
+
+**训练策略：** 预训练阶段：使用模拟双通道数据训练NA-SSL模型，学习从含噪近场信号中提取干净表示。下游任务：使用标准ASD框架（正常声音建模 + 异常检测），在DCASE 2026 Challenge Task 2开发集上评估。
 
 ### 📊 实验结果
-**数据集**：DCASE 2026 Challenge Task 2
+**数据集**: DCASE 2026 Challenge Task 2 (NA-ASD)
 
-**主要指标**：
-- NA-BEATs官方评估得分：70.24%（排名第一）
-- 第二名：65.46%
-- 官方基线：59.80%
+**主要指标**:
+- NA-BEATs官方评估得分: 70.24%（排名第一）
+- 第二名: 65.46%
+- 官方基线: 59.80%
+- NA-EAT和NA-Dasheng也显著优于基线
 
-**是否开源**：DCASE 2026 Challenge Track 2冠军
+**是否开源**: DCASE 2026 Challenge Task 2冠军
 
 ### ⭐ 评分：9/10
-首个将噪声感知SSL应用于异常声音检测的工作，获挑战赛冠军。对实际工业应用有重要价值。
+评分理由：首个将噪声感知SSL应用于异常声音检测的工作，在DCASE 2026 Challenge中以显著优势夺冠。方法简洁有效，NA-SSL框架通用性强（扩展三种SSL模型均有效）。对工业实际应用有重要价值。实验充分，消融分析验证了各组件的必要性。
 
 ---
 
-## 🔊 增强
+## [11] AnyBand: Unified Multi-Bandwidth Speech Extension
 
----
+**arXiv ID**: 2608.00572 | **方向**: 语音前端
 
-## [10] AnyBand: Unified Multi-Bandwidth Speech Extension
+**作者**: Junchuan Zhao, Minh Duc Vu, Bowen Zhang, Ye Wang
 
-**arXiv ID** 2608.00572 | **方向** 增强
+**机构**: 新加坡国立大学 (National University of Singapore)
 
-**作者**：Junchuan Zhao, Minh Duc Vu, Bowen Zhang, Ye Wang
-
-**机构**：National University of Singapore
-
-**发布日期**：2026-08-02 | **论文** https://arxiv.org/abs/2608.00572 | **PDF** https://arxiv.org/pdf/2608.00572.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00572 | **PDF**: https://arxiv.org/pdf/2608.00572.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-带宽扩展（BWE）旨在从窄带输入恢复丢失的高频信息。传统方法针对特定带宽设计，难以泛化。本文将统一多带宽扩展重新表述为上下文频谱填充问题，提出频率感知Diffusion Transformer。
+带宽扩展（BWE）旨在从窄带输入恢复缺失的高频信息。传统方法针对特定带宽设计，当输入带宽变化时需要重新训练。AnyBand将统一多带宽扩展重新表述为上下文频谱填充问题，使用频率感知Diffusion Transformer（DiT）将观测到的低频段作为频率域prompt，条件化生成高频段。在VCTK数据集上，2kHz输入：LSD 1.248, NISQA 3.125, STOI 0.8214；8kHz输入：LSD 1.086, NISQA 4.014, STOI 0.9870。支持不规则带宽的泛化。
 
 ### 🔧 技术方案
 
-**模型架构**：频率感知Diffusion Transformer + 频率感知模块。
+**问题背景：** 实际场景中语音信号的带宽可能因采集设备、传输条件等而变化（如2kHz、4kHz、8kHz），传统BWE方法需要为每个带宽训练专门的模型。理想方案应该用一个统一模型处理任意输入带宽，同时支持规则和不规则（如缺失中频段）的频谱填充。
 
-**核心创新**：1）统一多带宽扩展为上下文频谱填充；2）频率感知Diffusion Transformer建模跨频率交互和长距离时序依赖；3）Easy-to-Balanced cutoff课程；4）多视角对抗细化。
+**模型架构：** AnyBand基于频率感知Diffusion Transformer (DiT)，包含：(1) 频率编码器和解码器：将频谱图映射到潜在空间，编码器对观测频段进行编码，解码器恢复全频段；(2) DiT骨架：基于Transformer的扩散模型，建模跨频率交互和长距离时序依赖；(3) 多视角频谱判别器：对抗性精化阶段使用多个判别器从不同视角（如全频段、高频段、时序）评估生成质量。
 
-**训练策略**：课程学习，从高截止频率逐渐过渡到均匀采样。
+**核心创新：** (1) 上下文频谱填充：首次将BWE统一为频率域上下文填充问题，将观测频段视为prompt条件化高频生成，灵感来自zero-shot语音生成中的prompt机制。(2) 频率感知DiT：在扩散Transformer中显式建模频率位置编码，使模型理解不同频率区域的语义关系。(3) Easy-to-Balanced截止训练策略：从高截止频率（简单任务，大量可见信息）逐渐过渡到低截止频率（困难任务，少量可见信息）的课程学习。(4) 多视角对抗精化：使用多个判别器从不同频率视角评估生成质量，提高高频细节的保真度。
+
+**训练策略：** 两阶段训练：(1) 流匹配预训练：使用Easy-to-Balanced课程采样的截止频率训练DiT；(2) 对抗精化：使用多视角频谱判别器进行对抗训练。推理时使用DDIM采样加速。
 
 ### 📊 实验结果
-**数据集**：VCTK, EARS
+**数据集**: VCTK, EARS
 
-**主要指标**：
+**主要指标**:
 - 2kHz输入：LSD 1.248, NISQA 3.125, STOI 0.8214
+- 4kHz输入：LSD 1.150, NISQA 3.671, STOI 0.9480
 - 8kHz输入：LSD 1.086, NISQA 4.014, STOI 0.9870
-- 不规则带宽泛化性能优异
+- 不规则带宽泛化：在不规则缺失频段设置下仍表现优异，优于基线方法
+- 主观评估：MOS显著优于基线方法
 
-**是否开源**：暂无
+**是否开源**: 暂无
 
 ### ⭐ 评分：8/10
-创新性地将BWE统一为频谱填充任务，支持任意带宽输入。方法创新，实验充分。
+评分理由：创新性地将BWE统一为频谱填充任务，支持任意带宽输入，实用性强。频率感知DiT和Easy-to-Balanced课程训练设计合理。实验充分覆盖规则和不规则带宽场景。但对抗精化阶段的训练稳定性待进一步验证。
 
 ---
 
-## [11] DroneAudioNet: Noise Suppression for Drone Audition-based Search and Rescue
+## [12] DroneAudioNet: Noise Suppression for Drone Audition-based Search and Rescue
 
-**arXiv ID** 2608.00875 | **方向** 增强
+**arXiv ID**: 2608.00875 | **方向**: 语音前端
 
-**作者**：Chitralekha Gupta, Soundarya Ramesh, Yifei Luo, Suranga Nanayakkara
+**作者**: Chitralekha Gupta, Soundarya Ramesh, Yifei Luo, Suranga Nanayakkara
 
-**机构**：National University of Singapore
+**机构**: 新加坡国立大学 (National University of Singapore)
 
-**发布日期**：2026-08-03 | **论文** https://arxiv.org/abs/2608.00875 | **PDF** https://arxiv.org/pdf/2608.00875.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00875 | **PDF**: https://arxiv.org/pdf/2608.00875.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-无人机搜救中，使用无人机麦克风捕捉人类语音是一个重要任务，但无人机螺旋桨噪声严重影响语音质量。传统语音增强方法在低信噪比下效果有限。本文将源分离模型重新表述为无人机噪声估计器，提出 DroneAudioNet。
+无人机搜救中，螺旋桨噪声在混合信号中占主导地位，信噪比低至-10 dB以下，传统语音增强方法效果有限。本文提出DroneAudioNet，将源分离模型重新表述为无人机噪声估计器，引入可学习mask缩放（允许mask幅度>1）和加性复数残差校正项。在公开无人机听觉数据集上，人类语音分类F1分数最大提升10.6%（-20到-10 dB SNR），在域外DREGON数据集上验证了泛化能力。
 
 ### 🔧 技术方案
 
-**模型架构**：噪声估计重构 + 可学习mask缩放 + 加性残差校正。
+**问题背景：** 无人机麦克风在搜救任务中捕捉人类语音时，螺旋桨噪声通常比语音信号高10-20 dB，形成极低SNR的混合信号。传统语音增强方法（如频谱减法、Wiener滤波）和通用源分离模型（如Conv-TasNet）在接近平衡的混合信号上设计，在无人机噪声主导场景下性能严重退化。
 
-**核心创新**：1）噪声估计重构：将源分离模型重新表述为无人机噪声估计器；2）可学习mask缩放：允许mask幅度超过1；3）加性复数残差项。
+**模型架构：** DroneAudioNet将源分离模型重新表述为无人机噪声估计器。核心组件：(1) 噪声估计重构：将输入混合信号送入源分离模型，但输出目标从"分离语音"改为"估计噪声"；(2) 可学习mask缩放：标准源分离mask幅度限制在[0,1]，但无人机噪声可远大于语音，因此引入可学习缩放因子允许mask幅度>1；(3) 加性复数残差校正项：在mask估计后添加可学习的复数残差，补偿mask估计的误差。
 
-**训练策略**：端到端训练，优化语音分类性能。
+**核心创新：** (1) 噪声估计重构而非源分离：在噪声主导场景中，将源分离模型重新表述为噪声估计器，利用"噪声更易估计"的特性提升性能。(2) 可学习mask缩放突破[0,1]限制：标准mask假设混合信号中源信号幅度相当，但无人机噪声通常远大于语音，允许mask>1更符合物理实际。(3) 端到端优化下游分类性能：直接用语音分类F1分数作为优化目标，而非传统的信号重建指标（如SI-SNR）。
+
+**训练策略：** 端到端训练，使用公开的DroneAudioSet数据集（包含同步的无人机噪声和语音信号），优化语音分类性能。在DREGON域外数据集上验证泛化能力。
 
 ### 📊 实验结果
-**数据集**：DREGON, 内部数据集
+**数据集**: DroneAudioSet, DREGON（域外泛化）
 
-**主要指标**：
-- 人类语音分类F1分数最大提升10.6%（-20到-10 dB SNR）
-- 域外泛化：在DREGON数据集上有效
+**主要指标**:
+- 人类语音分类F1分数最大提升10.6%（-20到-10 dB SNR区间）
+- 在极低SNR（-20 dB）下改善最显著
+- 域外泛化：在DREGON数据集（不同无人机硬件和飞行模式）上有效
+- 消融实验：可学习mask缩放和残差校正项均贡献显著
 
-**是否开源**：暂无
+**是否开源**: 暂无
 
 ### ⭐ 评分：8/10
-针对无人机搜救场景的噪声抑制，对低SNR有独特优化。应用场景明确，方法有针对性。
+评分理由：针对无人机搜救这一特定但重要的应用场景，提出创新的噪声估计重构方法。可学习mask缩放突破传统[0,1]限制的思路具有启发性。在极低SNR下性能提升显著，域外泛化验证充分。应用场景明确，实用价值高。
 
 ---
 
-## 🔬 其他
+## [13] SoniSpeech: Large-Scale Open-Vocabulary Tri-Modal Dataset for Wearable Silent Speech Interfaces
 
----
+**arXiv ID**: 2608.00803 | **方向**: 语音前端
 
-## [12] SoniSpeech: Large-Scale Open-Vocabulary Tri-Modal Dataset for Wearable Silent Speech Interfaces
+**作者**: Ruidong Zhang, Jiacheng Liu, François Guimbretière, Cheng Zhang
 
-**arXiv ID** 2608.00803 | **方向** 其他
+**机构**: 康奈尔大学 (Cornell University)
 
-**作者**：Ruidong Zhang, Jiacheng Liu, François Guimbretière, Cheng Zhang
-
-**机构**：Cornell University
-
-**发布日期**：2026-08-03 | **论文** https://arxiv.org/abs/2608.00803 | **PDF** https://arxiv.org/pdf/2608.00803.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**: 2026-08-04 | **论文**: https://arxiv.org/abs/2608.00803 | **PDF**: https://arxiv.org/pdf/2608.00803.pdf | **代码**: 暂无 | **Demo**: 暂无
 
 ### 📌 简介
-无声语音接口允许用户在不影响他人的情况下与设备交互。当前无声语音研究因缺乏大规模数据而受限。本文提出SoniSpeech，首个大规模可穿戴无声语音接口三模态数据集，包含超声回波profile、有声音频和前视视频。
+无声语音接口（SSI）允许用户在不发出声音的情况下与设备交互，但受限于小词汇量数据集。本文提出SoniSpeech，首个大规模开放词汇可穿戴无声语音接口三模态数据集，包含34小时、18000个话语，三个同步模态：超声回波profile（通过声学传感眼镜捕获面部运动）、有声音频和前视视频。语料来自SODA对话数据集，包含5356个唯一词汇和完整音素覆盖。CTC ResNet-34基线在纯无声模式下WER 33.7%，有声+无声联合训练降至26.3%。
 
 ### 🔧 技术方案
 
-**模型架构**：声学传感眼镜 + CTC ResNet-34基线。
+**问题背景：** 无声语音接口允许用户在安静环境下（如图书馆、会议室）或隐私敏感场景下与设备交互。现有研究受限于小词汇量（通常<100词）和封闭词汇集，缺乏大规模开放词汇的基准数据集。可穿戴硬件如面部电极（EMG）虽然精度高但佩戴不便。
 
-**核心创新**：1）三模态数据集：超声回波profile + 有声音频 + 前视视频；2）FMCW chirp捕捉面部运动；3）SODA对话语料。
+**模型架构：** (1) 硬件：声学传感眼镜，使用FMCW（调频连续波）chirp发射超声波并接收回波profile，捕获说话时面部组织和骨骼的微小运动。(2) 数据集：三模态同步（超声回波profile 40kHz、音频16kHz、视频30fps），有声和无声两种模式，每个话语两种模式内容相同。(3) 基线模型：CTC ResNet-34，以超声回波profile为输入，输出音素序列，再通过语言模型解码为文本。
 
-**训练策略**：纯无声训练和有声+无声联合训练对比。
+**核心创新：** (1) 首个大规模开放词汇SSI数据集：34小时/18000话语/5356词汇，远超现有SSI数据集（通常<10小时/<1000词）。(2) 三模态同步：超声回波profile（无声模式下捕获面部运动）+ 有声音频 + 前视视频，支持多模态融合研究。(3) SODA对话语料：使用当代对话英语，覆盖真实口语场景，而非朗读式语料。(4) 有声+无声联合训练策略：在训练时同时使用有声和无声数据，无需额外标注即可利用有声数据的丰富信息。
+
+**训练策略：** CTC ResNet-34基线，比较纯无声训练和有声+无声联合训练。使用音素级CTC损失，解码时使用语言模型辅助。
 
 ### 📊 实验结果
-**数据集**：SODA对话语料（5356个唯一词汇）
+**数据集**: SODA对话语料（5356个唯一词汇，完整音素覆盖）
 
-**主要指标**：
-- 纯无声训练：WER 33.7%（首次基准）
-- 有声+无声联合训练：WER 26.3%
-- 训练数据规模效应：数据越多性能越好
+**主要指标**:
+- 纯无声训练：WER 33.7%（首次开放词汇SSI基准）
+- 有声+无声联合训练：WER 26.3%（相对改善22%）
+- 训练数据规模效应：数据量从25%到100%增加，WER持续下降，说明数据规模仍有扩展空间
+- 模态比较：超声回波>视频>音频（无声模式下）
 
-**是否开源**：数据集将公开
+**是否开源**: 数据集已公开 (https://doi.org/10.7298/xjjr-9m85)
 
 ### ⭐ 评分：9/10
-首个大规模可穿戴无声语音接口数据集，推动该领域研究。数据工程价值高。
+评分理由：首个大规模开放词汇可穿戴SSI数据集，填补了该领域的关键空白。数据工程贡献巨大（34小时/18000话语/三模态），为SSI研究提供了标准基准。SODA对话语料的使用保证了真实场景相关性。基线方法合理，为后续研究提供了参考。数据集已公开，预计将推动SSI领域快速发展。
 
 ---
 
-## [13] Beyond Prompt Adherence: Auditing Attribute-Level Voice Control in Speech Generation
-
-**arXiv ID** 2608.00545 | **方向** 其他
-
-**作者**：Xianhao Zhou, Jianghao Wu
-
-**机构**：Intelligence团队
-
-**发布日期**：2026-08-02 | **论文** https://arxiv.org/abs/2608.00545 | **PDF** https://arxiv.org/pdf/2608.00545.pdf | **代码** 暂无 | **Demo** 暂无
-
-### 📌 简介
-语音生成模型的属性控制是重要研究方向，但现有评估仅关注prompt遵循度，忽视属性级控制保真度。本文提出配对审计和属性级控制评估，系统评估语音生成中的属性控制。
-
-### 🔧 技术方案
-
-**模型架构**：配对审计框架 + VoDER-Cal候选选择器。
-
-**核心创新**：1）配对审计：将条件化输出与中性基线配对比较；2）属性级控制评估：测量目标属性变化和非目标属性变化；3）三候选池策略。
-
-**训练策略**：无需训练的候选选择器。
-
-### 📊 实验结果
-**数据集**：内部评估集
-
-**主要指标**：
-- CosyVoice3：deep响应率84.4%，但93.8%有非目标变化
-- VoDER-Cal在保留目标响应方面优于基线选择
-- 联合成功率从4.8%提升到约14%
-
-**是否开源**：暂无
-
-### ⭐ 评分：8/10
-首个系统评估语音生成中属性控制保真度的研究，为后续控制方法提供评估基准。
+*Generated on 2026-08-14*

@@ -1,274 +1,395 @@
 # 2026-08-12 语音论文速递
 
-**共收录**: 10 篇 | **语音大模型**: 10 篇 | **语音前端**: 0 篇
+**共收录**: 10 篇 | **语音大模型**: 8 篇 | **语音前端**: 2 篇
 
 > 今日 arXiv 语音相关论文共命中 10 篇。
-> 以下是按评分排序的结果。
 
 ---
 
-##  语音大模型
+## 语音大模型
 
 ---
 
-## [1] Beyond Naturalness: Probing Automated Text-To-Speech Evaluators on Linguistically Grounded Dimensions
+## [1] Beyond Naturalness: Probing Automated TTS Evaluators on Linguistically Grounded Dimensions
 
-**arXiv ID** 2608.09930 | **方向** 语音大模型
+**arXiv ID**：2608.09930 | **方向**：语音大模型
 
-**作者：** Oluwanifemi Bamgbose, Simon Rosen, Jash Shah, Lindsay Devon Brin, Hoang H Nguyen, Anke Koelzer, Rachel Hansen, Tara Bogavelli
+**作者**：Oluwanifemi Bamgbose, Simon Rosen, Jash Shah, Lindsay Devon Brin, Hoang H Nguyen, Anke Koelzer, Rachel Hansen, Tara Bogavelli, Fanny Riols
 
-**机构：** Carnegie Mellon University, University of Oxford
+**机构**：Carnegie Mellon University（卡内基梅隆大学）、University of Oxford（牛津大学）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09930 | **PDF** https://arxiv.org/pdf/2608.09930.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09930 | **PDF**：https://arxiv.org/pdf/2608.09930.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Automated Text-to-Speech (TTS) evaluation methods (Mean Opinion Score (MOS) predictors and Audio Large Language Models (Audio-LLM) judges) are expected to reflect human perception, yet it is unclear how well they capture the distinct aspects of speech that listeners actually perceive. We deconstruct "naturalness" into a linguistically grounded annotation schema spanning 10 distinct perceptual dime
+### 📌 简介
+自动 TTS 评估方法（MOS 预测器和 Audio-LLM 评判器）被期望反映人类感知，但尚不清楚它们能多好地捕获听众实际感知的不同语音维度。该工作将"自然度"解构为 10 个语言学感知维度的标注模式，构建首个维度级 TTS 元评估基准，包含 860 句由训练有素的语言学家标注的语料。对 4 个 MOS 预测器和 4 个 Audio-LLM 评判器的基准测试显示：MOS 预测器仅关注声学信号质量，Audio-LLM 评判器表现出选择性、依赖提示词的检测能力，不能泛化到所有维度。两类方法均无法可靠捕获语言结构化的语音错误。
 
-###  技术方案
-本文提出对自动TTS评估器（MOS预测器和Audio-LLM评判器）进行多维度评估。将「自然度」解构为10个语言学感知维度，构建了包含860句标注语料的基准测试。MOS预测器侧重声学信号质量，Audio-LLM评判器表现出选择性、依赖提示词的检测能力，但不能泛化到所有维度。
+### 🔧 技术方案
 
-###  实验结果
-对4个MOS预测器和4个Audio-LLM评判器进行了基准测试，数据集、标注模式和评估代码已公开发布。
+**问题背景：** 现有 TTS 评估主要使用 MOS 预测器或 Audio-LLM 评判器，但它们是否真正理解语音的多维感知特性（如发音清晰度、韵律自然度、语速适当性等）缺乏系统评估。
 
-**是否开源：** 暂无。
+**模型架构：** 10 维度语言学标注模式：包括发音清晰度、音段准确性、韵律自然度、语速适当性、重音模式、语调自然度、流畅度、响度适当性、音质、整体自然度。860 句由训练有素的语言学家标注。
 
-###  评分：8/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 语言学维度解构——将"自然度"分解为 10 个可操作的语言学维度，提供可解释的评估框架；(2) 首个维度级 TTS 元评估基准——专门设计用于测试自动评估器在多维感知空间中的能力；(3) 揭示两类评估器的根本局限——MOS 预测器塌缩为声学质量，Audio-LLM 评判器提示词依赖性强。
+
+**训练策略：** 基准测试包含 4 个 MOS 预测器和 4 个 Audio-LLM 评判器。
+
+### 📊 实验结果
+**数据集**：860 句语言学标注语料
+
+**主要指标**：
+- MOS 预测器：仅与声学信号质量相关，无法检测语言错误
+- Audio-LLM 评判器：选择性检测，依赖提示词设计，不能泛化到所有维度
+- 两类评估器均无法可靠捕获语言结构化的语音错误（如音段替换、省略）
+
+**是否开源**：数据集、标注模式和评估代码已公开发布
+
+### ⭐ 评分：8/10
+评分理由：该工作对 TTS 评估领域有重要贡献——揭示了现有自动评估器的根本性局限。10 维度语言学标注模式设计合理，为更精细的 TTS 评估提供了理论基础。实验发现 MOS 预测器仅关注声学质量、Audio-LLM 提示词敏感等对实践者有重要指导意义。但语料规模（860 句）有限，且未提出改进的评估方法。
 
 ---
 
 ## [2] MADBench: A Benchmark for Modality-Aware Audio Deepfake Detection
 
-**arXiv ID** 2608.09593 | **方向** 语音大模型
+**arXiv ID**：2608.09593 | **方向**：语音大模型
 
-**作者：** Yanqiu Li, Yang Xiao, Jisheng Bai, Bin Chen, Hong Jia, Ting Dang
+**作者**：Yanqiu Li, Yang Xiao, Jisheng Bai, Bin Chen, Hong Jia, Ting Dang
 
-**机构：** The University of Melbourne, Xi'an University of Posts and Telecommunications
+**机构**：The University of Melbourne（墨尔本大学）、Xi'an University of Posts and Telecommunications（西安邮电大学）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09593 | **PDF** https://arxiv.org/pdf/2608.09593.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09593 | **PDF**：https://arxiv.org/pdf/2608.09593.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Recent advances in speech synthesis and audio generation have made high-fidelity acoustic forgery low-cost and difficult to attribute, enabling a realistic attack scenario in which speech and background audio are independently manipulated over otherwise authentic video. Yet existing research either focuses on visual manipulation, addresses speech detection in isolation, or conflates speech and non
+### 📌 简介
+语音合成和音频生成的最新进展使得高保真声学伪造低成本且难以归因，实现了语音和背景音频可被独立操纵的现实攻击场景。但现有研究要么关注视觉操纵，要么孤立处理语音检测，或将语音和非语音音频混为一谈。MADBench 是首个将语音和环境音频视为不同声学组件的基准，支持组件感知的音频深度伪造检测评估。实验揭示：环境音频操纵比合成语音更容易被通用编码器检测；现有预训练检测器对两种声学组件均失败；操纵环境音频不对称地降低语音深度伪造检测性能。
 
-###  技术方案
-MADBench：用于模态感知音频深度伪造检测的基准测试。评估评估器在音频-视觉多模态场景下的深度伪造检测能力。
+### 🔧 技术方案
 
-###  实验结果
-建立了多模态音频深度伪造检测基准，覆盖多种场景。
+**问题背景：** 真实攻击场景中，攻击者可独立操纵视频中的语音轨道和背景音频，但现有检测基准将语音和背景音频视为单一标签，忽视了两者不同的伪造特征和检测难度。
 
-**是否开源：** 暂无。
+**模型架构：** 组件感知评估框架——将音频深度伪造检测分解为语音组件检测和环境音频组件检测。评估代表性 SOTA 检测器和多模态大语言模型。
 
-###  评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 组件感知设计——首次将语音和环境音频作为独立组件进行评估，而非单一标签；(2) 揭示不对称影响——操纵环境音频会不对称地降低语音深度伪造检测性能，该现象在单标签范式中完全不可见；(3) 统一评估协议——在同一框架下评估多种检测器和 MLLM。
+
+**训练策略：** 在统一协议下评估现有 SOTA 检测器和多模态大语言模型。
+
+### 📊 实验结果
+**数据集**：MADBench
+
+**主要指标**：
+- 环境音频操纵比合成语音更容易被检测
+- 现有预训练检测器在两种声学组件上均失败
+- 操纵环境音频不对称地降低语音检测性能
+
+**是否开源**：暂无
+
+### ⭐ 评分：7/10
+评分理由：MADBench 提出了有价值的组件感知音频深度伪造检测视角。发现环境音频操纵对语音检测的不对称影响具有实践意义。但主要贡献是基准而非新检测方法，具体检测性能数值和与现有基准的定量对比在摘要中未充分展示。
 
 ---
 
 ## [3] SonicWeave: Chunk-Routed Mixture-of-Experts for Unified Audio Scene Generation
 
-**arXiv ID** 2608.09571 | **方向** 语音大模型
+**arXiv ID**：2608.09571 | **方向**：语音大模型
 
-**作者：** Yunrui Cai, Xu Li, Yucheng Zhou, Jinchao Li, Dingdong Wang, Dongchao Yang, Xixin Wu, Chen Zhang
+**作者**：Yunrui Cai, Xu Li, Yucheng Zhou, Jinchao Li, Dingdong Wang, Dongchao Yang, Xixin Wu, Chen Zhang, Zhiyong Wu, Pengfei Wan, Helen Meng
 
-**机构：** Kling Team, Kuaishou Technology; The Chinese University of Hong Kong
+**机构**：Kuaishou Technology（快手科技 Kling 团队）、The Chinese University of Hong Kong（香港中文大学）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09571 | **PDF** https://arxiv.org/pdf/2608.09571.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09571 | **PDF**：https://arxiv.org/pdf/2608.09571.pdf | **代码**：暂无 | **Demo**：https://caiyunrui.github.io/SonicWeave
 
-###  简介
-Text-conditioned general audio generation is moving beyond isolated speech, music, and sound-effect synthesis toward a single model that can compose them into controllable, coherent audio scenes. This unified setting is particularly challenging: heterogeneous components impose conflicting structural requirements on a shared backbone, while a complex mixed scene may contain locally distinct or over
+### 📌 简介
+文本条件通用音频生成正从孤立的语音、音乐和音效合成走向单一模型组合可控连贯音频场景。SonicWeave 提出基于分块路由 MoE 的流匹配模型，核心是冲突门控先验-证据路由机制（CPE-MoE），通过结合全局先验（编码文本条件和扩散相位）和局部证据（进化声学状态）来路由连续声学块。当局部状态不可靠时，学习到的冲突门偏向先验；当区域偏离全局场景上下文时，允许局部证据影响路由。支持语音、音乐、音效、歌声及其细粒度混合，在 TTS、TTA、TTM 基准上一致优于 Dense 和 Base-MoE 基线。复杂场景评估显示改进的合成质量，路由分析揭示扩散阶段中内容相关的专家专业化。
 
-###  技术方案
-SonicWeave：基于分块路由MoE（Mixture-of-Experts）的统一音频场景生成框架。将音频场景分解为分块处理，通过专家混合机制实现多样化音频生成。
+### 🔧 技术方案
 
-###  实验结果
-在多种音频场景生成任务上验证了方法的有效性。
+**问题背景：** 统一音频场景生成中，异构组件（语音、音乐、音效）对共享骨干提出冲突的结构要求，复杂混合场景可能包含局部不同或重叠内容，需要细粒度适应。现有音频 MoE 主要在域级别路由，token 级路由忽略声学信号的局部连续性。
 
-**是否开源：** 暂无。
+**模型架构：** 基于流匹配的生成模型，核心为 CPE-MoE（Conflict-gated Prior-Evidence routing mechanism）。CPE-MoE 路由连续声学块，结合全局先验（文本条件 + 扩散相位编码）和局部证据（进化声学状态）。学习到的冲突门在局部状态不可靠时偏向先验，在区域偏离场景上下文时允许局部证据影响路由。
 
-###  评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 分块路由 MoE——不同于域级别或 token 级别路由，在连续声学块级别路由，保持声学信号的局部连续性；(2) CPE-MoE——冲突门控先验-证据路由，结合全局文本/相位先验和局部声学证据，实现细粒度内容适应；(3) 统一音频场景生成——单组权重支持语音、音乐、音效、歌声及其任意混合。
+
+**训练策略：** 在 TTS、TTA（text-to-audio）、TTM（text-to-music）基准上评估。
+
+### 📊 实验结果
+**数据集**：TTS、TTA、TTM 基准，复杂场景评估
+
+**主要指标**：
+- 在 TTS、TTA、TTM 上一致优于 Dense 和 Base-MoE 基线
+- 复杂场景合成质量改进
+- 路由分析显示扩散阶段中内容相关的专家专业化
+
+**是否开源**：暂无
+
+### ⭐ 评分：8/10
+评分理由：SonicWeave 的 CPE-MoE 设计精巧——分块路由保持了声学连续性，冲突门控机制有效平衡了全局先验和局部证据。在统一音频场景生成这一挑战性任务上取得了有意义的进展。路由分析揭示了扩散阶段中可解释的专家专业化模式。但缺乏与更多 SOTA 方法的详细数值对比，代码未开源。
 
 ---
 
 ## [4] AudioMap: Cloze-and-Choice Reinforcement Learning for Time-Aware Dense Audio Captioning
 
-**arXiv ID** 2608.09559 | **方向** 语音大模型
+**arXiv ID**：2608.09559 | **方向**：语音大模型
 
-**作者：** Yan Rong, Fengji Ma, Xu Li, Jinting Wang, Chen Zhang, Li Liu
+**作者**：Yan Rong, Fengji Ma, Xu Li, Jinting Wang, Chen Zhang, Li Liu
 
-**机构：** The Hong Kong University of Science and Technology (Guangzhou); Kling Team, Kuaishou Technology
+**机构**：The Hong Kong University of Science and Technology (Guangzhou)（香港科技大学广州）、Kuaishou Technology（快手科技）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09559 | **PDF** https://arxiv.org/pdf/2608.09559.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09559 | **PDF**：https://arxiv.org/pdf/2608.09559.pdf | **代码**：https://github.com/ryysayhi/AudioMap | **Demo**：暂无
 
-###  简介
-Time-aware dense audio captioning (TDAC) aims to generate multiple fine-grained attributes (dense) of the audio with precise time boundaries (time-aware). Existing methods struggle to achieve these two goals and mainly rely on supervised fine-tuning, yielding sub-optimal performance. While reinforcement learning (RL) shows promise, applying it to TDAC faces two main challenges: (1) existing reward
+### 📌 简介
+时间感知密集音频描述（TDAC）旨在生成具有精确时间边界的多个细粒度音频属性。现有方法主要依赖监督微调，性能次优。AudioMap 提出基于填空-选择强化学习（RL）的 TDAC 框架，引入证据充分性奖励（ESR）的不对称分层评分机制以提高细粒度准确性和描述丰富性，以及事件条件时间奖励（ECTR）通过时间 IoU 将时间戳绑定到事件语义。构建首个时间感知细粒度音频描述数据集 AudioMapCap-44K（44K 精心标注的 caption）。在多个基准上达到开源模型 SOTA，与闭源模型竞争或更优。
 
-###  技术方案
-AudioMap：基于填空-选择强化学习的时间感知密集音频描述方法。提出同时考虑时序和语义的时间感知密集音频captioning任务。
+### 🔧 技术方案
 
-###  实验结果
-在音频描述任务上验证了时间感知能力。
+**问题背景：** TDAC 需要同时生成细粒度多属性描述和精确时间边界，现有监督微调方法难以优化两个目标。现有奖励函数过于粗糙，无法细粒度监督多事件、多属性、多关系描述；自由格式 caption 的时间监督困难。
 
-**是否开源：** 暂无。
+**模型架构：** 基于 RL 的 TDAC 框架，采用统一的填空-选择奖励范式。ESR：不对称分层评分机制，促进细粒度准确性和描述丰富性。ECTR：通过时间 IoU 将时间戳绑定到事件语义，配合双课程学习策略。
 
-###  评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 填空-选择 RL 范式——将 TDAC 重新定义为统一的选择问题，而非生成问题；(2) ESR——不对称分层评分，从粗到细评估多维度描述质量；(3) ECTR——通过时间 IoU 结构性地绑定时间戳和事件语义，解决自由格式 caption 的时间监督难题；(4) AudioMapCap-44K 数据集——首个时间感知细粒度音频描述数据集。
+
+**训练策略：** 在 AudioMapCap-44K 上训练，RL 优化使用 ESR + ECTR 奖励。
+
+### 📊 实验结果
+**数据集**：AudioMapCap-44K 及多个公开基准
+
+**主要指标**：
+- 开源模型中 SOTA
+- 与闭源模型竞争或更优
+
+**是否开源**：已开源
+
+### ⭐ 评分：7/10
+评分理由：AudioMap 将 RL 成功应用于 TDAC，填空-选择范式设计新颖。ESR 和 ECTR 分别针对描述质量和时间对齐进行优化，思路合理。AudioMapCap-44K 数据集填补了 TDAC 数据空白。但具体性能数值（如 F1、CIDEr、时间对齐精度）在摘要中未充分展示，与现有方法的定量对比不够详细。
 
 ---
 
 ## [5] Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation
 
-**arXiv ID** 2608.09451 | **方向** 语音大模型
+**arXiv ID**：2608.09451 | **方向**：语音大模型（语音前端）
 
-**作者：** Yuzhu Wang, Archontis Politis, Konstantinos Drossos, Tuomas Virtanen
+**作者**：Yuzhu Wang, Archontis Politis, Konstantinos Drossos, Tuomas Virtanen
 
-**机构：** Signal Processing Research Centre, Tampere University; Nokia Technologies, Espoo
+**机构**：Tampere University（坦佩雷大学）、Nokia Technologies（诺基亚科技）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09451 | **PDF** https://arxiv.org/pdf/2608.09451.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09451 | **PDF**：https://arxiv.org/pdf/2608.09451.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Long speech separation typically employs a segment-separation-stitch paradigm where recordings are divided into short segments, processed independently, and stitched together. Its challenge lies in predicting cross-segment permutations. This paper proposes a training-free dynamic clustering approach for cross-segment permutation alignment using speaker embedding reference pools. The method predict
+### 📌 简介
+长语音分离通常采用分段-分离-拼接范式，其挑战在于预测跨段排列。该工作提出免训练的动态聚类方法，使用说话人 embedding 参考池进行跨段排列对齐。方法基于当前段 embedding 与参考池的余弦相似度预测排列，通过保留与现有参考整体余弦相似度最具代表性的说话人 embedding 来更新参考池。作为与现有分离模型兼容的即插即用后处理模块，在密集和稀疏长语音场景中优于现有方法，尤其在具有扩展话语间隔的挑战性稀疏场景中表现突出，且在未知说话人数场景中对说话人数估计误差具有鲁棒性。被 MLSP 2026 接收。
 
-###  技术方案
-动态聚类用于长语音分离中的跨段排列对齐。在长语音分离任务中，动态调整聚类以处理说话人排列问题，提高分离质量。
+### 🔧 技术方案
 
-###  实验结果
-在长语音分离数据集上验证了方法的有效性。
+**问题背景：** 长语音分离中，录音被分割为短段独立处理，然后拼接。跨段排列对齐（segment 1 的说话人 A 对应 segment 2 的哪个输出）是关键挑战，尤其在稀疏场景中说话人可能长时间不出现。
 
-**是否开源：** 暂无。
+**模型架构：** 免训练动态聚类方法。使用说话人 embedding 参考池，基于当前段 embedding 与参考池的余弦相似度预测排列。参考池通过保留最具代表性的说话人 embedding 更新。
 
-###  评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 免训练设计——无需额外训练，作为即插即用后处理模块，兼容任何现有分离模型；(2) 动态参考池更新——通过保留整体余弦相似度最具代表性的 embedding 实现鲁棒参考池维护；(3) 稀疏场景鲁棒性——在扩展话语间隔场景中显著优于现有方法。
+
+**训练策略：** 无需训练，直接作为后处理模块。
+
+### 📊 实验结果
+**数据集**：密集和稀疏长语音场景
+
+**主要指标**：
+- 优于现有跨段排列对齐方法
+- 在稀疏场景中优势更显著
+- 对说话人数估计误差鲁棒
+
+**是否开源**：暂无
+
+### ⭐ 评分：7/10
+评分理由：该工作提出了实用的免训练动态聚类方法解决长语音分离的排列对齐问题。即插即用设计具有实际价值。稀疏场景鲁棒性验证了方法对实际挑战的有效性。但方法相对简单（基于余弦相似度的聚类），创新性有限，且未在多样化真实场景中验证。
 
 ---
 
 ## [6] Neural Array-Generic Direction-of-Arrival Estimation Exploiting Array Transfer Functions
 
-**arXiv ID** 2608.09425 | **方向** 语音大模型
+**arXiv ID**：2608.09425 | **方向**：语音前端
 
-**作者：** Mikko Heikkinen, Archontis Politis, Konstantinos Drossos, Tuomas Virtanen
+**作者**：Mikko Heikkinen, Archontis Politis, Konstantinos Drossos, Tuomas Virtanen
 
-**机构：** Tampere University
+**机构**：Tampere University（坦佩雷大学）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09425 | **PDF** https://arxiv.org/pdf/2608.09425.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09425 | **PDF**：https://arxiv.org/pdf/2608.09425.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Direction-of-arrival (DoA) estimation is a key component of multichannel audio processing, yet many deep learning approaches remain tied to the microphone arrays used during training and generalize poorly to unseen devices. This paper proposes an array-generic neural DoA estimation framework using measured or simulated complex directional array transfer functions (ATFs) matched to real-world multi
+### 📌 简介
+DOA 估计是多通道音频处理的关键组件，但许多深度学习方法与训练时使用的麦克风阵列绑定，对未见设备泛化差。该工作提出阵列通用神经 DOA 估计框架，使用测量或模拟的复值方向阵列传递函数（ATF）匹配真实多麦克风设备。使用独立卷积编码器处理多通道频谱图和 ATF 元数据，通过交叉注意力融合表示，使用多源笛卡尔向量输出预测源方向。在混响和扩散噪声下的模拟 2D 和 3D 定位任务中，方法泛化到未见阵列（包括手机式配置）而无显著性能下降，与常规和基于学习的基线竞争。被 IWAENC 2026 接收。
 
-###  技术方案
-利用阵列传递函数的神经阵列通用方向到达估计（DOA）方法。提出不依赖特定麦克风阵列配置的通用DOA估计方法。
+### 🔧 技术方案
 
-###  实验结果
-在多种阵列配置上验证了方法的泛化能力。
+**问题背景：** 现有神经 DOA 方法通常针对特定阵列配置训练，当部署到不同阵列（如不同麦克风数量、几何形状）时性能严重下降，需要重新训练。
 
-**是否开源：** 暂无。
+**模型架构：** 双编码器架构——(1) ATF 编码器：使用卷积网络编码测量或模拟的复值方向 ATF；(2) 频谱编码器：使用卷积网络编码多通道频谱图。通过交叉注意力融合两个表示，多源笛卡尔向量输出预测。
 
-###  评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 阵列通用设计——利用 ATF 作为阵列无关的表示，使模型泛化到未见阵列配置；(2) ATF 元数据融合——通过交叉注意力将 ATF 信息与声学特征融合，而非简单拼接；(3) 多源笛卡尔向量输出——避免传统分类或角度回归的局限性。
+
+**训练策略：** 在模拟 2D 和 3D 定位任务上训练和评估，含混响和扩散噪声。
+
+### 📊 实验结果
+**数据集**：模拟 2D 和 3D 定位任务
+
+**主要指标**：
+- 泛化到未见阵列（包括手机式配置）而无显著性能下降
+- 与常规和基于学习的基线竞争
+
+**是否开源**：暂无
+
+### ⭐ 评分：7/10
+评分理由：该工作解决了神经 DOA 估计的阵列泛化问题，ATF 元数据融合方案设计合理。交叉注意力融合机制比简单拼接更灵活。但仅在模拟数据上评估，真实场景泛化性待验证，且与现有方法的性能差距在摘要中未量化展示。
 
 ---
 
 ## [7] RAG-Audio: Retrieval-Augmented Generation for Faithful Brain-to-Audio Reconstruction
 
-**arXiv ID** 2608.09331 | **方向** 语音大模型
+**arXiv ID**：2608.09331 | **方向**：语音大模型
 
-**作者：** Ambuj Mehrish, Sebastiano Vascon
+**作者**：Ambuj Mehrish, Sebastiano Vascon
 
-**机构：** Ca' Foscari University of Venice; National University of Singapore
+**机构**：Ca' Foscari University of Venice（威尼斯大学）、National University of Singapore（新加坡国立大学）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09331 | **PDF** https://arxiv.org/pdf/2608.09331.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09331 | **PDF**：https://arxiv.org/pdf/2608.09331.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Brain-to-audio reconstruction is limited by \emph{prior domination}: when a pretrained generator is conditioned on a weak neural signal, it produces realistic but stimulus-inaccurate audio. We introduce RAG-Audio, which decodes fMRI into a semantic audio embedding, retrieves a matching real-audio exemplar, and initializes the frozen generator's sampling trajectory from that exemplar while retainin
+### 📌 简介
+脑到音频重建受限于"先验主导"问题：当预训练生成器以弱神经信号为条件时，会产生逼真但刺激不准确的音频。RAG-Audio 将 fMRI 解码为语义音频 embedding，检索匹配的真实音频样本，从该样本初始化冻结生成器的采样轨迹，同时保留解码 embedding 作为条件。在 Brain2Music 上，10 路刺激识别从 0.14-0.18（直接生成，接近随机 0.10）提升到 0.40-0.43（接近检索基线）。Fréchet Audio Distance 从 13.49 降到 1.25（AudioLDM）。RAG-Audio 在识别上接近最近邻检索同时保持生成性。自回归负对照（无可初始化潜轨迹）无类似增益，将改进归因于轨迹初始化。
 
-###  技术方案
-RAG-Audio：用于脑电-音频重建的检索增强生成框架。通过检索相关脑电信号来增强音频重建的保真度。
+### 🔧 技术方案
 
-###  实验结果
-在脑电-音频重建任务上验证了保真度提升。
+**问题背景：** 脑到音频重建中，fMRI 信号空间分辨率有限（~2mm），时间分辨率低（~1s），导致条件信号弱。预训练生成器倾向于产生"先验主导"的输出——逼真但与刺激无关。现有方法难以区分 generator 先验和神经信号驱动的重建。
 
-**是否开源：** 暂无。
+**模型架构：** 三阶段框架：(1) fMRI→语义 embedding 解码；(2) 在 embedding 空间中检索匹配的真实音频样本；(3) 从检索样本初始化冻结生成器（AudioLDM）的采样轨迹，同时保留解码 embedding 作为条件。
 
-###  评分：8/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) RAG 应用于脑到音频——首次将检索增强生成用于脑信号重建，利用检索样本初始化生成器轨迹；(2) 轨迹初始化机制——不同于简单条件生成，通过从检索样本的潜状态开始采样来引导生成器，保留生成多样性的同时提高刺激保真度；(3) 归因实验——自回归负对照证明改进来源于轨迹初始化而非检索本身。
+
+**训练策略：** 在 Brain2Music 数据集上评估。fMRI→embedding 解码器需训练，生成器冻结。
+
+### 📊 实验结果
+**数据集**：Brain2Music
+
+**主要指标**：
+- 10 路刺激识别：0.14-0.18 → 0.40-0.43（直接生成→RAG-Audio）
+- FAD：13.49 → 1.25（AudioLDM）
+- 与最近邻检索接近（检索 0.46-0.49），但保持生成性
+
+**是否开源**：暂无
+
+### ⭐ 评分：8/10
+评分理由：RAG-Audio 创新性地将 RAG 应用于脑到音频重建，有效缓解了先验主导问题。10 路识别从随机水平（0.10）到 0.40-0.43 的提升显著，FAD 降低一个数量级。自回归负对照实验设计精巧，清晰归因了改进来源。但依赖检索数据库（需预先存在匹配音频），且生成多样性可能受限。
 
 ---
 
 ## [8] DAVE: A Decoupled Audio-Visual Enhancement Framework for Real-World Speech Separation
 
-**arXiv ID** 2608.09288 | **方向** 语音大模型
+**arXiv ID**：2608.09288 | **方向**：语音大模型（语音前端）
 
-**作者：** Wei Zhou, Wanyi Ning, Yinshang Guo, Qianxiao Fang, Haitao Qian, Yingpeng Li
+**作者**：Wei Zhou, Wanyi Ning, Yinshang Guo, Qianxiao Fang, Haitao Qian, Yingpeng Li
 
-**机构：** Tianjin University; Nanjing University
+**机构**：Tianjin University（天津大学）、Nanjing University（南京大学）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09288 | **PDF** https://arxiv.org/pdf/2608.09288.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09288 | **PDF**：https://arxiv.org/pdf/2608.09288.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Audio-visual speech enhancement under real-world conditions remains challenging due to unreliable visual inputs and the lack of large-scale training data with realistic acoustic conditions. Existing approaches usually fuse visual features directly into the separation network, making them vulnerable to degraded visual signals. In this paper, we present DAVE, a decoupled audio-visual enhancement fra
+### 📌 简介
+真实世界条件下音视频语音增强因不可靠的视觉输入和缺乏大规模真实声学条件训练数据而具有挑战性。现有方法通常将视觉特征直接融合到分离网络中，使其对退化视觉信号脆弱。DAVE 提出解耦音视频增强框架：构建 DAVE-Corpus（219,411 个混合样本，从公共会议语料库通过组合声学增强生成），引入渐进多目标优化策略联合改善语音分离、可懂度、说话人身份保持和感知质量，发展认证选择性增强链（仅对无参考分区应用场景路由、GAN 去噪和响度归一化，保证参考指标不退化）。在真实世界音视频语音增强挑战中展示了鲁棒性。
 
-###  技术方案
-DAVE：用于真实世界语音分离的解耦音视频增强框架。将音频和视觉信息解耦处理，更好地处理噪声和混响条件下的语音分离。
+### 🔧 技术方案
 
-###  实验结果
-在真实世界音视频数据集上验证了增强效果。
+**问题背景：** 真实世界中视觉输入可能被遮挡、模糊或低光，现有方法将视觉特征直接融合到分离网络，使系统在视觉退化时性能严重下降。同时缺乏大规模真实声学条件的训练数据。
 
-**是否开源：** 暂无。
+**模型架构：** 解耦音视频增强框架。DAVE-Corpus：219,411 个混合样本。渐进多目标优化：联合优化语音分离、可懂度、说话人身份保持和感知质量。认证选择性增强链：场景路由→GAN 去噪→响度归一化，仅应用于无参考分区。
 
-###  评分：8/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 解耦架构——视觉和音频分支独立处理，避免视觉退化影响音频分离核心；(2) DAVE-Corpus——大规模真实声学条件训练数据，通过组合声学增强生成；(3) 认证选择性增强——仅对无参考分区应用增强，保证参考指标不退化（非退化保证）。
+
+**训练策略：** 在 DAVE-Corpus（219,411 混合样本）上训练，使用渐进多目标优化。
+
+### 📊 实验结果
+**数据集**：真实世界音视频语音增强挑战数据集
+
+**主要指标**：
+- 在真实世界混合场景和视觉退化条件下展示鲁棒性
+- 解耦设计的优势在视觉退化条件下体现
+
+**是否开源**：暂无
+
+### ⭐ 评分：7/10
+评分理由：DAVE 的解耦设计解决了现有音视频语音增强中对视觉退化敏感的问题，认证选择性增强链保证了非退化场景的性能不受影响。DAVE-Corpus（219K 样本）填补了训练数据空白。但缺乏与 SOTA 方法的详细数值对比，且解耦设计在视觉质量好时可能不如紧耦合方法。
 
 ---
 
 ## [9] From Inaudible Inputs to Model Failures: Low-Frequency Safety Risks in LALMs
 
-**arXiv ID** 2608.09158 | **方向** 语音大模型
+**arXiv ID**：2608.09158 | **方向**：语音大模型
 
-**作者：** Yuanhe Zhang, Weiliu Wang, Jie Ren, Liang Lin, Zhenhong Zhou, Haoran Gao, Kun Wang, Chen Li
+**作者**：Yuanhe Zhang, Weiliu Wang, Jie Ren, Liang Lin, Zhenhong Zhou, Haoran Gao, Kun Wang, Chen Li, Li Sun, Sen Su
 
-**机构：** Beijing University of Posts and Telecommunications; Institute of Information Engineering, Chinese Academy of Sciences
+**机构**：Beijing University of Posts and Telecommunications（北京邮电大学）、Institute of Information Engineering, CAS（中科院信工所）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09158 | **PDF** https://arxiv.org/pdf/2608.09158.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09158 | **PDF**：https://arxiv.org/pdf/2608.09158.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Large audio-language models (LALMs) have demonstrated strong capabilities in understanding diverse audio inputs. This diversity includes low-frequency signals that are inaudible to humans but can still enter the model and influence its generation. However, the practical impact of such low-frequency inputs on LALMs remains largely unexplored. In this paper, we propose Intermittent Low-Frequency Loc
+### 📌 简介
+大型音频语言模型（LALM）已展示理解多样音频输入的能力，包括人类听不见的低频信号。该工作提出间歇性低频锁定（ILL）攻击方法，使用通用波形模板在黑盒设置中评估此风险。ILL 使用句子注意力尺度估计确定活跃区间，频率混淆转移从语料谱变化构建连续相位低频波形。提出分布重查询守卫（DRG）检测低频分布偏移并条件性请求第二次录音进行语义恢复。在 6 个 LALM 和多个音频理解任务上，ILL 降低准确率高达 67 个百分点，人类可听度评分仅 1.33（接近干净音频 1.17）。DRG 将平均攻击准确率从 28.5% 提升到 46.1%。
 
-###  技术方案
-研究低频安全风险：分析语言音频大模型（LALM）对听不见的低频输入的响应，揭示潜在安全威胁。
+### 🔧 技术方案
 
-###  实验结果
-识别并分析了多种低频安全风险场景。
+**问题背景：** LALM 处理人类可听频段（20Hz-20kHz）和不可听低频（<20Hz）信号，但低频输入对 LALM 安全性的实际影响尚未被探索。
 
-**是否开源：** 暂无。
+**模型架构：** ILL 攻击：句子注意力尺度估计→确定活跃区间，频率混淆转移→从语料谱变化构建连续相位低频波形。DRG 防御：检测低频分布偏移→条件性请求第二次录音。黑盒设置，使用通用波形模板。
 
-###  评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 发现低频安全风险——首次揭示 LALM 对不可听低频输入的脆弱性，开辟新的安全研究方向；(2) ILL 攻击——黑盒方法，无需模型内部信息，使用通用波形模板；(3) DRG 防御——轻量级检测方法，通过条件性重查询实现语义恢复。
+
+**训练策略：** 在 6 个 LALM 和多个音频理解任务上评估。
+
+### 📊 实验结果
+**数据集**：6 个 LALM，多个音频理解任务
+
+**主要指标**：
+- ILL 攻击：准确率降低高达 67 个百分点
+- 人类可听度评分：1.33（干净音频 1.17，5 分制），接近不可感知
+- DRG 防御：平均攻击准确率从 28.5% 提升到 46.1%
+
+**是否开源**：暂无
+
+### ⭐ 评分：8/10
+评分理由：该工作首次揭示 LALM 对不可听低频输入的安全风险，发现极其重要——低频攻击几乎不可被人类感知（可听度 1.33 vs 1.17），但能降低准确率高达 67 个百分点。ILL 攻击在黑盒设置下有效，DRG 防御提供了初步缓解方案。在 6 个 LALM 上验证了泛化性。但攻击的物理可实现性（真实环境中的声学传播）和防御的鲁棒性有待进一步验证。
 
 ---
 
 ## [10] Structured Phonological Representations for Audio-Articulatory rtMRI Speech Classification
 
-**arXiv ID** 2608.09767 | **方向** 语音大模型
+**arXiv ID**：2608.09767 | **方向**：语音大模型（语音前端）
 
-**作者：** Abner Hernandez, Tomás Arias Vergara, Daiqi Liu, Andreas Maier, Paula Andrea Pérez-Toro
+**作者**：Abner Hernandez, Tomás Arias Vergara, Daiqi Liu, Andreas Maier, Paula Andrea Pérez-Toro
 
-**机构：** Pattern Recognition Lab, Friedrich-Alexander-Universität Erlangen-Nürnberg (FAU), Department of Electronic Engineering
+**机构**：Friedrich-Alexander-Universität Erlangen-Nürnberg（埃尔朗根-纽伦堡大学）
 
-**发布日期：** 2026-08-10 | **论文** https://arxiv.org/abs/2608.09767 | **PDF** https://arxiv.org/pdf/2608.09767.pdf | **代码** 暂无 | **Demo** 暂无
+**发布日期**：2026-08-10 | **论文**：https://arxiv.org/abs/2608.09767 | **PDF**：https://arxiv.org/pdf/2608.09767.pdf | **代码**：暂无 | **Demo**：暂无
 
-###  简介
-Real-time MRI makes it possible to observe vocal-tract articulation during speech, but mapping these articulatory patterns to phonetic and phonological categories remains challenging. We investigate whether PhonoQ, an audio-based model trained to recognize structured phonological features, provides useful information for audio--articulatory modeling. Specifically, we extract representations from P
+### 📌 简介
+实时 MRI 可以观察语音中的声道发音，但将这些发音模式映射到音系类别仍具挑战性。该工作研究 PhonoQ（一个训练识别结构音系特征的音频模型）是否为音频-发音建模提供有用信息。从 PhonoQ 的 Conformer 模块提取表示（其训练受方式、位置、发声、元音特征监督），使用发音轮廓与同步音频特征结合，对比 WavLM-large 和 HuBERT-large 基线。在未见语音和未见说话人设置中，PhonoQ 特征改善了音系目标的 macro-F1（包括方式、位置、发声、元音高度和前后位置），以及细粒度 39 音素分类。在仅轮廓推理设置中，音频教师监督比仅轮廓训练带来适度但一致增益。后验分析显示可解释的与表面敏感的舌拍 /t/ 实现、/t/-/r/ 后缩或塞擦化、鼻音位置同化一致的模式。被 SLT 2026 投稿。
 
-###  技术方案
-提出用于音频-发音rtMRI语音分类的结构化音系表示方法。将发音运动模式映射到音系类别，提取高维MRI数据中的结构化特征。
+### 🔧 技术方案
 
-###  实验结果
-在语音分类任务上验证了所提表示方法的有效性。
+**问题背景：** rtMRI 提供了高时间分辨率（~80fps）的声道发音观测，但发音数据维度高、标注困难，映射到音系类别需要有效的特征表示。
 
-**是否开源：** 暂无。
+**模型架构：** PhonoQ 的 Conformer 模块提取结构音系特征（方式、位置、发声、元音特征）。与 WavLM-large 和 HuBERT-large 基线对比。使用发音轮廓 + 同步音频特征进行音系分类。
 
-###  评分：7/10
-基于标题和摘要的初步评估，有一定学术价值。
+**核心创新：** (1) 结构音系表示——使用 PhonoQ 的显式音系特征监督，而非自监督通用表示；(2) 音频-发音知识迁移——在仅发音轮廓推理中，音频教师监督带来适度增益，证明音系信息可部分迁移到发音模型；(3) 可解释后验分析——揭示与已知音系现象（舌拍、后缩、同化）一致的表面敏感模式。
+
+**训练策略：** 在 rtMRI 数据上评估，对比未见语音和未见说话人设置。
+
+### 📊 实验结果
+**数据集**：rtMRI 语音数据集
+
+**主要指标**：
+- PhonoQ 特征改善音系目标 macro-F1（方式、位置、发声、元音高度、前后位置）
+- 改善 39 音素细粒度分类
+- 仅轮廓推理：音频教师监督比仅轮廓训练有适度增益
+- 后验分析：可解释的舌拍 /t/、/t/-/r/ 后缩、鼻音同化模式
+
+**是否开源**：暂无
+
+### ⭐ 评分：7/10
+评分理由：该工作探索了结构音系表示在音频-发音建模中的应用，PhonoQ 特征在多个音系目标上优于自监督基线。后验分析的可解释性展示了方法的语言学价值。但性能增益幅度在摘要中未量化，且仅在 rtMRI 数据上验证，泛化性有限。
 
 ---
 
-今日语音论文速递
+## 语音前端
+
+---
+
+*Generated on 2026-08-14*
