@@ -1,367 +1,249 @@
 # 2026-08-15 语音论文速递
 
-**共收录**: 9 篇 | **语音大模型**: 7 篇 | **语音前端**: 1 篇 | **其他**: 1 篇
+**共收录**: 6 篇 | **语音大模型**: 3 篇 | **语音前端**: 3 篇
 
-> 今日 arXiv 语音相关论文共命中 9 篇。
+> 今日 arXiv 语音相关论文共命中 6 篇（数据来源：2026-08-14 arXiv 最新提交，周六无新提交）。
 > 以下是按评分排序的结果。
 
 ---
 
 ## 语音大模型
 
-## [1] CookVoice: Unified Framework for Style Controllable Multi-Modal Human Voice Generation
+## [1] VoxAudio: Vocalized Audio Synthesis via Multi-Reward Autoregressive Flow Matching
 
-**arXiv ID：** 2608.11590 | **方向：** 语音生成/TTS
+**arXiv ID**：2608.12951 | **方向**：语音生成 / TTS
 
-**作者：** Haowei Lou, Hye-Young Paik, Jia Dai, Kai Li, Lina Yao
+**作者**：Wenxiang Guo, Changhao Pan, Ziyue Jiang, Fei Wu, Zhou Zhao
 
-**机构：** UNSW Sydney, Dolby Laboratories
+**机构**：Zhejiang University
 
-**发布日期：** 2026-08-13 | **论文：** https://arxiv.org/abs/2608.11590 | **PDF：** https://arxiv.org/pdf/2608.11590 | **代码：** 暂无 | **Demo：** https://haoweilou.github.io/CookVoice/
+**发布日期**：2026-08-13 | **论文**：https://arxiv.org/abs/2608.12951 | **PDF**：https://arxiv.org/pdf/2608.12951 | **代码**：https://voxaudio.github.io | **Demo**：https://voxaudio.github.io
 
 ### 📌 简介
-CookVoice 提出一个统一的人声生成框架，将语音和歌声生成任务统一在单一非自回归模型中。该框架将人声分解为内容、韵律和风格三个关键因子，通过灵活的帧级对齐策略实现精细控制，支持 TTS、歌声合成、风格可控生成、声音模仿、语音转换和语音编辑等多种任务。仅 43.51M 参数即可在 4 步 ODE 求解下高效推理，风格相似度达 91.65%（TTS）和 95.00%（TTSV），F0 相关系数达 0.71 和 0.84，显著优于基线模型。
+VoxAudio 提出了一种因果自回归流匹配模型，用于在环境音景中嵌入可理解语音的"发声音频"合成任务。该方法在架构层面采用分块因果分解与随机分块边界预训练，支持滑动窗口流式推理；在偏好对齐层面引入多奖励 Negative-aware FineTuning (NFT)，联合优化语义保真度、语言准确率（WER）、美学质量和时间接地性。在数据层面构建了 VoxCorpus 大规模语料库，包含逐字转录和时间间隔标注。实验表明 VoxAudio 在统一发声音频生成基准上超越了现有方法，在通用 T2A 和 TTS 任务上保持竞争力。
 
 ### 🔧 技术方案
 
-**问题背景：** 现有语音生成系统多为特定任务设计，TTS、歌声合成、语音克隆等任务各自使用独立架构、数据集和训练目标，导致碎片化严重。自回归模型难以实现帧级精细控制，非自回归模型又受限于预定义的音素-时长假设，无法灵活组合多种控制信号。
+**问题背景：** 现有 Text-to-Audio 系统处理引用语音时只能生成不可理解的嘟囔声，或将语音委托给独立的 TTS 模型进行后期混合，丧失了对语音发生时间和场景交互的控制。解耦管线无法调节语音与环境声之间的时间协同和相对响度，破坏听觉场景的连贯性。
 
-**模型架构：** 基于 HiFi-GAN 自编码器将线性谱压缩为连续潜变量，以 DiT-S 为骨干网络结合最优传输流匹配进行生成。风格编码器支持文本描述（MPNet 提取语义）和参考语音（Transformer 编码器+注意力池化）两种模态，内容编码器使用 G2P 模块将文本转为音素序列并通过 FFT 块处理，韵律编码器支持离散信号（声调/重音/MIDI 音符）和连续 F0 轮廓两种控制。三者拼接后作为 DiT 的交叉注意力条件。
+**模型架构：** 基于预训练的 Universe Audio VAE 将 24kHz 音频编码为 64 维潜变量（12.5 fps），主干为 6 个 joint 和 12 个 fused DiT block（hidden size 512）。采用分块因果注意力掩码：块内双向可见，块间严格因果。使用因果卷积替代标准卷积，配合 KV 缓存实现流式推理。时长条件通过傅里叶特征编码注入全局条件。
 
-**核心创新：** (1) 统一因子分解框架，将人声解耦为内容、韵律和风格三个独立因子，通过条件开关实现多任务训练，无需任务特定目标函数。(2) 灵活帧级对齐策略，将不同控制信号均展至声学帧级别，语音使用预训练对齐器获取音素时长，歌声根据乐谱节拍比例计算帧级时长，实现统一的时序建模。(3) 相对音高解耦设计，将 F0 减去语音级均值转为相对音高轮廓，避免韵律与音色信息纠缠，使连续 F0 控制仅表达旋律变化。
+**核心创新：** (1) 随机分块边界预训练：每个潜变量帧以概率 pb=0.15 独立开启新块，使模型学到与分块粒度无关的去噪动力学，推理时可自由选择流式块大小。(2) 滑动窗口流式推理：相邻块保持固定步差 Δ=5，同时处理活动窗口内的多个块，平衡初始延迟与总吞吐量。(3) 多奖励 NFT：将 DiffusionNFT 适应到因果流匹配，回放流式采样器访问的异步噪声快照，联合优化 CLAP 语义相似度、Whisper WER、Audiobox 美学评分和时间接并比。
 
-**训练策略：** 使用约 12.3 万样本（168 小时，6361 个说话人）的中英双语语音和歌声数据集，歌声与语音比例 1:9。流匹配 MSE 损失，单张 RTX 5090 训练 80 万步，batch size 32。推理使用 4 步 ODE 求解。
+**训练策略：** 两阶段训练。第一阶段在模拟语料上以 AR-FM 目标训练 ~195k 步（batch 384, lr 1e-4, cosine decay），再在混合语料（70% 模拟 + 30% 真实叙事）上训练 60k 步（lr 5e-5）。第二阶段多奖励 NFT，lr 1e-5，K=6  rollout per prompt，奖励权重 (w_CLAP, w_Aes, w_WER, w_TG) = (1.0, 0.005, 0.06, 0.05)。
 
 ### 📊 实验结果
-**数据集：** 多源数据集（Baker, LJSpeech, ESD, CREMA-D, CommonPhone, Genshin Voice, GTSinger 等）
+**数据集**：VoxBench-10s, MECAT-en, AudioCaps, Seed-TTS-Eval
 
-**主要指标：**
-- TTS MOS：3.98（接近 GT 4.05）
-- TTSV MOS：3.40（最优基线 Vevo2 为 3.42）
-- 风格相似度 S-SIM：91.65%（TTS Voice+DISC），95.00%（TTSV Voice+CONT）
-- F0-CORR：0.7102（TTS），0.8425（TTSV）
-- 参数量：43.51M，RTF：0.04
+**主要指标**：
+- VoxBench-10s WER：0.038（Dasheng-AudioGen 为 0.264）
+- VoxBench-10s TG-IoU：0.654（Dasheng-AudioGen 为 0.146）
+- AudioCaps CLAP：0.657（与 SOTA 相当）
+- Seed-TTS-Eval WER：1.61%（参数量仅 234M，CosyVoice2 为 2.16%）
 
-**是否开源：** 未提供代码，有 Demo 页面
+**是否开源**：代码和 demo 已开源，https://voxaudio.github.io
 
 ### ⭐ 评分：8/10
-评分理由：统一的语音/歌声生成框架设计简洁优雅，帧级对齐策略带来卓越的风格和韵律可控性，在参数量极小的情况下实现 SOTA 级可控性。但感知质量 MOS 略低于部分基线，训练数据量相对较小，可扩展性有待验证。
+评分理由：发声音频合成任务定义新颖，因果流匹配架构设计巧妙，随机分块边界预训练是亮点。多奖励对齐策略全面覆盖语义、语言、美学和时间维度。实验充分覆盖多个基准，但 VoxCorpus 依赖模拟数据，真实场景泛化性有待进一步验证。
 
 ---
 
-## [2] HybridSB-MoE: Dual-Domain Schrödinger Bridges with Scene-Adaptive Expert Routing for Speech Enhancement
+## [2] CASA: Content-Acoustic Speaking Assessment with Speech Encoder and Large Language Model
 
-**arXiv ID：** 2608.12715 | **方向：** 语音增强
+**arXiv ID**：2608.13101 | **方向**：口语评估 / ASR
 
-**作者：** Zhengyi Lu, Aswini Sivakumar, Jie Hu, Yao Qiang
+**作者**：Nhan Phan, Ilona Lähteenmäki, Anna von Zansen, Olli-Pekka Pauna, Yaroslav Getman, Tamás Grósz, Mikko Kurimo
 
-**机构：** Oakland University
+**机构**：Aalto University, University of Helsinki, Walton Institute
 
-**发布日期：** 2026-08-13 | **论文：** https://arxiv.org/abs/2608.12715 | **PDF：** https://arxiv.org/pdf/2608.12715 | **代码：** 暂无 | **Demo：** 暂无
+**发布日期**：2026-08-13 | **论文**：https://arxiv.org/abs/2608.13101 | **PDF**：https://arxiv.org/pdf/2608.13101 | **代码**：https://github.com/aalto-speech/casa | **Demo**：暂无
 
 ### 📌 简介
-HybridSB-MoE 提出一种双域语音增强框架，结合频域混合专家（MoE）和时域薛定谔桥（SB）两种路径，通过非对称不确定性融合机制自适应选择置信度更高的增强结果。频域路径使用 5 种异构专家架构进行稀疏路由，时域路径使用路径一致性和轨迹正则化训练 SB 实现 8 步推理。在 VoiceBank+DEMAND 上 PESQ 达 3.88，COVL 达 4.82，全面超越扩散和 SB 基线。
+CASA 提出了一种轻量级双分支自动口语评估架构，显式分离声学特征（语音表达）和文本内容（说了什么）。声学分支使用 LoRA 适配的 Whisper-medium 编码器，内容分支使用 Qwen3.5-2B 处理 ASR 转录文本，仅依赖三个手工流利度特征。在 Speak & Improve Corpus 2025 上实现 RMSE 0.358，超越此前 SOTA（0.360），同时参数量仅为同类系统的一半。通过消融实验和重复运行分析了声学与文本信息的各自贡献，并展示了 LLM 分支支持无需训练的内容验证能力。
 
 ### 🔧 技术方案
 
-**问题背景：** 生成式语音增强面临三个结构性缺陷：频域模型善于捕捉谐波结构但破坏相位，时域模型保持相位连续性但难以处理谐波干扰，薛定谔桥缩短了噪声到干净的传输路径但推理步数与训练目标缺少形式化关联。单一域模型无法自适应不同噪声场景。
+**问题背景：** 现有基于语音 LLM 的口语评估系统依赖大型多模态骨干网络，推理计算量大，且对声学与文本信息各自的贡献缺乏系统分析。此前方法要么使用多评分器组合（管线复杂），要么缺乏可解释性，且大多未开源。
 
-**模型架构：** 双路径并行架构。频域路径对 log-magnitude STFT 特征使用 5 种异构专家（对应家庭/自然/办公/交通/公共场景），采用两级门控（语级+帧级），top-k=2 稀疏路由。时域路径使用 1D U-Net 加 Transformer 瓶颈的 SB 模型，噪声调度采用余弦累积策略。非对称融合模块使用频域专家分歧度（认知不确定性）和时域桥方差（偶然不确定性）驱动 MLP 动态加权。
+**模型架构：** 双分支架构。声学分支：Whisper-medium 编码器（冻结）+ LoRA 适配，30s 分块处理，相邻帧平均降低时间分辨率至 40ms，经两层 Transformer 编码器（RoPE）+ [CLS] 池化得到声学摘要，再映射为 4 个声学软 token 和辅助 CEFR 估计。内容分支：Whisper 编码-解码器离线生成 ASR 转录，Qwen3.5-2B 接收融合输入（4 声学软 token + 文本 CEFR 估计 + 评分标准 + 问答对 + 3 流利度统计），LoRA 适配，线性回归头预测分数。
 
-**核心创新：** (1) 异构 MoE 专家设计，每种专家对应不同的噪声处理先验（低秩去噪、宽感受野、信息瓶颈、谐波基、通用逼近），使专家分歧度反映归纳偏置失配而非容量扰动。(2) 路径一致性和轨迹正则化，理论证明二者联合最小化可在 2-Wasserstein 距离下以 K^{-α} 速率界定 K 步桥采样误差，使小步数推理具有理论保证。(3) 非对称不确定性融合，认知不确定性仅存在于频域 MoE（多个专家共存），偶然不确定性仅存在于时域 SB（随机桥过程），融合权重在两种误差模式间切换而非平均两个预测。
+**核心创新：** (1) 声学-内容双分支显式分离：声学分支通过 LoRA 适配 Whisper 编码器所有层（而非仅最后一层），保留更多声学信息；内容分支通过 Qwen 实现语义推理。(2) 容错辅助损失：辅助损失仅对超出 ±1 分数点的偏差进行惩罚，避免声学分支主导训练。(3) LLM 推理时内容验证：无需训练即可判断回答是否切题，替换为无关问题时 99.9% 被标记为不相关。
 
-**训练策略：** 端到端联合训练，损失函数包括重建损失、SB 损失、负载均衡损失和校准损失。VoiceBank+DEMAND 训练集 11572 句，测试集 824 句。AdamW 优化器，lr=2e-4，余弦调度，200 epoch，batch size 32，2 张 RTX 5090。推理时 SB 使用 8 步。
-
-### 📊 实验结果
-**数据集：** VoiceBank+DEMAND
-
-**主要指标：**
-- PESQ：3.88（ROSE-CD 为 3.85，SGMSE+ 为 3.45）
-- STOI：0.96
-- CSIG：4.82，CBAK：3.85，COVL：4.82
-- CBAK 提升最显著，超出 SB-SE 0.10，超出 ROSE-CD 0.48
-
-**是否开源：** 未提供代码
-
-### ⭐ 评分：8/10
-评分理由：双域非对称融合设计具有理论创新性，异构 MoE+SB 的耦合思路新颖，离散化界限提供了理论保证。实验充分，VoiceBank+DEMAND 上全面超越现有方法。但仅在单一数据集上评估，泛化性和实际部署延迟有待验证。
-
----
-
-## [3] VoxAudio: Vocalized Audio Synthesis via Multi-Reward Autoregressive Flow Matching
-
-**arXiv ID：** 2608.12951 | **方向：** 语音合成/T2A
-
-**作者：** Wenxiang Guo, Changhao Pan, Ziyue Jiang, Fei Wu, Zhou Zhao
-
-**机构：** Zhejiang University
-
-**发布日期：** 2026-08-13 | **论文：** https://arxiv.org/abs/2608.12951 | **PDF：** https://arxiv.org/pdf/2608.12951 | **代码：** https://voxaudio.github.io | **Demo：** https://voxaudio.github.io
-
-### 📌 简介
-VoxAudio 提出一种因果自回归流匹配模型，用于在环境音景中嵌入可理解语音的有声音频合成。通过分块因果分解、随机分块边界预训练、滑动窗口流式推理实现可变时长流式生成。引入多奖励负感知微调（NFT）联合优化语义保真度、语言准确率（WER）、感知美学和时序对齐。在 AudioCaps 等四个基准上验证了有效性，234M 参数，RTF 0.32，语音 WER 仅 1.61%。
-
-### 🔧 技术方案
-
-**问题背景：** 现有 Text-to-Audio 系统无法生成嵌入场景中的可理解语音，引用的对话通常退化为不可识别的语音咕哝。解耦管线（TTS + T2A + 后混音）无法控制语音与场景的时序交互。此外，非自回归模型无法流式输出，监督式训练无法直接优化人类偏好。
-
-**模型架构：** 基于 Universe Audio VAE 的潜空间，使用因果 Diffusion Transformer 骨干。核心设计为分块因果自回归流匹配：将潜序列划分为因果块，每块独立噪声水平，训练时随机化分块边界（pb=0.15）使模型对任意推理分块大小鲁棒。推理时采用滑动窗口流式策略，相邻块间保持固定步长差 Δ=5，结合 KV 缓存实现连续音频输出。
-
-**核心创新：** (1) 分块感知因果自回归流匹配，训练时随机分块边界使模型学习对任意分块粒度的鲁棒去噪动力学，推理时可自由选择流式分块大小。(2) 多奖励负感知微调（NFT），在因果流匹配框架中引入语义（CLAP/PEAV）、语言（WER）、美学（Audiobox Aesthetics）和时序（TG-IoU）四维奖励，通过组内优势归一化和 KL 正则化进行偏好对齐。(3) VoxCorpus 数据集构建，包含带逐字转录和时间戳的语音标注的大规模音频场景数据集，以及带时序定位指标的 VoxBench 基准。
-
-**训练策略：** 两阶段训练。第一阶段：模拟语料库从头训练，随机分块边界，约 195k 步，batch 384，lr=1e-4；然后在混合语料（70% 模拟+30% 真实叙事）上继续 60k 步，lr=5e-5。第二阶段：多奖励 NFT 偏好对齐，lr=1e-5，每组 6 个 rollout。推理使用 25 步求解器，text-CFG 5.0。
+**训练策略：** 单张 NVIDIA H100 80GB GPU，batch size 16，梯度累积 2 步。声学 LoRA lr 2e-4，LLM LoRA lr 1e-4，其他模块 lr 5e-5。训练约 2 小时。主损失 MSE + 辅助损失权重 0.1，容差 τ=1。
 
 ### 📊 实验结果
-**数据集：** AudioCaps, VoxBench-10s, MECAT-en, seed-tts-eval
+**数据集**：Speak & Improve Corpus 2025 (S&I)
 
-**主要指标：**
-- AudioCaps CLAP：0.657（TangoFlux 为 0.728）
-- VoxBench 语音 WER：3.8%（优于 Dasheng-AudioGen 的 26.4%）
-- seed-tts-eval WER：1.61%（TTS 专用模型 F5-TTS 为 1.20%）
-- 参数量 234M，RTF 0.32
-
-**是否开源：** 代码和 Demo 可用
-
-### ⭐ 评分：7/10
-评分理由：VoxAudio 首次将因果自回归流匹配用于有声音频合成，解决了 T2A 系统中语音不可理解的关键问题。多奖励 NFT 对齐和 VoxCorpus 数据集是实质贡献。但通用音频质量（CLAP 等指标）低于专用 T2A 模型，270 步推理延迟较高。
-
----
-
-## [4] SraVaani 1.0: Scaling Inclusive Speech Recognition for Indic Languages
-
-**arXiv ID：** 2608.08235 | **方向：** ASR
-
-**作者：** Sujith Pulikodan, Agneedh Basu, Pavan Kumar J, Pranav D Bhat, Suryansh Shukla, Nihar Desai, Prasanta Kumar Ghosh
-
-**机构：** Indian Institute of Science (IISc), Bangalore; ARTPARK@IISc
-
-**发布日期：** 2026-08-12 | **论文：** https://arxiv.org/abs/2608.08235 | **PDF：** https://arxiv.org/pdf/2608.08235 | **代码：** https://huggingface.co/ARTPARK-IISc/SraVaani-1.0 | **Demo：** 暂无
-
-### 📌 简介
-SraVaani-1.0 是一个覆盖 65 种印度语言和方言的多语言 ASR 模型，基于 FastConformer 架构，采用三阶段训练：自监督对比学习预训练（31,255 小时无标签语音）、音频-图像表示对齐（利用 VAANI 语料库的图片-语音对）、混合 TDT-CTC 监督微调（31,263 小时标注语音）。在 8 个基准测试中，SraVaani-1.0 在 17 种可比较语言上平均 WER 28.4%，为 44 种低资源语言和部落语言提供了首个公开 ASR 能力。
-
-### 🔧 技术方案
-
-**问题背景：** 印度有 700 多种语言和数千种方言，但现有 ASR 系统仅覆盖少数高资源语言。Whisper、Google USM 等对印度低资源语言支持有限，IndicConformer 和 Sarvam Saaras 仅覆盖 22 种宪法认可语言，大量部落语言和方言完全没有 ASR 支持。
-
-**模型架构：** FastConformer 编码器（17 层 Transformer，dmodel=1024，8 头注意力，8× 深度可分离卷积降采样），采用混合 TDT-CTC 解码器（Token-and-Duration Transducer + CTC 联合优化，λCTC=0.3）。BPE 分词器，5000 个子词单元，统一覆盖所有印度文字。
-
-**核心创新：** (1) 三阶段训练策略，自监督预训练后插入音频-图像对齐阶段，利用 VAANI 语料库中图片提示语音对，通过 SigLIP 对比损失将语音表示与冻结视觉编码器的图像嵌入对齐，无需任何转录即可注入语义信息。(2) FastConformer 高效架构，深度可分离卷积降采样 8 倍，在保持建模能力的同时大幅降低注意力计算成本。(3) 极广泛的语言覆盖，65 种语言包括 44 种无任何公开 ASR 的部落语言（如 Garo、Mizo、Nyishi 等），基于 24 个公开数据集的 31,263 小时标注语音。
-
-**训练策略：** 第一阶段：VAANI 语料 28,418 小时无标签语音，wav2vec2.0 对比损失，70 epoch，Noam 调度，lr 峰值 3.5e-6。第二阶段：1184 万音频-图像对，SigLIP 对比损失，200K 步，SigLIP2-Large 视觉编码器冻结。第三阶段：24 个数据集 30,565 小时标注语音，lr=1e-5，最多 50 epoch。
-
-### 📊 实验结果
-**数据集：** CommonVoice, FLEURS, IndicTTS, Kathbath, RESPIN, GramVaani, MUCS, VAANI
-
-**主要指标：**
-- 17 种可比较语言平均 WER：28.4%（低于 Gemini 39.4%、Sarvam 33.9%、IndicConformer 30.2%）
-- 44 种唯一语言平均 WER：50.2%（Garo 9.5%，Mizo 25.3%，Nyishi 93.9%）
-- 在 10/17 种可比语言上取得最佳 WER
-- 28/68 个语言-数据集对上取得最佳 WER
-
-**是否开源：** 模型权重在 Hugging Face 开源
-
-### ⭐ 评分：7/10
-评分理由：SraVaani-1.0 在语言覆盖广度上具有独特价值，首次为 44 种低资源语言提供 ASR 能力。音频-图像对齐的创新设计有效利用多模态信号。但低资源语言 WER 偏高（均值 50%），且训练和评估数据同源，域外泛化能力待验证。
-
----
-
-## [5] Optimal Transport-based Semantic Alignment for LLM-based Audio-Visual Speech Recognition
-
-**arXiv ID：** 2607.09001 | **方向：** AVSR
-
-**作者：** Xugang Lu, Peng Shen, Yu Tsao, Hisashi Kawai
-
-**机构：** National Institute of Information and Communications Technology, Japan; Academia Sinica, Taiwan
-
-**发布日期：** 2026-08-13（更新版） | **论文：** https://arxiv.org/abs/2607.09001 | **PDF：** https://arxiv.org/pdf/2607.09001 | **代码：** 暂无 | **Demo：** 暂无
-
-### 📌 简介
-本文提出基于最优传输（OT）的语义对齐框架用于 LLM 视听语音识别（AVSR）。在融合前，通过 OT 将 Whisper 声学编码器和 AV-HuBERT 视觉编码器的表示对齐到 LLaMA3.2-3B 的语言嵌入空间，利用 OT 耦合矩阵作为软伪标签监督对比学习，促使多模态特征在语义上更一致。在 LRS3-TED 上，信噪比 -5dB 条件下 WER 从 8.34% 降至 7.16%，干净条件下 WER 从 0.89% 降至 0.71%。
-
-### 🔧 技术方案
-
-**问题背景：** 现有 LLM-AVSR 系统直接将音频和视觉特征投影融合，未解决模态间的表示差异问题。声学编码器和视觉编码器使用不同目标和数据分布独立预训练，其潜空间存在结构性失配。此外，时间同步不一定等于语义同步，音视频对语言内容的贡献可能发生在不同时间位置。
-
-**模型架构：** Whisper 声学编码器（medium，冻结）+ AV-HuBERT 视觉编码器（large，冻结）+ LLaMA3.2-3B 解码器（LoRA 微调）。OT 对齐模块插入在编码器和投影层之间，将声学/视觉特征序列与目标文本嵌入分布之间的 OT 耦合矩阵作为软标签监督对比学习。
-
-**核心创新：** (1) OT 语义对齐，将音频和视觉特征分布与 LLM 文本嵌入分布之间的 OT 耦合作为软伪标签，显式桥接模态间隙而非简单拼接。(2) 虚拟桶机制，引入虚拟桶吸收非信息帧（噪声/静音/背景），避免不相关帧强制对齐到语言标记。(3) 对比学习对齐损失，OT 耦合矩阵作为软标签监督交叉熵对比学习，促使提取语义一致且跨模态一致的特征表示。
-
-**训练策略：** 联合优化 AR 交叉熵损失和对齐损失（α=0.1-0.5）。LoRA rank=16，缩放因子 32，Adam 优化器，初始 lr=1e-4，5k warmup，总计 30k 步。噪声训练使用 babble 噪声，SNR [-5,0,5,10,15,20] dB。
-
-### 📊 实验结果
-**数据集：** LRS3-TED
-
-**主要指标：**
-- SNR-5dB WER：7.16%（基线 C_Concat 8.34%，MMS-LLaMA 7.44%）
-- SNR0dB WER：2.26%（基线 2.82%）
-- 干净条件 WER：0.71%（基线 0.89%）
-- 虚拟桶带来额外提升（SNR-5 从 8.06% 降至 7.98%）
-
-**是否开源：** 未提供代码
-
-### ⭐ 评分：7/10
-评分理由：OT 语义对齐思路新颖，有效解决了多模态表示融合前的语义对齐问题。在 LRS3-TED 上一致改进，-5dB 条件下提升显著。但超参数多且交互复杂，调优依赖经验，缺少对更多低 SNR 条件的评估。
-
----
-
-## [6] CASA: Content-Acoustic Speaking Assessment with Speech Encoder and Large Language Model
-
-**arXiv ID：** 2608.13101 | **方向：** 口语评估/ASA
-
-**作者：** Nhan Phan, Ilona Lähteenmäki, Anna von Zansen, Olli-Pekka Pauna, Yaroslav Getman, Tamás Grósz, Mikko Kurimo
-
-**机构：** Aalto University, University of Helsinki, Walton Institute
-
-**发布日期：** 2026-08-13 | **论文：** https://arxiv.org/abs/2608.13101 | **PDF：** https://arxiv.org/pdf/2608.13101 | **代码：** https://github.com/aalto-speech/casa | **Demo：** 暂无
-
-### 📌 简介
-CASA 提出一种内容-声学双分支口语自动评估架构，显式分离语音表达（声学分支）和内容（文本分支）。使用 Whisper-medium 编码器（LoRA 适配）提取声学特征，Qwen3.5-2B（LoRA 适配）处理 ASR 转录文本，仅使用三个手工流畅度特征。在 Speak & Improve Corpus 2025 上 RMSE 达 0.358，略优于 SOTA 0.360，同时参数量减半（3.13B vs 6.24B）。代码已开源。
-
-### 🔧 技术方案
-
-**问题背景：** 口语自动评估需要同时考虑语音表达（怎么说）和内容（说什么）。现有 speech LLM 方法依赖大型多模态骨干网络，推理开销大，且对声学和文本信息各自贡献的分析不足。多评估器组合系统管线复杂，可迁移性受限。
-
-**模型架构：** 双分支架构。声学分支：Whisper-medium 编码器（冻结，LoRA 适配），输出帧级特征经 Transformer 聚合后生成 4 个声学软 token 和辅助 CEFR 估计。文本分支：ASR 转录文本与任务提示、评分标准、3 个流畅度统计（时长、静音比、语速）拼接后输入 Qwen3.5-2B（LoRA 适配）。线性回归头从最后 token 表示预测分数。
-
-**核心创新：** (1) 显式声学-内容分离，通过双分支架构实现声学信息和文本信息的独立建模和可解释融合，辅助损失（容忍度 τ=1）仅在偏差超过容忍度时惩罚。(2) 声学软 token 设计，将声学汇总表示为 4 个软 token 输入 LLM，配合辅助损失头提供互补监督信号。(3) 训练无关内容验证，利用 LLM 在推理时零样本判断回答是否切题，检测率 99.9%，单条响应耗时 <0.1s。
-
-**训练策略：** 单张 H100 80GB，batch size 16，梯度累积 2 步。声学 LoRA lr=2e-4，LLM LoRA lr=1e-4，其他模块 lr=5e-5，训练约 2 小时。主损失 MSE + 辅助损失 0.1×MSEτ。
-
-### 📊 实验结果
-**数据集：** Speak & Improve Corpus 2025
-
-**主要指标：**
+**主要指标**：
 - RMSE：0.358（NTNU 0.360，Perezoso 0.364）
 - PCC：0.829
-- 参数量 3.13B（NTNU 6.24B 的一半）
-- 10 次重复运行平均 RMSE 0.363，95% CI [0.359, 0.367]
-- 不同 CEFR 等级：A2 0.553，B1 0.351，B2 0.290，C1 0.554
+- 参数量：3.13B（NTNU 6.24B 的一半）
+- 10 次重复运行 RMSE 范围：0.357-0.377，均值 0.363
 
-**是否开源：** 代码在 GitHub 开源
-
-### ⭐ 评分：7/10
-评分理由：CASA 以更小的模型达到 SOTA 级性能，双分支设计清晰可解释，LLM 零样本内容验证功能实用。但 RMSE 提升幅度小（0.358 vs 0.360），低分（A2）和高分（C1）的评估误差较大，且声学 Transformer 聚合器的任务嵌入效果不理想。
-
----
-
-## [7] Alignment Drift in Single-Model Speculative Decoding for ASR: Mechanism, Correction, and Cost
-
-**arXiv ID：** 2608.12703 | **方向：** ASR 加速
-
-**作者：** Xinyu Wang, Huapeng Zhou, Ziyu Zhao, Silin Meng, Ke Bai, Dongming Shen, Xiao-Wen Chang, Alex Smola
-
-**机构：** Boson AI
-
-**发布日期：** 2026-08-13 | **论文：** https://arxiv.org/abs/2608.12703 | **PDF：** https://arxiv.org/pdf/2608.12703 | **代码：** 暂无 | **Demo：** 暂无
-
-### 📌 简介
-本文研究了单模型推测解码在 ASR 中的应用，发现轻量级 draft 模块在目标模型验证之间运行时会出现"对齐漂移"问题——draft 的音频注意力逐渐偏离正确的音频位置。在 Qwen 1.7B 和 Voxtral 3B 上，带音频交叉注意力的 draft 相比无音频版本将续行接受率提升约一倍（从 0.25-0.32 到 0.54-0.58），端到端加速达 1.41-1.69 倍。提出 AnchorDraft 训练方法在训练时加入位置监督，无需改变推理图即可提升加速效果。
-
-### 🔧 技术方案
-
-**问题背景：** 推测解码通过轻量 draft 提出多个候选 token 由目标模型一次性验证来加速生成。在 ASR 中，draft 每一步都能读取完整的编码音频，但自回归运行 draft 时其注意力逐渐偏离正确音频帧（对齐漂移），导致后续提案接受率下降。晚期 draft 中位误差在困难条件下达 21 帧，而验证阶段目标注意力中位误差仅 2 帧。
-
-**模型架构：** 基于 EAGLE-3 的 draft 设计（直接 token 预测+多层特征），加入从每个 draft 步到冻结音频编码器的交叉注意力。训练了 Qwen3-ASR 两个规模（1.7B 和 0.6B）和 Voxtral-Mini 的 draft，Whisper 作为跨架构对比。
-
-**核心创新：** (1) 对齐漂移的定量刻画，首次系统分析 ASR 推测解码中 draft 的音频位置跟踪问题，通过 MMS 强制对齐器验证注意力峰值作为位置度量。(2) 验证注意力校正方法，在运行时从验证注意力读取音频位置指导下一轮 draft，仅在额外接受 token 抵消费用时有效。(3) AnchorDraft 训练方法，在不改变推理图的情况下，通过训练目标加入位置监督，使 draft 学会跟踪音频位置，在两个测试规模上均提升端到端速度。
-
-**训练策略：** LibriSpeech train-clean-100 训练可行性 draft，官方数据训练主要因果实验。A100-80GB 单卡，batch size 1，bfloat16。评估使用 LibriSpeech clean/other、TED-LIUM、GigaSpeech、FLEURS。
-
-### 📊 实验结果
-**数据集：** LibriSpeech, TED-LIUM, GigaSpeech, FLEURS
-
-**主要指标：**
-- Qwen 1.7B + 音频 draft：加速 1.41-1.55×（无音频 1.14-1.30×）
-- Voxtral 3B + 音频 draft：加速 1.42-1.69×（无音频 0.95-1.08×）
-- 续行接受率 a2c：0.54-0.58（有音频）vs 0.25-0.32（无音频）
-- 正确位置窗口 vs 偏移窗口的接受率差异：+0.254（95% CI [+0.241,+0.268]）
-
-**是否开源：** 未提供代码
+**是否开源**：代码已开源，https://github.com/aalto-speech/casa
 
 ### ⭐ 评分：7/10
-评分理由：对齐漂移问题的发现和分析深入，对 ASR 推测解码社区有指导意义。AnchorDraft 校正方法简洁有效。但实验主要在特定模型架构上进行，泛化性有待验证，AnchorDraft 端到端加速增益有限。
+评分理由：以更小参数量达到 SOTA 水平，工程价值显著。双分支设计清晰，辅助损失和容错机制设计合理。实验分析充分（重复运行、消融、内容验证），但整体架构创新性有限，主要贡献在于工程优化和系统集成。A2 和 C1 边界表现仍较弱。
 
 ---
 
-## [8] Evaluating Pre-trained Speech Encoders for Spontaneous Speech Detection and Out of Domain Synthetic Speech Generalisation in Indic Languages
+## [3] Alignment Drift in Single-Model Speculative Decoding for ASR: Mechanism, Correction, and Cost
 
-**arXiv ID：** 2608.12536 | **方向：** 语音检测/说话人识别
+**arXiv ID**：2608.12703 | **方向**：ASR 推理加速
 
-**作者：** Varun Rai, Pavan Kumar J, Sujith Pulikodan, Nihar Desai
+**作者**：Xinyu Wang, Huapeng Zhou, Ziyu Zhao, Silin Meng, Ke Bai, Dongming Shen, Xiao-Wen Chang, Alex Smola
 
-**机构：** IIT Guwahati, ARTPARK@IISc
+**机构**：Boson AI
 
-**发布日期：** 2026-08-12 | **论文：** https://arxiv.org/abs/2608.12536 | **PDF：** https://arxiv.org/pdf/2608.12536 | **代码：** 暂无 | **Demo：** 暂无
+**发布日期**：2026-08-13 | **论文**：https://arxiv.org/abs/2608.12703 | **PDF**：https://arxiv.org/pdf/2608.12703 | **代码**：暂无 | **Demo**：暂无
 
 ### 📌 简介
-本文系统评估了 5 种冻结预训练语音编码器（AST、Vaani-FastConformer、Wav2vec2、Whisper、BEATs）在 22 种印度语言上的自发语音检测和合成语音泛化能力。发现编码器选择至关重要：Wav2vec2 存在语言可区分性与自发性检测之间的权衡，Whisper 和 Vaani 则保持高准确率且与语言结构无关。在合成语音泛化中，训练多样性将 OOD 召回率从 7% 提升至 51%，泛化能力由训练系统与未见 TTS 嵌入的邻近度决定。
+本文研究了单模型推测解码在 ASR 中的对齐漂移问题。在单模型推测解码中，轻量级 draft 模块附加在目标模型上，但 draft 在连续自回归生成时音频位置跟踪会逐渐漂移，导致后续 token 接受率下降。实验发现 draft 后期音频锚点中位误差在 hardest 条件下达到 21 帧，而目标模型验证注意力保持 2 帧中位误差。作者提出两种校正方法：运行时校正利用验证注意力引导下一轮 draft，以及 AnchorDraft 训练目标让 draft 在训练中学习跟踪音频位置。AnchorDraft 在两种目标模型规模下均提升了端到端速度。
 
 ### 🔧 技术方案
 
-**问题背景：** 基于 Transformer 的语音编码器在自发/脚本语音分类和自然/合成语音分类上表现优异，但结果主要建立在英语等高资源语言上，对印度语言的泛化性未知。嵌入几何分析来解释编码器行为和深度伪造泛化失败的研究也缺乏。
+**问题背景：** 推测解码通过轻量 draft 提前生成多个 token 再由目标模型验证来加速自回归解码。在 ASR 中应用时，draft 每步都可以读取整个音频编码，但音频锚点位置会随 draft 自回归运行而漂移，因为 token 时长不固定。这种"对齐漂移"导致 continuation 接受率显著下降。
 
-**模型架构：** 5 种冻结 Transformer 编码器（AST、Vaani-FastConformer、Wav2vec2、Whisper、BEATs），每种提取帧级嵌入后时间平均池化，通过轻量 3 层全连接 DNN 分类器（约 28-32 万参数）进行线性探测。
+**模型架构：** draft 采用 EAGLE-3 的直接 token 预测和多层特征设计，每步添加对冻结音频编码器的交叉注意力。目标模型为 Qwen3-ASR（1.7B 和 0.6B 两种规模）和 Voxtral-Mini。draft 与目标共享 tokenizer、音频编码和 decoder cache。
 
-**核心创新：** (1) 语言隔离探测分析，通过训练多分类逻辑回归探针预测嵌入的语言来源，发现 Wav2vec2 存在显著负相关（Pearson R=-0.62，p=0.0015），即语言可区分性越高的语言，自发性检测准确率越低，而 Whisper 和 Vaani 无此权衡。(2) 质心邻近度分析，发现 OOD 泛化由训练系统与未见 TTS 嵌入的邻近度预测，而非与自然语音的距离，这对训练数据选择有直接指导意义。(3) 多系统 TTS 泛化实验，训练池从 1 个扩展到 4 个 TTS 系统时，OOD 合成语音召回率从 7% 提升至 51%。
+**核心创新：** (1) 对齐漂移的识别与量化：将推测轮次分为 restart（验证后首 token）和 continuation（后续 token），发现音频访问对 restart 影响有限但使 continuation 接受率翻倍。draft 后期锚点误差达 21 帧（中位），验证阶段仅 2 帧。(2) 位置干预实验：通过固定窗口宽度仅改变中心位置，正确位置窗口可恢复部分 continuation 损失，证明音频位置是 continuation 衰减的原因之一。(3) AnchorDraft 训练：在训练中监督 draft 跟踪音频位置，不改变推理图，在两种目标规模下均提升端到端速度。
 
-**训练策略：** 使用 IndicVoices 语料库的 22 种印度语言，IEMOCAP 作为英语参考。自发性分类使用 IndicVoices 的场景标签（Read/Extempore/Conversation）作为二值标签。合成语音分类使用 4 个 TTS 系统（F5、OmniVoice、Indic VITS、M4）生成音频，2 个外部系统（freevc24、xttsv2）用于 OOD 评估。
+**训练策略：** 可行性 draft 使用 LibriSpeech train-clean-100，主要因果实验使用官方训练数据。Qwen 实验在单张 NVIDIA A100-80GB GPU 上运行，batch size 1，bfloat16。
 
 ### 📊 实验结果
-**数据集：** IndicVoices, IEMOCAP, IndicSynth
+**数据集**：LibriSpeech (clean & other), TED-LIUM, GigaSpeech, FLEURS
 
-**主要指标：**
-- 自发性分类：Whisper 和 Vaani 在所有 22 种语言上均保持高准确率（约 85%+）
-- OOD 合成语音召回率：4 系统训练 51%（单系统训练仅 7%）
-- F5 嵌入最接近自然语音（欧氏距离 1.12），但 OOD 泛化最差
-- Omni 嵌入最接近 OOD 系统（xttsv2 距离 1.27），OOD 泛化最好
+**主要指标**：
+- Qwen 1.7B + 音频 draft：speedup 1.41-1.55x（无音频 draft 仅 1.14-1.30x）
+- Voxtral 3B + 音频 draft：speedup 1.42-1.69x（无音频 draft 仅 0.95-1.08x）
+- 位置干预：正确 vs 偏移窗口深度 2 条件接受率对比 +0.254
+- WER 与自回归解码接近且差异正负混合
 
-**是否开源：** 未提供代码
+**是否开源**：未提及
 
-### ⭐ 评分：6/10
-评分理由：在印度语言语音检测上的系统评估填补了空白，质心分析结果为训练数据选择提供了新视角。但编码器仅使用冻结版本，方法较为常规，缺乏细粒度分析或新方法提出。
+### ⭐ 评分：7/10
+评分理由：系统性地识别和量化了 ASR 推测解码中的对齐漂移问题，实验设计严谨（位置干预、匹配对比、多数据集）。AnchorDraft 训练方法实用且有效。但 draft 结构和 AnchorDraft 依赖 EAGLE-3，创新部分主要在于问题分析和诊断而非全新的方法。实验硬件配置较单一。
 
 ---
 
-## 其他
+## 语音前端
 
-## [9] Motor, Cognitive, or Corpus? What Survives Cross-Lingual Transfer in Speech-Based Parkinson's Disease Detection
+## [4] HybridSB-MoE: Dual-Domain Schrödinger Bridges with Scene-Adaptive Expert Routing for Speech Enhancement
 
-**arXiv ID：** 2608.13425 | **方向：** 语音医学/帕金森检测
+**arXiv ID**：2608.12715 | **方向**：语音增强
 
-**作者：** Serli Kopar, Sam Gijsen, Abner Hernandez, Paula Andrea Perez-Toro, Kerstin Ritter
+**作者**：Zhengyi Lu, Aswini Sivakumar, Jie Hu, Yao Qiang
 
-**机构：** University of Tübingen, Charité–Universitätsmedizin Berlin, FAU Erlangen-Nürnberg
+**机构**：Oakland University
 
-**发布日期：** 2026-08-13 | **论文：** https://arxiv.org/abs/2608.13425 | **PDF：** https://arxiv.org/pdf/2608.13425 | **代码：** 暂无 | **Demo：** 暂无
+**发布日期**：2026-08-13 | **论文**：https://arxiv.org/abs/2608.12715 | **PDF**：https://arxiv.org/pdf/2608.12715 | **代码**：暂无 | **Demo**：暂无
 
 ### 📌 简介
-本文系统评估了 9 种自监督学习语音表征在跨语言帕金森病（PD）检测中的迁移能力。通过 5 种渐进式分布偏移场景分析发现：最优层选择高度依赖语料库而非模型架构，跨语言迁移的判别信号缺乏病理特异性——PD 分类器对痴呆症语音也赋予高概率。在严重偏移下（跨语言+跨任务），平衡准确率下降至 64%，表明当前语音 PD 检测更多反映语料库特定因素而非疾病特异性特征。
+HybridSB-MoE 提出了一种双域语音增强框架，结合频谱域异质专家混合（MoE）和波形域薛定谔桥（SB）。核心思想是利用非对称不确定性融合：频谱路径通过专家分歧捕捉认知不确定性，波形路径通过随机动力学建模偶然方差。频谱 MoE 采用 top-k=2 路由，包含 5 种架构迥异的专家原型（低秩去噪、宽感受野、信息瓶颈、谐波基、通用逼近）。波形 SB 通过路径一致性和轨迹正则化训练，理论证明 (Theorem 1) 可将 K 步桥采样误差以 2-Wasserstein 距离界在 K^{-α} 速率。在 VoiceBank+DEMAND 上 PESQ 3.88 达到 SOTA。
 
 ### 🔧 技术方案
 
-**问题背景：** 自监督语音表征在单一语料库内的 PD 检测表现优异，但跨语言、跨语料库的泛化能力未知。模型是否真正捕获了疾病相关特征，还是利用了语料库特定的混杂因素？SSL 模型几乎仅在健康语音上预训练，能否编码 PD 相关语音特征？此外，大多数研究仅与健康对照比较，未评估与痴呆等其他神经退行性疾病的区分能力。
+**问题背景：** 语音增强面临频谱与波形域的固有折衷：频谱方法捕获谐波结构但破坏相位，波形方法保持相位但丢失谐波。现有生成式方法要么单域承诺，要么对所有噪声类型统一处理，且推理步数与训练目标缺乏正式关联。简单的双域集成无法提供哪个路径失效的信号，退化为固定权重平均。
 
-**模型架构：** 9 种 SSL 语音骨干（HuBERT-B/L、WavLM-B/L、W2V2-B、W2V2-B-FT、HuBERT-L-FT、XLS-R、MMS）+ 手工 eGeMAPS 特征（88 维），提取每层帧级表示后时间平均池化，使用低容量逻辑回归探针分类。
+**模型架构：** 双域并行架构。频谱路径：log-magnitude STFT 特征经 5 种异质专家（Scene-adaptive），两层级路由（话语级 Archetype 路由 + 帧级 token 路由），top-k=2 稀疏路由，并行幅度掩码头和相位修正头（M_max=5.0, φ_max=π/4）。波形路径：1D U-Net 带 transformer bottleneck 和 FiLM 时间步条件，4 编解码层级，K=8 步非均匀前加载离散化 (γ=0.6)，余弦调度 (s=0.008)。
 
-**核心创新：** (1) 五场景渐进式评估框架，从无偏移（REF）到重测（S1）、录音条件（S2）、语言（S3）、任务（S4）、语言+任务（S5）逐步引入分布偏移，系统性量化 PD 检测的鲁棒性。(2) 跨病理特异性分析，将 PD 训练分类器迁移到 TREND 队列，发现其对 PD 和痴呆症语音的区分能力为随机水平（AUC 0.50-0.55），表明捕获的是"患者-健康对照"一般性差异而非 PD 特异性特征。(3) 层选择语料库依赖性发现，大模型最优层跨语料库标准差高达 0.43（WavLM-L 在 DDK 任务上），说明层选择由语料库而非架构主导。
+**核心创新：** (1) 非对称不确定性融合：频谱 MoE 的专家分歧作为认知不确定性 u_epi，波形 SB 的随机动力学作为偶然不确定性 u_ale，经 2 层 MLP 动态融合权重 w = σ(MLP(u_epi, u_ale))，校准损失 (L_cal) 将两个标量与各自重建误差关联。(2) 异质专家 MoE：5 种不同架构原型各自编码特定噪声处理先验，通过组合覆盖 14 种噪声类型，专家分歧指示哪个归纳偏置失效而非小扰动。(3) 离散化上界定理：路径一致性和轨迹正则化联合将 K 步桥采样误差以 2-Wasserstein 距离界在 K^{-α} 速率，使小 K 推理有训练目标层面的保证。
 
-**训练策略：** 3 种 PD 语料库（西班牙语 ES、德语 DE、捷克语 CZ），每种包含 DDK/READ/VOWEL 三种任务。REF 设定下 5 折交叉验证选择最优层，10 个随机种子。TREND 队列用于跨病理评估（36 痴呆+18 PD，各匹配对照组）。
+**训练策略：** AdamW (lr 2e-4, cosine schedule, 200 epochs, batch 32)，2 张 NVIDIA RTX 5090 GPU。损失权重：λ_SB=1.0, λ_path=0.1, λ_traj=0.05, λ_aux=0.01, λ_cal=0.05。STFT 1024 点 FFT，256 点 hop (16ms)，Hann 窗。
 
 ### 📊 实验结果
-**数据集：** ES/DE/CZ 三种 PD 语料库，TREND 队列（痴呆+PD+对照）
+**数据集**：VoiceBank+DEMAND (11572 训练/824 测试，28/2 说话人，14 种噪声)
 
-**主要指标：**
-- REF 准确率：READ 任务最优（约 80-90% BA）
-- S1（重测）平均变化：-1.9±4.5 BA 点
-- S2（录音条件）平均变化：-12.5±14.3 BA 点
-- S3（跨语言）平均变化：-16.3±10.6 BA 点
-- S4/S5（跨病理）：PD vs 痴呆 AUC 0.50-0.55（随机水平）
+**主要指标**：
+- PESQ：3.88（ROSE-CD 3.85，SGMSE+ 3.45，SB-SE 3.70）
+- CBAK：3.85（SB-SE 3.75，ROSE-CD 3.37）
+- COVL：4.82（SBCTM 4.52，SB-SE 4.48）
+- CSIG：4.82（与 Mamba-SEUNet 并列）
+- 消融：无不确定性融合 PESQ 降 0.17，同质 MoE 降 0.43，移除 SB 路径降 0.63
 
-**是否开源：** 未提供代码
+**是否开源**：未提及
 
-### ⭐ 评分：6/10
-评分理由：严格的五场景评估框架和跨病理特异性分析具有重要临床意义，揭示了语音 PD 检测的泛化瓶颈。但样本量有限（DE 176 人，痴呆 36 人），结论的统计效力有限，且仅使用线性探针，未探索更复杂的迁移方法。
+### ⭐ 评分：8/10
+评分理由：非对称不确定性融合设计新颖，异质 MoE 专家理念独特，理论上界将小步数推理与训练目标关联。实验充分，消融验证了各组件的必要性。但仅在 VoiceBank+DEMAND 上评估，缺乏多数据集泛化验证。代码未开源影响可复现性。
+
+---
+
+## [5] Evaluating Pre-trained Speech Encoders for Spontaneous Speech Detection and Out of Domain Synthetic Speech Generalisation in Indic Languages
+
+**arXiv ID**：2608.12536 | **方向**：说话人检测 / 语音分类
+
+**作者**：Varun Rai, Pavan Kumar J, Sujith Pulikodan, Nihar Desai
+
+**机构**：IIT Guwahati, ARTPARK @ IISc Bangalore
+
+**发布日期**：2026-08-12 | **论文**：https://arxiv.org/abs/2608.12536 | **PDF**：https://arxiv.org/pdf/2608.12536 | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+本文系统评估了 5 种冻结语音编码器（AST, Vaani-FastConformer, Wav2vec2, Whisper, BEATs）在 22 种印度语言上的自发言语检测和合成语音泛化能力。研究发现语言隔离探针揭示了编码器依赖的语言可区分性与自发性检测之间的权衡。在深度伪造检测方面，训练池从 1 个扩展到 4 个 TTS 系统时，OOD 合成语音召回率从 7% 提升到 51%。质心分析表明 OOD 泛化由训练系统与未见 TTS 嵌入的接近度预测，而非与自然语音的距离。
+
+### 🔧 技术方案
+
+**问题背景：** 预训练语音编码器在自发言语检测和合成语音检测上的表现仅在少数高资源语言上得到验证，缺乏对印度语言的覆盖，且嵌入几何分析未被用于解释编码器行为和深度伪造泛化失败的原因。
+
+**模型架构：** 5 种冻结 Transformer 编码器（AST, Vaani-FastConformer, Wav2vec2-large, Whisper-small, BEATs），后接紧凑三块全连接 DNN 分类器。768-D 变体（Whisper, AST, BEATs）使用 768→192→64→1 维度，281K 可训练参数；1024-D 变体（Wav2vec2, Vaani）使用 1024→128→64→1 维度，323K 参数。语言隔离探针使用多项逻辑回归。
+
+**核心创新：** (1) 语言隔离探针分析：发现编码器依赖的语言可区分性与自发性检测之间的权衡——Wav2vec2 呈显著负相关（R=-0.62, p=0.0015），Whisper 和 Vaani 无显著相关，保持高准确率。(2) 嵌入质心分析：OOD 泛化由训练系统与未见 TTS 嵌入的接近度预测，而非与自然语音的距离。Omni 到 xttsv2 的欧氏距离 1.26，帮助提升泛化；F5 到 Natural 最近（1.12）但 OOD 表现最差。(3) 多系统训练多样性实验：从 1 个 TTS 系统扩展到 4 个，OOD 合成语音召回率从 7% 提升到 51%。
+
+**训练策略：** 使用 IndicVoices 语料库（22 种印度语言），IndicVoices 自然语音 + 4 种 TTS 系统合成语音（Indic F5, Indic VITS, OmniVoice, Meta M4）。每语言每模型 1000 句合成语音，800 训练/200 测试。两个外部 OOD 系统：freevc24 和 xttsv2。
+
+### 📊 实验结果
+**数据集**：IndicVoices (22 语言), IEMOCAP, IndicSynth
+
+**主要指标**：
+- 自发性检测：Whisper 和 Vaani 在所有 22 种印度语言上准确率最高
+- OOD 合成语音召回率：1 系统训练 7% → 4 系统训练 51%
+- 语言隔离-自发性相关性：Wav2vec2 R=-0.62 (p=0.0015)，Whisper R=-0.37 (p=0.083)
+- 最接近 OOD 的嵌入系统（Omni 到 xttsv2 欧氏距离 1.27）提供最佳泛化
+
+**是否开源**：未提及
+
+### ⭐ 评分：7/10
+评分理由：首个在 22 种印度语言上系统评估语音编码器的工作，填补了重要空白。语言隔离探针和质心分析提供了新颖的分析视角，跨语言深度伪造检测的实验设计合理。但整体方法较为标准（冻结编码器+轻量分类器），主要贡献在于评估基准和分析框架，而非方法创新。
+
+---
+
+## [6] Motor, Cognitive, or Corpus? What Survives Cross-Lingual Transfer in Speech-Based Parkinson's Disease Detection
+
+**arXiv ID**：2608.13425 | **方向**：医学语音分析
+
+**作者**：Serli Kopar, Sam Gijsen, Abner Hernandez, Paula Andrea Perez-Toro, Kerstin Ritter
+
+**机构**：University of Tübingen, Charité Berlin, FAU Erlangen-Nürnberg
+
+**发布日期**：2026-08-13 | **论文**：https://arxiv.org/abs/2608.13425 | **PDF**：https://arxiv.org/pdf/2608.13425 | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+本文系统研究了基于语音的帕金森病（PD）检测在跨语言迁移中的鲁棒性问题。使用 9 种 SSL 语音骨干网络和逻辑回归探针，在捷克语、西班牙语、德语三种语言上设计了 5 种渐进式分布偏移场景。关键发现：最优层选择主要由源数据集而非 SSL 架构决定；迁移后的判别信号缺乏病理特异性——PD 检测器对痴呆症语音也分配了同样高的概率。研究提示语音病理识别模型在临床部署前需解决这些关键局限。
+
+### 🔧 技术方案
+
+**问题背景：** SSL 语音表示在单一语料库内实现强 PD 检测性能，但无法确定模型捕获的是疾病相关特征还是数据集特定混淆因素。大多数 SSL 骨干仅在健康语音上预训练，且现有工作仅与健康对照比较，不验证对痴呆等其他神经退行疾病的特异性。
+
+**模型架构：** 9 种 SSL 骨干（W2V2-B/Large, W2V2-B-FT, HuBERT-B/Large, HuBERT-L-FT, WavLM-B/Large, XLS-R, MMS）和手工 eGeMAPS 特征。每层提取帧级表示后时间平均池化，逻辑回归分类器（scikit-learn）。最优层通过 5 折交叉验证选择并固定用于所有迁移实验。
+
+**核心创新：** (1) 五场景渐进式评估框架：REF（同语料库内 CV）→ S1（+重录）→ S2（+录音条件变化）→ S3（+语言变化）→ S4（+任务变化）→ S5（+任务+语言），系统量化每种分布偏移的影响。(2) 跨病理特异性验证：首次将 PD 检测器迁移到痴呆症数据集，发现 PD vs 痴呆区分能力为随机水平（AUC 0.50-0.55），揭示检测器捕获的是"患者 vs 健康"的通用偏离信号而非 PD 特异性模式。(3) 最优层语料库依赖性：大型骨干的层选择在不同语料库间差异巨大（WavLM-L 的 σ=0.43），表明层选择由数据集而非架构主导。
+
+**训练策略：** 三种 PD 语料库：捷克 CZ (50PD/50HC)、西班牙 ES (50/50) 和 ES-e (20/20)、德国 DE (88/88)。TREND 队列（36 痴呆/36 HC, 18 PD/18 HC）。每骨干-语料库-任务-层组合使用 10 种子 × 5 折重复交叉验证。
+
+### 📊 实验结果
+**数据集**：CZ, ES, ES-e, DE 特殊会议语料库 + TREND 队列
+
+**主要指标**：
+- S1 (重录) vs REF：ΔBA = -1.9 ± 4.5
+- S2 (录音条件) vs REF：ΔBA = -12.5 ± 14.3（非对称迁移：噪声→干净优于干净→噪声）
+- S3 (跨语言) vs REF：ΔBA = -16.3 ± 10.6
+- S4/S5 (跨任务迁移到 TREND)：PD vs HC 最高 BA 0.64-0.67，PD vs 痴呆 AUC 0.50-0.55
+- 最优层语料库标准差：WavLM-L 在 DDK 上 σ=0.43，HuBERT-L 在 READ 上 σ=0.37
+
+**是否开源**：未提及
+
+### ⭐ 评分：7/10
+评分理由：实验设计严谨，五场景评估框架系统全面。跨病理验证是重要贡献，揭示 PD 检测缺乏特异性这一关键问题。但样本量较小（尤其是 TREND 队列），结论需更大规模验证。方法层面为标准探针分析，主要贡献在于评估框架和负面发现。
 
 ---
 
