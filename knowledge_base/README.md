@@ -16,9 +16,10 @@
 
 ## 构建与更新
 
-- 一次性构建：`python3 knowledge_base/build_kb.py`
-- 每日速递后自动追加（由 speech-paper-daily 流程调用）
+- 构建知识库：`python3 knowledge_base/build_kb.py`（解析历史速递，过滤评分 ≥ 7 分）
+- 重新构建会基于全量速递覆盖重建所有方向文件（`.cache/` 为历史记录）
 - 全局索引：`knowledge_base/_index.json`
+- 每日速递后的自动同步集成正在开发中（计划见 docs/superpowers/plans/）
 
 ## 检索
 

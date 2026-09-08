@@ -20,12 +20,14 @@
    - 理解/评测/安全 → `speech_lm_understanding.md`
    - 增强/降噪/超分 → `enhancement_frontend.md`
    - 分离/说话人 → `separation_diarization.md`
-3. 用 grep 在文件内按关键词筛选：
+   - 其他/多主题或方向不明确 → 先查 `other_related.md`，再在全部 md 中搜索
+3. 用 grep 在文件内按关键词筛选（扩展正则，多文件搜索）：
    ```bash
-   grep -i -A 5 "可达|<关键词>" knowledge_base/<文件>.md
+   grep -niE "关键词1|关键词2" knowledge_base/<文件>.md
    ```
+   方向不明确时跨多个文件搜索；标题行（`## [`）命中通常是最强匹配。
 4. 按评分优先引用（条目本身按评分降序排列）
-5. 引用时包含：一句话贡献、关键技术点、主要指标、代码链接
+5. 引用时包含：一句话贡献、关键技术点、主要指标、代码链接。仅当在全部 7 个 md 文件中都无匹配时才说明暂无覆盖。
 
 ## 输出约束
 
