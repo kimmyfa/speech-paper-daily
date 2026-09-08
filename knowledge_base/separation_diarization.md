@@ -2,88 +2,88 @@
 
 共 10 篇
 
-## [1 WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
+## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
 - **方向**：语音大模型 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-07-29
 - **一句话贡献**：目标说话人提取（TSE）在给定辅助线索（如说话人注册、空间方向、视频信号或文本描述）的情况下从混合语音中分离目标说话人。现有系统通常针对单一线索类型设计，当线索可用性随场景动态变化时缺乏灵活性。本文提出WeSep统一框架，将TSE重新表述为异构线索条件学习问题，通过标准化接口解耦线索模块与分离器骨干网，支持可配置的线索注入和灵活的多模态集成。在Libri2Mix上，文本关键词线索DAE-TSE达到
-- **关键技术点**：** 目标说话人提取（TSE）依赖辅助线索指定目标说话人，但现有系统针对特定线索类型定制架构和训练流程，难以扩展到新线索或多线索组合。实际场景中线索可用性动态变化（注册语音可能不匹配当前状态、空间线索依赖稳定定位、视觉信号可能退化），但缺乏统一框架来系统研究异构图线索条件下的提取行为。
-- **主要指标**：
+- **关键技术点**：目标说话人提取（TSE）依赖辅助线索指定目标说话人，但现有系统针对特定线索类型定制架构和训练流程，难以扩展到新线索或多线索组合。实际场景中线索可用性动态变化（注册语音可能不匹配当前状态、空间线索依赖稳定定位、视觉信号可能退化），但缺乏统一框架来系统研究异构图线索条件下的提取行为。
+- **主要指标**：- 说话人注册（BSRNN，非因果）：USEF+Contextual达SI-SDRi 16.56 dB，准确率98.05% - 说话人注册（BSRNN，因果）：USEF+Contextual达SI-SDRi 14.15 dB，准确率95.93% - 空间线索（BSRNN）：手工特征（CDF+SDF+
 - **代码**：https://github.com/wenet-e2e/WeSep | **Demo**：暂无
 
 ---
-## [1 FlowSep 2: Self-Supervised Flow Matching for Language-Queried Audio Source Separation](https://arxiv.org/abs/2608.22111)
+## [FlowSep 2: Self-Supervised Flow Matching for Language-Queried Audio Source Separation](https://arxiv.org/abs/2608.22111)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-08-25
 - **一句话贡献**：现有 LASS 方法多为判别式掩码估计模型，在声音高度重叠的复杂声学场景下会过抑制目标源或分离不完整。本文提出 FlowSep2，将整流流匹配（Rectified Flow Matching）与扩散 Transformer（DiT）结合，在 Stable-Audio VAE 潜在空间中从高斯噪声直接生成目标源表征，条件为混合音频潜在表示与 FLAN-T5 文本嵌入，并引入 Self-Flow 自监
-- **关键技术点**：** 判别式 LASS（LASS-Net、AudioSep）从混合频谱估计时频掩码，重叠事件下掩码易产生过抑制或选择性不足，造成谱空洞与不完整分离；PIT/MixIT 等通用分离依赖类别选择模块、扩展性差；SAM-Audio 用生成式框架但依赖大规模私有数据，无法复现与系统分析。
-- **主要指标**：
+- **关键技术点**：判别式 LASS（LASS-Net、AudioSep）从混合频谱估计时频掩码，重叠事件下掩码易产生过抑制或选择性不足，造成谱空洞与不完整分离；PIT/MixIT 等通用分离依赖类别选择模块、扩展性差；SAM-Audio 用生成式框架但依赖大规模私有数据，无法复现与系统分析。
+- **主要指标**：- FAD（越小越好）：FlowSep2-L 在 AudioCaps 0.84、VGGSound 1.28、DCASE-Synth 0.71（FlowSep AC 2.86→0.88） - CLAP Score：AudioCaps 44.9、DCASE-Real 51.0、VGGSound 42.0
 - **代码**：暂无 | **Demo**：https://audio-agi.github.io/Flowsep2-demo/
 
 ---
-## [3 Separating Voice from Age in COPD Screening](https://arxiv.org/abs/2608.21599)
+## [Separating Voice from Age in COPD Screening](https://arxiv.org/abs/2608.21599)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-08-25
 - **一句话贡献**：本文针对 COPD 语音筛查结果可被"年龄混淆"琐碎解释的问题，重新评估公开的 COPDVD 持续元音语料（1246条录音、68名参与者），首次在严格的参与者级年龄匹配队列上验证语音是否携带超越年龄的疾病信息。作者发现常规合并评估在年龄严重失衡（SMD=0.726）下无法区分语音病理与年龄信号，遂提出以"混淆变量自身的判别力"（原始年龄 AUC 0.510、性别0.479，均为随机水平）为已核验对
-- **关键技术点**：** COPD 强年龄相关且发声随年龄衰老变化，病例组普遍比对照组年老时，模型可能学到的是年龄或其声学代理而非疾病。仅"剔除年龄变量"的训练并不充分：特征与年龄相关时，灵活学习器可从相关声学特征中重构年龄驱动决策边界。作者审计数据发现：按参与者计对照组比 COPD 组年轻7.7岁、SMD=0.726，而按录音加权则方向反转——源论文声称的年龄匹配基于录音而非参与者统计。
-- **主要指标**：
+- **关键技术点**：COPD 强年龄相关且发声随年龄衰老变化，病例组普遍比对照组年老时，模型可能学到的是年龄或其声学代理而非疾病。仅"剔除年龄变量"的训练并不充分：特征与年龄相关时，灵活学习器可从相关声学特征中重构年龄驱动决策边界。作者审计数据发现：按参与者计对照组比 COPD 组年轻7.7岁、SMD=0.726，而按录音加权则方向反转——源论文声称的年龄匹配基于录音而非参与者统计。
+- **主要指标**：- 匹配队列 ROC-AUC：AC（不含年龄）0.717 [0.552,0.859]；含年龄配置 0.531-0.679 - 匹配队列 AP：AC 0.747 [0.581,0.892]；PTRB 0.755 为最高下界 - 对照判别力：原始年龄 0.510、性别 0.479，均在机会水平；SMD 
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [10 Ontology-based Target Sound Extraction](https://arxiv.org/abs/2609.00752)
+## [Ontology-based Target Sound Extraction](https://arxiv.org/abs/2609.00752)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-09-01
 - **一句话贡献**：目标声音提取（TSE）旨在给定语义查询从混合声中分离目标音源。现有TSE系统锚定于逐一声类标签的固定类表示，无法利用层级组织关系。本文提出ontology-based TSE新任务：单一模型可提取声音本体中任意层级的声音（从cat、dog到animal）。作者提出覆盖AudioSet派生本体全部节点的可学习类别嵌入表，并用Cophenetic相关系数（CPCC）损失约束嵌入距离与本体最短路径距离一
-- **关键技术点**：** 现有TSE使用one-hot类标签，各类别嵌入彼此独立，无法编码类间上下位关系，模型只能在训练见过的类别上工作。
-- **主要指标**：
+- **关键技术点**：现有TSE使用one-hot类标签，各类别嵌入彼此独立，无法编码类间上下位关系，模型只能在训练见过的类别上工作。
+- **主要指标**：- 各查询层级上目标提取性能：优于不利用本体结构的基线 - 高层级（如animal）查询：支持（传统方法无法实现）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [3 Geometric Ceilings on Time-Frequency Masking for Single-Channel Separation](https://arxiv.org/abs/2609.03481)
+## [Geometric Ceilings on Time-Frequency Masking for Single-Channel Separation](https://arxiv.org/abs/2609.03481)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-09-03
 - **一句话贡献**：论文给出时频掩码分离这一主流格式的精确"天花板"：任意实增益估计器的最优解是源到混合谱线的正交投影，残差由源-混合夹角θ决定且不可被训练消除。构造四层嵌套算子类与先验三大假设建立对应，证明MMSE估计的缺口恰为预言增益的后验方差。在MUSDB18上，非循环高斯混合先验的后验均值距逐帧上限仍差11.44 dB。
-- **关键技术点**：** 主流单通道分离（Wiener滤波、IRM、IBM、Open-Unmix等）都在每个t-f bin对混合乘一个实数增益，估计只能落在ℝ线上；现有oracle掩码本身只是该类的普通成员，离类最优值仍差数dB，无法作为类上界。作者从算子而非估计器出发判断类归属。 **理论方法：** 构建四层嵌套实线性算子链ℳ₁⊂ℳ₂⊂ℳ₃⊂ℳ₄（实掩码→复掩码→逐bin线性映射→跨频耦合全矩阵），分别对应放弃零均值、循环性、频间独立三项先验假设。天花板最优实增益m⋆=Re(sx̄)/|x|²，残差为能量加权sin²θ平均。关键定理：相位后验对称时MMSE=预言增益均值的实掩码，缺口=|x|²Var(m⋆|x)
-- **主要指标**：
+- **关键技术点**：主流单通道分离（Wiener滤波、IRM、IBM、Open-Unmix等）都在每个t-f bin对混合乘一个实数增益，估计只能落在ℝ线上；现有oracle掩码本身只是该类的普通成员，离类最优值仍差数dB，无法作为类上界。作者从算子而非估计器出发判断类归属。 **理论方法：** 构建四层嵌套实线性算子链ℳ₁⊂ℳ₂⊂ℳ₃⊂ℳ₄（实掩码→复掩码→逐bin线性映射→跨频耦合全矩阵），分别对应放弃零均值、循环性、频间独立三项先验假设。天花板最优实增益m⋆=Re(sx̄)/|x|²，残差为能量加权sin²θ平均。关键定理：相位后验对称时MMSE=预言增益均值的实掩码，缺口=|x|²Var(m⋆|x)。
+- **主要指标**：- 后验均值估计器距逐帧天花板：-11.44 dB - 增加4倍GMM分量、7.5倍数据、全协方差：各自仅改善<1 dB - 最宽固定类（ℳ₄）距天花板：-6.70 dB - 子类限制代价：约1.25 dB@L=1024
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [5 Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation](https://arxiv.org/abs/2608.09451)
+## [Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation](https://arxiv.org/abs/2608.09451)
 
 - **方向**：语音大模型（语音前端） | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-10
 - **一句话贡献**：长语音分离通常采用分段-分离-拼接范式，其挑战在于预测跨段排列。该工作提出免训练的动态聚类方法，使用说话人 embedding 参考池进行跨段排列对齐。方法基于当前段 embedding 与参考池的余弦相似度预测排列，通过保留与现有参考整体余弦相似度最具代表性的说话人 embedding 来更新参考池。作为与现有分离模型兼容的即插即用后处理模块，在密集和稀疏长语音场景中优于现有方法，尤其在具有扩展
-- **关键技术点**：** 长语音分离中，录音被分割为短段独立处理，然后拼接。跨段排列对齐（segment 1 的说话人 A 对应 segment 2 的哪个输出）是关键挑战，尤其在稀疏场景中说话人可能长时间不出现。
-- **主要指标**：
+- **关键技术点**：长语音分离中，录音被分割为短段独立处理，然后拼接。跨段排列对齐（segment 1 的说话人 A 对应 segment 2 的哪个输出）是关键挑战，尤其在稀疏场景中说话人可能长时间不出现。
+- **主要指标**：- 优于现有跨段排列对齐方法 - 在稀疏场景中优势更显著 - 对说话人数估计误差鲁棒
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [8 Singer-Informed Vocal Source Separation for Multi-Singer Music Mixtures](https://arxiv.org/abs/2608.14516)
+## [Singer-Informed Vocal Source Separation for Multi-Singer Music Mixtures](https://arxiv.org/abs/2608.14516)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-17
 - **一句话贡献**：现有音乐源分离系统通常提取单一歌声轨道，无法区分多歌手混合中的不同歌手。本文提出一种歌手感知的歌声源分离框架，利用目标歌手的短时长注册录音提取歌手嵌入向量，通过特征拼接或特征线性调制（FiLM）条件化分离模型，使其聚焦目标歌手并抑制干扰。基于DAMP-VSEP数据集构建了含质量过滤和非重叠注册段的二重唱数据集。实验表明：在二重唱场景下，基线方法的target-singer SI-SDR仅为0.33
-- **关键技术点**：** 传统音乐源分离系统（如Open-Unmix、Demucs、Spleeter）将混合信号中的所有人声视为单一源，提取的是"所有歌声之和"而非特定歌手。在多歌手场景（如二重唱）中，歌声在时频域高度重叠，传统模型无法区分不同歌手。语音领域的说话人提取（如SpeakerBeam、VoiceFilter、SpEx+）已证明注册音频引导分离的有效性，但将其迁移到歌声面临两大挑战：一是缺乏含干净人声和多歌手混合的标注数据集；二是歌声在音高、音色和表达方式上的变化远大于语音，使条件化过程更加困难。
+- **关键技术点**：传统音乐源分离系统（如Open-Unmix、Demucs、Spleeter）将混合信号中的所有人声视为单一源，提取的是"所有歌声之和"而非特定歌手。在多歌手场景（如二重唱）中，歌声在时频域高度重叠，传统模型无法区分不同歌手。语音领域的说话人提取（如SpeakerBeam、VoiceFilter、SpEx+）已证明注册音频引导分离的有效性，但将其迁移到歌声面临两大挑战：一是缺乏含干净人声和多歌手混合的标注数据集；二是歌声在音高、音色和表达方式上的变化远大于语音，使条件化过程更加困难。
 - **主要指标**：
 - **代码**：https://github.com/jocelynxu01/singer-separation-paper | **Demo**：暂无
 
 ---
-## [8 Target Speaker Identification: A Low-Latency Streaming Pipeline](https://arxiv.org/abs/2608.17972)
+## [Target Speaker Identification: A Low-Latency Streaming Pipeline](https://arxiv.org/abs/2608.17972)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-19
 - **一句话贡献**：本文面向助听器中目标说话人识别的极低延迟需求（听者能感知低至 10 ms 的处理延迟），提出一套由开源预训练模型构建的实时流式识别流水线。系统采用两阶段方案：先由流式说话人分割（Diart）对音频按说话人切分，再用说话人验证模型（Pyannote）与预先注册的目标说话人段比对，判断其是否活跃。在 This American Life 博客数据集 17 个 episode 上，以 100 ms 二进
-- **关键技术点**：** 助听器用户在多人说话与背景噪声场景下放大语音质量下降，近半数用户对噪声环境表现不满；便携麦克风方案需额外配件且成本高。现有在线说话人分割系统延迟达 500–1000 ms，低于助听器播放路径亚 10 ms 的延迟要求。作者因此提出"信号式"方案：把识别结果作为音频播放路径之外的控制信号，只决定放大算法在说话人切换时的自适应速度，而不增加听者感知延迟。
-- **主要指标**：
+- **关键技术点**：助听器用户在多人说话与背景噪声场景下放大语音质量下降，近半数用户对噪声环境表现不满；便携麦克风方案需额外配件且成本高。现有在线说话人分割系统延迟达 500–1000 ms，低于助听器播放路径亚 10 ms 的延迟要求。作者因此提出"信号式"方案：把识别结果作为音频播放路径之外的控制信号，只决定放大算法在说话人切换时的自适应速度，而不增加听者感知延迟。
+- **主要指标**：- 系统级（阈值 0.70）：accuracy 中位 0.93（均值 0.91）、precision 中位 0.91、recall 中位 0.56、F1 中位 0.68、specificity 中位 0.99 - 系统级（阈值 0.75）：accuracy 中位 0.91（均值 0.90）、prec
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [8 Neural Multichannel Distant Speaker Diarization and Source Separation with Beta Speaker Activity Prior](https://arxiv.org/abs/2608.28661)
+## [Neural Multichannel Distant Speaker Diarization and Source Separation with Beta Speaker Activity Prior](https://arxiv.org/abs/2608.28661)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-21
 - **一句话贡献**：远场说话人日志在混响、噪声、说话人数目动态变化与重叠语音等条件下仍是极具挑战的问题。本文面向模型驱动方法 neural FCASA，提出贝叶斯日志模型：为说话人活动引入 Beta 先验，推导出可视为"带正则的连续活动度得分"的变分下界目标函数，替代原始交叉熵损失训练日志模型。在 AMI 数据集上，该方法相较基线实现 DER 绝对下降至少 3%（相对 16%）、JER 绝对下降至少 4%（相对 20
 - **关键技术点**：
-- **主要指标**：
+- **主要指标**：- DER：较基线绝对下降至少 3%，相对降低 16% - JER：较基线绝对下降至少 4%，相对降低 20%
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [1 REDnet: Recursive Encoder and Decoder for Speech Separation under Unknown Number of Speakers and Variable Number of Microphones](https://arxiv.org/abs/2608.24659)
+## [REDnet: Recursive Encoder and Decoder for Speech Separation under Unknown Number of Speakers and Variable Number of Microphones](https://arxiv.org/abs/2608.24659)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-26
 - **一句话贡献**：实际麦克风阵列场景中说话人数量与麦克风数量往往事先未知。REDnet 采用递归编码器和解码器结构，摆脱了对固定说话人数与固定通道数的依赖，同时解决"说话人数量未知"与"麦克风数量可变"两大问题，在多个公开数据集上实现领先性能。

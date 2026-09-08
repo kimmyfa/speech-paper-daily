@@ -19,7 +19,7 @@ SUBTAG_RULES = [
     # ASR / VAD / 端点检测 / 关键词
     (re.compile(r"\b(ASR|speech recognition|transcription|inverse text normalization|endpoint|voice activity|VAD|turn.?aware|turn.?based|turn.?taking|turn action|keyword spot\w*)\b", re.I), "ASR"),
     # Codec / Tokenizer / 声码器
-    (re.compile(r"(codec|tokeniz|speech.?token|audio.?encoder|speech cod|vector quantiz|vocoder|speech.?unit|waveform)", re.I), "Codec"),
+    (re.compile(r"\b(codec\w*|tokeniz\w*|speech.?token\w*|audio.?encoder\w*|speech cod\w*|vector quantiz\w*|vocoder\w*|speech.?unit\w*|waveform\w*)\b", re.I), "Codec"),
     # 语音大模型相关术语
     (re.compile(r"(\bSpeech Language Model\w*|\bLarge Language Model\w*|\bslm\b|\bLLMs?\b|\bLALMs?\b|\bAudio LM\b|\baudio lms?\b|\blarge audio\b|audio.?language|audio.?understand|audio.?comprehension|audio.?grounded|audio.?representation|audio.?learn)", re.I), "SpeechLM"),
     # 理解 / 评测 / 安全 / 说话人身份之外的大模型主题
@@ -27,7 +27,7 @@ SUBTAG_RULES = [
     # MOS / 音质评估
     (re.compile(r"\b(MOS|mean opinion|quality assessment|listening test|speech quality)\b", re.I), "SpeechLM"),
     # 前端增强 / 降噪 / 波束 / 空间处理
-    (re.compile(r"\b(speech enhancement|audio enhancement|noise suppression|noise control|noise cancellation|active noise|acoustic echo|echo cancel|super-?resolution)\b|\bsuper-?resolut|\bband.?width|\bdereverberat|\bdenois|\benhanc|\brestorat|\bbeamform|\bdirection.?of.?arrival|\bambisonic", re.I), "Enhancement"),
+    (re.compile(r"\b(speech enhancement|audio enhancement|noise suppression|noise control|noise cancellation|active noise|acoustic echo|echo cancel|super-?resolution)\b|\bband.?width|\bdereverberat|\bdenois|\benhanc|\brestorat|\bbeamform|\bdirection.?of.?arrival|\bambisonic", re.I), "Enhancement"),
     # 分离 / 说话人提取
     (re.compile(r"\bseparat|\bspeaker extraction|\btarget speaker|\btarget sound|\bdiariz", re.I), "Separation"),
     # 说话人识别 / 认证 / 伪造检测
@@ -62,7 +62,9 @@ def parse_output_files(output_dir: Path):
             if not m:
                 continue
             aid = m.group(1)
-            title = entry.split("\n", 1)[0].replace("## [", "").replace("]", "", 1).strip()
+            title_line = entry.split("\n", 1)[0]
+            tm = re.match(r"^##\s*\[\d+\]\s*(.+)$", title_line)
+            title = tm.group(1).strip() if tm else title_line.replace("## [", "").replace("]", "", 1).strip()
             score_m = re.search(r"评分[^\d]*([0-9]+(\.[0-9]+)?)/10", entry)
             score = float(score_m.group(1)) if score_m else 0.0
             dm = re.search(r"方向[^\n:：]*[:：]\s*([^\n|]*)\s*\|?\s*\*\*", entry)
@@ -71,8 +73,8 @@ def parse_output_files(output_dir: Path):
             code_m = re.search(r"\*\*代码\*\*：([^\n|]*)", entry)
             demo_m = re.search(r"\*\*Demo\*\*：([^\n|]*)", entry)
             intro_m = re.search(r"### 📌 简介\n+\s*(.+?)\n\n###", entry, re.DOTALL)
-            tech_m = re.search(r"问题背景：\s*(.+?)(?=\n\n\*\*模型架构|\n\n\*\*核心创新)", entry, re.DOTALL)
-            exp_m = re.search(r"### 📊 实验结果\n+\s*数据集[^\n:：]*[:：]\s*([^\n]+)", entry, re.DOTALL)
+            tech_m = re.search(r"\*\*问题背景：\*\*\s*(.+?)(?=\n\n\*\*模型架构|\n\n\*\*核心创新)", entry, re.DOTALL)
+            exp_m = re.search(r"\*\*主要指标\*\*\s*[:：]\s*(.*?)(?=\n\*\*是否开源|\Z)", entry, re.DOTALL)
 
             new_entry = {
                 "id": aid,
@@ -109,15 +111,16 @@ def normalize_direction(direction: str, title: str = "") -> str:
 
 def subtag(title: str, direction: str) -> str:
     """按标题关键词推断子方向标签。"""
+    # direction retained for API compatibility; classification is title-driven
     for pat, tag in SUBTAG_RULES:
         if pat.search(title):
             return tag
     return "Other"
 
 
-def pick_file(direction: str, tag: str) -> Path:
+def pick_file(direction: str, tag: str, title: str = "") -> Path:
     """选择目标方向文件。"""
-    main = normalize_direction(direction)
+    main = normalize_direction(direction, title)
     for fname, f_tag in MAIN_DIRS[main].items():
         if f_tag == tag:
             return Path(__file__).parent / fname
@@ -148,7 +151,6 @@ def render_entry(e: dict) -> str:
 
 
 ALL_FILES = [*MAIN_DIRS["语音大模型"], *MAIN_DIRS["语音前端"], "other_related.md"]
-BUCKETS = {name: [] for name in ALL_FILES}
 
 
 def incremental_update(papers: dict):
@@ -165,7 +167,7 @@ def incremental_update(papers: dict):
         merged = {
             k: v
             for k, v in new_papers.items()
-            if pick_file(v["direction"], subtag(v["title"], v["direction"])).name == fname
+            if pick_file(v["direction"], subtag(v["title"], v["direction"]), v["title"]).name == fname
         }
         ordered = sorted(merged.values(), key=lambda x: (-x["score"], x["date"]))
         parts = [f"# {fname.replace('.md', '').replace('_', ' ').upper()}（按评分降序）", "", f"共 {len(ordered)} 篇", ""]
@@ -187,7 +189,7 @@ def main():
         "by_file": {f: 0 for f in ALL_FILES},
     }
     for e in selected.values():
-        fname = pick_file(e["direction"], subtag(e["title"], e["direction"])).name
+        fname = pick_file(e["direction"], subtag(e["title"], e["direction"]), e["title"]).name
         index["by_file"][fname] += 1
     (KB_DIR / "_index.json").write_text(json.dumps(index, ensure_ascii=False, indent=2), encoding="utf-8")
     print(json.dumps(index, ensure_ascii=False, indent=2))

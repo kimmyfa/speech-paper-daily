@@ -1,331 +1,331 @@
 {
   "2607.29363": {
     "id": "2607.29363",
-    "title": "2 Stable Autoregressive Speech Generation with Low-Frame-Rate High-Dimensional Continuous Tokens",
+    "title": "Stable Autoregressive Speech Generation with Low-Frame-Rate High-Dimensional Continuous Tokens",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-07-31",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "自回归语音生成中，高帧率高容量表示保留更多信号细节但易受分布漂移和误差累积影响，低帧率压缩表示简化AR建模但可能丢弃重要信息。本文提出协同设计低帧率（8Hz）、高维（768维）、高带宽连续表示与流式生成框架。Locodec tokenizer通过局部编码和训练目标塑造表示空间几何——围绕低维核心流形组织高维空间以改善可插值性，同时保持高维坐标能量层次以改善可辨识性。MP-ELD生成框架使用多路径信",
-    "tech_points": "** 自回归语音生成面临信息容量与长程稳定性的权衡。高带宽表示保留更多信号细节但预测误差在AR系统中累积导致漂移（响度、音色、语速、频谱质量退化甚至崩溃）。现有方法依赖语义-声学解耦（如SSL/ASR模型提供语义空间）来降低建模难度，但外部模型引入偏置，限制了tokenizer编码非语义信息的能力。",
-    "metrics": ""
+    "tech_points": "自回归语音生成面临信息容量与长程稳定性的权衡。高带宽表示保留更多信号细节但预测误差在AR系统中累积导致漂移（响度、音色、语速、频谱质量退化甚至崩溃）。现有方法依赖语义-声学解耦（如SSL/ASR模型提供语义空间）来降低建模难度，但外部模型引入偏置，限制了tokenizer编码非语义信息的能力。",
+    "metrics": "- 8Hz 768维token：重建质量保持，单token可预测性显著改善 - WER：具有竞争力（与使用外部SSL/ASR模型的方法相比） - 长形式合成：稳定（无累积漂移） - 无需外部SSL/ASR模型、预训练文本语言模型或后训练阶段"
   },
   "2608.00722": {
     "id": "2608.00722",
-    "title": "2 Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS",
+    "title": "Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS",
     "score": 9.0,
     "direction": "语音大模型",
     "date": "2026-08-04",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "基于语言模型的TTS（LM-based TTS）生成的语音可能偏离目标文本（语音幻觉）。本文提出条件信息视角，区分来自文本的\"对齐信息\"和来自声学上下文及学习规律的\"经验信息\"，并提出ECCD（Experience-Calibrated Contrastive Decoding），一种无需训练的解码时控制方法。ECCD通过对比同一语音LM在有/无文本条件下的预测分布，增强对齐支持同时保留有用经验信",
-    "tech_points": "** LM-based TTS（如VALL-E、SeedTTS）在解码时可能生成与目标文本不一致的语音内容，即语音幻觉。现有方法依赖架构改动或额外训练（如外部对齐模块、重训练），解码时控制（decoding-time control）仍缺乏探索。核心挑战在于如何在保持语音自然度的同时抑制幻觉。",
-    "metrics": ""
+    "tech_points": "LM-based TTS（如VALL-E、SeedTTS）在解码时可能生成与目标文本不一致的语音内容，即语音幻觉。现有方法依赖架构改动或额外训练（如外部对齐模块、重训练），解码时控制（decoding-time control）仍缺乏探索。核心挑战在于如何在保持语音自然度的同时抑制幻觉。",
+    "metrics": "- SeedTTS-Eval: 四个模型WER/CER最多降低55.6%，所有设置均取得改进 - CV3-Eval: 25个多语言设置中24个取得改进 - 主观评测: CMOS +0.644，同时保持说话人相似度 - 信息论分析：验证了对齐信息和经验信息的动态平衡"
   },
   "2608.00998": {
     "id": "2608.00998",
-    "title": "3 Beyond One-Size-Fits-All: Personalized and Culturally Adaptive Emotional TTS",
+    "title": "Beyond One-Size-Fits-All: Personalized and Culturally Adaptive Emotional TTS",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-04",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "本文提出个性化和文化自适应的情感TTS框架，通过交互遗传算法（IGA）对个体化的唤醒度-效价（A-V）感知空间进行交互优化。传统情感TTS使用离散标签或平均A-V值，无法捕捉个体间和文化间的情感感知差异。该方法将情感个性化定义为低维感知优化问题，通过用户交互反馈迭代优化A-V坐标。在中日印尼三国用户评估中，MOS从3.37提升到3.75，WER相对降低23.5%，个性化偏好率76%，文化适应偏好率",
-    "tech_points": "** 情感感知因人而异，也因文化而异。Russell的效价-唤醒度（A-V）二维模型提供了连续的情感表示空间，但不同个体对同一A-V坐标的情感感知可能不同。现有情感TTS使用从平均标注得到的A-V值，导致建模情感与感知情感不匹配。",
-    "metrics": ""
+    "tech_points": "情感感知因人而异，也因文化而异。Russell的效价-唤醒度（A-V）二维模型提供了连续的情感表示空间，但不同个体对同一A-V坐标的情感感知可能不同。现有情感TTS使用从平均标注得到的A-V值，导致建模情感与感知情感不匹配。",
+    "metrics": "- MOS: 从3.37提升到3.75 - WER: 相对降低23.5%（情感语音更自然，识别率提高） - 个性化偏好率: 76%（相比默认A-V值） - 文化适应偏好率: 64-70%（跨文化听众偏好文化自适应版本）"
   },
   "2608.02023": {
     "id": "2608.02023",
-    "title": "4 SwanTale: Unified Multi-Speaker Speech and Audio Generation",
+    "title": "SwanTale: Unified Multi-Speaker Speech and Audio Generation",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-04",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "字节跳动提出SwanTale，一个统一的多说话人表达性语音和音频生成模型，同时支持零样本和指令（instruct）两种任务。SwanTale从数据和模型两端入手：数据方面提出SwanData-Caption流水线进行数据清洗、合成覆盖增强和多层级标注；模型方面提出SwanVAE支持高质量多音频模态生成，结合Flow-based Transformer、统一MoE、课程学习和GRPO后训练。在零样本",
-    "tech_points": "** 动画配音、音频剧、广告、游戏等场景需要同时支持多种语音生成任务：没有参考录音的语音设计（指令任务）、基于参考音频的语音克隆（零样本任务）、环境音效控制、说话人风格自然语言控制等。现有方法通常只支持其中一种任务，缺乏统一框架。",
-    "metrics": ""
+    "tech_points": "动画配音、音频剧、广告、游戏等场景需要同时支持多种语音生成任务：没有参考录音的语音设计（指令任务）、基于参考音频的语音克隆（零样本任务）、环境音效控制、说话人风格自然语言控制等。现有方法通常只支持其中一种任务，缺乏统一框架。",
+    "metrics": "- 零样本任务：说话人相似度、自然度、可懂度领先基线 - 指令任务：表达分数、指令遵循度最优 - SwanVAE重建质量：在多个音频模态上优于基线codec - 支持复杂指令：如\"用低沉的声音在咖啡馆背景中朗读一段悲伤的新闻\""
   },
   "2608.00545": {
     "id": "2608.00545",
-    "title": "7 Beyond Prompt Adherence: Auditing Attribute-Level Voice Control in Speech Generation",
+    "title": "Beyond Prompt Adherence: Auditing Attribute-Level Voice Control in Speech Generation",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-04",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "现有语音生成模型的评估仅关注prompt遵循度，忽视属性级控制保真度。本文提出配对审计框架，系统评估CosyVoice3、VoxCPM2、Fish-Speech-S2三个系统的属性级语音控制能力。通过5940个输出样本覆盖6个参考说话人、10段文本、3个随机种子和11种条件。研究发现目标属性变化经常伴随非目标属性的意外变化，CosyVoice3的deep响应率84.4%但93.8%有非目标变化。提",
-    "tech_points": "** 语音生成模型支持自然语言描述控制语音属性（如\"用低沉的声音说话\"、\"带点口音\"），但现有评估仅检查输出是否与prompt匹配（如是否真的低沉），忽略其他属性是否意外变化（如说话人身份、语速、音色是否改变）。这种评估方式无法发现\"属性耦合\"问题。",
-    "metrics": ""
+    "tech_points": "语音生成模型支持自然语言描述控制语音属性（如\"用低沉的声音说话\"、\"带点口音\"），但现有评估仅检查输出是否与prompt匹配（如是否真的低沉），忽略其他属性是否意外变化（如说话人身份、语速、音色是否改变）。这种评估方式无法发现\"属性耦合\"问题。",
+    "metrics": "- CosyVoice3: deep响应率84.4%，但93.8%有非目标变化 - 联合成功率（目标属性命中 + 无显著非目标变化）：从4.8%提升到约14%（使用VoDER-Cal三候选池） - 不同系统差异显著：CosyVoice3属性控制强度高但耦合严重，Fish-Speech-S2耦合少但控"
   },
   "2608.03215": {
     "id": "2608.03215",
-    "title": "1 GROW: Group-Relative Advantage-Weighted On-Policy RL of Autoregressive-Diffusion TTS",
+    "title": "GROW: Group-Relative Advantage-Weighted On-Policy RL of Autoregressive-Diffusion TTS",
     "score": 9.0,
     "direction": "语音大模型",
     "date": "2026-08-05",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "流匹配TTS的强化学习因确定性ODE采样而复杂化：轨迹级策略梯度方法需将ODE转换为SDE并跟踪每步似然比，引入随机扰动和大量开销。本文提出GROW，一种组相对优势加权的on-policy RL方法，直接在标准流匹配目标上运作。对每个prompt采样一组on-policy utterances，在组内标准化可懂度和说话人相似度奖励，结合Wasserstein-2速度惩罚锚定到预训练参考模型。在Di",
-    "tech_points": "** 流匹配（Flow Matching）TTS模型（如DiTAR）使用确定性ODE从噪声到数据采样，不涉及随机性。传统RL方法（如策略梯度）需要估计策略的似然比，但确定性ODE的似然比计算需要轨迹级展开，将ODE转换为SDE引入随机扰动，计算开销大且不稳定。GRPO（Group Relative Policy Optimization）虽然不需要隐式奖励模型，但需要每个token的log概率，而流匹配模型在连续空间中的log概率难以直接获得。",
-    "metrics": ""
+    "tech_points": "流匹配（Flow Matching）TTS模型（如DiTAR）使用确定性ODE从噪声到数据采样，不涉及随机性。传统RL方法（如策略梯度）需要估计策略的似然比，但确定性ODE的似然比计算需要轨迹级展开，将ODE转换为SDE引入随机扰动，计算开销大且不稳定。GRPO（Group Relative Policy Optimization）虽然不需要隐式奖励模型，但需要每个token的log概率，而流匹配模型在连续空间中的log概率难以直接获得。",
+    "metrics": "- 平均WER: 从2.016降至1.558（相对降低22.7%） - 说话人相似度: 从0.676提升至0.715 - UTMOS: 保持不变（未退化） - 训练效率: 10-NFE rollout + 32-NFE evaluation，比32-NFE DiTAR-GRPO快2.9倍 - 线性优"
   },
   "2608.05663": {
     "id": "2608.05663",
-    "title": "2 Vorch-Streamer: Extending Human Audio-Visual Generation to Real-Time Long-Form Streaming",
+    "title": "Vorch-Streamer: Extending Human Audio-Visual Generation to Real-Time Long-Form Streaming",
     "score": 8.0,
     "direction": "音视频生成",
     "date": "2026-08-06",
     "code": "暂无",
     "demo": "https://vorch-project.github.io/Vorch-Streamer-project/",
     "contribution": "实时长形式虚拟人音视频生成需要因果连续合成，但预训练双向模型（如LTX2.3）在自回归推理中面临暴露偏差累积和语音内容时序错位两大难题。Vorch-Streamer提出后训练框架，通过合成80K虚拟人片段语料库，结合mixed Teacher Forcing/Diffusion Forcing训练因果生成器，并采用长视野Self Forcing与DMD蒸馏将双向教师模型质量迁移至因果轨迹。引入基于",
-    "tech_points": "** 现有双向音视频扩散模型（如LTX2.3）依赖全局双向注意力进行去噪，无法增量式流式输出。自回归复用生成块作为上下文时产生暴露偏差，导致误差累积和视觉漂移。此外，全局文本提示描述了完整语音内容，但因果块只能利用有限局部上下文，无法确定当前应生成哪部分语音。",
-    "metrics": ""
+    "tech_points": "现有双向音视频扩散模型（如LTX2.3）依赖全局双向注意力进行去噪，无法增量式流式输出。自回归复用生成块作为上下文时产生暴露偏差，导致误差累积和视觉漂移。此外，全局文本提示描述了完整语音内容，但因果块只能利用有限局部上下文，无法确定当前应生成哪部分语音。",
+    "metrics": "- 生成速度：27.12 FPS（22.8B参数，单H200 GPU），对比LTX2.3 1.83 FPS（14.8×加速），OmniForcing 12.12 FPS（2.2×加速），Hallo-Live 11.51 FPS（2.4×加速） - Sync-C/Sync-D：6.62/8.95（对比"
   },
   "2606.14750": {
     "id": "2606.14750",
-    "title": "1 Pixel-TTS: Image based Text Rendering for Robust Text-to-Speech",
+    "title": "Pixel-TTS: Image based Text Rendering for Robust Text-to-Speech",
     "score": 8.0,
     "direction": "TTS",
     "date": "2026-08-06",
     "code": "即将发布",
     "demo": "暂无",
     "contribution": "传统TTS系统依赖离散Unicode字符嵌入，每个字符独立处理，导致跨语言适配时需扩展嵌入矩阵且在未见字符上泛化能力差。Pixel-TTS提出首个基于视觉文本渲染的端到端语音合成框架：将文本渲染为16×16灰度图像，经2D卷积层投影为像素级嵌入，利用视觉相似性使结构相似字符（如A-À、e-é）产生相近嵌入。在LibriSpeech-PC上WER 2.28%（对比Text-TTS 2.53%），MO",
-    "tech_points": "** 传统TTS将每个字符映射为独立one-hot嵌入向量，Unicode编码不同的视觉相似字符（如A和À）被完全独立处理。跨语言适配时需扩展嵌入矩阵，未见字符无法处理。此外，Unicode同形攻击和l33tspeak噪声下传统方法性能急剧下降。",
-    "metrics": ""
+    "tech_points": "传统TTS将每个字符映射为独立one-hot嵌入向量，Unicode编码不同的视觉相似字符（如A和À）被完全独立处理。跨语言适配时需扩展嵌入矩阵，未见字符无法处理。此外，Unicode同形攻击和l33tspeak噪声下传统方法性能急剧下降。",
+    "metrics": "- 300k步后LibriSpeech-PC: WER 2.28%, CER 0.81%, UTMOS 4.01, SIM 0.58（对比Text-TTS: 2.53%/1.16%/4.06/0.59） - MOS: Pixel-TTS 4.63±0.11 vs Text-TTS 4.25±0.14"
   },
   "2608.07462": {
     "id": "2608.07462",
-    "title": "1 SemBridge: Semantic Token Anchoring for Continuous-Latent Autoregressive Speech Generation",
+    "title": "SemBridge: Semantic Token Anchoring for Continuous-Latent Autoregressive Speech Generation",
     "score": 9.0,
     "direction": "语音大模型",
     "date": "2026-08-07",
     "code": "https://github.com/ASLP-lab/SemBridge",
     "demo": "https://tiamojames.github.io/SemBridge_demo/",
     "contribution": "连续潜向量自回归语音生成避免了离散 token 的量化损失，但连续声学目标不提供显式 token 级语言结构，导致 LM 需间接学习语言结构，损害内容保真度。SemBridge 提出训练阶段语义 token 锚定框架，使用离散语义 token（GLM-4-Voice, 12.5Hz, 16384 词表）直接监督 AR LM 状态，并引入语义对齐声学 VAE（SA-VAE）组织连续目标空间。语义监督",
-    "tech_points": "** 连续 AR 语音生成中，LM 需从声学预测中推断语言结构，缺乏显式 token 级语义目标。现有方法使用连续语义特征对齐（如 SemaVoice、MELA-TTS），但离散语义 token 提供更明确的分类目标且能抑制与语言无关的声学变化。",
-    "metrics": ""
+    "tech_points": "连续 AR 语音生成中，LM 需从声学预测中推断语言结构，缺乏显式 token 级语义目标。现有方法使用连续语义特征对齐（如 SemaVoice、MELA-TTS），但离散语义 token 提供更明确的分类目标且能抑制与语言无关的声学变化。",
+    "metrics": "- 中文 CER: 0.95%（最佳），SIM: 0.758 - 英文 WER: 1.81%（最佳），SIM: 0.699 - 中文困难集 CER: 9.79%，SIM: 0.717 - CV3-EVAL 中文 CER: 3.34%，英文 WER: 4.22% - 歌声合成：中文 CER 8.32%"
   },
   "2608.09930": {
     "id": "2608.09930",
-    "title": "1 Beyond Naturalness: Probing Automated TTS Evaluators on Linguistically Grounded Dimensions",
+    "title": "Beyond Naturalness: Probing Automated TTS Evaluators on Linguistically Grounded Dimensions",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-10",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "自动 TTS 评估方法（MOS 预测器和 Audio-LLM 评判器）被期望反映人类感知，但尚不清楚它们能多好地捕获听众实际感知的不同语音维度。该工作将\"自然度\"解构为 10 个语言学感知维度的标注模式，构建首个维度级 TTS 元评估基准，包含 860 句由训练有素的语言学家标注的语料。对 4 个 MOS 预测器和 4 个 Audio-LLM 评判器的基准测试显示：MOS 预测器仅关注声学信号质量",
-    "tech_points": "** 现有 TTS 评估主要使用 MOS 预测器或 Audio-LLM 评判器，但它们是否真正理解语音的多维感知特性（如发音清晰度、韵律自然度、语速适当性等）缺乏系统评估。",
-    "metrics": ""
+    "tech_points": "现有 TTS 评估主要使用 MOS 预测器或 Audio-LLM 评判器，但它们是否真正理解语音的多维感知特性（如发音清晰度、韵律自然度、语速适当性等）缺乏系统评估。",
+    "metrics": "- MOS 预测器：仅与声学信号质量相关，无法检测语言错误 - Audio-LLM 评判器：选择性检测，依赖提示词设计，不能泛化到所有维度 - 两类评估器均无法可靠捕获语言结构化的语音错误（如音段替换、省略）"
   },
   "2608.09571": {
     "id": "2608.09571",
-    "title": "3 SonicWeave: Chunk-Routed Mixture-of-Experts for Unified Audio Scene Generation",
+    "title": "SonicWeave: Chunk-Routed Mixture-of-Experts for Unified Audio Scene Generation",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-10",
     "code": "暂无",
     "demo": "https://caiyunrui.github.io/SonicWeave",
     "contribution": "文本条件通用音频生成正从孤立的语音、音乐和音效合成走向单一模型组合可控连贯音频场景。SonicWeave 提出基于分块路由 MoE 的流匹配模型，核心是冲突门控先验-证据路由机制（CPE-MoE），通过结合全局先验（编码文本条件和扩散相位）和局部证据（进化声学状态）来路由连续声学块。当局部状态不可靠时，学习到的冲突门偏向先验；当区域偏离全局场景上下文时，允许局部证据影响路由。支持语音、音乐、音效、",
-    "tech_points": "** 统一音频场景生成中，异构组件（语音、音乐、音效）对共享骨干提出冲突的结构要求，复杂混合场景可能包含局部不同或重叠内容，需要细粒度适应。现有音频 MoE 主要在域级别路由，token 级路由忽略声学信号的局部连续性。",
-    "metrics": ""
+    "tech_points": "统一音频场景生成中，异构组件（语音、音乐、音效）对共享骨干提出冲突的结构要求，复杂混合场景可能包含局部不同或重叠内容，需要细粒度适应。现有音频 MoE 主要在域级别路由，token 级路由忽略声学信号的局部连续性。",
+    "metrics": "- 在 TTS、TTA、TTM 上一致优于 Dense 和 Base-MoE 基线 - 复杂场景合成质量改进 - 路由分析显示扩散阶段中内容相关的专家专业化"
   },
   "2608.11593": {
     "id": "2608.11593",
-    "title": "1 Luna-TTS Family: A Unified Speech-Text Foundation Model",
+    "title": "Luna-TTS Family: A Unified Speech-Text Foundation Model",
     "score": 9.0,
     "direction": "语音大模型",
     "date": "2026-08-12",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "针对现有TTS系统在语音质量、自然度、可控性和多语言泛化能力上的不足，Luna-TTS提出基于扩散语言模型的统一语音-文本基座模型系列。模型基于Qwen3-0.6B通过渐进式因果→双向→块因果注意力适配，在100万小时中英日韩四语数据上预训练。Luna-TTS全非自回归版本在Seed-TTS-Eval上达到test-zh CER 0.73%/SIM 79.7%和test-en WER 1.49%/",
-    "tech_points": "** 现有TTS系统在多语言、多场景下的语音质量、自然度和可控性仍不理想，尤其是实时推理场景中非自回归模型与自回归模型之间的效率-质量权衡问题。扩散模型在TTS中展现出潜力，但缺乏统一的预训练框架和高效的实时解码方案。",
-    "metrics": ""
+    "tech_points": "现有TTS系统在多语言、多场景下的语音质量、自然度和可控性仍不理想，尤其是实时推理场景中非自回归模型与自回归模型之间的效率-质量权衡问题。扩散模型在TTS中展现出潜力，但缺乏统一的预训练框架和高效的实时解码方案。",
+    "metrics": "- test-zh CER: 0.73% - test-zh SIM: 79.7% - test-en WER: 1.49% - test-en SIM: 76.8% - Luna-TTS Realtime RTF: 0.024 - Luna-TTS Realtime 首块延迟: 41.6ms - "
   },
   "2608.11737": {
     "id": "2608.11737",
-    "title": "2 Phoenix TTS: A Joint Training Framework for Tokenizer and Flow Matching Based Text-to-Speech",
+    "title": "Phoenix TTS: A Joint Training Framework for Tokenizer and Flow Matching Based Text-to-Speech",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-12",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "Phoenix TTS针对语义token与声学空间之间的特征不匹配问题，提出联合训练语义Tokenizer和Flow Matching解码器的统一框架。UniSpeechTokenizer基于W2v-BERT 2.0第16层特征+6层Conformer编码器+VQ（码本8192），以25Hz帧率输出语义token，并通过LLM（Qwen2.5-0.5B，24层）预测语义token序列。Flow M",
-    "tech_points": "** 现有神经编解码语言模型TTS系统中，语义tokenizer和声学tokenizer/解码器通常独立训练，导致语义token携带的信息与声学解码器期望的特征之间存在不匹配。这种不匹配限制了语音质量和说话人相似度。",
-    "metrics": ""
+    "tech_points": "现有神经编解码语言模型TTS系统中，语义tokenizer和声学tokenizer/解码器通常独立训练，导致语义token携带的信息与声学解码器期望的特征之间存在不匹配。这种不匹配限制了语音质量和说话人相似度。",
+    "metrics": "- LibriSpeech-PC WER: 1.94%（GT 2.06%） - SeedTTS-EN WER: 1.56% - SeedTTS-ZH CER: 1.16% - SIM: 0.718 (LibriSpeech-PC), 0.720 (SeedTTS-EN), 0.778 (SeedTT"
   },
   "2608.11650": {
     "id": "2608.11650",
-    "title": "3 Confucius4-TTS: Cross-lingual Zero-Shot TTS",
+    "title": "Confucius4-TTS: Cross-lingual Zero-Shot TTS",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-12",
     "code": "https://github.com/netease-youdao/Confucius4-TTS",
     "demo": "暂无",
     "contribution": "Confucius4-TTS针对跨语言零样本TTS中参考音频缺乏转录文本的问题，提出无需参考音频转录本的跨语言语音克隆方法，支持14种语言。两阶段架构包括T2S（24层decoder-only Transformer，hidden size 1280）和S2A（DiT CFM），说话人编码器结合ECAPA-TDNN和w2v-BERT 2.0自监督特征。在500K小时14语言数据上训练，CV3-Ev",
-    "tech_points": "** 跨语言零样本TTS面临两个核心挑战：(1) 目标语言的参考音频通常没有对应文本转录，限制了训练数据的可用性；(2) 跨语言场景中说话人特征与语言特征的解耦困难，容易出现\"口音泄露\"问题。",
-    "metrics": ""
+    "tech_points": "跨语言零样本TTS面临两个核心挑战：(1) 目标语言的参考音频通常没有对应文本转录，限制了训练数据的可用性；(2) 跨语言场景中说话人特征与语言特征的解耦困难，容易出现\"口音泄露\"问题。",
+    "metrics": "- CV3-Eval 跨语言平均WER: 3.73% - Seed-TTS-Eval EN WER: 1.49% - Seed-TTS-Eval EN SIM: 0.700 - Seed-TTS-Eval ZH CER: 0.94% - Seed-TTS-Eval ZH SIM: 0.765"
   },
   "2608.11590": {
     "id": "2608.11590",
-    "title": "4 CookVoice: Unified Voice-Singing Generation",
+    "title": "CookVoice: Unified Voice-Singing Generation",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-12",
     "code": "暂无",
     "demo": "https://haoweilou.github.io/CookVoice/",
     "contribution": "CookVoice提出统一的语音与歌声生成框架，将语音信号分解为内容（content）、韵律（prosody）和风格（style）三个正交要素，并分别建模。Flow Matching DiT结合HiFi-GAN自编码器，总参数量仅43.51M（DiT-S），在168小时数据上训练。模型支持文本/语音风格控制和离散/连续韵律控制，F0相对音高归一化有效解耦风格与韵律。S-SIM达91.65%（TTS",
-    "tech_points": "** 语音生成和歌声生成通常由独立系统处理，缺乏统一的生成框架。现有方法在风格控制、韵律控制和内容保真度之间的权衡不理想，且参数量大、推理效率低。",
-    "metrics": ""
+    "tech_points": "语音生成和歌声生成通常由独立系统处理，缺乏统一的生成框架。现有方法在风格控制、韵律控制和内容保真度之间的权衡不理想，且参数量大、推理效率低。",
+    "metrics": "- S-SIM (TTS): 91.65% - S-SIM (TTSV): 95.00% - F0-CORR (TTS): 0.7102 - F0-CORR (TTSV): 0.8425 - 推理步数: 4 ODE steps - 参数量: 43.51M"
   },
   "2608.11804": {
     "id": "2608.11804",
-    "title": "6 MiDashengLM-Gen: Unified Audio Scene Generation",
+    "title": "MiDashengLM-Gen: Unified Audio Scene Generation",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-12",
     "code": "https://github.com/xiaomi-research/midashenglm-gen",
     "demo": "https://xingws.github.io/midashenglm-gen-demo/",
     "contribution": "MiDashengLM-Gen提出基于LLM驱动的自回归流匹配统一框架，实现语音、音乐和音效三种音频场景的端到端统一生成。模型采用LLM+per-token条件流匹配架构，无需依赖外部声码器或编解码器。在Seed-TTS基准上WER达2.79%，在MECAT benchmark上达到竞争性结果。代码和Demo已全部开源。",
-    "tech_points": "** 现有音频生成系统通常针对单一场景（语音、音乐或音效）独立设计，缺乏统一的生成框架。不同场景的音频在时域结构、频域分布和语义内容上差异巨大，统一建模面临挑战。",
-    "metrics": ""
+    "tech_points": "现有音频生成系统通常针对单一场景（语音、音乐或音效）独立设计，缺乏统一的生成框架。不同场景的音频在时域结构、频域分布和语义内容上差异巨大，统一建模面临挑战。",
+    "metrics": "- Seed-TTS WER: 2.79%（专用TTS参考: 1.24%） - MECAT benchmark: 竞争性结果"
   },
   "2608.12951": {
     "id": "2608.12951",
-    "title": "2 VoxAudio: Vocalized Audio Synthesis via Multi-Reward Autoregressive Flow Matching",
+    "title": "VoxAudio: Vocalized Audio Synthesis via Multi-Reward Autoregressive Flow Matching",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-13",
     "code": "https://voxaudio.github.io",
     "demo": "https://voxaudio.github.io",
     "contribution": "有声语音合成（vocalized audio synthesis）指在环境声景中嵌入可理解语音的音频生成任务，现有 T2A 系统要么将引述语音退化为不可理解的嘟囔，要么依赖独立的 TTS 模型后期混合，丧失对语音发生时机和场景交互的控制。VoxAudio 提出因果自回归流匹配模型，在架构层面采用逐块因果分解与独立噪声级别，支持滑动窗口流式推理和 KV 缓存；在偏好层面引入多奖励负感知微调（NFT）",
-    "tech_points": "** 现有文本到音频（T2A）系统无法在环境声景中生成可理解语音，引述台词通常变为不可理解的发声纹理。解耦流水线（分别合成语音和背景音再后期混合）无法控制语音与场景的时序交互和相对响度，破坏了听觉场景的连贯性。根本原因在于数据层面缺乏联合标注、架构层面非自回归公式不支持流式输出、训练范式缺乏人类偏好对齐。",
-    "metrics": ""
+    "tech_points": "现有文本到音频（T2A）系统无法在环境声景中生成可理解语音，引述台词通常变为不可理解的发声纹理。解耦流水线（分别合成语音和背景音再后期混合）无法控制语音与场景的时序交互和相对响度，破坏了听觉场景的连贯性。根本原因在于数据层面缺乏联合标注、架构层面非自回归公式不支持流式输出、训练范式缺乏人类偏好对齐。",
+    "metrics": "- VoxBench-10s：WER 3.8%，TG-IoU 0.654，MOS-O 4.47，MOS-C 4.51 - AudioCaps：CLAP 0.657，PEAV 0.126，MOS-O 4.09，MOS-C 4.79，RTF 0.32 - seed-tts-eval：WER 1.61%（"
   },
   "2608.13613": {
     "id": "2608.13613",
-    "title": "1 VoiceDesigner: Text-to-Voice Generation and Editing via Unified Diffusion Modeling and Data Augmentation",
+    "title": "VoiceDesigner: Text-to-Voice Generation and Editing via Unified Diffusion Modeling and Data Augmentation",
     "score": 8.5,
     "direction": "语音大模型",
     "date": "2026-08-17",
     "code": "暂无",
     "demo": "https://voicedesigner-demo.github.io/",
     "contribution": "现有文本到语音生成（TTV）系统面临两大核心挑战：一是生成声音的多样性不足，难以覆盖真实人类说话人和虚构角色；二是缺乏灵活的声音编辑能力，如声音克隆和属性修改。本文提出VoiceDesigner，一个统一的声音生成与编辑框架。在数据层面，作者设计了混合数据流水线，利用DSP音频效果合成（变调、共振峰偏移、混响等）和生成式仿真（零样本TTS+语音转换）来构造覆盖人类和非人类声音的多样化数据集。在模型",
-    "tech_points": "** 现有TTV系统主要基于有声书和播客等自然语音数据训练，难以生成小说创作和游戏制作中所需的虚构角色声音（如龙、恶魔、机器人等），也无法处理如\"低沉雷鸣般的龙吼\"这类基于角色身份而非显式声学属性的描述。此外，声音克隆方法主要针对常规人声设计，对非传统或强风格化声音的克隆鲁棒性不足；指令式声音编辑方法编辑能力有限且难以保持语音质量。更重要的是，生成和编辑通常作为独立系统实现，增加了训练和部署成本。",
-    "metrics": ""
+    "tech_points": "现有TTV系统主要基于有声书和播客等自然语音数据训练，难以生成小说创作和游戏制作中所需的虚构角色声音（如龙、恶魔、机器人等），也无法处理如\"低沉雷鸣般的龙吼\"这类基于角色身份而非显式声学属性的描述。此外，声音克隆方法主要针对常规人声设计，对非传统或强风格化声音的克隆鲁棒性不足；指令式声音编辑方法编辑能力有限且难以保持语音质量。更重要的是，生成和编辑通常作为独立系统实现，增加了训练和部署成本。",
+    "metrics": "- TTV生成：WER 1.22%（最低），Style-ACC 0.66（最高），MOS-C 3.93（开源最高） - 声音克隆（Seed-TTS基准）：WER 1.70%（最低），SIM-o 0.757（开源最高，仅次于闭源SeedTTS） - 角色声音克隆主观：MOS-T 3.93（最高），MO"
   },
   "2608.13831": {
     "id": "2608.13831",
-    "title": "3 VoiceChat-TTS: A Low-Latency Continuous Speech Synthesis Model for Interactive Agents",
+    "title": "VoiceChat-TTS: A Low-Latency Continuous Speech Synthesis Model for Interactive Agents",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-17",
     "code": "https://github.com/NVIDIA-NeMo/Speech",
     "demo": "暂无",
     "contribution": "现有语音语言模型大多局限于轮次式交互，无法支持用户实时打断（barge-in）等全双工行为。近期端到端双工S2S模型虽降低了延迟，但因ASR、打断处理和高质量合成需联合优化，往往牺牲语音质量。本文提出VoiceChat-TTS，一种低延迟、连续、流式的TTS模型，可直接消费LLM文本token流，通过控制token支持显式打断，并在无文本输入时生成静音。模型在保持模块化和高语音质量的同时实现持续响",
-    "tech_points": "** 现有流式TTS系统（如Audio Flamingo 3-Chat、VoXtream、SpeakStream、Qwen3-TTS）主要解决单轮响应内的流式生成，但缺乏全双工交互所需的持续始终在线行为——解码器需在对话时间内保持活跃，无文本时生成静音，并在用户打断时迅速停止。端到端S2S模型虽能降低延迟，但架构复杂且语音质量下降。",
-    "metrics": ""
+    "tech_points": "现有流式TTS系统（如Audio Flamingo 3-Chat、VoXtream、SpeakStream、Qwen3-TTS）主要解决单轮响应内的流式生成，但缺乏全双工交互所需的持续始终在线行为——解码器需在对话时间内保持活跃，无文本时生成静音，并在用户打断时迅速停止。端到端S2S模型虽能降低延迟，但架构复杂且语音质量下降。",
+    "metrics": "- 未见说话人单轮CER：1.00% | WER：2.00% | SECS：0.757 | Squim-MOS：4.380 - 未见说话人四轮CER：1.20% | WER：2.20% | SECS：0.685 | Squim-MOS：4.376 - 见说话人单轮CER：1.20% | WER：2."
   },
   "2608.13602": {
     "id": "2608.13602",
-    "title": "6 Omni-LiveAvatar: Minute-Level Real-Time Streaming Joint Audio-Visual Avatar Generation",
+    "title": "Omni-LiveAvatar: Minute-Level Real-Time Streaming Joint Audio-Visual Avatar Generation",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-17",
     "code": "https://github.com/Aoko955/Omni-LiveAvatar",
     "demo": "暂无",
     "contribution": "现有联合音视频生成模型依赖双向注意力与多步去噪，推理延迟高且仅能生成短视频，无法用于实时长时交互。本文提出Omni-LiveAvatar，首个支持分钟级实时流式联合音视频数字人生成的框架。核心贡献包括：(1) 渐进式自回归蒸馏，将19B参数的双向联合音视频扩散模型LTX-2转化为4步因果生成器，无需辅助稳定机制，在单卡H200上实现33倍加速（21.99 FPS）；(2) 同步音视频长短时记忆机制",
-    "tech_points": "** 现有联合音视频生成模型（如LTX-2、Ovi）依赖双向注意力与多步去噪，推理速度慢且仅能生成短片段。近期工作如OmniForcing和Hallo-Live尝试通过自回归蒸馏实现实时生成，但依赖音频sink token、额外未来音频上下文或外部奖励模型等模态特定补偿手段，而非从本质上解决蒸馏框架的不稳定性。此外，现有方法局限于短片段生成，分钟级流式数字人生成尚未被探索，主要面临三大挑战：大尺度多模态模型蒸馏困难，音频建模与跨模态耦合增加蒸馏难度；跨模态漂移，视觉与音频漂移随时间累积并相互放大；异构语义调度，需协调缓慢变化的视觉上下文与快速变化的语音内容。",
+    "tech_points": "现有联合音视频生成模型（如LTX-2、Ovi）依赖双向注意力与多步去噪，推理速度慢且仅能生成短片段。近期工作如OmniForcing和Hallo-Live尝试通过自回归蒸馏实现实时生成，但依赖音频sink token、额外未来音频上下文或外部奖励模型等模态特定补偿手段，而非从本质上解决蒸馏框架的不稳定性。此外，现有方法局限于短片段生成，分钟级流式数字人生成尚未被探索，主要面临三大挑战：大尺度多模态模型蒸馏困难，音频建模与跨模态耦合增加蒸馏难度；跨模态漂移，视觉与音频漂移随时间累积并相互放大；异构语义调度，需协调缓慢变化的视觉上下文与快速变化的语音内容。",
     "metrics": ""
   },
   "2608.15734": {
     "id": "2608.15734",
-    "title": "2 CineDub: Scaling End-to-End Video Dubbing to Multi-Speaker Dialogues with Coherent Sound Effects",
+    "title": "CineDub: Scaling End-to-End Video Dubbing to Multi-Speaker Dialogues with Coherent Sound Effects",
     "score": 9.0,
     "direction": "语音大模型",
     "date": "2026-08-18",
     "code": "暂无",
     "demo": "https://cinedub2026.github.io",
     "contribution": "CineDub 是一个统一扩散式视频配音框架，直接在未裁剪视频上实现多说话人多轮对话配音，无需人脸裁剪或说话人分离。通过隐式耦合整体条件（ICHC）范式结合语义捆绑转录，将 CineDub-Multi 上 cpWER 降到 13.93%，相对最强基线降低 68.0%；同时扩展出语音+音效联合生成，在 CineDub-SA 上 WER 达 18.65%、Desync 0.19。单说话人 GRID/C",
-    "tech_points": "** 层级式方法（HPMDubbing、AlignDiT、FunCineForge）依赖人脸/嘴唇裁剪、主动说话人检测、说话人分离等多阶段预处理，管线脆弱且训练数据难以规模化；整体式/流式方法（DeepAudio、DeepDubber）直接处理全帧视频，但缺乏细粒度唇形时序对齐，且多说话人场景下存在说话人-话语漂移。现有 V2SA 级联方案还面临幻影语音与声道声学不一致问题。",
-    "metrics": ""
+    "tech_points": "层级式方法（HPMDubbing、AlignDiT、FunCineForge）依赖人脸/嘴唇裁剪、主动说话人检测、说话人分离等多阶段预处理，管线脆弱且训练数据难以规模化；整体式/流式方法（DeepAudio、DeepDubber）直接处理全帧视频，但缺乏细粒度唇形时序对齐，且多说话人场景下存在说话人-话语漂移。现有 V2SA 级联方案还面临幻影语音与声道声学不一致问题。",
+    "metrics": "- GRID：WER 13.27（优于 DeepAudio 19.18），SIM 0.94，MCD-DTW 4.35；零样本 CineDub* WER 10.36 - CHEM：WER 2.21，MCD-DTW 5.03，LSE-C 7.83 - CineDub-Multi：cpWER 13.93%"
   },
   "2608.15910": {
     "id": "2608.15910",
-    "title": "6 Iterative Self-Learning for Expressive Text-to-Speech Synthesis",
+    "title": "Iterative Self-Learning for Expressive Text-to-Speech Synthesis",
     "score": 8.5,
     "direction": "语音大模型",
     "date": "2026-08-18",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "表达性 TTS 采用显式标签控制（如重音、情感）直观可解释，但大规模标注代价高昂。本文提出迭代自学习（ISL）框架：用种子数据训练 Matcha-TTS，冻结后用 Invert-Classify 梯度反演恢复无标注语音的离散情感/重音伪标签，再对合成数据+伪标签数据重训并循环。在词级重音（Naver-Prosody）与语句级情感（ESD）两任务、多档低资源切分下验证，1% 情感切分伪标签 F1 由",
-    "tech_points": "** 显式条件标签控制提供可解释、可定向的表达控制，但情感/重音标注依赖人工听觉判断，大规模获取昂贵且主观性强。现有多数半监督 TTS 解决的是语音-文本配对或转写稀缺，而非表达性标签稀缺；自动分类器方案需针对每个任务/数据集单独设计且跨域适应差。ASR 中的迭代自学习（IPL）被证明行之有效，但尚无工作将其与表达性标签恢复机制结合用于生成式 TTS。",
-    "metrics": ""
+    "tech_points": "显式条件标签控制提供可解释、可定向的表达控制，但情感/重音标注依赖人工听觉判断，大规模获取昂贵且主观性强。现有多数半监督 TTS 解决的是语音-文本配对或转写稀缺，而非表达性标签稀缺；自动分类器方案需针对每个任务/数据集单独设计且跨域适应差。ASR 中的迭代自学习（IPL）被证明行之有效，但尚无工作将其与表达性标签恢复机制结合用于生成式 TTS。",
+    "metrics": "- 伪标签 F1（情感 1%）：0.33 → 0.40 - Emo2vec F1：1% ISL 29.87 vs 控制 26.58 | 5% ISL 49.58 vs 控制 39.38 vs 100%GT 45.95 - TTSDS 总平均：情感 1% 89.90 vs 88.70 | 重音 0.5"
   },
   "2608.15690": {
     "id": "2608.15690",
-    "title": "7 Adding Voice Cloning to Text-to-Audio-Video Models with a Single Zero-Initialised Layer",
+    "title": "Adding Voice Cloning to Text-to-Audio-Video Models with a Single Zero-Initialised Layer",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-18",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "本文针对文生音视频（T2AV）模型无法控制输出说话人身份的问题，提出在音频骨干上仅加一个零初始化的线性层，把预训练 T2AV 模型改造成参考语音克隆模型：参考音频扩散潜变量前置进音频流，冻结 Qwen3-TTS 编码器的全局说话人嵌入经该层以 FiLM 调制目标音频。在基于 VCTK 的 674 对说话人-文本、30 说话人基准上，微调后的 k6a_5b（5B）在三套说话人验证网上的 SECS（E",
-    "tech_points": "** 现有 T2AV 扩散模型（基于 Kandinsky 5.0、LTX-2、3MDiT 等）能按文本合成视频与配乐，却无法控制语音身份。TTS 语音克隆系统（XTTS、Qwen3-TTS 等）虽能克隆音色，但仅生成纯语音、依赖专用说话人分支架构，无法产出对应视频；给 T2AV 模型加此能力需昂贵的从头训练，或进行可能破坏视听先验的架构手术。",
-    "metrics": ""
+    "tech_points": "现有 T2AV 扩散模型（基于 Kandinsky 5.0、LTX-2、3MDiT 等）能按文本合成视频与配乐，却无法控制语音身份。TTS 语音克隆系统（XTTS、Qwen3-TTS 等）虽能克隆音色，但仅生成纯语音、依赖专用说话人分支架构，无法产出对应视频；给 T2AV 模型加此能力需昂贵的从头训练，或进行可能破坏视听先验的架构手术。",
+    "metrics": "- k6a_5b SECS vs reference：ECAPA-TDNN 0.766 / WavLM-SV 0.944 / Resemblyzer 0.866，全部第一，三网平均领先最强基线 Qwen3-TTS 0.6B 达 0.041（Wilcoxon p<10^-89） - 可懂度（k6a_5"
   },
   "2608.16053": {
     "id": "2608.16053",
-    "title": "9 DuplexGen: Decoupling Content, Timing, and Acoustics for Synthetic Dialogue Speech",
+    "title": "DuplexGen: Decoupling Content, Timing, and Acoustics for Synthetic Dialogue Speech",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-18",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "现有对话合成管线先生成内容、再用标记或规则插入重叠/打断/反馈词，时序是\"规定\"而非\"涌现\"。DuplexGen 将内容、时序、声学显式解耦：DeepSeek-V4 生成脚本，两个 Moshi 式 full-duplex 对话模型实时互听执行脚本（时序自然涌现），CosyVoice 无改时序重渲染。FTO Wasserstein 距离由 0.695 降至 0.366（相对降 47%），重叠转变比例",
-    "tech_points": "** 常规方法（Behavior-SD、PersonaPlex 等）依赖对话标记、行为标签或手工时序规则拼接语音，重叠间隔分布坍缩到单一峰值，背离真实对话；而 full-duplex 模型（Moshi、SyncLLM）交互自然但自由生成、无法遵循预设脚本。可控内容与涌现交互难以兼得，二者结合少被探索。本文假设对话生成应按语义、交互、声学三类决策独立解耦，实现零训练管线。",
-    "metrics": ""
+    "tech_points": "常规方法（Behavior-SD、PersonaPlex 等）依赖对话标记、行为标签或手工时序规则拼接语音，重叠间隔分布坍缩到单一峰值，背离真实对话；而 full-duplex 模型（Moshi、SyncLLM）交互自然但自由生成、无法遵循预设脚本。可控内容与涌现交互难以兼得，二者结合少被探索。本文假设对话生成应按语义、交互、声学三类决策独立解耦，实现零训练管线。",
+    "metrics": "- FTO Wasserstein 距离：0.366（拼接基线 0.695，降 47%）；KS 0.197（基线 0.432） - 重叠转变/长尾间隔比例：38.5%/30.8%（真实 42.8%/20.5%） - 重渲染 WER：≤1.7%；说话人一致性（CAM++）：0.82 - 反馈词落于韵律"
   },
   "2608.17492": {
     "id": "2608.17492",
-    "title": "2 FireRedTTS3: Unified Speech Generation and Editing with Semantically Enriched Speech Representations",
+    "title": "FireRedTTS3: Unified Speech Generation and Editing with Semantically Enriched Speech Representations",
     "score": 8.5,
     "direction": "语音大模型",
     "date": "2026-08-19",
     "code": "https://github.com/FireRedTeam/FireRedTTS3",
     "demo": "暂无",
     "contribution": "面向连续自回归TTS（LLM-DiT范式）中误差累积导致的音色漂移、韵律崩塌等问题：现有方案或经VQ量化损失声学细节，或需额外语义模块与多阶段tokenizer训练管道。本文提出FireRedTTS3，在表示层面缓解误差累积：新tokenizer RedAE通过冻结的多任务音频理解编码器对潜空间做语义蒸馏，单阶段GAN训练，无需额外模块；配合轻量LLM-DiT框架，Base变体支持24语言21方言",
-    "tech_points": "** Flow-matching类方法依赖预训练文本编码器、非自回归架构难以下游对齐文本LLM的指令跟随能力；VQ/RVQ类量化方法会在语音编辑等声学敏感任务上产生失真。连续自回归（LLM-DiT）框架把离散token预测改写为潜变量去噪，可复用文本LLM的指令跟随能力，但连续特征处于无界空间，预测误差在自回归步间累积，造成音色漂移与韵律崩塌。此前方案或需额外语义模块/多阶段tokenizer训练（Ming-UniAudio、VibeVoice、dots.tts），或引入FSQ瓶颈增加架构复杂度（VoxCPM），本文旨在以表示级语义增强在保持简单架构的前提下解决该问题。",
-    "metrics": ""
+    "tech_points": "Flow-matching类方法依赖预训练文本编码器、非自回归架构难以下游对齐文本LLM的指令跟随能力；VQ/RVQ类量化方法会在语音编辑等声学敏感任务上产生失真。连续自回归（LLM-DiT）框架把离散token预测改写为潜变量去噪，可复用文本LLM的指令跟随能力，但连续特征处于无界空间，预测误差在自回归步间累积，造成音色漂移与韵律崩塌。此前方案或需额外语义模块/多阶段tokenizer训练（Ming-UniAudio、VibeVoice、dots.tts），或引入FSQ瓶颈增加架构复杂度（VoxCPM），本文旨在以表示级语义增强在保持简单架构的前提下解决该问题。",
+    "metrics": "- Seed-TTS-Eval平均：WER/CER 3.04%（最低）、SIM 78.8%（最高），Test-ZH SIM 80.9%、Test-EN SIM 77.2%，优于 dots.tts(Pre.)(3.14/78.7)、VoxCPM2(3.65/76.7) 等 - MiniMax-MLS-"
   },
   "2608.21378": {
     "id": "2608.21378",
-    "title": "7 sanoTTS: The Smallest Real-Time Neural TTS on a General-Purpose Microcontroller",
+    "title": "sanoTTS: The Smallest Real-Time Neural TTS on a General-Purpose Microcontroller",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-08-25",
     "code": "https://github.com/Ampixa/saanotts",
     "demo": "暂无",
     "contribution": "针对 Piper/VITS 这类约 15M 参数的优质神经 TTS 面向 Linux 级设备、无法在通用单片机（MCU）上实时合成的问题，本文提出 sanoTTS，一个从 VITS 条件 VAE 教师蒸馏出的确定性学生堆栈，无需神经加速器即可在通用 MCU 上运行到 22.05kHz PCM。部署图仅 567,008 参数，两个 int8 blob 共 679,832 字节；在 ESP32-S3 ",
-    "tech_points": "** 面向 MCU 时参数量只回答了一半问题：模型还须在未见文本上保持可用质量，并在设备算力/内存内完成合成。已有工作边界不统一：TinyTTS 使用 NPU；TinyVocos 仅测声码器而非完整 TTS；SlimTTS 报告了 562k 参流水线但未在物理 MCU 上执行。作者主张知识蒸馏比单纯剪枝更能迁移教师行为，并对完整神经路径在实体 MCU 上计时。",
-    "metrics": ""
+    "tech_points": "面向 MCU 时参数量只回答了一半问题：模型还须在未见文本上保持可用质量，并在设备算力/内存内完成合成。已有工作边界不统一：TinyTTS 使用 NPU；TinyVocos 仅测声码器而非完整 TTS；SlimTTS 报告了 562k 参流水线但未在物理 MCU 上执行。作者主张知识蒸馏比单纯剪枝更能迁移教师行为，并对完整神经路径在实体 MCU 上计时。",
+    "metrics": "- 参数量：嵌入式 567,008；质量级 1,454,284 / 1,834,380 - ESP32-S3：最终 0.22x 实时，峰值 arena 约 289KB，全程约 45 MMAC/秒音频 - ESP32-C3（无FPU）：整数流水线后 5.72x 实时（离线） - 质量（diverse2"
   },
   "2608.22186": {
     "id": "2608.22186",
-    "title": "10 AudioNoisePrints: Model-free audio watermarking using spatial correlation in flow matching TTS",
+    "title": "AudioNoisePrints: Model-free audio watermarking using spatial correlation in flow matching TTS",
     "score": 7.0,
     "direction": "语音大模型",
     "date": "2026-08-25",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "针对flow matching/扩散TTS水印的\"事后\"嵌入需额外算力、损伤音质且易遭覆盖攻击，\"模型内\"水印需重训生成模型的问题，本文提出 AudioNoisePrints，首次将图像领域 NoisePrints 思想迁移到语音合成：利用 FM/扩散模型中初始高斯噪声与生成输出间显著的余弦相关性，生成时仅替换初始噪声即完成\"模型无关\"打标，零推理开销、不重训TTS、不损音质。在 F5-TTS 与",
-    "tech_points": "** 扩散/FM模型虽推动了高保真语音合成，但生成内容缺乏可靠溯源水印。post-hoc 水印（如 AudioSeal）带来额外计算与延迟，且存在\"音质-鲁棒性\"根本权衡，并易受覆盖攻击；in-model 水印需重训整个生成模型，训练昂贵且可能降低生成质量。图像领域已证明潜在扩散模型中生成图像与初始噪声存在显著空间相关（NoisePrints），但尚无工作将其应用于语音合成模型。",
-    "metrics": ""
+    "tech_points": "扩散/FM模型虽推动了高保真语音合成，但生成内容缺乏可靠溯源水印。post-hoc 水印（如 AudioSeal）带来额外计算与延迟，且存在\"音质-鲁棒性\"根本权衡，并易受覆盖攻击；in-model 水印需重训整个生成模型，训练昂贵且可能降低生成质量。图像领域已证明潜在扩散模型中生成图像与初始噪声存在显著空间相关（NoisePrints），但尚无工作将其应用于语音合成模型。",
+    "metrics": "- F5-TTS，AAC压缩准确率：CosSim 0.987、检测器 0.9947、AudioSeal 1.0 - 强增强（裁剪、变速）：AudioNoisePrints 显著胜出，AudioSeal 在1%音速变化即完全失效 - 距离函数消融：余弦 0.988 > 点积 0.986 >> L2 0"
   },
   "2608.23791": {
     "id": "2608.23791",
-    "title": "3 EmoTra-TTS: Smooth Intra-Utterance Emotion Transitions for Speech Synthesis",
+    "title": "EmoTra-TTS: Smooth Intra-Utterance Emotion Transitions for Speech Synthesis",
     "score": 7.0,
     "direction": "语音大模型",
     "date": "2026-08-26",
@@ -337,7 +337,7 @@
   },
   "2608.24579": {
     "id": "2608.24579",
-    "title": "2 Visually-Guided Spatial Audio Generation for 360° In-the-Wild Speech Scenes",
+    "title": "Visually-Guided Spatial Audio Generation for 360° In-the-Wild Speech Scenes",
     "score": 7.0,
     "direction": "语音前端",
     "date": "2026-08-26",
@@ -349,7 +349,7 @@
   },
   "2608.25404": {
     "id": "2608.25404",
-    "title": "1 CSAVocoder: A Causal Spatial Audio Vocoder Towards Real-Time Spatial Audio Generation",
+    "title": "CSAVocoder: A Causal Spatial Audio Vocoder Towards Real-Time Spatial Audio Generation",
     "score": 7.0,
     "direction": "语音大模型",
     "date": "2026-08-27",
@@ -361,7 +361,7 @@
   },
   "2608.28970": {
     "id": "2608.28970",
-    "title": "6 Diagnose, Then Refine: A Closed-Loop TTS System with AudioLLM-Guided Correction",
+    "title": "Diagnose, Then Refine: A Closed-Loop TTS System with AudioLLM-Guided Correction",
     "score": 7.0,
     "direction": "语音大模型",
     "date": "2026-08-29",
@@ -369,11 +369,11 @@
     "demo": "暂无",
     "contribution": "当前TTS系统多为开环单次生成，易在局部产生错位重音、不自然停顿、语调扁平化等韵律缺陷，而语句级指标往往无法暴露此类问题。本文提出LoopTTS闭环TTS框架，采用Filter-Judge-Refiner流水线：由AudioLLM Judge对初版语音进行诊断并输出结构化修正指令，再由细粒度指令跟随TTS模型Refiner基于初版语音、目标文本与指令做受控重合成。为训练Refiner构建了42K条",
     "tech_points": "",
-    "metrics": ""
+    "metrics": "- 恢复质量（人工主观评测）：LoopTTS修正后的音频显著优于原始生成音频 - 开环重生成对比：LoopTTS的恢复质量优于直接重生成基线 - 韵律指令跟随：Refiner在重音与停顿的目标韵律修改上指令跟随能力优于基线TTS"
   },
   "2608.30325": {
     "id": "2608.30325",
-    "title": "12 Sequential Trajectories and Simultaneous Blending: Multi-Emotion Modeling for Instruction-Following TTS",
+    "title": "Sequential Trajectories and Simultaneous Blending: Multi-Emotion Modeling for Instruction-Following TTS",
     "score": 7.0,
     "direction": "语音大模型",
     "date": "2026-08-31",
@@ -381,102 +381,102 @@
     "demo": "暂无",
     "contribution": "现有情感TTS仅建模单一语句级情感，无法控制多情感。本文提出HybridEmo框架，针对两种互补任务——情感轨迹（有序情感阶段序列）和情感混合（多种情感共存于同一语句）——先SFT初始化再通过GRPO对齐语音token策略。轨迹分支使用分段对齐一致性（平均+最弱阶段证据）维护阶段完整性，混合分支使用基于GMM的奖励。在MultiEmo-Test上显著提升轨迹正确性和混合强度，人类评测优于CosyV",
     "tech_points": "",
-    "metrics": ""
+    "metrics": "- 轨迹正确性：HybridEmo显著优于基线 - 混合强度：HybridEmo显著优于基线 - 说话人相似度：无明显退化 - 人类偏好：优于CosyVoice 3 和 EmoVoice-0.5B，与Qwen3-TTS持平"
   },
   "2609.01016": {
     "id": "2609.01016",
-    "title": "2 Phrase-Localized Language-Contrastive Guidance: Training-Free Localized Accent Control for Code-Switching Text-to-Speech",
+    "title": "Phrase-Localized Language-Contrastive Guidance: Training-Free Localized Accent Control for Code-Switching Text-to-Speech",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-09-01",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "语音合成处理语码转换（code-switching）时，常使外语短语带上主语言口音。本文提出短语定位的语言对比引导（LCG），一种免训练的推理框架，用每个区域各自的语言引导替换整句单一语言引导，为语码转换短语恢复母语口音。配套提出自注意力探测技术，无需外部对齐即可定位短语边界。在多样语言对上稳健提升短语母语度、抑制口音泄漏，并保持说话人身份与自然度。",
-    "tech_points": "** 交叉语言 TTS 的语码转换中，外语短语常以主语言口音发音。主流方案需多语言训练数据或外部对齐，成本高且约束强。",
-    "metrics": ""
+    "tech_points": "交叉语言 TTS 的语码转换中，外语短语常以主语言口音发音。主流方案需多语言训练数据或外部对齐，成本高且约束强。",
+    "metrics": "- 短语母语度：稳健提升 - 口音泄漏：有效抑制 - 说话人相似度与自然度：保持"
   },
   "2609.02623": {
     "id": "2609.02623",
-    "title": "4 Scalable Direction-Following TTS via Voice Impression-Guided Pseudo Triplet Construction",
+    "title": "Scalable Direction-Following TTS via Voice Impression-Guided Pseudo Triplet Construction",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-09-02",
     "code": "暂无",
     "demo": "https://ntt-hilab-gensp.github.io/IS2026pseudo/",
     "contribution": "本文提出 direction-following TTS 任务：给定脚本、参考语音（pre-mod）与自然语言表演指示，生成保持说话人身份和文本内容、且风格按指示方向改变的新语音（post-mod）。针对缺乏(参考语音、指示、修改语音)三元组训练数据的难题，提出基于印象可控TTS与LLM的可扩展伪三元组构建流水线，得到350,617个伪三元组（127.6小时）。风格精调器基于rectified f",
-    "tech_points": "** 大规模零样本TTS语料每条脚本通常只有一次朗读，缺少对\"相对风格修改\"的刻画；即使有小规模重复朗读语料，也缺少描述修改意图的方向文本。这一稀缺性制约了扩散/流式生成模型及跨说话人鲁棒的说话人保持型风格变换。",
-    "metrics": ""
+    "tech_points": "大规模零样本TTS语料每条脚本通常只有一次朗读，缺少对\"相对风格修改\"的刻画；即使有小规模重复朗读语料，也缺少描述修改意图的方向文本。这一稀缺性制约了扩散/流式生成模型及跨说话人鲁棒的说话人保持型风格变换。",
+    "metrics": "- UTMOS自然度：Full条件 seen 2.96±0.01 / unseen 2.97±0.01，与pre-mod基线(2.95/2.97)相当，无明显退化 - LLM方向对齐评分（1-5）：Full seen 3.79±0.01 / unseen 3.24±0.02；Recorded 3.7"
   },
   "2609.01723": {
     "id": "2609.01723",
-    "title": "6 Hearing the Whispers: Black-Box Membership Inference Attacks on Finetuned TTS Models",
+    "title": "Hearing the Whispers: Black-Box Membership Inference Attacks on Finetuned TTS Models",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-09-01",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "该论文首次针对现代生成式 TTS 模型提出黑盒成员推断攻击（MIA）框架，在说话人级和记录级两个粒度上审计隐私泄露。方法上，作者刻画了 TTS 双条件输入（文本+参考语音）的查询空间并提出两条评估准则，发现\"复述查询\"（Recitation）最有效；在表征工程中，采用 WavLM 多层级特征结合改进的 DTW 时序对齐和 LSTM 评分器。在 CosyVoice2、F5-TTS、XTTS-v2 三",
-    "tech_points": "** 现有黑盒 MIA 对生成模型采用\"查询生成+表征工程\"两阶段流水线，但 TTS 的双条件输入（文本+参考语音）产生了巨大的未探索查询空间，且语音的多层级特性与时序变异性导致低层声学特征（Mel谱、MFCC）无法捕捉成员推断信号。",
-    "metrics": ""
+    "tech_points": "现有黑盒 MIA 对生成模型采用\"查询生成+表征工程\"两阶段流水线，但 TTS 的双条件输入（文本+参考语音）产生了巨大的未探索查询空间，且语音的多层级特性与时序变异性导致低层声学特征（Mel谱、MFCC）无法捕捉成员推断信号。",
+    "metrics": "- 说话人级 MIA AUC（CosyVoice2 on VCTK）：0.980 - 说话人级 MIA AUC（CosyVoice2 on British Dialect）：接近 1.0 - 说话人级 MIA AUC（XTTS-v2 on VCTK）：0.841 / British Dialect："
   },
   "2609.03992": {
     "id": "2609.03992",
-    "title": "7 Alignment-Free Text-Audiobox for Voice Dubbing and Full-Duplex Dialogue Synthesis",
+    "title": "Alignment-Free Text-Audiobox for Voice Dubbing and Full-Duplex Dialogue Synthesis",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-09-03",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "Text-AB是统一的语音生成框架，同时支持跨语言配音、全双工对话与情绪化对话合成（Mono/Stereo两种变体）。核心三点：用DAC-VAE将48kHz语音压缩为25Hz低帧率隐变量（约1920倍压缩率）；去对齐设计，直接用mT5文本编码器+交叉注意力连接文本与语音，去掉强制对齐与时长预测；模型与数据规模提升到3B参数/48万小时。配音人评全面超越内部工业系统，短对话接近真人录音（人类相似度仅",
-    "tech_points": "** 定向配音的级联ASR→MT→TTS管线中TTS是瓶颈，旧Audiobox依赖强制对齐与显式时长预测，时长回归器易欠拟合、对齐误差在口语/噪声场景严重伤害性能；全双工对话合成需联合建模对话上下文与轮次动态而非单轮独白拼接。",
-    "metrics": ""
+    "tech_points": "定向配音的级联ASR→MT→TTS管线中TTS是瓶颈，旧Audiobox依赖强制对齐与显式时长预测，时长回归器易欠拟合、对齐误差在口语/噪声场景严重伤害性能；全双工对话合成需联合建模对话上下文与轮次动态而非单轮独白拼接。",
+    "metrics": "- 配音人评（相对内部系统）：可分享性+0.40/+0.38，音色自然度+0.39/+0.45 - 规模消融：配音WER 44.45%(300M)→13.98%(3B)；SpkSim 0.64→0.76 - 短对话vs GT人类相似度仅差-0.09；长对话相对内部系统+0.86 - 情绪对话：愤怒S"
   },
   "2508.12001": {
     "id": "2508.12001",
-    "title": "14 FNH-TTS: Mixture-of-Experts Duration Modeling for Robust Neural Speech Synthesis",
+    "title": "FNH-TTS: Mixture-of-Experts Duration Modeling for Robust Neural Speech Synthesis",
     "score": 7.0,
     "direction": "语音大模型",
     "date": "2025-08-16",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "针对NAR-TTS中音素时长预测不准确、难以刻画说话人个性化韵律，以及复杂韵律导致声码器合成谱不和谐的问题，提出FNH-TTS。核心是将MoE首次引入时长预测器（MoE-DP），并用VOCOS声码器配合CoMBD与SBD双判别器应对高复杂度韵律。在LJSpeech/VCTK上MOS达4.48/4.63，Libri460韵律预测准确率67.07%，CPU/GPU RTF较HiFiGAN快约7.6/1",
-    "tech_points": "** NAR依赖显式Duration Predictor对齐序列，现有DP无法捕捉上下文相关及说话人特有的时长变化，且MAS等对齐标签并非真值；同时实验发现韵律信息越多样，HiFiGAN在频谱上产生的\"不和谐成分\"越严重，成为合成质量瓶颈。",
-    "metrics": ""
+    "tech_points": "NAR依赖显式Duration Predictor对齐序列，现有DP无法捕捉上下文相关及说话人特有的时长变化，且MAS等对齐标签并非真值；同时实验发现韵律信息越多样，HiFiGAN在频谱上产生的\"不和谐成分\"越严重，成为合成质量瓶颈。",
+    "metrics": "- MOS：LJSpeech 4.48、VCTK 4.63（VITS原版4.26/4.34、F5-TTS 3.87/4.49） - 韵律准确率（Libri460）：67.07%（F5-TTS仅11.17%） - RTF：CPU 0.046、GPU 0.0046（HiFiGAN为0.352/0.007"
   },
   "2609.04250": {
     "id": "2609.04250",
-    "title": "1 Motion-Omni: End-to-End Joint Speech and Full-Body Motion for Spoken Dialogue",
+    "title": "Motion-Omni: End-to-End Joint Speech and Full-Body Motion for Spoken Dialogue",
     "score": 9.0,
     "direction": "语音大模型",
     "date": "2026-08-28",
     "code": "GitHub 与 Hugging Face（论文注明 Code and data available）",
     "demo": "https://step-out.github.io/Motion-Omni-Page/",
     "contribution": "口语对话模型（SDM）只能产出语音而不能产出伴随动作，语音驱动动作模型则无法规划对话应答，常规级联方案需在音频完成后再做一次完整动作推理，且动作目标无法反向更新语音与对话参数。本文提出 Motion-Omni，首个原生端到端输出面部表情与手、上体、下体全身动作的口语对话框架，动作直接从产出语音的 Speech Generator 隐状态生成。以 Qwen2.5-7B-Instruct 为骨干的 M",
-    "tech_points": "** 级联方案存在两大结构性代价：动作模型在音频生成完成后要执行第二次独立推理；运动目标永远无法更新语音或对话参数。近年口语运动模型也未完全解决该问题。核心挑战有三：语音与动作处于异构帧率（12.5 Hz 语音单元 vs 30 Hz 动作）、共享参数时两条损失互相干扰，且没有大规模一致嗓音的运动监督与公开评测基准。",
-    "metrics": ""
+    "tech_points": "级联方案存在两大结构性代价：动作模型在音频生成完成后要执行第二次独立推理；运动目标永远无法更新语音或对话参数。近年口语运动模型也未完全解决该问题。核心挑战有三：语音与动作处于异构帧率（12.5 Hz 语音单元 vs 30 Hz 动作）、共享参数时两条损失互相干扰，且没有大规模一致嗓音的运动监督与公开评测基准。",
+    "metrics": "- WER：Motion-Omni-Q7 2.62%，Omni-modal LLM 中最低（Qwen2.5-Omni 2.72、Ex-Omni 2.67） - VoiceBench Overall：47.63（LLaMA-Omni 41.12、Ex-Omni 43.57、Moshi 29.51） -"
   },
   "2609.04828": {
     "id": "2609.04828",
-    "title": "5 ProLombard: Structured Multi-Scale Modeling for Normal-to-Lombard Speech Conversion",
+    "title": "ProLombard: Structured Multi-Scale Modeling for Normal-to-Lombard Speech Conversion",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-09-04",
     "code": "暂无",
     "demo": "暂无",
     "contribution": "常规语音到 Lombard 语音转换（N2L）旨在噪声环境下提升语音可懂度，但现有方法仅在语句级或帧级建模 Lombard 效应，忽略了其层级结构及其与说话人身份、音素级内容纠缠的本质，导致说话人表征中 Lombard 泄漏、内容特征分离不彻底。本文提出 ProLombard，一种结构化多尺度 N2L 框架，在语句级、音素级和帧级三个时间尺度上显式建模 Lombard 效应：设计对齐说话人编码器（",
-    "tech_points": "** 现有解耦式 N2L 方法（如 PGD-N2L、LombardTokenizer）面临两大瓶颈。其一为 Lombard-说话人纠缠：预训练说话人确认模型以身份判别为目标而非去除风格变化，导致 Lombard 信息残留在说话人嵌入中（Lombard 泄漏）；对抗式或互信息式解耦缺少显式跨风格对齐监督，在说话人稀缺的低资源场景下难以兼顾身份保持与解耦。其二为 Lombard-内容纠缠：Lombard 效应随音素变化（共振峰位移、元音时长延长），帧级解耦无法覆盖；现有音素级方法多用外部模型分割后做简单池化，分割边界不可靠且会损伤内容保真。",
-    "metrics": ""
+    "tech_points": "现有解耦式 N2L 方法（如 PGD-N2L、LombardTokenizer）面临两大瓶颈。其一为 Lombard-说话人纠缠：预训练说话人确认模型以身份判别为目标而非去除风格变化，导致 Lombard 信息残留在说话人嵌入中（Lombard 泄漏）；对抗式或互信息式解耦缺少显式跨风格对齐监督，在说话人稀缺的低资源场景下难以兼顾身份保持与解耦。其二为 Lombard-内容纠缠：Lombard 效应随音素变化（共振峰位移、元音时长延长），帧级解耦无法覆盖；现有音素级方法多用外部模型分割后做简单池化，分割边界不可靠且会损伤内容保真。",
+    "metrics": "- LMUSHRA（EMALG）：ProLombard 72.40±1.90，优于 CycleGAN 69.37、PGD-N2L 61.41（真实 Lombard 93.31） - QMUSHRA：82.01±1.59，优于 PGD-N2L 74.25、StarGAN 69.94 - F0RMSE "
   },
   "2609.04455": {
     "id": "2609.04455",
-    "title": "12 Brain2Speech-Net: Intelligible, Real-Time Brain-to-Speech Synthesis Without Text Decoding",
+    "title": "Brain2Speech-Net: Intelligible, Real-Time Brain-to-Speech Synthesis Without Text Decoding",
     "score": 8.0,
     "direction": "语音大模型",
     "date": "2026-09-03",
     "code": "https://b2s-lang.github.io/",
     "demo": "暂无",
     "contribution": "针对瘫痪或 ALS 患者失去语音能力的问题，speech BCI 需从皮层神经信号直接合成语音。现有级联式\"脑→文本→语音\"系统推理延迟高（RTF 大于 1.6）且错误逐级累积；直接预测离散语音单元的方法在脑内数据不足 6 小时时缺乏语言结构先验，产出不可懂语音。本文提出 Brain2Speech-Net，首个在有限数据下保持可懂且超实时的单阶段神经-语音框架：以可微音素瓶颈（帧级音素后验）保留语",
-    "tech_points": "** 级联范式先解码文本再由独立 TTS 合成，强 LM 先验可能覆盖神经证据而非修正之，多级处理既抬高延迟又使后端继承且无法恢复前端错误。speech BCI 脑内数据极度稀缺，纯端到端大词表训练困难；而直接声学单元方法在小样本下因缺显式语言结构而不可懂。",
-    "metrics": ""
+    "tech_points": "级联范式先解码文本再由独立 TTS 合成，强 LM 先验可能覆盖神经证据而非修正之，多级处理既抬高延迟又使后端继承且无法恢复前端错误。speech BCI 脑内数据极度稀缺，纯端到端大词表训练困难；而直接声学单元方法在小样本下因缺显式语言结构而不可懂。",
+    "metrics": "- 闭集 PER：0.109，DSU 基线 0.758，NTS-Cascade 0.078（+LLM 重排 0.069） - 闭集 WER 0.068、MCD 4.632，优于 DSU（1.011/6.004） - 开集 PER/WER：0.373/0.472，显著优于 DSU（0.785/1.05"
   }
 }
