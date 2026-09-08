@@ -10,15 +10,30 @@ OUTPUT_DIR = BASE_DIR / ".skills" / "speech-paper-daily" / "output"
 KB_DIR = Path(__file__).resolve().parent
 MIN_SCORE = 7.0
 
-# 子方向标签：arXiv标题关键词 -> 子方向
+# 子方向标签：arXiv标题关键词 -> 子方向（按顺序优先匹配）
 SUBTAG_RULES = [
-    (re.compile(r"\b(TTS|Text-to-?Speech|speech synthesis|dubbing|voice cloning|voice conversion)\b", re.I), "TTS"),
-    (re.compile(r"\b(ASR|speech recognition|transcription|inverse text normalization|endpoint)\b", re.I), "ASR"),
-    (re.compile(r"\b(codec|tokenizer|vector quantiz|vocoder|speech unit)\b", re.I), "Codec"),
-    (re.compile(r"\b(Speech Language Model|SLM|audio language model|Audio LM|LLM|large audio)\b", re.I), "SpeechLM"),
-    (re.compile(r"\b(speech enhancement|noise suppression|denois|dereverberat|super-resolution|band.?width extension)\b", re.I), "Enhancement"),
-    (re.compile(r"\b(separation|source separation|speaker extraction|target speaker|diariz)\b", re.I), "Separation"),
-    (re.compile(r"\b(voiceprint|speaker verification|speaker recognition|speaker identification|emotion|deepfake|spoof|watermark)\b", re.I), "Speaker/Verification"),
+    # 合成 / 克隆 / 说话人转换
+    (re.compile(r"\b(TTS|Text-to-?Speech|text-to-?voice|speech synthes|dubbing|voice cloning|voice conversion|speech conversion)\b", re.I), "TTS"),
+    # 语音/音频生成与编辑
+    (re.compile(r"\b(speech|voice|audio) (generation|editing|design|designer|synthesis)\b|\b(TTS|dubbing|duplex|dialogue) (synthesis|generation)\b|\b(audio.?visual|avatar|scene|singing|voice.?singing) (generation|synthesis)\b|\b(synthetic|spoken) (speech|dialogue|dialog|voice)\b", re.I), "TTS"),
+    # ASR / VAD / 端点检测 / 关键词
+    (re.compile(r"\b(ASR|speech recognition|transcription|inverse text normalization|endpoint|voice activity|VAD|turn.?aware|turn.?based|turn.?taking|turn action|keyword spot\w*)\b", re.I), "ASR"),
+    # Codec / Tokenizer / 声码器
+    (re.compile(r"(codec|tokeniz|speech.?token|audio.?encoder|speech cod|vector quantiz|vocoder|speech.?unit|waveform)", re.I), "Codec"),
+    # 语音大模型相关术语
+    (re.compile(r"(\bSpeech Language Model\w*|\bLarge Language Model\w*|\bslm\b|\bLLMs?\b|\bLALMs?\b|\bAudio LM\b|\baudio lms?\b|\blarge audio\b|audio.?language|audio.?understand|audio.?comprehension|audio.?grounded|audio.?representation|audio.?learn)", re.I), "SpeechLM"),
+    # 理解 / 评测 / 安全 / 说话人身份之外的大模型主题
+    (re.compile(r"\b(caption\w*|benchmark\w*|challenge\w*|retrieval|reasoning|ground(ed|ing|s)?|paralinguistic|sentiment|privacy|safety|voice agent\w*|speech agent\w*|duplex|conversational|summar\w*|assessment|understanding)\b", re.I), "SpeechLM"),
+    # MOS / 音质评估
+    (re.compile(r"\b(MOS|mean opinion|quality assessment|listening test|speech quality)\b", re.I), "SpeechLM"),
+    # 前端增强 / 降噪 / 波束 / 空间处理
+    (re.compile(r"\b(speech enhancement|audio enhancement|noise suppression|noise control|noise cancellation|active noise|acoustic echo|echo cancel|super-?resolution)\b|\bsuper-?resolut|\bband.?width|\bdereverberat|\bdenois|\benhanc|\brestorat|\bbeamform|\bdirection.?of.?arrival|\bambisonic", re.I), "Enhancement"),
+    # 分离 / 说话人提取
+    (re.compile(r"\bseparat|\bspeaker extraction|\btarget speaker|\btarget sound|\bdiariz", re.I), "Separation"),
+    # 说话人识别 / 认证 / 伪造检测
+    (re.compile(r"\bvoiceprint|\bspeaker verif|\bspeaker recogni|\bspeaker identif|\bspeaker represent|\bemotion|\bdeepfake|\bspoof|\bwatermark|\bmanipulat|\bdeceiv|\bevasion|\bimpersonat|\banti-spoof", re.I), "Speaker/Verification"),
+    # Whisper 类模型归入 ASR
+    (re.compile(r"\bwhisper", re.I), "ASR"),
 ]
 
 # 主方向文件映射
@@ -76,22 +91,42 @@ def parse_output_files(output_dir: Path):
     return papers
 
 
+# 需要路径映射的跨主方向子标签集合
+UNDERSTANDING_TAGS = ("SpeechLM", "Speaker/Verification")
+
+
+def normalize_direction(direction: str, title: str = "") -> str:
+    """把编辑侧方向标签归一化为 语音大模型 / 语音前端。"""
+    d = direction or ""
+    if "语音大模型" in d:
+        return "语音大模型"
+    if "语音前端" in d:
+        return "语音前端"
+    if title and re.search(r"\b(separat|speaker extraction|target speaker|enhanc|denois|dereverberat|diariz|band.?width)\b", title, re.I):
+        return "语音前端"
+    return "语音大模型"
+
+
 def subtag(title: str, direction: str) -> str:
     """按标题关键词推断子方向标签。"""
-    if direction in ("语音大模型", "语音前端"):
-        for pat, tag in SUBTAG_RULES:
-            if pat.search(title):
-                return tag
+    for pat, tag in SUBTAG_RULES:
+        if pat.search(title):
+            return tag
     return "Other"
 
 
 def pick_file(direction: str, tag: str) -> Path:
     """选择目标方向文件。"""
-    for main, files in MAIN_DIRS.items():
-        if direction == main:
-            for fname, f_tag in files.items():
-                if f_tag == tag:
-                    return Path(__file__).parent / fname
+    main = normalize_direction(direction)
+    for fname, f_tag in MAIN_DIRS[main].items():
+        if f_tag == tag:
+            return Path(__file__).parent / fname
+    for other in (m for m in MAIN_DIRS if m != main):
+        for fname, f_tag in MAIN_DIRS[other].items():
+            if f_tag == tag:
+                return Path(__file__).parent / fname
+    if tag in UNDERSTANDING_TAGS:
+        return Path(__file__).parent / "speech_lm_understanding.md"
     return Path(__file__).parent / "other_related.md"
 
 
@@ -117,27 +152,26 @@ BUCKETS = {name: [] for name in ALL_FILES}
 
 
 def incremental_update(papers: dict):
-    """基于 .cache/<fname>.json 增量重写受影响方向文件。
+    """基于全量语料重写各方向文件。
 
-    首次运行 .cache 不存在时为全量构建。每次运行后刷新对应缓存，
-    使后续增量只需合并新论文即可，丢弃的条目（评分低于阈值不再出现）自然移除。
+    解析输出会返回完整语料，因此每次构建都以 new_papers 为准重排各文件，
+    缓存文件仅作为历史记录保留（不再作为合并依据），
+    评分低于阈值的条目自然移除。
     """
     cache_dir = KB_DIR / ".cache"
     cache_dir.mkdir(exist_ok=True)
     new_papers = {k: v for k, v in papers.items() if v["score"] >= MIN_SCORE}
     for fname in ALL_FILES:
-        cf = cache_dir / f"{fname}.json"
-        cached = {}
-        if cf.exists():
-            cached = json.loads(cf.read_text(encoding="utf-8"))
-        merged = dict(cached)
-        for k, v in new_papers.items():
-            if pick_file(v["direction"], subtag(v["title"], v["direction"])).name == fname:
-                merged[k] = v
+        merged = {
+            k: v
+            for k, v in new_papers.items()
+            if pick_file(v["direction"], subtag(v["title"], v["direction"])).name == fname
+        }
         ordered = sorted(merged.values(), key=lambda x: (-x["score"], x["date"]))
         parts = [f"# {fname.replace('.md', '').replace('_', ' ').upper()}（按评分降序）", "", f"共 {len(ordered)} 篇", ""]
         parts.extend(e for en in ordered for e in [render_entry(en), "---"])
         (KB_DIR / fname).write_text("\n".join(parts) + "\n", encoding="utf-8")
+        cf = cache_dir / f"{fname}.json"
         cf.write_text(json.dumps(merged, ensure_ascii=False, indent=2), encoding="utf-8")
 
 

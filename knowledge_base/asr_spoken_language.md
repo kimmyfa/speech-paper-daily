@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 29 篇
+共 37 篇
 
 ## [2 The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -9,6 +9,15 @@
 - **关键技术点**：** 现有端点检测路线（VAD+静音超时、下游分类器、或与识别器联合训练）都只间接获取"语义完整度"这一本应收音机副产品，且各开源/商用系统均未披露训练方法与标注规程。核心发现在于：用离线语料训练流式决策会系统性违反因果性——离线 clip 被强制对齐切成"说话即结束"，标签依赖决策点之后的音频（未来信息），作者称之为 clairvoyant 标签，会造成训练振荡和虚假的"召回-精度 Pareto 前沿"。
 - **主要指标**：
 - **代码**：https://github.com/19PINE-AI/turn-aware-asr | **Demo**：https://01.me/research/turn-aware-asr
+
+---
+## [3 Cocktail-Talker: Multi-Speaker Dialog Modeling in Noisy Social Environments with Turn Action GRPO](https://arxiv.org/abs/2607.27756)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：9/10 | **日期**：2026-07-30
+- **一句话贡献**：现实社交环境中语音助手需在多人对话和背景噪音中决定是否响应、继续倾听还是忽略。本文提出Cocktail-Talker，基于Qwen2.5-Omni-7B的语音LLM框架，通过三种行动token（respond/listen/ignore）建模助手的对话行为。使用Cocktail-DialogGen数据管道模拟14,400个独特对话、72,000个带噪音频混合物（约1,280小时），涵盖18种see
+- **关键技术点**：** 现有语音对话系统假设干净的双人交互环境，用户话语直接面向助手。但真实社交场景中多人同时说话、背景噪音存在，每个话语可能面向助手、其他说话人或完全无关。助手需要决定是否回应、继续倾听还是忽略。这是一个多说话人-单助手的口语对话建模问题，目前缺乏系统性解决方案。
+- **主要指标**：
+- **代码**：https://github.com/xi-j/Cocktail-Talker | **Demo**：暂无
 
 ---
 ## [1 ParaASR: Multi-Token Prediction for Fast and Long-Context LLM-Based ASR](https://arxiv.org/abs/2607.29279)
@@ -110,6 +119,15 @@
 - **代码**：https://github.com/windskylionheart1023/Score_Rank_Confidence_Estimation_Module | **Demo**：暂无
 
 ---
+## [5 Normal-Anchored MAML for Whisper Fine-Tuning for Cleft Lip and Palate Speech](https://arxiv.org/abs/2608.00186)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-08-04
+- **一句话贡献**：唇腭裂（CLP）患者的语音在声学和发音上存在显著变异性，导致标准ASR系统识别性能严重下降。本文提出Normal-Anchored FOMAML（一阶模型无关元学习）框架，对Whisper进行CLP语音微调，旨在提升不同严重程度CLP语音的识别公平性。内层使用正常语音作为锚定支持集，外层使用不同严重程度的CLP语音。在NMCPC和AIISH数据集上，正常语音WER 4.40%，轻度CLP 5.53
+- **关键技术点**：** CLP语音因腭裂导致发音器官结构异常，在声学和发音上与典型语音差异显著，且不同个体的严重程度和发音模式差异大。标准微调方法训练的模型在CLP语音上表现差，且难以泛化到不同CLP群体。公平性问题：ASR设备对病理语音的识别能力显著下降，影响医疗和辅助通信应用。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [6 Latent Softmax for Data-Efficient Phoneme-Based Multilingual ASR](https://arxiv.org/abs/2608.01281)
 
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-08-04
@@ -117,6 +135,24 @@
 - **关键技术点**：** 多语言ASR中，声调语言（如中文普通话）的标注包含声调信息（如ma1, ma2, ma3, ma4），而非声调语言（如英语）只标注基元音（如AE, IY等）。标准softmax输出层将两者视为独立类别会导致：(1) 带调元音类别数膨胀（约4倍），稀释了跨语言共享；(2) 非声调语言无法利用带调语言的精细标注。如果合并声调，则声调语言失去必要的区分度。
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [10 TurnFSM for Full-Duplex Dialogue System: Internalizing State-Machine Logic for Streaming Semantic Voice Activity Detection and Utterance-Level Rejection](https://arxiv.org/abs/2609.04240)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-08-05
+- **一句话贡献**：全双工语音助手需在持续播放语音的同时监听用户输入，实时处理打断、流式分工和无效输入拒绝。现有端到端方案会让模型在下游推理能力上退化，级联流水线则引入额外推理开销和手工状态机控制逻辑。本文提出 TurnFSM，一种基于 LLM 的流式控制状态预测框架，将级联管线的外部决策逻辑内化为显式有限状态转移（Start、Silence、Listen、Submit、Accept、Reject 六态），并设计一阶
+- **关键技术点**：** 现有全双工系统分两类：端到端统一建模（如 Moshi、GLM-4-Voice）接口简洁、天然处理重叠，但语音域适配会损害预训练文本推理与工具调用能力；工业级联管线（声学 VAD、语义 VAD、话语级拒绝逐级串联）稳健但引入额外开销、级间误差传播和手工状态机。折中方案是在共享流式骨干上加双预测头，但两任务决策准则异构，平行标签会在共享表征上产生梯度冲突。TurnFSM 的出发点即消除这种多任务耦合。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [5 Audio-to-Score Transcription using Pre-trained Features, Data Augmentation, and SheetSage-A2S Dataset](https://arxiv.org/abs/2608.06165)
+
+- **方向**：音乐transcription | **子方向**：ASR | **评分**：8/10 | **日期**：2026-08-06
+- **一句话贡献**：现有音频到乐谱（A2S）系统主要聚焦古典音乐，流行音乐应用严重缺乏数据集和方法探索。本文提出SheetSage-A2S数据集（61小时音频，9468个**kern乐谱片段，来自6066首流行歌曲，为首个真实录音的流行音乐A2S数据集），并引入MuQ预训练特征提取模型和数据增强（音高偏移±3半音+时间伸缩0.9-1.1×）改进A2S方法。在古典Quartets上SER从15.3%降至4.98%（相对
+- **关键技术点**：** 现有A2S数据集全部依赖合成音频（MIDI+虚拟乐器渲染），无法泛化到真实录音。流行音乐A2S完全未被探索。此外，缺乏预训练模型和数据增强等常规ML技术的应用，限制了A2S性能天花板。
+- **主要指标**：
+- **代码**：https://github.com/Multimodal-Music-Research-Lab/SheetSage2Kern_model | **Demo**：暂无
 
 ---
 ## [1 X2-Turn: Frame-Synchronous Dual-Head Modeling for Joint Streaming ASR and Turn State Prediction](https://arxiv.org/abs/2608.10878)
@@ -160,6 +196,15 @@
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-08-18
 - **一句话贡献**：提出无需训练的"缓存 LLM 概率检索"ASR 重打分方法：离线用本地 teacher LLM（Qwen2.5-0.5B/Qwen3-8B）对背景文本打分并缓存上下文-目标 token 概率，识别时通过查表、短上下文回退与选择性直接打分获得语言先验。在 6 类 ASR 模型、39 项全数据配置中 28 项优于 1-pass 解码（Whisper-large-v3 与 SpeechBrain 上收益
 - **关键技术点**：** 直接让 LLM 逐句自回归重打分 N-best 列表代价高昂（延迟、内存与部署复杂度）；GER/KD 虽能降低运行时成本但需配对监督数据、参数训练及额外适配流程。现有检索/缓存 LM 仅存储计数或最近邻嵌入，语言先验弱。论文旨在识别前将 LLM 转化为可复用、本地的打分资源，无需改动声学模型。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [7 A Multiplication-Free Feature Extractor for Signal Classification: Keyword Spotting Case Study](https://arxiv.org/abs/2608.17108)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-08-19
+- **一句话贡献**：关键词唤醒（KWS）需要极低复杂度的信号分类链，而MFCC含FFT、DCT与对数等乘法运算、CNN特征提取器计算量大，难以部署于超低功耗TinyML平台。本文提出完全无乘法的next iRDT特征提取器，仅依赖加减、比较等能量高效算术运算。在Google KWS 12类数据集上，配合baseline分类器其准确率与MFCC/CNN特征提取器相当，换用另一分类器达到94.7%验证准确率；CPU处理时
+- **关键技术点**：** KWS是TinyML的典型应用，要求信号分类链复杂度极低。主流特征提取器（MFCC的FFT/DCT/对数/滤波组、CNN方案的乘加密集算子）依赖大量乘法运算，在无硬件乘法器、内存受限的MCU上代价高昂，是超低功率部署的主要瓶颈。
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
 
@@ -236,10 +281,28 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [3 Attention-Guided Reliability Scaling for Contrastive Decoding in Robust Audio-Visual Speech Recognition](https://arxiv.org/abs/2608.26213)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-08-26
+- **一句话贡献**：LLM驱动的音视频语音识别（AVSR）在噪声场景下具有鲁棒性，但固定强度的对比解码（CD）面临"鲁棒性-干净语音"权衡：强干预利于恶劣噪声却会在干净条件下过度纠正可靠预测。本文提出基于可靠性感知的CD自适应缩放：在同一LLM内分别以"纯音频"与"音频+视觉"条件化作为弱/强对比分支，并按token依据注意力动态与跨分支预测分歧度动态调制对比强度，三者经乘法融合得到权重因子。在LRS3上，该方法使L
+- **关键技术点**：** 近年LLM式AVSR（如Llama-AVSR）借助大模型的语音先验在噪声下表现优异，但模型对音频模态存在过度依赖：声学输入严重退化时仍倾向沿用音频线索，而视觉信息本可纠正这些错误。对比解码原本是让弱模型与强模型在推理时互相对比以稳定LLM生成。本文将CD引入AVSR：以同一模型的音频条件化为Amateur、音频+视觉条件化为Expert。任何固定对比权重都无法同时适配干净与强噪声环境（robustness-clean speech trade-off），这是本文要解决的核心问题。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [14 Anchoring Speech with Semantics: A Multimodal Adapter Mechanism for Automatic Speech Recognition in Low-Resource Languages](https://arxiv.org/abs/2608.29239)
 
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-08-29
 - **一句话贡献**：低资源语音识别因稀缺转录样本为解码端生成提供很少监督证据而长期困难。本文提出 SAMA-ASR，一种轻量多模态适配器机制：解码时用辅助翻译派生的语义锚和来自语音的声学锚共同调节解码器隐状态，在词符预测前融合语句级语义与语音双模态证据。在两个各 30 小时的台湾闽南语与客家语语料上，SAMA-ASR 超越纯声学、先前提示式及纯语义翻译引导三类基线。
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [7 Stride-k Subsampling: Train-Free Audio Token Reduction for Whisper](https://arxiv.org/abs/2608.30927)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-08-31
+- **一句话贡献**：Whisper编码器将语音映射为固定1500个音频token，该接口已成为ASR解码器与Whisper类语音语言模型（SpeechLM）的默认表示，但其冗余性鲜被研究。本文提出stride-k下采样：一种无需训练的确定性索引操作，在卷积stem或编码器Transformer之后仅保留每第k个token。五种Whisper规模下k=2在stem与编码器输出两处均保持基线WER，CKA归因该稳定性源于
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
@@ -258,6 +321,15 @@
 
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-08-31
 - **一句话贡献**：本文提出一种面向FPGA硬件实现、不可学习的可编程音频-脉冲编码器，并与简单前馈SNN分类器联合设计，以基于定量脉冲活动的硬件无关指标评估全管线能效。在脉冲编码的Heidelberg Digits上，该前馈网络以99.77%的分类准确率刷新该基准的神经形态Sota，并首次实现TIMIT数据集的端到端脉冲编码与评估。
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [15 Parallel Time-Band Mixing with Learned Observation-Adding for Robust ASR Front-Ends](https://arxiv.org/abs/2608.30326)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-08-31
+- **一句话贡献**：面向鲁棒ASR的语音增强前端通常依赖循环时序与跨频带模块，串行依赖限制了并行效率。本文提出基于并行时-频带混合器（PTBM）块的序列并行频带分离增强前端：PTBM将频带内时序混合与逐帧跨频带注意力统一于单一并行架构，消除块内循环展开，并引入学习型观测叠加（LOA）抑制ASR敏感伪影。以冻结Whisper为后端在DNS Challenge与CHiME-4上验证，前端网络仅需0.96M参数、0.58 
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
