@@ -84,6 +84,42 @@ def _make_sample_tree(tmp_path):
     return tmp_path / "out"
 
 
+def _render_digest(aid, title, score, metrics, direction="语音大模型", date="2026-09-01"):
+    return f"""# {date} 语音论文速递
+
+## 语音大模型
+
+## [1] {title}
+
+**arXiv ID**：{aid} | **方向**：{direction}
+
+**作者**：A, B
+**发布日期**：{date} | **论文**：https://arxiv.org/abs/{aid} | **PDF**：https://arxiv.org/pdf/{aid}.pdf | **代码**：https://github.com/x/tts | **Demo**：暂无
+
+### 📌 简介
+本文提出{title}。
+
+### 🔧 技术方案
+
+**问题背景：** 现有方案慢。
+
+**模型架构：** Transformer。
+
+### 📊 实验结果
+**数据集**：LibriTTS
+
+**主要指标**：
+{metrics}
+
+**是否开源**：开源
+
+### ⭐ 评分：{score}/10
+评分理由：ok.
+
+---
+"""
+
+
 def test_parse_output_files(tmp_path):
     out = _make_sample_tree(tmp_path)
     papers = parse_output_files(out)
@@ -98,8 +134,28 @@ def test_filter_score(tmp_path):
     out = _make_sample_tree(tmp_path)
     papers = parse_output_files(out)
     selected = {k: v for k, v in papers.items() if v["score"] >= MIN_SCORE}
-    assert list(selected.keys()) == ["2609.00001"]
+    assert set(selected.keys()) == {"2609.00001"}
     assert papers["2609.00002"]["score"] == 5.0
+
+
+def test_parse_dedup_keeps_higher_score(tmp_path):
+    out = tmp_path / "out"
+    variants = [
+        ("2026-09-01", 7, "WER：1.5"),
+        ("2026-09-03", 9, "WER：0.8"),
+    ]
+    for date, score, metrics in variants:
+        src = out / date
+        src.mkdir(parents=True)
+        (src / f"speech_paper_{date.replace('-', '')}.md").write_text(
+            _render_digest("2609.00001", "ExampleTTS", score, metrics, date=date),
+            encoding="utf-8",
+        )
+    papers = parse_output_files(out)
+    assert len(papers) == 1
+    assert papers["2609.00001"]["score"] == 9.0
+    assert "WER：0.8" in papers["2609.00001"]["metrics"]
+    assert papers["2609.00001"]["date"] == "2026-09-03"
 
 
 def test_subtag():
