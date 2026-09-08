@@ -329,7 +329,7 @@ Audio-Side Time Prompt将时间戳嵌入穿插在音频特征序列中，使用�
 
 ```bash
 cd /Users/kimmy/Desktop/Vagent_app/SpeechAIResercher
-git add papers/YYYY-MM-DD/
+git add papers/YYYY-MM-DD/ knowledge_base/
 git commit -m "Daily Speech Papers Update - YYYY-MM-DD"
 git push origin main
 ```
@@ -338,8 +338,8 @@ git push origin main
 
 ### 第五步：同步语音论文知识库
 
-生成并推送速递后，同步语音论文知识库：
+在第四步 git commit 之前，先更新知识库：
 
 1. 运行 `python3 knowledge_base/build_kb.py`（读取全量速递，过滤评分 ≥ 7 分论文，重建知识库各方向文件）
-2. 确认 `knowledge_base/_index.json` 已更新（total_papers 变化）
-3. 将 `knowledge_base/` 一并加入 git commit 与 push（与速递同一次推送）
+2. 确认 `knowledge_base/_index.json` 已更新（`generated_at` 变为当前日期）
+3. 回到第四步，在 git add/commit 中同时包含 `papers/YYYY-MM-DD/` 与 `knowledge_base/`，一次性 commit 与 push

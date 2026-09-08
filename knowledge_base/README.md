@@ -16,10 +16,10 @@
 
 ## 构建与更新
 
-- 构建知识库：`python3 knowledge_base/build_kb.py`（解析历史速递，过滤评分 ≥ 7 分）
-- 重新构建会基于全量速递覆盖重建所有方向文件（`.cache/` 为历史记录）
+- 构建知识库：`python3 knowledge_base/build_kb.py`（解析全量速递，过滤评分 ≥ 7 分）
+- 重建会覆盖所有方向文件（`.cache/` 为历史记录，不入库）
 - 全局索引：`knowledge_base/_index.json`
-- 每日速递后的自动同步集成正在开发中（计划见 docs/superpowers/plans/）
+- 每日速递流程（speech-paper-daily 第五步）在速递 commit 前自动运行构建，知识库随速递一并提交推送
 
 ## 检索
 
