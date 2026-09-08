@@ -1,0 +1,74 @@
+{
+  "2608.14516": {
+    "id": "2608.14516",
+    "title": "8 Singer-Informed Vocal Source Separation for Multi-Singer Music Mixtures",
+    "score": 7.0,
+    "direction": "语音前端",
+    "date": "2026-08-17",
+    "code": "https://github.com/jocelynxu01/singer-separation-paper",
+    "demo": "暂无",
+    "contribution": "现有音乐源分离系统通常提取单一歌声轨道，无法区分多歌手混合中的不同歌手。本文提出一种歌手感知的歌声源分离框架，利用目标歌手的短时长注册录音提取歌手嵌入向量，通过特征拼接或特征线性调制（FiLM）条件化分离模型，使其聚焦目标歌手并抑制干扰。基于DAMP-VSEP数据集构建了含质量过滤和非重叠注册段的二重唱数据集。实验表明：在二重唱场景下，基线方法的target-singer SI-SDR仅为0.33",
+    "tech_points": "** 传统音乐源分离系统（如Open-Unmix、Demucs、Spleeter）将混合信号中的所有人声视为单一源，提取的是\"所有歌声之和\"而非特定歌手。在多歌手场景（如二重唱）中，歌声在时频域高度重叠，传统模型无法区分不同歌手。语音领域的说话人提取（如SpeakerBeam、VoiceFilter、SpEx+）已证明注册音频引导分离的有效性，但将其迁移到歌声面临两大挑战：一是缺乏含干净人声和多歌手混合的标注数据集；二是歌声在音高、音色和表达方式上的变化远大于语音，使条件化过程更加困难。",
+    "metrics": ""
+  },
+  "2608.17972": {
+    "id": "2608.17972",
+    "title": "8 Target Speaker Identification: A Low-Latency Streaming Pipeline",
+    "score": 7.0,
+    "direction": "语音前端",
+    "date": "2026-08-19",
+    "code": "暂无",
+    "demo": "暂无",
+    "contribution": "本文面向助听器中目标说话人识别的极低延迟需求（听者能感知低至 10 ms 的处理延迟），提出一套由开源预训练模型构建的实时流式识别流水线。系统采用两阶段方案：先由流式说话人分割（Diart）对音频按说话人切分，再用说话人验证模型（Pyannote）与预先注册的目标说话人段比对，判断其是否活跃。在 This American Life 博客数据集 17 个 episode 上，以 100 ms 二进",
+    "tech_points": "** 助听器用户在多人说话与背景噪声场景下放大语音质量下降，近半数用户对噪声环境表现不满；便携麦克风方案需额外配件且成本高。现有在线说话人分割系统延迟达 500–1000 ms，低于助听器播放路径亚 10 ms 的延迟要求。作者因此提出\"信号式\"方案：把识别结果作为音频播放路径之外的控制信号，只决定放大算法在说话人切换时的自适应速度，而不增加听者感知延迟。",
+    "metrics": ""
+  },
+  "2608.22111": {
+    "id": "2608.22111",
+    "title": "1 FlowSep 2: Self-Supervised Flow Matching for Language-Queried Audio Source Separation",
+    "score": 8.0,
+    "direction": "语音前端",
+    "date": "2026-08-25",
+    "code": "暂无",
+    "demo": "https://audio-agi.github.io/Flowsep2-demo/",
+    "contribution": "现有 LASS 方法多为判别式掩码估计模型，在声音高度重叠的复杂声学场景下会过抑制目标源或分离不完整。本文提出 FlowSep2，将整流流匹配（Rectified Flow Matching）与扩散 Transformer（DiT）结合，在 Stable-Audio VAE 潜在空间中从高斯噪声直接生成目标源表征，条件为混合音频潜在表示与 FLAN-T5 文本嵌入，并引入 Self-Flow 自监",
+    "tech_points": "** 判别式 LASS（LASS-Net、AudioSep）从混合频谱估计时频掩码，重叠事件下掩码易产生过抑制或选择性不足，造成谱空洞与不完整分离；PIT/MixIT 等通用分离依赖类别选择模块、扩展性差；SAM-Audio 用生成式框架但依赖大规模私有数据，无法复现与系统分析。",
+    "metrics": ""
+  },
+  "2608.24659": {
+    "id": "2608.24659",
+    "title": "1 REDnet: Recursive Encoder and Decoder for Speech Separation under Unknown Number of Speakers and Variable Number of Microphones",
+    "score": 7.0,
+    "direction": "语音前端",
+    "date": "2026-08-26",
+    "code": "暂无",
+    "demo": "暂无",
+    "contribution": "实际麦克风阵列场景中说话人数量与麦克风数量往往事先未知。REDnet 采用递归编码器和解码器结构，摆脱了对固定说话人数与固定通道数的依赖，同时解决\"说话人数量未知\"与\"麦克风数量可变\"两大问题，在多个公开数据集上实现领先性能。",
+    "tech_points": "",
+    "metrics": ""
+  },
+  "2608.28661": {
+    "id": "2608.28661",
+    "title": "8 Neural Multichannel Distant Speaker Diarization and Source Separation with Beta Speaker Activity Prior",
+    "score": 7.0,
+    "direction": "语音前端",
+    "date": "2026-08-21",
+    "code": "暂无",
+    "demo": "暂无",
+    "contribution": "远场说话人日志在混响、噪声、说话人数目动态变化与重叠语音等条件下仍是极具挑战的问题。本文面向模型驱动方法 neural FCASA，提出贝叶斯日志模型：为说话人活动引入 Beta 先验，推导出可视为\"带正则的连续活动度得分\"的变分下界目标函数，替代原始交叉熵损失训练日志模型。在 AMI 数据集上，该方法相较基线实现 DER 绝对下降至少 3%（相对 16%）、JER 绝对下降至少 4%（相对 20",
+    "tech_points": "",
+    "metrics": ""
+  },
+  "2609.03481": {
+    "id": "2609.03481",
+    "title": "3 Geometric Ceilings on Time-Frequency Masking for Single-Channel Separation",
+    "score": 8.0,
+    "direction": "语音前端",
+    "date": "2026-09-03",
+    "code": "暂无",
+    "demo": "暂无",
+    "contribution": "论文给出时频掩码分离这一主流格式的精确\"天花板\"：任意实增益估计器的最优解是源到混合谱线的正交投影，残差由源-混合夹角θ决定且不可被训练消除。构造四层嵌套算子类与先验三大假设建立对应，证明MMSE估计的缺口恰为预言增益的后验方差。在MUSDB18上，非循环高斯混合先验的后验均值距逐帧上限仍差11.44 dB。",
+    "tech_points": "** 主流单通道分离（Wiener滤波、IRM、IBM、Open-Unmix等）都在每个t-f bin对混合乘一个实数增益，估计只能落在ℝ线上；现有oracle掩码本身只是该类的普通成员，离类最优值仍差数dB，无法作为类上界。作者从算子而非估计器出发判断类归属。 **理论方法：** 构建四层嵌套实线性算子链ℳ₁⊂ℳ₂⊂ℳ₃⊂ℳ₄（实掩码→复掩码→逐bin线性映射→跨频耦合全矩阵），分别对应放弃零均值、循环性、频间独立三项先验假设。天花板最优实增益m⋆=Re(sx̄)/|x|²，残差为能量加权sin²θ平均。关键定理：相位后验对称时MMSE=预言增益均值的实掩码，缺口=|x|²Var(m⋆|x)",
+    "metrics": ""
+  }
+}

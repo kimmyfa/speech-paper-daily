@@ -1,0 +1,98 @@
+{
+  "2608.05727": {
+    "id": "2608.05727",
+    "title": "2 LILAC: An Idempotent Neural Speech Codec",
+    "score": 9.0,
+    "direction": "语音大模型",
+    "date": "2026-08-06",
+    "code": "https://github.com/Rick-McCoy/lilac-codec",
+    "demo": "https://rick-mccoy.github.io/lilac-demo",
+    "contribution": "现有神经音频编解码器不是幂等的——12 个基线系统在单次解码-重编码周期中平均至少重写 15% 的 token，多次循环后质量严重退化。LILAC 是首个在设计上保证幂等的全卷积 24kHz 语音编解码器（0.75 kbit/s, 9.375Hz），利用可逆分析变换（可逆 1×1 卷积 + 加性耦合块）和有限标量量化（FSQ）实现结构级幂等性保证。在 LibriSpeech 和 LibriTTS-",
+    "tech_points": "** 神经编解码器作为 token 接口在语音生成管线中广泛使用，但重编码解码输出会导致 token 漂移：EnCodec 一次循环后仅 80.5% token 一致，Mimi 32.9%，FocalCodec 10.9%，DAC 1.7%。现有方法（Code Drift, ICASSP 2025）通过辅助损失缓解但无法消除。",
+    "metrics": ""
+  },
+  "2608.06424": {
+    "id": "2608.06424",
+    "title": "3 Multi Codec Discrete Diffusion Model for Text Guided Speech Inpainting and Editing",
+    "score": 8.0,
+    "direction": "语音大模型",
+    "date": "2026-08-05",
+    "code": "https://github.com/iftachShoham/SIEDD",
+    "demo": "暂无",
+    "contribution": "语音修复（inpainting）和编辑（editing）需要在不完全重新合成整个语音的情况下重建或修改缺失/错误区域。离散扩散天然适合该任务，因为它能迭代精炼 mask token 同时联合条件于左右声学上下文。SIEDD 提出分层多码本离散扩散框架 HiCoDD，遵循 RVQ 粗到细生成顺序，将先前生成的 codebook 表示为干净承诺声学上下文，仅对当前精炼 codebook 应用扩散。在 ",
+    "tech_points": "** 语音编辑中，自回归编解码器语言模型按固定因果顺序生成，无法同时利用左右上下文，早期错误会传播。离散扩散可同时条件于双边上下文并反复精炼，但简单将所有 RVQ codebook 扁平化处理会忽略粗到细的层次依赖。",
+    "metrics": ""
+  },
+  "2608.25404": {
+    "id": "2608.25404",
+    "title": "1 CSAVocoder: A Causal Spatial Audio Vocoder Towards Real-Time Spatial Audio Generation",
+    "score": 7.0,
+    "direction": "语音大模型",
+    "date": "2026-08-27",
+    "code": "暂无",
+    "demo": "暂无",
+    "contribution": "现有神经声码器扩展到空间音频时往往出现空间质量下降，且难以满足实时性要求。CSAVocoder 提出基于因果 GAN 的空间音频声码器，通过空间适配器与空间一致性判别器实现空间保真度与音频质量的联合优化，在大规模数据集上验证其同时具备高空间保真度、有竞争力的音频质量与实时推理性能。",
+    "tech_points": "",
+    "metrics": ""
+  },
+  "2608.31037": {
+    "id": "2608.31037",
+    "title": "10 Language-Statistical Analysis of Neural Audio Codec Tokens Across Architectures, Corpora, and Noise Conditions",
+    "score": 7.0,
+    "direction": "语音大模型",
+    "date": "2026-08-31",
+    "code": "暂无",
+    "demo": "暂无",
+    "contribution": "神经音频编解码器（NAC）将语音转为离散token序列，此前研究声称其服从类语言统计定律。本文对13个NAC（覆盖多码本残差量化RVQ、单码本VQ与非VQ三类架构）在三个语料库、干净/白噪声/真实DEMAND噪声三种条件下系统估计Zipf与Heaps参数、unigram熵、码本占用率及JSD。结果显示：语料身份对各指标解释力极低，声学条件与量化器元类别按指标差异主导，unigram熵与元类别关联最",
+    "tech_points": "",
+    "metrics": ""
+  },
+  "2608.31035": {
+    "id": "2608.31035",
+    "title": "11 When Does Predictor-Based RL Align with Human Perception? A Study of Subjective Rewards in Codec-Based Speech Language Models",
+    "score": 7.0,
+    "direction": "语音大模型",
+    "date": "2026-08-31",
+    "code": "暂无",
+    "demo": "暂无",
+    "contribution": "本文系统研究了基于预测器的强化学习（RL）奖励在编解码器语音语言模型中对齐人类感知的条件。使用 GRPO 算法，以动漫风格、自然度、喜好度和唤醒度四个主观预测器作为奖励，并引入 CER 区域约束防止转录漂移。实验发现：各奖励主要优化自身指标，不可互换；Best-of-8 重排在感知上与 GRPO 相当，表明 GRPO 本质是将奖励选择行为摊销到策略中，而非统一优于重排。",
+    "tech_points": "",
+    "metrics": ""
+  },
+  "2606.02739": {
+    "id": "2606.02739",
+    "title": "1 EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement",
+    "score": 9.0,
+    "direction": "语音大模型",
+    "date": "2026-06-01",
+    "code": "https://github.com/luckyerr/EntangleCodec",
+    "demo": "暂无",
+    "contribution": "现有音频分词器难以同时支撑理解与生成：重建导向codec声学保真但语义匮乏，语义导向分词器多采用语义/声学双流结构造成冗余与错位。EntangleCodec提出在量化前通过CLIP式对比学习，将音频与LLM生成的多维rich caption对齐，把语义-声学信息纠缠进单一共享表征流，并配Rectified Flow扩散解码器。重建UTMOS 3.96接近专用codec（Xcodec2 4.02）；",
+    "tech_points": "** 音频语言模型需要既语义丰富又声学保真的离散token，但重建导向与语义导向两类tokenizer各执一端；后者多采用独立语义流+双编码器，需要后期融合，且监督多为ASR文本，丢失说话人、情感、韵律、声场与音乐结构等非文本语义。作者认为双流分离是冗余的根源，主张在单编码器内于量化前一次性纠缠语义与声学。",
+    "metrics": ""
+  },
+  "2609.03107": {
+    "id": "2609.03107",
+    "title": "10 CRAW: Codec Robust Audio Watermarking",
+    "score": 8.0,
+    "direction": "语音大模型",
+    "date": "2026-09-02",
+    "code": "https://github.com/DavidC1212/craw",
+    "demo": "https://davidc1212.github.io/craw-audio-samples/",
+    "contribution": "语音克隆技术使合成语音日益以假乱真，现有后验式音频水印在神经编解码器与降噪器下几乎全部失效。本文提出CRAW，在TimbreWatermark基础上用四项互补组件解决鲁棒性与保真度矛盾：扩宽的失真层（含FACodec再合成）、Q-Former式注意力池化、PESQ梯度推理期感知掩蔽、以及Rep3纠错码。CRAW在FACodec/EnCodec/TiCodec上F1达0.982/0.987/0.82",
+    "tech_points": "** O'Reilly与RAW-Bench证实现有后验式水印（WavMark、AudioSeal等）在低码率神经编解码器或降噪器下检测率塌缩趋近随机，因为\"再合成\"变换整体重建波形而水印信号幅度远低于语音主体；生成式水印虽构造鲁棒却无法对已存在音频水印。CRAW目标是在后验范式内同时获得对神经再合成攻击的鲁棒性与高感知保真度。",
+    "metrics": ""
+  },
+  "2609.03363": {
+    "id": "2609.03363",
+    "title": "13 PACodec: A Low-bitrate Neural Speech Codec with Parallel Additive Vector Quantization",
+    "score": 8.0,
+    "direction": "语音大模型",
+    "date": "2026-09-03",
+    "code": "暂无",
+    "demo": "https://anonymity225.github.io/PACodec/",
+    "contribution": "针对RVQ顺序依赖导致码编解码器码率难以下降的问题，提出并行加性矢量量化（PAVQ）的低码率神经语音编解码器PACodec。PAVQ采用\"全局—局部—全局\"设计，多个独立VQ并行量化同一全局特征、结果相加聚合。PACodec仅用4个码本大小为128的VQ即实现1.4 kbps（16kHz）与4.2 kbps（48kHz）码率，在同等音质前提下较基线省流约30%，参数量仅6.7M为所有模型中最小。",
+    "tech_points": "** 主流神经语音编解码器皆采用残差矢量量化（RVQ），VQ间顺序依赖、逐级细化使得进一步降低码率困难，且不利于语音解耦任务。HiFi-Codec的GRVQ按通道分组引入部分并行但仍有RVQ依赖，SQCodec的FSQ需超大码本。PACodec从量化结构入手，用并行加性聚合替代残差迭代。",
+    "metrics": ""
+  }
+}
