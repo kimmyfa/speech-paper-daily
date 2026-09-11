@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 37 篇
+共 41 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -81,6 +81,15 @@
 - **关键技术点**：现有 ASR 后门均为短语级投毒，产生两类结构性伪迹：大量重复的固定转录（可被频率统计或转录过滤识别）、触发附于非语音区（可被 Silero 等 VAD 直接裁剪）。作者指出 ASR 词表远超 1 万类且输出为变长序列，后门抑制（梯度上升式 unlearning）会把概率质量按 softmax 梯度重新分配给与目标 token 高对齐的"runner-up"簇，结构性地损害干净识别，且词表越大、几何拥挤越严重。
 - **主要指标**：- 无防御下 GhostWord 平均攻击成功率：89.3%（跨 2 语言 4 模型） - BadNet/Blended 无防御 97.4%，经转录去重后降为 0.0% - GhostWord 对转录去重/VAD 免疫：攻击率仍约 83–93.5% - 最优防御 ANP/i-BAU/SAU 下降至 
 - **代码**：https://github.com/rohban-lab/GhostWord | **Demo**：暂无
+
+---
+## [Candor-LR: A Dyadic Conversational Dataset for Audio-Visual Speech Recognition](https://arxiv.org/abs/2609.10394)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：9/10 | **日期**：2026-09-11
+- **一句话贡献**：本文构建了 Candor-LR，一个基于 1656 场自然双人视频会议的 AVSR 对话基准，提供 713.5/10.1/60.1 小时训练/验证/测试数据。作者设计定制清洗流水线，用 Speechmatics 词级时间戳驱动分割、人脸对齐与质量过滤。实验表明脚本式数据训练模型在真实对话上性能骤降，视觉信息与域内数据显著提升鲁棒性，并开源处理流水线。
+- **关键技术点**：现有 AVSR 基准（LRS2/LRS3）基于脚本化、排练式广播语音，无重叠语音、无打断、声学环境单一，高分不保证真实对话鲁棒性；低 WER 常来自数据集模式与语言建模而非真实视觉表征。WildVSR、LRS-VoxMM 等虽趋于真实，但缺乏对话规模。
+- **主要指标**：- 零样本：AV-HuBERT 在 LRS3 AO 1.95/AV 1.47，Candor-LR AO 24.32/AV 22.76；Llama-AVSR Candor-LR AO 16.92、AV 16.92；Auto-AVSR-L Candor-LR AV 16.69 - 干净域内：LRS3 训
+- **代码**：https://github.com/rishabhjain16/lipreading-data-guide/tree/main/Candor | **Demo**：暂无
 
 ---
 ## [Phoenix-VAD: Streaming Semantic Endpoint Detection for Full-Duplex Speech Interaction](https://arxiv.org/abs/2509.20410)
@@ -242,6 +251,33 @@
 - **一句话贡献**：面向重症卒中后构音障碍（dysarthria）患者的单人ASR生产场景，本工作首次系统对比7种LoRA家族PEFT变体（LoRA、QLoRA、AdaLoRA、DoRA、LoHA、VeRA、VB-LoRA）在Whisper-large-v3+匈牙利微调与Qwen3-ASR-1.7B两个生产基座上的效果。注意力投影适配显著降低CER，三种子配对bootstrap证明LoRA与DoRA统计无差异（13.
 - **关键技术点**：per-patient adapter是临床构音障碍ASR的生产架构（单个患者独立训练小适配器、基座不动），但说话人相关小数据端PEFT变体选型从未被系统研究；既有工作（Wagner等AdaLoRA、Ankita等LoHA）均为说话人无关条件，speaker重叠正是per-patient场景的定义属性。
 - **主要指标**：- Whisper-large-v3+HUFT零样本 CER 29.46%，LoRA r=16 三种子平均 13.86±0.07%（相对降低52.8%） - DoRA r=16 13.90±0.07%，配对bootstrap无显著差异（Δ+0.03pp，CI[-0.17,+0.25]，p=0.79）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [X2Streaming-ASR: wait when uncertain, emit when ready for streaming ASR](https://arxiv.org/abs/2609.08672)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-08
+- **一句话贡献**：针对实时语音代理与全双工对话场景，流式 ASR 需提供低 commit 延迟的准确 partial 结果。现有系统多采用固定 chunk、固定 look-ahead 或目标延迟，未显式优化"在单遍硬 commit 约束下每个输出位置该等多少额外上下文"。本文提出 X2Streaming-ASR，将流式识别解耦为"何时 commit"与"commit 什么"，三阶段训练首先建立流式识别能力，再用自动
+- **关键技术点**：流式 ASR 的核心矛盾是准确率与延迟的权衡：等待更多上下文可降低歧义但增加延迟，过早输出则需回改。主流方案（固定 chunk 的 Transformer/Conformer streaming、可配置 chunk size、固定帧数 look-ahead、MRT/min-ALG 等最小延迟训练）均为全局统一的延迟-准确率折中，无法逐输出位置自适应决策，尤其在"硬 commit 单遍输出"约束下（一旦发出不可修正）如何按位置动态决定等待时长仍是开放问题。
+- **主要指标**：- 平均字符级 commit 延迟：27-84ms（vs 基线 409-585ms，约一个数量级降低） - AISHELL-1/3 上取得最佳流式 CER，且延迟显著更低
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Orukeet: Multilingual ASR with Frozen Gabor Kernels](https://arxiv.org/abs/2609.10054)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：Orukeet 以 NVIDIA Parakeet TDT 0.6B v3 为基座，用全局拟合的最优 12,288 个 Gabor 函数替换其编码器中一半的时间深度卷积核并冻结，其余参数在多语种/多口音数据上继续训练。在 25 语言 20,146 条 FLEURS 上 pooled WER 由 11.01% 降至 9.85%（相对降幅 10.6%），25 种语言中 23 种更优，且在 LibriS
+- **关键技术点**：端到端 ASR 模型中蕴含大量冗余参数，能否在不改变架构、不加任何推理开销的前提下提升多语种识别？现有可学习前端（LEAF、SincNet）把解析滤波器放在模型最前端，本文思考将确定性信号处理结构嵌入编码器内部，替代已学习的时间滤波器，验证"冻结的解析结构"是否能在适配后带来增益。
+- **主要指标**：- FLEURS pooled WER（20,146 条）：11.01% → 9.85%（相对 -10.6%）；language macro WER 11.07% → 9.96% - LibriSpeech test-clean WER 1.53% → 1.46%；test-other 3.14% 
+- **代码**：https://github.com/Oruk-AI/orukeet | **Demo**：https://huggingface.co/oruk/orukeet
+
+---
+## [Source-Adaptive Data Curation for Bilingual NVV-Aware ASR](https://arxiv.org/abs/2609.09929)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：本文提出中英双语 NVV-aware ASR 系统，参赛 ISCSLP 2026 NVVSpeech Challenge Track 1（16 类非语言发声事件在线内标注与转写）。基于 Whisper-medium（769M）通过 checkpoint 兼容词表重映射实现词元与 NVV 标签统一自回归解码，并用"源自适应数据治理"策略（公开语料增广+多模态大模型过滤+影视媒体 NVV 挖掘）构建训
+- **关键技术点**：笑声、叹息、呼吸、咳嗽等非语言发声（NVV）携带情感与交互信息，传统 ASR 常丢弃或归为通用符号；NVV-aware ASR 需在单一转录中同时给出词元内容、NVV 类别及转录相对位置，中英双语下难度进一步加大。现有公开语料声学多样性有限、标注质量不一。
+- **主要指标**：- FinalScore：33.32 → 53.61（+20.29）；中文 34.05 → 55.45；英文 32.59 → 51.76 - 中文 F1_micro 0.3325 → 0.5666；mNTD 0.6602 → 0.4443 - 单类：英/中分别提升 14/16、15/16 类；EN 
 - **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 80 篇
+共 95 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -407,6 +407,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [CAD: Conflict-Aware Decoding to Mitigate Cross-Modal Hallucinations in Omnimodal Large Language Models](https://arxiv.org/abs/2609.04247)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-08-26
+- **一句话贡献**：全模态大语言模型（Omni-LLM）统一建模音频、视频与文本，但不同模态间的信息串扰会导致跨模态幻觉。现有免训练解码方法仅通过扰动或相关性加权调节模态影响，未评估联合音视频分支内部的预测兼容性。本文提出冲突感知解码（CAD）框架：先由潜在冲突幅度估计（PCME）以音视频分歧度和联合预测相对相关性加权单模态参考的偏差量化冲突大小，再由冲突可操作性评估（CAA）基于Dempster-Shafer可靠性
+- **关键技术点**：Omni-LLM在共享表示空间中融合多模态时，联合音频-视频分支的输出分布可能被某一模态"劫持"，使音源、视觉内容互相误判，产生跨模态幻觉。已有免训练解码器（如扰动式CD、相关性加权类方法）只调节单模态对整体预测的影响，未在联合分支内部检查两种模态的预测是否兼容；且联合分支的偏差既可能是有害干扰也可能是有益互补，随意干预有误伤风险，因此需要同时评估偏差幅度与干预的可操作性。
+- **主要指标**：- CMM总体准确率（Qwen2.5-Omni-7B）：较基准解码器提升14.1个百分点 - AVHBench总体准确率：较基准解码器提升8.0个百分点 - 四个数据集上稳定优于基线解码器及多种竞争性免训练方法，且跨越多个音视频主干验证
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [TEMPO: Temporally-grounded Multi-task Post-training for Large Audio-Language Models](https://arxiv.org/abs/2608.29999)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-08-30
@@ -452,6 +461,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [Probing Warmth-Mediated Harm in Speech-Enabled LLMs for Mental-Health Conversations](https://arxiv.org/abs/2609.04256)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
+- **一句话贡献**：现有音频LLM评测仅衡量理解与对话质量，忽略心理脆弱用户披露情绪时模型语音中的关系性温暖（relational warmth）。本文基于WHO mhGAP v2.0临床指南构建7轮脚本化披露探针（38脚本覆盖9类优先级病况），在gpt-realtime上以音频与纯文本双条件运行，共采集532条响应。发现诱发引导轮（T7）模型语音变得更短、更快、音调更低、更安静（7项声学特征中5项p<.001）；文
+- **关键技术点**：语音助手的使用人群与心理社会高风险群体高度重叠（如独居老人），而模型声音是语音优于转写的关系信号载体，但现有audio benchmarks（AudioBench、SD-Eval）只测理解与对话质量。text LLM中已证明warm-empathetic微调会降低可靠性并加剧sycophancy，这一"温暖-可靠"权衡从未在音频中被评测。
+- **主要指标**：- T7关系性接受率：音频58% vs 纯文本63%（parasocial commitment与role claim一致） - 聚合模态差距：Δ≈+0.05（McNemar精确p=0.73），集中于自伤/自杀脚本，哀悼/孤独双模态接近 - MedQA音频代价：中性前缀-3.4pp（p=.036）、
+- **代码**：论文声称release protocol、scoring pipeline、scripts，正文未给出仓库链接 | **Demo**：暂无
+
+---
 ## [VoxReason: Listener-Free Evaluation of Source-Grounded Speech Planning Before Synthesis](https://arxiv.org/abs/2609.03203)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-02
@@ -470,6 +488,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [Scalable Context Orchestration for Serving LLMs Over Voice](https://arxiv.org/abs/2609.04288)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-03
+- **一句话贡献**：现有语音LLM服务将上下文视为扁平且不断增长的消息序列，语速等副语言信息与丢包噪声等环境状态隐式存在于音频中，导致响应风格与用户偏好错位、丢包下极易误打断、长会话成本随历史膨胀。本文提出llmovoice，一种显式建模语音上下文并编排其使用的服务中间件：把每次交互组织为VoicePage/VoiceThread结构化记忆，按上下文预算在音频、转写、摘要间做多保真度投影，并利用serving LLM
+- **关键技术点**：现有级联式或端到端语音LLM系统将会话历史视为单一持续增长的消息序列追加处理，副语言线索与环境条件均隐式于音频流；丢包造成的低能量音频会被VAD误判为静音而提前触发响应，且完整历史逐轮重处理使总成本随会话时长二次增长，长会话15至60分钟即触及上下文上限。
+- **主要指标**：- 语速对齐WPM MAE：38.26降至18.23（相对改善52.4%） - 丢包下误打断率FIR：46.0%（Fixed-500）降至0.9%（相对降98.0%） - 网络诱导成本：每轨迹$0.003344降至$0.000695（降79.2%） - 单轮成本：RT2与MSP-PODCAST分别为
+- **代码**：https://llmovoice.com | **Demo**：https://llmovoice.com
+
+---
 ## [Tracing Audio Grounding and Answer Selection in Audio LLMs](https://arxiv.org/abs/2609.04637)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-04
@@ -477,6 +504,114 @@
 - **关键技术点**：现有评测关注预测是否真正由声学证据支撑（幻觉、模态冲突、证据缺失），但已有研究指出模型可在几乎无声学证据时保持高 AudioQA 性能，说明基准精度与实际听音之间存鸿沟。机制层面工作虽已探究音频信息在模型中的表示与传播位置，却未说明训练如何改变音频信息最终驱动答案选择的过程。
 - **主要指标**：- Qwen2-Audio ADQA：ZS 36.9%→FT 51.1%，ΔSaudio +9.3；MMAR 41.2%→52.5%，ΔSaudio +6.9 - Qwen2.5-Omni ADQA：41.9%→54.4%，ΔSaudio +4.5；MMAR 53.7%→65.7% - 两模型在 M
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [What Did I Just Say? Self-Listening for Full-Duplex Speech Models](https://arxiv.org/abs/2609.05592)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-04
+- **一句话贡献**：全双工语音对话模型中，文本生成、语音合成与音频播放异步进行，导致模型"以为已说的内容"与用户实际听到的播放内容不一致，中断后难以合理恢复，即 anchor interruption 问题。本文提出 Self-Listening 方法，将用户语音、模型文本与模型实际播放的语音交织为统一输入流，把已播放语音反馈给模型，使中断恢复基于用户实际听到的内容。配合新构建的 AnchorSpeech 数据集（同
+- **关键技术点**：全双工模型能在说话的同时持续监听，实现对打断与 backchannel 的实时响应。但文本解码、TTS 合成到最终播放三者异步推进，在被打断瞬间模型内部分词进度与实际播放进度存在漂移，模型"记忆"的已说话内容与用户真实听到的内容不一致。作者将"从中断中恢复、同时保持对模型已实现语音的感知"形式化定义为 anchor interruption 问题。
+- **主要指标**：- 配备 self-listening 机制的模型相比全双工基线在 AnchorSpeech-test 上取得更好的 anchoring 性能（摘要未披露精确数值）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Emotion as a Distribution: Joint Valence-Arousal Probability Learning for Speaker-Independent Multimodal Emotion Recognition](https://arxiv.org/abs/2609.05755)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-04
+- **一句话贡献**：人类情感是渐变且常为混合状态，但多数多模态识别器将其压成单一硬标签，丢失大量信息。本文提出 text+speech 系统在类别决策之外同时输出 V-A 平面上的 9×9 概率矩阵，以二维高斯软目标在 KL/交叉熵目标下训练。在 IEMOCAP 严格 speaker-independent 留一会话外评估中，双头系统达 73.0%±0.3 UA，超 Transformer 融合基线 3.0 点，换用
+- **关键技术点**：情感在 Valence-Arousal 平面的特征是连续渐变且常呈混合叠加，单一硬标签无法表达"7 分高兴、3 分平静"这类状态，且标注者间常存在歧义。论文论证识别器应输出 affective space 上的分布而非单点，面向心理咨询辅助（counseling support）这类对情感精细度与不确定性表达要求更高的场景。
+- **主要指标**：- 双头系统 UA：73.0%±0.3（三 seed，独立 rerun 72.1%），超 Transformer 融合基线 3.0 UA 点（95% bootstrap CI [1.0,4.7]，配对 t 检验与会话级 bootstrap 均显著） - 冻结 WavLM-Large 特征：76.6%
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [TAD: Token-Adaptive Contrastive Decoding with Confidence-Guided Gating for Hallucination Mitigation in Large Audio-Language Models](https://arxiv.org/abs/2609.07286)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-07
+- **一句话贡献**：大音频语言模型（LALM）会幻觉音频对象，对不存在的音事件回答"yes"，损害音频问答可靠性。本文提出 Token-Adaptive Decoding（TAD），一种训练无关的幻觉缓解解码策略：将真实音频 logits 与匹配静音参考对比以锚定首步 yes/no 决策，并引入 token 自适应、置信门控机制（首步决策关键、对肯定类 token 类条件控制），用 audio-silent marg
+- **关键技术点**：LALM 在音频 QA 中常对 absent 的声音事件输出幻觉性"yes"；现有对比解码类方法（如 AAD）使用全局固定对比强度，对上下文噪声敏感、易过度矫正或矫正不足，难以同时适应证据充分与证据缺失的 token。
+- **主要指标**：- AudioCaps-Hallucination：Qwen2 F1 提升 0.059-0.117，Gemma 提升 0.025-0.064（相对 AAD） - Clotho-AQA：Qwen2 F1 0.810→0.816；Gemma 与 AAD 相当
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [RAFM_SER++: A Lightweight Multimodal Emotion Recognition Framework for Real-Time Behavioral Monitoring in Surveillance Systems](https://arxiv.org/abs/2609.07409)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-07
+- **一句话贡献**：交互式跨模态 transformer 虽使多模态语音情感识别达到高精度，但计算开销大，难部署于延迟敏感、资源受限的监控系统。本文提出轻量级多模态 SER 框架 RAFM_SER++，以非对称 Residual Attention Fusion Mechanism（RAFM）单向残差注意力路径将情感语音线索注入语义文本表征，规避昂贵双向跨模态交互，配合 BYOL 启发式跨模态对齐目标与 attent
+- **关键技术点**：主流高性能多模态 SER 依赖交互式跨模态 transformer，通过双向 cross-attention 对齐音频与文本模态，精度高但训练与推理成本陡增，无法满足监控、安检等时延敏感且算力受限场景的实时情感行为监测需求。
+- **主要指标**：- BACC：IEMOCAP 81.10%、ESD 95.39% - 可训练参数较 MemoCMT 减少 60%+，推理 79.60 it/s - 结果一致性超越 HuBERT-Base 基线
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AdoDAS: A Privacy-Preserving Multimodal Challenge for Adolescent Depression, Anxiety, and Stress Assessment](https://arxiv.org/abs/2609.07038)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-07
+- **一句话贡献**：青少年抑郁、焦虑与压力（D/A/S）需要可扩展的自动评估工具补充而非替代专业诊断，AdoDAS Grand Challenge 在严格的隐私保护政策下拒发未成年人原始录音，仅分发匿名化音视频表征与 ASR 衍生文本。其 6,000 名参与者提供 24,000 个片段（1 次脚本阅读+3 次开放式会话）；设置多任务二分类筛查与 21 项 DASS-21 条目序数预测双赛道。191 个注册团队中 95
+- **关键技术点**：青少年心理评估依赖专业访谈，成本高、覆盖面有限；而未成年人语音含高度敏感个人信息，直接发布原始音频面临严重隐私与伦理风险。AdoDAS 以"表征替代原始信号"为核心，探索大规模数据共享与隐私保护的平衡点。
+- **主要指标**：- 筛查赛道：音视频基线 mean F1 0.4604，领先提交 0.5921 - 条目预测：基线 mean QWK 0.2675，领先提交 0.2776
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ConversationalVoice: Full-Duplex Speech Data from Real Conversations through Source-Faithful Reconstruction and Conversation-Grounded Expansion](https://arxiv.org/abs/2609.08147)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-08
+- **一句话贡献**：全双工语音模型需要保留 turn-taking、重叠、打断与 backchannel 行为的数据，但这些信号在含噪真实录音中跨说话人纠缠、难以直接使用。本文提出 ConversationalVoice 管线，将真实双说话人片段转化为三类互补训练数据：Separation（说话人分离）、Reconstruction（源忠实重建）与 Expansion（对话 grounded 扩增）。实验显示同说话人
+- **关键技术点**：全双工语音模型训练的关键瓶颈在于：真实对话中 turn-taking、重叠、打断、backchannel 事件天然蕴含在原始波形中，但含噪录音中不同说话人的语音能量在时间与频域上相互纠缠，难以直接形成"干净单说话人+规范时序标注"的训练对；若简单用增强或合成数据替代，又易丢失真实对话中不规则的节奏与交互模式。
+- **主要指标**：- 同说话人相似度 0.983-0.991，判别 margin 0.199-0.209 - NISQA MOS：separation 3.56 / reconstruction 4.41 / expansion 4.61 - 扩展数据：Gemini 评估上下文连贯 4.94/5、对话自然度 4.80
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Disentangled Global-Local Feature Learning with E-Branchformer for Audio Deepfake Detection](https://arxiv.org/abs/2609.08948)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-08
+- **一句话贡献**：TTS 与 VC 等语音合成技术的快速进步对说话人认证等语音业务系统构成严重威胁，亟需鲁棒深度伪造检测。本文提出基于 E-Branchformer 的新架构，有效利用自监督语音表征进行音频深度伪造检测：并行双分支（multi-head self-attention 与 depthwise 卷积）同步建模全局上下文与局部时序模式，并在特征合并后引入 DWConv 与 Squeeze-and-Exci
+- **关键技术点**：语音合成与转换技术日益逼真，伪造语音可轻易欺骗基于声纹/说话人认证的系统；同时真实场景中伪造攻击类型不可预知、声学条件复杂，检测器必须同时把握整段话语的全局语义上下文与细粒度局部时序伪迹（频谱不连续、共振峰抖动、人工痕迹等），单一结构难以兼顾。
+- **主要指标**：- EER：LA 0.88%、DF 1.85%、In-the-Wild 6.30%
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Beyond Accuracy: ARIA-Rubrics for Evaluating Audio Reasoning in Large Audio Language Models](https://arxiv.org/abs/2609.09681)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：针对LALM音频推理评估仅看准确率而无法区分"真推理"与"猜对/模式匹配"的问题，本文提出ARIA-Rubrics：以四步结构化CoT提示（Perception/Analysis/Reasoning/Answer）外化推理过程，用六个互补指标（CLAP声学接地、句嵌入跨步连贯、LLM内容充实度、条件困惑度因果性、RoBERTa-NLI推理进展、AudioSet词表声学词密度）融合成ARIA总分。在
+- **关键技术点**：现有LALM推理基准（MMAR、MMAU等）仅以准确率评估，高分可能来自猜测或统计模式利用，无法反映推理过程忠实度；MMAR-Rubrics依赖专有模型与人工金CoT、CAFE是黑盒LLM-as-judge、OCRA纯依赖人工，均不可扩展或不透明。音频特有挑战——感知幻觉（捏造/误识别声音实体）与跨模态对齐——使纯文本指标无法直接迁移。
+- **主要指标**：- ARIA总分（MMAR）：GPT-4o-audio 0.5796（Acc 67.6%）、Gemini 2.5 Flash 0.5689、Qwen2.5-Omni 0.5449 - ARIA总分（MMAU-mini）：Gemini 2.5 Flash 0.5819、GPT-4o-audio 0.5
+- **代码**：https://github.com/glam-imperial/allm_assessment | **Demo**：暂无
+
+---
+## [SpeechAnnotator: A Context-Aware Multi-Agent Framework and Benchmark for Multidimensional Speech Annotation](https://arxiv.org/abs/2609.09947)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：SpeechAnnotator 提出全开源、本地可部署的多智能体语音标注框架：前端模块完成分段与转写，三个专家智能体经共享状态协作，实现说话人特质、韵律、情感、副语言与声学场景等多维字段标注与受限复查；发布含 8.87 小时人工标注的 SA-Bench 基准与分离词法、闭集、开放语义评估的 SA-Eval，以低词错误率与 81.27% 属性均值逼近商业多模态系统。
+- **关键技术点**：可控语音生成需要描述"谁在说、如何说、何场景、何语境"的细粒度段级标注。现有流程依赖人工修正、付费托管多模态 API 或固定处理链，存在标注成本高、外部服务依赖、跨阶段错误难纠正等局限；MD 评测资源按任务碎片化，缺乏统一 schema 下联合评估时间线、闭集属性与开放语义的基准。
+- **主要指标**：- 时间线：CER 12.42%（最优）；tcpCER 33.69%（比最佳商业基线低 19.92 点） - 属性宏平均：SpeechAnnotator 81.27%（第二），Gemini 2.5 Pro 81.73%（第一），Seed2.0 Lite 79.40% - 15 字段中 7 项第一；最
+- **代码**：https://github.com/ASLP-lab/SpeechAnnotator | **Demo**：https://zhanqirui.github.io/SpeechAnnotator-demo-page/
+
+---
+## [AVSRBench: A Multi-Condition AVSR Benchmark](https://arxiv.org/abs/2609.10366)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：本文针对 AVSR 在 LRS3 上 WER 低于 1% 却难以区分真实泛化与域适配的问题，系统评测了 Auto-AVSR、AV-HuBERT Large 和 Llama-AVSR 三种架构在六个数据集（LRS2/LRS3/GRID/LombardGrid/TCD-TIMIT/RoomReader-AV）上的视觉、音频与音视频识别性能。发现视觉理解在广播域外急剧退化，听觉-视觉融合仅对 Lomba
+- **关键技术点**：主流 AVSR 研究几乎全在 LRS2/LRS3 广播语料上评估，其测试集不足 1 小时；各模型评估代码与数据集紧耦合。作者追问：广播域上的低 WER 究竟代表真实泛化还是仅域内适配。已有研究表明鸡尾酒会场景 WER 可从 7% 飙升至 69%+，野外基准相对 LRS3 平均暴增约 30 绝对值，Zoom 视频会议下 Auto-AVSR AV 也从 <1% 升至 33%+。
+- **主要指标**：- LRS3 AV WER：Llama-AVSR 0.79% < Auto-AVSR 0.90% < AV-HuBERT 1.47% - GRID VO WER：Auto-AVSR 66.53%；融合恶化 Auto-AVSR Δ(AO-AV)=-8.90% - LombardGrid：唯一 AV 优
+- **代码**：https://github.com/rishabhjain16/lipreading-data-guide | **Demo**：暂无
+
+---
+## [Zero-Shot Temporal Localisation of Audio Deepfakes in Multi-Speaker Conversations](https://arxiv.org/abs/2609.10051)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：针对"外科手术式注入"语音克隆欺诈，将多说话人对话中音频深度伪造的时间定位形式化为 TDLMC，证明混合内容文件上 utterance 级 EER/min-DCF 不适定，提出 t-IoU/TDR/TFAR/SBD/MS-DCF 等时间指标，并设计免训练的 5 阶段流水线包裹冻结检测器、以迟滞 FSM 解码器输出连贯伪造区间。在 ASVspoof 5 构建的 180 段对话上主骨干达到 t-IoU
+- **关键技术点**：语音克隆欺诈常仅替换真实通话中一句关键句，utterance 级检测器每片段只输出单一二值标签，无法定位注入片段；现有 PartialSpoof、W-TDL、LENS-DF 等定位工作均需帧级标注训练，尚无对冻结检测器免训练、无时间监督地在多说话人对话上输出位置的工作。混合内容下 naive 应用 utterance 级 EER 近随机（≈44%）。
+- **主要指标**：- 主骨干 DF Arena 1B：t-IoU 0.904、TDR 0.949、TFAR 0.284、SBD 3.527s、MS-DCF 0.258、frame-EER 0.042 - 真音误警：RRRR 上 TFAR 0.0、含真音三模式均值 0.053；AMI real-only 0.017 -
+- **代码**：https://github.com/sami42200/tdlmc-audio-deepfake-localization | **Demo**：暂无
+
+---
+## [NVV-Locator: From Transcript Tags to Acoustic Boundaries for Fine-Grained Nonverbal Vocalization Grounding](https://arxiv.org/abs/2609.09940)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：针对非语言发声（NVV）仅以转录本文本标签表示、缺乏波形时间边界细粒度监督的问题，本文统一26类NVV分类体系，构建"双LLM校验＋转写引导强制对齐＋能量边界精修＋解耦增广"四阶段自动标注流水线，产出551.42小时带时间戳训练数据，并构建667句/1094事件的基准NVV-TimeBench。提出基于Qwen3-ASR-0.6B的非自回归槽填充模型NVV-Locator，并行预测词时间戳、NVV
+- **关键技术点**：NVV 承载情感与交互信息。现有工作或仅做片段/句级事件分类，或将其表示为转录本中的离散标签与相对位置，不保留波形起止与时长；MFA/Kaldi 等强制对齐依赖发音词典难以覆盖 OOV 的 NVV，WhisperX/NeMo 等神经对齐器主要面向词语音且对非词事件退化；时间戳监督数据稀缺、人工边界标注昂贵是核心瓶颈。
+- **主要指标**：- NVV-Locator Micro F1 71.0%（最佳基线 Gemini-2.5-Pro 仅 45.8%，+25.2pp）；Macro F1 70.2% - Macro mIoU 80.4%；Macro mMAE 59.6ms（基线 92.6ms） - 消融：去双 LLM 校验 Macro 
+- **代码**：暂无 | **Demo**：https://nvv-locator.github.io/Demo-Page/
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)

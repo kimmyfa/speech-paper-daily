@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 15 篇
+共 18 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -108,6 +108,33 @@
 - **关键技术点**：语音SR需低算法时延还原缺失高频分量。波形域方法计算代价高或时延大；mel类需外接声码器，STFT类相位缠绕难以建模，显式幅相预测结构复杂，均难在零前瞻约束下兼顾信息保留与端到端优化。
 - **主要指标**：- 8kHz：LSD 0.73/ViSQOL 4.68；4kHz：0.92/4.27（优于TRAMBA）；2kHz：1.03/3.81 - 复杂度：9.03M参数、2.12G FLOPs（约为UDM+ 189G的1%） - 消融：频谱判别器换波形域后2kHz ViSQOL降至3.78
 - **代码**：暂无 | **Demo**：https://tian1507.github.io/StreamWSR/
+
+---
+## [Clean Accuracy Does Not Guarantee Provenance Robustness: A Prospective Codec-Stress Evaluation of Audio Attribution](https://arxiv.org/abs/2609.07981)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-09-07
+- **一句话贡献**：音频溯源归属（判断合成话语由哪个系统产生）在干净 benchmark 上报告接近满分，但分析师实际拿到的音频通常经过转码，性能大幅衰减。本文提出前瞻注册式测量协议：在训练任何归属模型前用保真元数据固定分析区域，评估单阶段 codec 转码后的 closed-set 归属。实验显示 WavLM-Base+ 在 support 内损失 53.5 与 70.3 点 Macro-F1，W2V2-BERT 
+- **关键技术点**：音频溯源归属检测在实际取证中面对的音频几乎都经过转码传输，而现有评测多在无扰动干净信号上进行，导致近满分精度与真实性能脱节；衰减同时强依赖被测表征类型与 codec 条件，需要一个在训练前就固定评估范畴、避免选择偏差的协议。
+- **主要指标**：- support 内损失：WavLM-Base+ 53.5 [43.5,63.6] 与 70.3 [63.0,77.5] Macro-F1；W2V2-BERT 2.0 61.0 [56.8,65.1] 与 49.8 [41.6,57.9] - 单一 support 网格内 WavLM 损失范围 -
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [StreamAlign: Streaming Text-Aligned Speech Tokenization](https://arxiv.org/abs/2609.09719)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：StreamAlign 提出流式文本对齐语音分词框架：通过字符级 RNN-T 对齐与词级 ASR 引导的在线声学-文本对齐，配合 LLM 子词级聚合解决 ASR-LLM 词表不匹配；并引入前瞻性词边界分类器，将延迟从 560ms 降至 270ms。在 LibriSpeech 上取得最低 WER（4.41）与最高 UTMOS（4.23），其 SLM 在 speech continuation 上人类
+- **关键技术点**：现有 text-aligned 分词（TASTE、TASLA）依赖离线 ASR，需完整话语才能分词，无法流式实时处理（延迟约 410ms+300ms）；且 ASR 与 LLM 子词词表不匹配，需在词级复制特征到各子词 token，丢失细粒度声学与副语言信息。
+- **主要指标**：- WER：StreamAlign 4.41（SpeechTokenizer 4.63、WavTokenizer 4.95、Mimi 4.82、TASTE 8.38） - UTMOS 4.23（最高）；SECS 0.588；单元率仅 2.97Hz，延迟 270ms - SLM 总体一致率 70.6；
+- **代码**：暂无 | **Demo**：https://ishlove77.github.io/StreamAlign/
+
+---
+## [UniStream: Multi-Expert Residual Vector Quantization for 48 kHz Causal Streaming Audio Coding](https://arxiv.org/abs/2609.09866)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：本文提出 UniStream，面向语音、音乐与环境声音的全因果 48kHz 流式神经音频编解码器。核心是 ME-RVQ（多专家残差矢量量化）：将每层单一共享码本替换为 4 个专家码本，由确定性 Top-K 路由器仅基于已解码量化状态路由，无需传输专家 ID，仅增加 5.5M 参数即扩展量化容量。配合训练期专属的 OT-CFM 流匹配正则（推理期完全移除），支持 12 kbps（Top-1）与 22
+- **关键技术点**：现有 RVQ 类编解码器每层共享单一码本，难以用同一表示空间建模语音、音乐、环境声音的异构声学结构；现有 MoE 方案要么把专家放在量化瓶颈之外，要么需在码流中额外传输路由信息增加开销、阻碍流式部署；FlowMAC/FlowDec 等流式解码器需迭代推理，难以实时。
+- **主要指标**：- PESQ/UTMOS/STOI（12k）：2.81 / 3.34 / 0.826；22.5k Top-2 为 3.41 / 3.87 / 0.864 - 语音 Mel-D：T1 8.21（vs EnCodec 13.07）；环境 Mel-D 10.16（vs 13.18） - ViSQOL（T2
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [KVAE: Family of Tokenizers for Multimodal Generative Models](https://arxiv.org/abs/2608.05798)

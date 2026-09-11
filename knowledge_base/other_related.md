@@ -1,7 +1,16 @@
 # OTHER RELATED（按评分降序）
 
-共 16 篇
+共 20 篇
 
+## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：9/10 | **日期**：2026-03-24
+- **一句话贡献**：针对移动说话人的弱引导目标说话人提取（TSE），作者在因果逐帧处理框架下将上一步增强信号自回归（AR）地融入轻量级贝叶斯跟踪器，提出两种策略：MISO-AR 将增强单通道信号作为额外观测量加入贝叶斯滤波，MIMO-AR 将深度空间选择性滤波器（SSF）扩展为多通道输出并用增强多通道估计替换带噪观测。结合基于社会力模型生成的新型合成数据集与真实录音，在计算开销几乎不变的前提下显著提升 DoA 跟踪精
+- **关键技术点**：深度空间选择性滤波器（SSF）对方向已知的静止说话人可实时高质量增强；但连续 DoA 信息通常不可得，移动说话人场景需依赖仅初始方位（弱引导）+跟踪算法。现有神经跟踪器精度高但计算量大，轻量统计算法（KF/PF 的 Concat 串联式）在难声学条件下精度不足。
+- **主要指标**：- ACC(10°)/MAE：MISO-AR PF 87.6%/6.47°（最优）；MIMO-AR WKF 86.4%/6.65°；Concat WKF 33.2%/32.67° - PESQ/ESTOI：Oracle 2.14/81.6%；MISO-AR PF 2.04/80.4% - MISO-
+- **代码**：https://github.com/sp-uhh/autoregressive-spatial-filters | **Demo**：https://sp-uhh.github.io/autoregressive-spatial-filters/
+
+---
 ## [Anomalous Sound Detection Meets Noise-Aware Self-Supervised Learning](https://arxiv.org/abs/2608.00447)
 
 - **方向**：语音前端 | **子方向**：Other | **评分**：9/10 | **日期**：2026-08-04
@@ -18,6 +27,24 @@
 - **关键技术点**：无声语音接口允许用户在安静环境下（如图书馆、会议室）或隐私敏感场景下与设备交互。现有研究受限于小词汇量（通常<100词）和封闭词汇集，缺乏大规模开放词汇的基准数据集。可穿戴硬件如面部电极（EMG）虽然精度高但佩戴不便。
 - **主要指标**：- 纯无声训练：WER 33.7%（首次开放词汇SSI基准） - 有声+无声联合训练：WER 26.3%（相对改善22%） - 训练数据规模效应：数据量从25%到100%增加，WER持续下降，说明数据规模仍有扩展空间 - 模态比较：超声回波>视频>音频（无声模式下）
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Language Orthogonalization of Self-Supervised Speech Representations for Cross-lingual Parkinson's Detection](https://arxiv.org/abs/2609.09499)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：9/10 | **日期**：2026-09-08
+- **一句话贡献**：自监督语音模型（S3M）表示中混杂的语种信息会扰乱跨语种帕金森病（PD）检测：当目标语言仅有健康对照（HC）语音时，分类器会学会区分语种而非病理，导致高特异/低敏感。本文提出语种正交化（LO）——仅用HC语音拟合S3M特征对外部VoxLingua107语种嵌入的闭式岭回归残差化。实验表明，在5个S3M骨干、3种语音任务、3种目标语言上，该方法将F1均值从0.52/0.67提升至0.87，并实现敏感
+- **关键技术点**：大多数语音化PD检测系统仅限单语种/单语料评估，而跨语种检测需区分可迁移的病理信号与语种特有变化。S3M同时编码强大的语种结构；当训练集只含源语种患者与目标语种HC时，分类器将目标语种与HC关联，导致目标语种患者被漏检（高特异、低敏感）。已有基线 Language Shift（LS）仅将各语种HC质心对齐为常向量，不改变组内协方差，无法去除质心之外的语种依赖结构。
+- **主要指标**：- 敏感度0.90工作点F1均值（5骨干×3任务×3目标语种×5折）：Raw 0.52 → LS 0.67 → LO 0.87（+0.35）；分任务：Vowel 0.53/0.65/0.89、DDK 0.59/0.68/0.90、Read 0.43/0.69/0.81 - 语种可解码性三语分类mac
+- **代码**：https://github.com/MINUKIMS/language-orthogonalization | **Demo**：暂无
+
+---
+## [TamilEOT: A Dataset and Model for Semantic End-of-Turn Detection in Tamil Telephone Speech](https://arxiv.org/abs/2609.05631)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-04
+- **一句话贡献**：语音代理必须在每个停顿处裁决用户是否说完，无语言模型时只能退化为固定静默超时。本文发布 TamilEOT 数据集（从 116 段真实泰米尔电话通话切出 18,485 条标注 turn 边界）及两个 audio-only 检测器（自 Smart Turn v3 微调，8.7MB 与 21MB）。在来自 30 通未见电话的 4,168 条 held-out 上，精度由零样本 70.30% 升至 83.
+- **关键技术点**：语义端轮（EOT）检测是语用层面判断，单纯静默时长是表面近似；现有开源语义 EOT 检测器均以英语等大语种为主，南印度语言完全空白。作者以实验揭示规则标签与模型任务不等价：规则在正类命中 95.9% 但负类仅 44.4%（低于随机），因规则回答的是"是否存在长静默"而模型需回答"用户话语是否完成"。
+- **主要指标**：- 精度：70.30%（零样本）→83.71%（8.7MB）→86.13%（21MB） - ROC-AUC：0.751→0.921 - 延迟：<150ms 单线程笔记本 CPU
+- **代码**：开源（数据、权重、代码公开） | **Demo**：暂无
 
 ---
 ## [MeloCodec: Harnessing Melodic Priors for High-Fidelity Singing Voice Representation](https://arxiv.org/abs/2608.03021)
@@ -71,6 +98,15 @@
 - **一句话贡献**：全文微调自监督（SSL）语音大模型计算开销巨大，而现有参数高效微调（PEFT）方法主要依赖 MLP 适配器，其固定激活函数在紧凑参数预算下表征能力受限。本文提出 KanAdapter，一种基于 Group-Rational KAN（GR-KAN）的即插即用适配器框架，采用并行瓶颈设计，在冻结的 Transformer 编码器旁插入可训练 GR-KAN 分支，并从预训练 MLP 层迁移权重实现稳定初
 - **关键技术点**：现有 PEFT 方法应用到语音 SSL 模型时建模能力受限：LoRA 本质是无非线性激活的线性低秩分解，难以刻画伪造痕迹、情感分布等复杂语音特征；AdaptFormer 的 MLP 瓶颈使用固定激活，表达力不足。针对语音 SSL 的 PEFT 研究仍少见，将 KAN 类可学习激活模块用作适配器此前尚属空白。
 - **主要指标**：- 说话人验证（9M 可训练，削减 97.5%）：Vox1-O 0.52%，全量微调（364M）0.49%，AdaptFormer（8M）1.44%，LoRA（4M）2.25% - SER（16M，削减 95.2%）：Test F1-Macro 0.3290，保留全量 99% 性能；AdaptFor
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Voice or Stereotype? Disentangling Acoustic and Content-Based Gender in Speech-to-Speech Models](https://arxiv.org/abs/2609.09263)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-08
+- **一句话贡献**：在配音、翻译、语音代理等语音到语音(S2S)任务中，模型需判断说话人性别。商用S2S系统多以固定音色输出，使"输出音色是否随内容刻板印象漂移"这一传统探针结构性失效。本文用神经TTS构建 180 条音声化段落（英/西/中文 × 阳刚/中性/阴柔内容 × 男/女声），在 5 个模型的 5 类任务上交叉验证。结果：渲染音色无刻板漂移（Δ=-0.018±0.020），但内容每向阴柔推进一档，判"女性"胜
+- **关键技术点**：S2S模型听得到说话人嗓音中的性别信息，忠实系统应按"听起来的性别"而非"通常谁说这类内容"来判断。但主流S2S模型以单一固定输出音色回答，使"输出音色是否向刻板印象漂移"的检测永远通过——无漂移≠无偏置。现有文本偏置基准（WinoBias/BBQ）仅限英文模板/多选题，语音基准（Spoken StereoSet、VoiceBBQ）为多选QA，缺少长文本、生成式评测。
+- **主要指标**：- 渲染音色：15次readback拟合content×voice交互无显著项，合并Δ=-0.018±0.020 - 归因胜算比：Gpt-audio OR=21.9、Gemini OR=24.3；开源GLM OR=1.7、Kimi OR=3.3、Step-Audio OR=3.4 - 误称率：错配单
 - **代码**：暂无 | **Demo**：暂无
 
 ---

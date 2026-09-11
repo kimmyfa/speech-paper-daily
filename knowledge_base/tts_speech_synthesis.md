@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 40 篇
+共 45 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -81,6 +81,15 @@
 - **关键技术点**：Flow-matching类方法依赖预训练文本编码器、非自回归架构难以下游对齐文本LLM的指令跟随能力；VQ/RVQ类量化方法会在语音编辑等声学敏感任务上产生失真。连续自回归（LLM-DiT）框架把离散token预测改写为潜变量去噪，可复用文本LLM的指令跟随能力，但连续特征处于无界空间，预测误差在自回归步间累积，造成音色漂移与韵律崩塌。此前方案或需额外语义模块/多阶段tokenizer训练（Ming-UniAudio、VibeVoice、dots.tts），或引入FSQ瓶颈增加架构复杂度（VoxCPM），本文旨在以表示级语义增强在保持简单架构的前提下解决该问题。
 - **主要指标**：- Seed-TTS-Eval平均：WER/CER 3.04%（最低）、SIM 78.8%（最高），Test-ZH SIM 80.9%、Test-EN SIM 77.2%，优于 dots.tts(Pre.)(3.14/78.7)、VoxCPM2(3.65/76.7) 等 - MiniMax-MLS-
 - **代码**：https://github.com/FireRedTeam/FireRedTTS3 | **Demo**：暂无
+
+---
+## [AuK Technical Report: An Open-Source Foundational Model for Speech Generation and Editing](https://arxiv.org/abs/2609.08936)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-08
+- **一句话贡献**：AuK 是一个开源语音基座模型，通过自然语言指令与音频上下文这一统一接口，把语音生成与编辑融合为单一框架。作者构建约 30.3 亿条指令-音频实例、195 万小时有效监督数据，覆盖语音生成、内容编辑、增强与分离、副语言编辑、声学编辑五大任务族。模型结合多模态大语言模型语义条件、语音/通用音频/音乐联合训练 VAE 声学条件，以及 dual-stream MMDiT 加 unified single
+- **关键技术点**：语音生成与编辑长期被拆分为零样本合成、内容替换、去噪分离、音色/风格迁移、声学属性修改等相互独立的子任务，各系统接口与数据结构不兼容、难以组合复用，缺乏统一的指令驱动通用模型。
+- **主要指标**：- AuK-Flash：4 步推理、无需 CFG，相比完整模型 4.5 倍墙钟加速 - 零样本与指令控制语音生成、通用指令编辑：领先水平 - 信号级复原任务（增强/分离）：竞争力良好
+- **代码**：开源（源码与模型权重发布） | **Demo**：暂无
 
 ---
 ## [Stable Autoregressive Speech Generation with Low-Frame-Rate High-Dimensional Continuous Tokens](https://arxiv.org/abs/2607.29363)
@@ -297,6 +306,42 @@
 - **关键技术点**：现有解耦式 N2L 方法（如 PGD-N2L、LombardTokenizer）面临两大瓶颈。其一为 Lombard-说话人纠缠：预训练说话人确认模型以身份判别为目标而非去除风格变化，导致 Lombard 信息残留在说话人嵌入中（Lombard 泄漏）；对抗式或互信息式解耦缺少显式跨风格对齐监督，在说话人稀缺的低资源场景下难以兼顾身份保持与解耦。其二为 Lombard-内容纠缠：Lombard 效应随音素变化（共振峰位移、元音时长延长），帧级解耦无法覆盖；现有音素级方法多用外部模型分割后做简单池化，分割边界不可靠且会损伤内容保真。
 - **主要指标**：- LMUSHRA（EMALG）：ProLombard 72.40±1.90，优于 CycleGAN 69.37、PGD-N2L 61.41（真实 Lombard 93.31） - QMUSHRA：82.01±1.59，优于 PGD-N2L 74.25、StarGAN 69.94 - F0RMSE 
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [KABURI-TTS: Phoneme-Keyed Activity-conditioned Bi-channel Utterance Rendering for Interaction](https://arxiv.org/abs/2609.07200)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-07
+- **一句话贡献**：全双工口语对话需大量"双通道、一说话者一通道"的会话语音数据，现有会话式 TTS 对双方同时发生的 backchannel、打断与重叠等自然对话现象不鲁棒。本文提出 KABURI-TTS：以 per-speaker 音素栅格为输入，在独立通道上渲染两位说话人的语音，并逐帧以说话人音素及其推导的 voice activity 为条件。主观评测表明其在 utterance 级与 interaction
+- **关键技术点**：真实全双工对话中双方会重叠发言、插入 backchannel 并用打断切换话轮，而主流会话 TTS 通常按轮次串行合成，难以复现这类同时性现象；双通道、逐说话人分隔的会话数据集采集成本高、规模有限，进一步制约模型对重叠语音的建模能力。
+- **主要指标**：- 用户评测：utterance 级与 interaction 级自然度均优于强基线 - voice activity 分析：产生更多重叠与更频繁 turn-taking
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Stabilizing Instruction Supervision for Instruct-TTS via Controllable Diversification and Drift Filtering](https://arxiv.org/abs/2609.08204)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-08
+- **一句话贡献**：Instruct-TTS 通过 LLM 将结构化风格标签改写为自然语言指令用于训练，但研究发现超过 40% 的无约束改写存在语义漂移，污染监督信号并削弱泛化能力，作者将其形式化为 instruction supervision instability 问题。提出的数据为中心稳定方案通过可控指令多样化、LLM 漂移过滤、attribute 对齐监督三机制同时提升覆盖度与保真度。在 InstructT
+- **关键技术点**：Instruct-TTS 用 LLM 改写把结构化 style 标签展开成自然语言训练指令，期望模型学到"指令-韵律"对应关系。但无约束改写极易产生语义漂移（标签指定风格被弱化/替换/引入未标注属性），改写结果与真实音频语义不符，形成矛盾监督，即 instruction supervision instability：指令覆盖不足与单条指令失真的双重不稳定。
+- **主要指标**：- 指令跟随率：34.5%（无微调）→51.0%（naive 微调）→56.4%（本方法） - 语义漂移：40.4%→15.4%（constrained rewriting）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Noise Adaptive Streaming Audio-Visual Speech Token Enhancement for Robust Full-Duplex Spoken Dialogue Models](https://arxiv.org/abs/2609.08390)
+
+- **方向**：语音前端 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-08
+- **一句话贡献**：全双工对话系统需同时听说，但其纯音频感知在背景噪声与重叠语音下常失效，产生不连贯响应。现有音视频对话方案多直接改造大型语音对话模型以处理视觉输入，多模态训练代价高。本文提出 AV-STE，一种模块化流式音视频前端，在带噪音频与唇部视频输入下、于送入语音 LLM 之前恢复被破坏的语义 speech token，下游对话模型（如 Moshi）完全冻结。集成实验显示 GPT-4o 评判的平均响应连贯性在
+- **关键技术点**：全双工系统（如 Moshi 类 streaming speech-to-speech 模型）的感知链对音频毁坏敏感，噪声或说话人重叠会使语义 speech token 严重受损产生不连贯响应；近年研究显示唇部视觉线索可增强音频毁坏下的鲁棒性，但典型做法是让语音对话模型本身融合视觉模态，需昂贵复杂的多模态后训练。
+- **主要指标**：- 集成冻结 Moshi：GPT-4o 评判平均响应连贯性 1.42→1.91（同数据集说话人干扰），并基本保持 turn-taking 行为 - 跨域 Seamless Interaction 上亦有增益
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Deterministic Prompting for Speaker-Stable Low-Resource Greek TTS](https://arxiv.org/abs/2609.10022)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-09
+- **一句话贡献**：针对现代希腊语缺乏干净高质量单说话人TTS数据的问题，提出基于WhisperX对齐过滤的数据清洗流水线，并在Parler-TTS（880M）上先全量微调（500M解码器，50 epoch）再做说话人专属LoRA（25M参数量，3.5h单说话人数据、2 epoch）。发现LLM生成风格提示导致说话人漂移，改用确定性提示（五分组箱标签拼接）后，最佳配置取得WER 10.7%、MOS-I 4.00、MO
+- **关键技术点**：现代希腊语公开语料要么干净单说话人数据极少（CSS10仅约4h），要么多说话人且含转写及声学噪声（Common Voice约32h/412人，清洗后15.5h）；其丰富屈折形态与词重音系统对韵律建模要求高，碎片化多说话人微调会得到"说话人平均化"的不稳定音色，VITS基线质量不足无法正式评估。
+- **主要指标**：- Det.+LoRA WER：10.7%（ASR底线7.8%）；CER 3.7%（LLM+LoRA WER 21.1%） - MOS-I：Det.+LoRA 4.00（真人4.36）；MOS-C：Det.+LoRA 4.24 vs LLM+LoRA 3.56（真人4.30） - SIM-S：约0.
+- **代码**：https://gsyllas.github.io/greek-stable-tts/ | **Demo**：暂无
 
 ---
 ## [FNH-TTS: Mixture-of-Experts Duration Modeling for Robust Neural Speech Synthesis](https://arxiv.org/abs/2508.12001)
