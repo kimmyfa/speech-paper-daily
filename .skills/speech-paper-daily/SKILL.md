@@ -1,216 +1,87 @@
 ---
 name: speech-paper-daily
-description: 语音领域每日论文速递。搜索前一天（北京时间）语音大模型（Speech LLM、TTS、ASR、codec、speech generation）和语音前端（speech enhancement、noise suppression、beamforming、source separation、dereverberation）arXiv预印本论文，以领域专家视角精读每篇论文，输出技术方案、实验结果、简介摘要和10分制评分，并将结果写入腾讯文档「每日论文速递」文件夹。触发场景：用户说"帮我找最新语音论文"、"搜语音预印本"、"语音论文速递"、"今天有什么语音论文"、"看看最新的 TTS/ASR/语音增强论文"等。
+description: 语音领域每日论文速递。搜索最新一批（北京时间前一工作日）语音大模型（Speech LLM、TTS、ASR、codec、speech generation）和语音前端（speech enhancement、noise suppression、beamforming、source separation、dereverberation）arXiv预印本论文，以领域专家视角精读每篇论文，按统一模板输出技术方案、实验结果、简介摘要和10分制评分，保存到本地 output/ 与 papers/{批次日期}/，同步 GitHub，并发送飞书通知。触发场景：用户说"帮我找最新语音论文"、"搜语音预印本"、"语音论文速递"、"今天有什么语音论文"、"看看最新的 TTS/ASR/语音增强论文"等。
 ---
 
 # 语音论文速递 Skill
 
 ## 目标
 
-搜索前一天（北京时间）语音领域 arXiv 预印本，以领域专家视角精读，写入腾讯文档。若论文数量超过15篇，只显示得分最高的15篇详细内容，其余论文只列出标题和链接。
-
-注意：arXiv 于美东时间周日至周四 20:00 发布新论文（北京时间周一至周五 08:00）。任务在 00:10 执行，因此**周日和周一**的 `/new` 页面无新内容。
+搜索最新 arXiv 语音领域预印本，以领域专家视角精读，按统一模板输出，保存到 `.skills/speech-paper-daily/output/{批次日期}/` 与项目根目录 `papers/{批次日期}/`，推送 GitHub，并发送飞书通知。若论文数量超过15篇，只显示得分最高的15篇详细内容，其余论文只列出标题和链接。
 
 ---
 
 ## 第一步：确定目标日期并获取论文列表
 
-### 日期逻辑（重要）
+### 命名与日期规则（重要，严禁再犯）
 
-**arXiv 发布规律**（基于 arXiv 官方政策）：
-- 美东时间周日至周四 20:00 发布新论文 announcement
-- 北京时间周一至周五 08:00 对应上述 announcement
-- 美东时间周五、周六 无 announcement
+**文件名一律使用 arXiv 批次日期，不是执行日、不是"当天"。** 这是唯一标准：
 
-**任务在 00:10 北京时间执行**，此时 `/new` 页面展示的是最近一次 announcement 的内容：
-- **周一 00:10**：最后一次 announcement 是上周五 08:00（美东周四 20:00 批次）。`/new` 无新内容 → 输出"前一天无新论文发布"
-- **周二 00:10**：最后一次 announcement 是周一 08:00（美东周日 20:00 批次）。有新内容 → 正常处理
-- **周三 00:10**：最后一次 announcement 是周二 08:00。有新内容 → 正常处理
-- **周四 00:10**：最后一次 announcement 是周三 08:00。有新内容 → 正常处理
-- **周五 00:10**：最后一次 announcement 是周四 08:00。有新内容 → 正常处理
-- **周六 00:10**：最后一次 announcement 是周五 08:00（美东周四 20:00 批次）。有新内容 → 正常处理
-- **周日 00:10**：最后一次 announcement 同周六（美东周四 20:00 批次）。`/new` 无新内容 → 输出"前一天无新论文发布"
+- **执行日（周一至周五 09:20 左右，白天执行）**
+  - **周二至周五**：目标日期 = 昨天的日期（前一工作日）
+  - **周一**：目标日期 = 上周五的日期
+- **执行日为周六或周日**：arXiv 无新发布，直接输出"今天是周六/周日，arXiv 无新发布"并结束。
+- 目标日期必须在 `papers/` 与 `.skills/speech-paper-daily/output/` 下都存在同名目录，且文件命名 `speech_paper_{YYYYMMDD}.md`（目录 `YYYY-MM-DD`，文件名 `YYYYMMDD`）。
 
-**简化规则**：
-- 执行日是**周一**或**周日** → 输出"YYYY-MM-DD 语音论文速递 - 无新论文（arXiv 该日无新发布）"，跳过后续步骤
-- 执行日是**周二至周六** → 正常搜索 arXiv
-- 文件名中的 YYYY-MM-DD 使用**前一天**的日期
-
-**为什么要用前一天命名**：因为 arXiv 的 announcement 过程有延迟。例如周二 00:10 抓到的论文实际是周一 08:00 发布的，用"周一"的日期命名更准确地反映论文的实际发布时间。
+**为什么要用批次日期命名**：arXiv 于北京时间周一至周五 08:00 发布当天批次（美东时间周日 20:00 至周四 20:00 announcement）。白天 09:20 执行时 `/new` 展示的正是当天 08:00 的批次，该批次所属日期在 arXiv 标示为"前一工作日"（例：周二执行 → /new 显示 "Mon, 14 Sep 2026" 批次 → 日期为周一）。执行日与批次日期之间是错开的，**永远不要用执行当天日期命名**。
 
 ### 获取论文列表
 
-**主要来源**：用 `web_fetch` 抓取 arXiv 官方每日列表页面（必须使用 `format: "markdown"`）：
+**主要来源**：用 `webfetch` 抓取 arXiv 官方每日列表页面（必须使用 `format: "markdown"`）：
 
 1. `https://arxiv.org/list/cs.SD/new` — Sound 分类
 2. `https://arxiv.org/list/eess.AS/new` — Audio and Speech Processing 分类
 
 从页面中提取所有 arXiv ID，合并去重。
 
-**补充来源**（论文数 < 5 篇时启用）：使用 `search_arxiv`，`date_from` 设置为目标日期，关键词：
-- `speech synthesis TTS neural`
-- `automatic speech recognition ASR`
-- `speech enhancement noise suppression`
-- `speech separation audio`
+**网络不可达处理**：若 arxiv.org 被网络阻断（TLS 握手 RST），先确认本机代理（如 `http://127.0.0.1:7892`），用 `curl -x <proxy>` 抓取 `/list/cs.SD/new`、`/list/eess.AS/new` 与 `https://arxiv.org/abs/{ID}`。若仍不可达，及时停下来告知用户。
+
+**补充来源**（论文数 < 5 篇时启用）：用 `webfetch` 抓取 arXiv API，`https://export.arxiv.org/api/query?search_query=cat:eess.AS+OR+cat:cs.SD&sortBy=submittedDate&sortOrder=descending&max_results=200`，过滤日期为批次日期（注意 API 可能 429 限流，需退避重试）。
+
+### 只抓取批次日期论文
+
+只处理 `/new` 页面"New submissions + Cross submissions"分区中的论文。**Replacement submissions（替换版）一律跳过**（它们是旧论文的新版本，不视为新论文）。
 
 ### 去重逻辑（重要）
 
 **必须对论文进行去重，避免同一篇论文出现在多天的速递中：**
 
-1. 扫描 `.skills/speech-paper-daily/output/` 下所有已有的输出文件，提取所有已出现过的 arXiv ID
+1. 用 `grep -rhoE "\b[0-9]{4}\.[0-9]{4,5}\b" .skills/speech-paper-daily/output/` 扫描所有已有输出，提取全部已出现的 arXiv ID
 2. 从当前论文列表中移除所有已出现过的 arXiv ID
-3. 如果去重后剩余论文数为 0，输出"YYYY-MM-DD 语音论文速递 - 无新论文（所有论文已在之前速递中收录）"
+3. 如果去重后剩余论文数为 0，输出"YYYY-MM-DD 语音论文速递 - 无新论文（所有论文已在之前速递中收录）"，不创建文件、不推送、不发通知
 
 ### 过滤规则
 
-保留：TTS、ASR、语音增强、语音分离、说话人识别/验证、音频语言模型、声码器、语音编解码等方向
+保留：TTS、ASR、语音增强、语音分离、说话人识别/验证、音频语言模型、声码器、语音编解码、实时/嵌入端侧音频模型等方向
 
-丢弃：纯音乐生成、纯图像/视频处理、纯理论数学/物理声学
+丢弃：纯音乐生成、纯图像/视频处理、纯理论数学/物理声学、与语音技术无关的动物声学/杂项
 
 ---
 
 ## 第二步：精读论文
 
-对所有通过过滤的论文，用 `web_fetch` 抓取全文（必须使用 `format: "markdown"`）：
+对所有通过过滤的论文，优先用 `webfetch`/`curl` 抓取全文：
 
 1. **优先 HTML**：`https://arxiv.org/html/<ID>v1` — 获取完整论文（含机构信息、技术细节、实验结果）
 2. **回退 Abstract**：若 HTML 不可用，用 `https://arxiv.org/abs/<ID>` 获取标题、作者、摘要
-3. **机构信息**：从论文 HTML 的作者单位标注中提取
+3. **机构信息**：从论文 HTML/abs 的作者单位标注中提取
 
 **精读要求**：你是语音信号处理领域专家，精读报告要体现专业深度，禁止简单翻译摘要。
 
-精读时需从论文中提取以下信息：
+**执行方式（防 context 溢出，必须用子代理）**：为每篇论文创建一个 general 子代理（`task` 工具）并行精读，每批最多 4 篇。子代理的 prompt 必须包含：论文标题、arXiv ID、方向、HTML 链接（以及本地已下载全文的绝对路径，若已缓存）、**输出模板全文引用**。子代理直接产出严格符合模板的整段 markdown。
 
-- **问题背景**：论文要解决什么具体问题？现有方法为什么不行？（从Introduction中提炼）
-- **方法创新**：核心创新点是什么？和现有方法的关键区别？（从Method中提炼）
-- **技术细节**：模型架构、关键模块设计、损失函数、训练策略、数据规模、超参数等（从Method/Experiment中提取具体数值）
-- **实验分析**：用了什么数据集？和哪些基线方法对比？关键指标提升多少？（从Experiment中提取具体数值）
-- **开源情况**：代码/模型/数据是否开源？链接？
+精读时需提取的信息：问题背景（Introduction）、方法创新（Method）、技术细节（架构/损失/训练策略/数据规模/超参数）、实验分析（数据集/基线/指标数值）、开源情况。
 
-### 输出格式（参考2026-07-30实际输出格式）
+### 输出格式（唯一标准）
 
-每条论文记录包含以下字段，严格按照以下格式输出：
+**单篇论文的完整输出格式以 `output_template.md` 为唯一模板**，本 Skill 运行时必须先读取 `.skills/speech-paper-daily/output_template.md` 并严格按其输出。要点摘录如下（详见模板文件）：
 
-```
-## [序号] 论文标题
-
-**arXiv ID**：ID | **方向**：方向分类
-
-**作者**：作者1, 作者2, 作者3 等
-
-**机构**：机构名称
-
-**发布日期**：YYYY-MM-DD | **论文**：URL | **PDF**：URL | **代码**：URL（或"暂无"） | **Demo**：URL（或"暂无"）
-
-### 📌 简介
-3-5句中文完整总结，让读者不看下文也能了解论文全貌。包含：要解决的问题、提出的方法/框架、关键实验结果（含具体指标数值）。**禁止仅翻译摘要，必须基于全文阅读提炼核心贡献。**
-
-### 🔧 技术方案
-
-**问题背景：** 该技术方案要解决的核心问题是什么，现有方法的局限性在哪里。**基于论文Introduction进行分析，而非简单重复摘要。** 与简介中的问题描述互补，提供更深入的技术背景分析。
-
-**模型架构：** 整体框架、关键模块设计，包含具体模型名称、组件结构、参数量等。介绍简介中未展开的架构细节。**需包含具体技术细节（如网络结构、模块设计、输入输出维度等），体现专业深度。**
-
-**核心创新：** (1) 创新点1详细说明。(2) 创新点2详细说明。(3) 创新点3详细说明。每个创新点需包含具体技术细节，补充简介中未提及的方案细节。**与现有方法的关键区别是什么？为什么有效？**
-
-**训练策略：** 损失函数、数据预处理、训练细节（数据集规模、训练轮数、学习率、优化器等）。**需从论文中提取具体数值，而非笼统描述。**
-
-### 📊 实验结果
-**数据集**：数据集名称列表
-
-**主要指标**：
-- 指标1：数值
-- 指标2：数值
-- 关键对比结果
-
-**是否开源**：开源状况（代码/模型链接）
-
-### ⭐ 评分：X/10
-评分理由：创新性/实验充分性/实用价值综合评述，3-5句话。
-```
-
-**内容生成优化要点**：
-
-1. **字符数控制**
-   - 单篇论文总字符数：1500-2500
-   - 简介：200-300字符
-   - 技术方案：500-800字符
-   - 实验结果：300-500字符
-   - 评分理由：100-200字符
-
-2. **列表使用**
-   - ✅ **核心创新使用编号列表**：(1) (2) (3) 格式
-   - ✅ **主要指标使用无序列表**：`- 指标名：数值`
-   - ✅ **其他内容使用紧凑段落**
-   - ❌ **禁止嵌套列表**
-
-3. **字段分隔符**
-   - ✅ **使用中文冒号 `：`** 分隔字段名和值，如 `**作者**：xxx`
-   - ✅ **竖线 `|`** 分隔同一行的多个字段，如 `**arXiv ID**：ID | **方向**：分类`
-   - ✅ **分类标题不包含emoji**，如 `## 语音大模型` 而非 `## 🤖 语音大模型`
-
-4. **emoji使用**
-   - ✅ **标题使用emoji**：📌、🔧、📊、⭐
-   - ❌ **正文禁止emoji**：正文内容不使用emoji
-
-5. **简介要求**：简介使用中文，必须包含三要素：要解决的问题、提出的方法/框架、关键实验结果（含具体指标数值）。让读者不看下文也能了解论文全貌。
-
-6. **问题背景要求**：技术方案中必须包含"问题背景"子段，清晰说明该技术方案要解决的核心问题和现有方法的局限性
-
-7. **技术方案详细度要求**：
-   - 模型架构说明需包含具体模型名称、组件结构
-   - 核心创新需详细说明技术细节，每个创新点2-3句
-   - 训练策略需包含数据集规模、训练轮数、学习率等具体参数
-
-8. **评分理由要求**
-    - 必须基于论文实际内容给出具体评价
-    - 包含创新性、实验充分性、实用价值等多个维度
-    - 3-5句话，避免空泛套话
-
-**示例：优化前 vs 优化后**
-
-❌ **优化前（风险格式，约7000字符）**：
-```markdown
-### 🔧 技术方案
-
-**模型架构**：
-- 整体框架：基于Qwen2-Audio
-- 关键模块：Audio-Side Time Prompt
-- 模型参数：7B参数量
-
-**核心创新**：
-- **创新点1**：Audio-Side Time Prompt
-  - 详细说明：将时间戳嵌入穿插在音频特征序列中
-  - 实现方式：使用特殊token标记时间戳
-  - 优势：提升时间感知能力
-- **创新点2**：语义初始化策略
-  - 详细说明：Timestamp Embedding初始化为对应数字字符串的subword embeddings平均
-  - 实现方式：预训练embeddings作为初始值
-
-**训练策略**：
-- **损失函数**：
-  - 主任务：Cross-entropy loss
-  - 辅助任务：Time prediction loss
-- **数据预处理**：
-  - 音频重采样：16kHz
-  - 特征提取：Mel-spectrogram
-- **训练细节**：
-  - SFT：3 epochs, lr=1e-5, LoRA
-  - RL：GRPO, 1 epoch, lr=1e-6
-```
-
-✅ **优化后（安全格式，约4500字符）**：
-```markdown
-### 🔧 技术方案
-
-**模型架构** 基于Qwen2-Audio，关键模块为Audio-Side Time Prompt，模型参数量7B。
-
-**核心创新**
-Audio-Side Time Prompt将时间戳嵌入穿插在音频特征序列中，使用特殊token标记时间戳，提升时间感知能力。语义初始化策略将Timestamp Embedding初始化为对应数字字符串的subword embeddings平均，使用预训练embeddings作为初始值。
-
-**训练策略**
-损失函数包括主任务的Cross-entropy loss和辅助任务的Time prediction loss。数据预处理包括音频重采样至16kHz和Mel-spectrogram特征提取。训练分两阶段：SFT阶段3 epochs，lr=1e-5，使用LoRA；RL阶段使用GRPO，1 epoch，lr=1e-6。
-```
+- 字段全部使用中文冒号 `：` 分隔，如 `**作者**：xxx`；同行多字段用 `|` 分隔
+- 每篇论文包含：标题、arXiv ID、方向、作者、机构、发布日期、论文/PDF/代码/Demo 链接（无则"暂无"）
+- 分段：`### 📌 简介`、`### 🔧 技术方案`（问题背景/模型架构/核心创新/训练策略）、`### 📊 实验结果`、`### ⭐ 评分：X/10`
+- 禁止嵌套列表；核心创新用 (1)(2)(3) 编号；主要指标用 `- 指标：数值` 无序列表
+- 字符量：单篇 1500-2500 字符，简介 200-300，技术方案 500-800，实验结果 300-500，评分理由 100-200
+- 全程中文（论文标题保留英文）；正文禁止 emoji，仅标题用 📌 🔧 📊 ⭐
 
 ### 评分标准
 
@@ -225,12 +96,15 @@ Audio-Side Time Prompt将时间戳嵌入穿插在音频特征序列中，使用�
 ### 排序逻辑
 
 1. 按评分降序排序
-2. 前15篇：显示完整精读内容
-3. 其余论文：只显示标题、arXiv ID、评分和链接
+2. 归入 `## 语音大模型` 或 `## 语音前端` 两个分类
+3. 前15篇：显示完整精读内容
+4. 其余论文：只显示标题、arXiv ID、评分和链接
 
 ---
 
+## 第三步：生成文件
 
+### 文件头模板
 
 ```markdown
 # YYYY-MM-DD 语音论文速递
@@ -243,103 +117,86 @@ Audio-Side Time Prompt将时间戳嵌入穿插在音频特征序列中，使用�
 ---
 
 ## 语音大模型
-
-## [1] 论文标题
-
-**arXiv ID**：ID | **方向**：分类
-
-**作者**：作者1, 作者2, 作者3
-
-**机构**：机构名称
-
-**发布日期**：YYYY-MM-DD | **论文**：URL | **PDF**：URL | **代码**：URL | **Demo**：URL
-
-### 📌 简介
-中文完整总结，包含三要素：要解决的问题、提出的方法、关键实验结果（含指标数值）。
-
-### 🔧 技术方案
-
-**问题背景：** 该技术方案要解决的核心问题及现有方法局限。
-
-**模型架构：** 整体框架、关键模块设计。
-
-**核心创新：** (1) 创新点1详细说明。(2) 创新点2详细说明。(3) 创新点3详细说明。
-
-**训练策略：** 损失函数、数据预处理、训练细节。
-
-### 📊 实验结果
-**数据集**：数据集名称
-
-**主要指标**：
-- 指标1：数值
-- 指标2：数值
-
-**是否开源**：开源状况
-
-### ⭐ 评分：X/10
-评分理由：创新性/实验充分性/实用价值评述。
-
----
-
-## 语音前端
-
-[按同样格式列出该分类的论文]
-
+...
 ---
 
 *Generated on YYYY-MM-DD*
 ```
 
----
+### 保存规范
+
+- 同时保存到两个位置（内容完全一致）：
+  - 本地输出：`.skills/speech-paper-daily/output/YYYY-MM-DD/speech_paper_YYYYMMDD.md`
+  - GitHub同步：`papers/YYYY-MM-DD/speech_paper_YYYYMMDD.md`（项目根目录，用于同步到 GitHub，不要保存到 `.skills/speech-paper-daily/papers/`）
 
 ---
 
-## 注意事项
+## 第四步：同步知识库与 GitHub
 
-### 日期与命名规则
-- **文件名中的日期**：使用执行日期的前一天（北京时间），即 arXiv 在北京时间当天 08:00 发布的论文以当天日期命名
-- **文件命名**：`YYYY-MM-DD` 必须与论文实际发布时间一致，且文件名中的日期与标题中的日期一致
-- **无发布处理**：执行日（北京时间 00:10）为**周日或周一**时，输出"YYYY-MM-DD 语音论文速递 - 无新论文（arXiv 该日无新发布）"，不生成论文内容
-- **原因**：arXiv 美东时间周五、周六无 announcement，导致北京时间周日、周一 `/new` 页面无更新
+1. **更新知识库**：在 `knowledge_base/` 目录执行 `python3 build_kb.py`（读取全量速递、过滤评分≥7分论文、重建各方向文件与 `_index.json`）
+2. **同步 GitHub**：
+   ```bash
+   cd /Users/kimmy/Desktop/Vagent_app/SpeechAIResercher
+   git add papers/YYYY-MM-DD/ knowledge_base/
+   git commit -m "Daily Speech Papers Update - YYYY-MM-DD"
+   git push origin main
+   ```
+3. **Git 注意事项**：
+   - 仓库 remote 已内置有效 token（`https://ghp_***@github.com/kimmyfa/speech-paper-daily.git`），直接 `git push origin main` 即可，**不要在脚本中另写 token**
+   - 仓库中 `.github/workflows/**`、`fetch_papers.py` 内含的旧 token（`ghp_vUVt8ny***`）均已失效/无权，**不得使用、不得提交新 workflow 文件**（当前 PAT 无 `workflow` 权限，提交会整体拒推）
 
-### 去重规则
-- 每次生成前必须扫描所有已有输出文件，提取 arXiv ID 进行去重
-- 已在之前速递中出现过的论文不得再次收录
-- 去重后无新论文时，输出"无新论文"
+---
 
-### 论文抓取与处理
-- **只抓取目标日期论文**：不抓取其他日期
-- **论文输出格式严格**：必须包含所有必需字段（arXiv ID、方向、作者、机构、发布日期、论文链接、PDF链接、代码链接、Demo链接）
-- **代码和Demo链接**：若论文未提供必须填"暂无"
-- **文件保存规范**：同时保存到两个位置：
-  - 本地输出：`.skills/speech-paper-daily/output/YYYY-MM-DD/`
-  - GitHub同步：`papers/YYYY-MM-DD/`（项目根目录，用于同步到 GitHub，不要保存到 `.skills/speech-paper-daily/papers/`）
-- **评分排序**：完成所有精读后按评分降序排序
-- **显示限制**：超过15篇时只显示得分最高的15篇完整详情
-- **全程中文**：除论文标题保留英文外，其余使用中文
+## 第五步：飞书通知
 
-### 超时与重试
-- **任务耗时**：10篇论文的精读约需 30-60 分钟，定时任务 timeout 必须设置 3600s（1小时）以上
-- **监控任务**：监控任务的 timeout 也必须设置 3600s 以上，因为重试生成同样需要大量时间
-- **terminated 处理**：如果任务被 terminated（超时或其他原因），监控任务应检测到输出文件不存在或为空，然后自动重新执行
-
-### 第四步：同步到 GitHub
-
-生成论文速递后，执行以下命令同步到 GitHub：
+使用正确配置的 lark-cli 发送（**必须**），发送文本固定格式：
 
 ```bash
-cd /Users/kimmy/Desktop/Vagent_app/SpeechAIResercher
-git add papers/YYYY-MM-DD/ knowledge_base/
-git commit -m "Daily Speech Papers Update - YYYY-MM-DD"
-git push origin main
+LARKSUITE_CLI_CONFIG_DIR="$HOME/.lark-cli" \
+  "$HOME/.config/vagent/runtime-home/lark-cli/darwin-arm64/lark-cli" \
+  im +messages-send --chat-id oc_6167c48a3ad5662413abab93b359d183 --msg-type text \
+  --text "$(printf '📚 语音论文速递（%s）%s🔗 GitHub链接：https://github.com/kimmyfa/speech-paper-daily/tree/main/papers/%s' 'YYYY-MM-DD' '
+
+' 'YYYY-MM-DD')" --as bot
 ```
 
-若生成和同步是同一 session 中连续执行，可直接在最后执行 git 操作。
+**飞书配置要点（曾反复踩坑）**：
+- 使用 `LARKSUITE_CLI_CONFIG_DIR="$HOME/.lark-cli"`（应用 `cli_aae2b74130789bd3`，已在「SSE小组」群内，且绑定了用户柯善发）
+- **禁止**使用 vagent runtime-home 默认配置（应用 `cli_aac993d952a3dbed`，不在群里，发送报 230002 "Bot/User can NOT be out of the chat"）
+- 若发送失败，先 `lark-cli config show` 确认 appId，再检查是否用了正确的 config dir
 
-### 第五步：同步语音论文知识库
+---
 
-在第四步 git commit 之前，先更新知识库：
+## 注意事项（汇总）
 
-1. 运行 `python3 knowledge_base/build_kb.py`（读取全量速递，过滤评分 ≥ 7 分论文，重建知识库各方向文件）
-2. 确认 `knowledge_base/_index.json` 已更新（`generated_at` 变为当前日期）
-3. 回到第四步，在 git add/commit 中同时包含 `papers/YYYY-MM-DD/` 与 `knowledge_base/`，一次性 commit 与 push
+### 日期与命名（最高优先级）
+- 文件名日期 = **arXiv 批次日期**（周二至周五=昨天，周一=上周五），绝不使用执行当天日期
+- 文件目录 `YYYY-MM-DD`、文件名 `speech_paper_YYYYMMDD.md`，两者必须一致且与标题日期一致
+- 周六、周日执行 → 直接结束，不生成文件
+
+### 去重规则
+- 每次生成前必须扫描所有已有输出文件（`.skills/speech-paper-daily/output/` 全量），提取 arXiv ID 去重
+- 已在之前速递中出现过的论文不得再次收录
+- 去重后无新论文 → 输出"无新论文"并结束，不创建文件、不通知
+
+### 论文抓取与处理
+- 只处理 `/new` 页面 New submissions + Cross submissions；Replacement 一律跳过
+- 论文输出必须包含所有必需字段（arXiv ID、方向、作者、机构、发布日期、论文链接、PDF链接、代码链接、Demo链接），缺则"暂无"
+- 代码和 Demo 链接若论文未提供必须填"暂无"
+- 全程中文，除论文标题保留英文
+
+### 超时与重试
+- 单次完整生成（含多篇精读）可能 30-60 分钟，任务 timeout 必须≥3600s
+- 若任务被 terminated：检测到输出文件不存在或为空时，自动重新执行
+
+### 幂等
+- 完成通知后写入哨兵文件 `~/.vagent-speech/log/.notified_{YYYYMMDD}`（YYYYMMDD = 批次日期）
+- 执行前先检查哨兵文件是否存在，存在则直接结束，避免重复通知
+
+---
+
+## ℝ 附录：与自动化脚本的分工
+
+- 自动化调度：`~/Library/LaunchAgents/com.speechpaper.daily.plist`（工作日 09:20，`launchctl asuser` 执行 `~/.vagent-speech/run_daily.sh`）
+- `run_daily.sh` 负责：注入模型 API key、起 `vagent serve`、探测 session、注入参数运行本 prompt、校验产出、调 lark-cli 发飞书、写哨兵
+- 本 SKILL 负责：arXiv 拉取、去重、精读、模板化输出、知识库构建、GitHub 推送（飞书通知由外层脚本负责时，agent 内不必重复发送）
