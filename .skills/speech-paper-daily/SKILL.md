@@ -149,19 +149,16 @@ description: 语音领域每日论文速递。搜索最新一批（北京时间�
 
 ## 第五步：飞书通知
 
-使用正确配置的 lark-cli 发送（**必须**），发送文本固定格式：
+**必须调用 `scripts/notify_lark.sh`（唯一正确方式）**，不要手写 lark-cli 命令：
 
 ```bash
-LARKSUITE_CLI_CONFIG_DIR="$HOME/.lark-cli" \
-  "$HOME/.config/vagent/runtime-home/lark-cli/darwin-arm64/lark-cli" \
-  im +messages-send --chat-id oc_6167c48a3ad5662413abab93b359d183 --msg-type text \
-  --text "$(printf '📚 语音论文速递（%s）%s🔗 GitHub链接：https://github.com/kimmyfa/speech-paper-daily/tree/main/papers/%s' 'YYYY-MM-DD' '
-
-' 'YYYY-MM-DD')" --as bot
+bash /Users/kimmy/Desktop/Vagent_app/SpeechAIResercher/scripts/notify_lark.sh YYYY-MM-DD
 ```
 
+该脚本已内置正确配置，会完成：校验产出 → 使用本机 `~/.lark-cli` 配置发送固定格式文本 → 写入哨兵文件 `~/.vagent-speech/log/.notified_{YYYYMMDD}`（幂等，已通知过自动跳过）。注意 **禁止** 手动 `touch` 哨兵，交给脚本处理。
+
 **飞书配置要点（曾反复踩坑）**：
-- 使用 `LARKSUITE_CLI_CONFIG_DIR="$HOME/.lark-cli"`（应用 `cli_aae2b74130789bd3`，已在「SSE小组」群内，且绑定了用户柯善发）
+- 必须使用本机配置 `LARKSUITE_CLI_CONFIG_DIR="$HOME/.lark-cli"`（应用 `cli_aae2b74130789bd3`，已在「SSE小组」群内，且绑定了用户柯善发）
 - **禁止**使用 vagent runtime-home 默认配置（应用 `cli_aac993d952a3dbed`，不在群里，发送报 230002 "Bot/User can NOT be out of the chat"）
 - 若发送失败，先 `lark-cli config show` 确认 appId，再检查是否用了正确的 config dir
 
