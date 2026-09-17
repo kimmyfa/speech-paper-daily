@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 12 篇
+共 15 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -108,5 +108,32 @@
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Neural Multichannel Distant Speaker Diarization With Heavy-tailed Source Separation Model](https://arxiv.org/abs/2609.12154)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-09-10
+- **一句话贡献**：远场说话人日志因声学环境复杂、说话人数可变和语音重叠而颇具挑战。模型驱动方法利用多通道录音中的语音源特征来辅助日志。本文对联合学习盲源分离与说话人日志的神经模型（neural FCASA）进行了重尾化推广。原始源分离模型采用高斯分布建模方差，本文将其替换为两类重尾分布：峰度大于高斯的正态均值（Leptokurtic Generalized Gaussian，GG）分布和 Student's t 分
+- **关键技术点**：远场说话人日志面临语音重叠、噪声混响、说话人数可变等挑战。数据驱动方向做大增强与EEND/LLM；模型驱动方向引入DOA、ITD和波束形成等多通道物理特征。neural FCASA将源分离模型与日志联合训练，但延续高斯方差建模。已知重尾分离模型对噪声、动态范围、混响等困难场景更鲁棒，且真实会议重叠率动态范围更大、重尾性更强，因此用重尾分布替换高斯分布有望提升日志性能。
+- **主要指标**：- AMI评测集：Student's t ν=0.1最优，Forgiving DER 11.24%（JER 10.78%，基线14.48/13.50）、Fair 12.53%（基线15.73）、Full 16.01%（基线18.73）、Overlap 20.03%（基线24.11），相对改善10-1
+- **代码**：https://github.com/alephpi/neural-fcasa（baseline代码，本文复现所用） | **Demo**：暂无
+
+---
+## [Real-Time Music Source Separation on a Low-Power Audio DSP](https://arxiv.org/abs/2609.12201)
+
+- **方向**：语音前端（实时源分离） | **子方向**：Separation | **评分**：7/10 | **日期**：2026-09-10
+- **一句话贡献**：针对实时音乐源分离虽在桌面 CPU/GPU 上验证却无法跑在目标嵌入式音频芯片上的问题，本文以 Analog Devices SHARC-FX 音频 DSP（1 GHz、512 kB L1、2 MB L2、实测 2.07 GMAC/s）为约束，证明现有系统无一满足内存与算力双约束，并构建首个真正可部署的实时分离器。核心发现：分块补零卷积训练会使流式逐帧推理约 2 秒内崩溃为静音，改为连续卷积上下文
+- **关键技术点**：实时音乐源分离通常在桌面硬件上报告"3.9 ms on RTX 3080Ti"之类的耗时，这一指标无法迁移到助听器、耳内监听或现场音频处理器所用的低功耗 DSP——固定 MAC 速率、硬性逐帧时限、数 MB 片内 SRAM 构成了完全不同的约束。内存约束淘汰了 TasNet/X-UMX 一族（16–51M 参数，超 L2 预算 8.0–25.5 倍）；逐帧算力约束淘汰 RT-STT（需 11.39 GMAC/s，为器件实测容量的 5.5 倍）。权重利用率 ρ 跨两个半数量级（1x 到 345x），参数量完全无法预测每帧成本。
+- **主要指标**：- 全频带部署模型：4.70 dB cSDR / 4.70 dB uSDR，21.9M MAC/帧 - 片上实测：10.43 ms/帧（11.6 ms 帧间隔的 90%），L2 占用 1963/2040 kB、L1 447/512 kB - F=192 裁剪变体：牺牲 0.36 dB 换 77% 算
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Location-based Training with Complementary Folded Linear Orderings for Multichannel Speech Separation](https://arxiv.org/abs/2609.12629)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-09-11
+- **一句话贡献**：位置训练（LBT）通过对网络输出施加确定性的空间排序，有效解决了多通道语音分离中的输出排列（permutation）问题。对于平面麦克风阵列，LBT 通常采用覆盖全空间范围的圆形方位角排序，但这种环形拓扑在其连线点（0°/360°边界）处存在不连续性，增大了学习难度并限制了空间线索的有效利用。本文研究了该局限性，提出基于折叠线性排序的位置训练（LBT-FLOs），将圆形方位角折叠为受控的线性排序。
+- **关键技术点**：多通道语音分离需要借助麦克风阵列的空间线索确定分离输出的排列顺序。基于位置训练（LBT）按声源方位角或距离确定输出排列，优于 PIT 方法。但对平面阵列采用覆盖全 360° 的圆形排序时，0°/360° 边界处的环绕不连续会造成排序突变，迫使网络将部分容量用于学习这一人为拓扑，限制了分离性能。
+- **主要指标**：- 评价指标为 SI-SDR 与 ESTOI。在 PET-3 与 URA-4+ 阵列、T60=0.65s 混响条件下：CLBT-FLOs 在 oracle 方位角（Δφ=0°）引导下较 LBT-CO 与各单个 LBT-FLO 获得一致改进，增益虽小但稳定；配对 Wilcoxon 符号秩检验效应量 r
+- **代码**：暂无 | **Demo**：https://aspire.ugent.be/demos/IWAENC2026KY/
 
 ---

@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 45 篇
+共 53 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -56,6 +56,33 @@
 - **代码**：GitHub 与 Hugging Face（论文注明 Code and data available） | **Demo**：https://step-out.github.io/Motion-Omni-Page/
 
 ---
+## [VoxTubeS: Distributable Speaker-Anonymized Synthetic Speech Corpora and Their Analysis](https://arxiv.org/abs/2609.12432)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：9/10 | **日期**：2026-09-11
+- **一句话贡献**：大型语音语料支撑研究的同时也会暴露说话人身份，因为语音属于可识别的生物特征，而源自媒体的语音数据又难以可靠地再分发。本文提出 VoxTubeS——一个面向再分发的说话人匿名化合成语音语料家族，包含三种方法族、七个变体，均源自 CC BY-NC-SA 4.0 授权的 VoxTube 语料（1,511 说话人的 129 万条质量过滤英语话语）。合成方法涵盖语音转换、潜空间匿名化与可控语音合成三种范式。
+- **关键技术点**：大规模公共语音语料是说话人识别、语音生成等研究的基石，但语音是生物特征信号，可暴露说话人身份、人口属性与录音环境。说话人识别训练天然需要说话人判别性的变化，而释放的数据可能被链接、检索和复用。VoxCeleb 官方已停止分发源媒体，说明生物特征语料获取脆弱；VoicePrivacy 倡议给出评估框架，但强话语级匿名化未必产生有用的训练语料。
+- **主要指标**：- 话语级不可链接 EER：OHNN-BigVGAN-SC 38.02% 最高之一（仅次 DAIEN-NCFG(-1.0) 44.28%、(-0.75) 39.97%），OHNN-HiFiGAN 32.70%，SALT-k4/k8 26.84%/26.08%，Auth 仅 1.49%。会话级链接（L
+- **代码**：https://zenodo.org/records/22699494; https://huggingface.co/datasets/nii-yamagishilab/VoxTubeS | **Demo**：https://nii-yamagishilab.github.io/voxtubes-demo-pages/
+
+---
+## [Taming Long-form Text-to-Speech](https://arxiv.org/abs/2609.16989)
+
+- **方向**：语音大模型（TTS） | **子方向**：TTS | **评分**：9/10 | **日期**：2026-09-16
+- **一句话贡献**：针对 Qwen3-TTS、VoxCPM2 等自回归神经编解码器 TTS 模型在长文本提示下内容准确率和说话人相似度骤降的问题，提出纯推理端方法 LACI（Localized Attention-Constrained Inference）：利用突发性音频-文本对齐头实时检测"跳词"与"幻觉"两类失效，回滚到失效起点并在临时注意力约束下重新生成。在 AppTek Call Center 数据集上，Q
+- **关键技术点**：自回归神经编解码器语言模型是当前 SOTA TTS 的主流范式，在短文本上表现优异，但输入文本变长时内容可靠性显著恶化（Qwen3-TTS-0.6B 在 500 词以下 worst-of-N WER 为 5.4%，1500 词以上升至 35.2%），语音克隆也无法从长参考音频获益。分析发现该差距根源于生成音频与输入文本 token 之间的注意力错位（attention misalignment）。现有训练期方法（Tacotron 2 位置敏感注意力、时长模型等）需要训练干预且稳定性难保证；推断期多候选生成法成本线性增长且不修复可能跨 RNG 种子持续存在的失效；最接近的工作 ACI 采用全时段
+- **主要指标**：- Qwen3-TTS-0.6B worst-of-N WER：<500 词 5.4% 维持不变，500-1000 词 6.5%→3.9%，1000-1500 词 11.2%→3.3%，≥1500 词 35.2%→3.4% - Qwen3-TTS-1.7B 最长两个桶基线最差 WER 45.7% 与
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [The Evolving Bottleneck in Speech Generation: Interface Co-design and Staged Alignment from CosyVoice to Qwen-Audio-3.0-TTS](https://arxiv.org/abs/2609.16514)
+
+- **方向**：语音大模型（TTS 技术回顾） | **子方向**：TTS | **评分**：9/10 | **日期**：2026-09-16
+- **一句话贡献**：这是对 CosyVoice 四代系统（CosyVoice→2→3→Qwen-Audio-3.0-TTS）的技术回顾论文，核心提出"演进瓶颈"论点：代际进步来自反复转移系统的主导瓶颈，而非单纯扩大模型、tokenizer 与数据。文章用四维接口契约（representation/ownership/availability/gradient reach）重构代际设计变化，并提炼五阶段渐进对齐训练范式
+- **关键技术点**：语音合成须同时优化语言正确性、说话人保真、韵律自然度、音质、多语方言覆盖、可控性、延迟、长句稳定性与不完美参考语音鲁棒性，这些目标在不同模块失效，改进其一便会暴露新约束。"更大模型、更好 tokenizer、更多数据"的叙事无法解释为何各代重点不同，本文以接口契约视角解释四代瓶颈的连续转移。
+- **主要指标**：- CosyVoice 2 消融：VQ 换 FSQ 使中文 CER 2.56→1.45、英文 WER 3.81→2.57、hard 集 WER 9.66→6.83 - Qwen-Audio-3.0-TTS tokenizer 对比：25Hz/K=6561 参考（CER 1.45、WER 2.57）；
+- **代码**：https://github.com/FunAudioLLM/CosyVoice | **Demo**：暂无
+
+---
 ## [VoiceDesigner: Text-to-Voice Generation and Editing via Unified Diffusion Modeling and Data Augmentation](https://arxiv.org/abs/2608.13613)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-08-17
@@ -90,6 +117,15 @@
 - **关键技术点**：语音生成与编辑长期被拆分为零样本合成、内容替换、去噪分离、音色/风格迁移、声学属性修改等相互独立的子任务，各系统接口与数据结构不兼容、难以组合复用，缺乏统一的指令驱动通用模型。
 - **主要指标**：- AuK-Flash：4 步推理、无需 CFG，相比完整模型 4.5 倍墙钟加速 - 零样本与指令控制语音生成、通用指令编辑：领先水平 - 信号级复原任务（增强/分离）：竞争力良好
 - **代码**：开源（源码与模型权重发布） | **Demo**：暂无
+
+---
+## [Self-Distilled Pronunciation and Accent Control for Neural Text-to-Speech](https://arxiv.org/abs/2609.17234)
+
+- **方向**：语音大模型（TTS 发音 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-16
+- **一句话贡献**：端到端 TTS 丢弃 G2P 词表环节后，生僻词与日语声调重音只能由模型猜测。本文提出自蒸馏方案：冻结基座对"含常见词且拼写正确的载体句"输出自身波形作为教师，学生输入把该词替换为带标记的带重音片假名，仅用 rank-16 LoRA 训练此配对即装好"读音+重音"信道，全程零录音、零标注。Sarashina2.2-TTS 上重音实现率 0.89（Fleiss κ=0.85），明文假名仅 0.57；
+- **关键技术点**：串联式 TTS 在合成前由 G2P 前端查词表，端到端 TTS 取消该环节后生僻汉字、专有名词、领域术语只能靠模型猜测；日语重音为词库性指定，读错会伤害可懂度。现有补救均付出录音代价：UtterTune 需 15,097 条人工修正对齐对，Sarashina2.2-TTS 需约 4,000 小时监督微调，CosyVoice 3 发音修补与 GLM-TTS 混合音素输入仅在基础训练时可用。核心问题：发布后的冻结模型如何以零录音成本安装读音与重音控制信道。
+- **主要指标**：- 读词准确率（319 生僻词×42 留出音色）：无编辑 vs 本文——Sarashina .511→.821、CosyVoice 2 .279→.749、Irodori .586→.837、T5Gemma .398→.752，四种骨架增益 +0.310/+0.470/+0.251/+0.354（均
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Stable Autoregressive Speech Generation with Low-Frame-Rate High-Dimensional Continuous Tokens](https://arxiv.org/abs/2607.29363)
@@ -344,6 +380,24 @@
 - **代码**：https://gsyllas.github.io/greek-stable-tts/ | **Demo**：暂无
 
 ---
+## [AlignDPO: Preference-Gated Alignment for Reducing Hallucination in Decoder-Only TTS](https://arxiv.org/abs/2609.12855)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：解码器式文本到语音（TTS）模型扩展效率高，但在自回归生成过程中由于文本-语音对齐较弱，容易出现内容幻觉（漏读、重复或凭空编造内容词）。作者发现鲁棒性受对齐注意力头锐度的非单调关系支配：中等锐度最佳，过度锐化不仅不优于未对齐的骨干模型，甚至更不鲁棒。基于此提出AlignDPO，一种后训练方法：将轻量级的CTC（连接时序分类）对齐项折叠进直接偏好优化（DPO）中，且仅应用于chosen样本，无需任何
+- **关键技术点**：解码式TTS（VALL-E范式）泛化与扩展性好，但缺乏显式文本-语音对齐，自回归生成时注意力不受约束，导致内容词漏读、重复、编造等幻觉，损害语义保真度。已有的记忆单调对齐方案多需引入架构改动、外部强制对齐器、教师模型或推理时约束（如ACI），增加部署复杂度和建模灵活性损失，且DPO等偏好优化虽然提升质量但未显式对齐结构、不直接针对幻觉。
+- **主要指标**：- Seed-TTS-Eval英文706句：Base vs DPO vs DPO+M的WER为14.2%/7.0%/5.2%，CER为9.4%/4.0%/2.7%，HAL幻觉率29.75%/15.01%/11.33%，SEV-HAL严重幻觉率4.39%/1.42%/0.57%（约0.6%，Wilso
+- **代码**：暂无 | **Demo**：https://align-dpo-demo.vercel.app
+
+---
+## [Cross-Lingual F5-TTS 2: A Simplified Framework for Language-Agnostic Voice Cloning](https://arxiv.org/abs/2609.15184)
+
+- **方向**：语音大模型（跨语言语音克隆TTS） | **子方向**：TTS | **评分**：8/10 | **日期**：2026-09-14
+- **一句话贡献**：零样本TTS推理时通常依赖音频提示的文本转写，跨语言克隆场景下该转写常不可得。本文提出Cross-Lingual F5-TTS 2，用预训练F5-TTS合成同说话人提示音，与真实语音构成配对进行有监督微调，无需强制对齐即去除转写依赖。实验在LibriSpeech-PC与Seed-TTS上取得最高说话人相似度SIM-o 0.687/0.683/0.768，可懂度不降（WER低至2.014%），并泛化
+- **关键技术点**：F5-TTS依赖提示音转写承担双重角色：文本条件与时长估计参考。Cross-Lingual F5-TTS用MMS强制对齐分割训练对并训练音节级语速预测器（SRP）来消除该依赖，但对齐对边界错误敏感、随语言扩展成本上升，且提示音带头尾静音时SRP会低估语速、高估时长导致语音被拉伸。
+- **主要指标**：- LIBRISPEECH-PC WER：2.014%（三个系统中最低） - SIM-o：0.687（LibriSpeech-PC）、0.683（test-en）、0.768（test-zh），均最高 - UTMOS：3.704（LibriSpeech-PC）、3.544（test-en）、2.76
+- **代码**：暂无 | **Demo**：https://qingyuliu0521.github.io/Cross-Lingual_F5-TTS_2_demo/
+
+---
 ## [FNH-TTS: Mixture-of-Experts Duration Modeling for Robust Neural Speech Synthesis](https://arxiv.org/abs/2508.12001)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2025-08-16
@@ -404,6 +458,24 @@
 - **一句话贡献**：现有情感TTS仅建模单一语句级情感，无法控制多情感。本文提出HybridEmo框架，针对两种互补任务——情感轨迹（有序情感阶段序列）和情感混合（多种情感共存于同一语句）——先SFT初始化再通过GRPO对齐语音token策略。轨迹分支使用分段对齐一致性（平均+最弱阶段证据）维护阶段完整性，混合分支使用基于GMM的奖励。在MultiEmo-Test上显著提升轨迹正确性和混合强度，人类评测优于CosyV
 - **关键技术点**：
 - **主要指标**：- 轨迹正确性：HybridEmo显著优于基线 - 混合强度：HybridEmo显著优于基线 - 说话人相似度：无明显退化 - 人类偏好：优于CosyVoice 3 和 EmoVoice-0.5B，与Qwen3-TTS持平
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [DiTAR+: Dual Optimization for Robust Autoregressive Diffusion Speech Synthesis](https://arxiv.org/abs/2609.13909)
+
+- **方向**：语音大模型（语音合成 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-12
+- **一句话贡献**：连续隐空间自回归扩散Transformer（AR-DiT）在零样本语音合成中展现巨大潜力，但在长句或复杂语言结构下解码稳定性不足。本文提出DiTAR+双优化框架：膨胀上下文采样（DCS）扩大历史感受野，分层声学掩码（HAM）抑制扩散解码器浅层的声学惯性捷径。在ZH-Hard硬句集上WER从12.478%降至9.893%，在25至35秒长句上SIM从0.741升至0.759且WER从2.778%降至
+- **关键技术点**：连续latent AR-DiT保留更丰富的音色、韵律与频谱细节，但存在两大瓶颈：LocDiT感受野窄，长句生成时历史信息逐渐不可达引发累计误差与说话人漂移；迭代去噪中浅层网络过度依赖历史声学走"复制延续"捷径而弱化LM语义条件。
+- **主要指标**：- Seed-EN WER/SIM：1.672%/0.735（WER最低） - Seed-ZH WER/SIM：0.985%/0.762（全场最优） - ZH-Hard WER/SIM：9.893%/0.695（比DiTAR的12.478%大幅降低） - ZH-Long WER/SIM：2.173%
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Modeling, Scaling, and Decoding: Optimizing Controllable Speech Generation with Nonverbal Vocalizations](https://arxiv.org/abs/2609.14231)
+
+- **方向**：语音大模型（可控语音生成 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-13
+- **一句话贡献**：可控地合成非语言发声（NVV）对自然且富有表现力的语音至关重要，但因其声学形态多样、语料分布极不均衡，仍是难题。本文提出NVV感知的DiTAR系统：以连续语音潜在表示建模，将16个NVV类别注册为专用特殊token，并改造停止预测以区分句中发声与真实句尾。系统先在10万小时双语语音上预训练，再在经定向合成增强与频率感知再均衡的数据上继续SFT。最终官方加权双语得分62.786，夺得ISCSLP 2
+- **关键技术点**：传统TTS主要优化词法流畅性，NVV事件常在数据清洗中被滤除；现有零样本TTS仍无法在指定位置以令人信服的声学表现生成指定NVV。
+- **主要指标**：- 官方最终分数（ZH/EN/双语）：61.775 / 63.797 / 62.786（总榜第一） - 相比官方基线（双语61.431）提升1.355分，中文提升2.075分 - 中文CER：5.012%（基线6.267%）| 英文WER：2.194%（基线3.159%） - DNSMOS：3.22
 - **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 18 篇
+共 21 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -137,6 +137,24 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [PhaseGAN: High-Fidelity Vocoder via Decoupled Amplitude and GAN-Driven Phase Reconstruction](https://arxiv.org/abs/2609.12918)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：PhaseGAN是一种面向TTS系统的轻量级神经声码器，针对神经网络声码器中最困难的相位重建问题，提出"mel→幅度谱→相位谱"的解耦重建流水线。第一阶段通过mel滤波器组伪逆插值将80维mel谱恢复到513维线性频域，再用ICCRN（Inplace Cepstral Convolutional Recurrent Neural Network）以MSE损失重建幅度谱；第二阶段借鉴计算机视觉中R3
+- **关键技术点**：神经声码器重建波形本质上是生成任务，幅度谱重建相对简单（类似插值，输入mel谱已含幅度信息），而相位谱在输入中不含任何信息，且一个幅度谱对应多个听感相同的相位谱，呈"一对多"映射，是制约音质与建模效率的主要瓶颈。现有T-F域声码器（如APNet2、FreeV）多用强监督方式直接拟合相位标签，训练不稳定且易产生频谱伪影；GAN类声码器（HiFi-GAN等）存在训练不稳定与金属感伪影等问题。
+- **主要指标**：- LJSpeech单说话人：PhaseGAN（1.63M参数）全面SOTA——UTMOS 4.238（真实语音4.37，HiFi-GAN 4.219/iSTFTNet 4.236/FreeV 4.015）、MOS 4.256、WB-PESQ 3.926、STOI 0.988、MCD 2.108（H
+- **代码**：暂无 | **Demo**：https://github.com/phasegan/phasegan-audio-demo
+
+---
+## [LACE: Layer-Wise Compression for Dynamic Frame Rate Codecs](https://arxiv.org/abs/2609.17509)
+
+- **方向**：语音大模型（音频编解码） | **子方向**：Codec | **评分**：8/10 | **日期**：2026-09-16
+- **一句话贡献**：动态帧率codec通过按段合并帧降低有效帧率，但现有方法要么只支持单码本，要么在多层量化前做一次统一压缩，迫使所有量化层共享同一套分段边界。LACE（Layer-Adaptive Codec Encoding）在每个RVQ量化层独立执行压缩，使各层拥有各自的分段边界，并提出 union alignment 与 boundary anchor 解决层间时长不一致以适配 TTS 训练。实验在 Libr
+- **关键技术点**：神经音频编解码器帧率高导致序列过长，增大 Transformer 计算开销，且语音 token 与文本长度失配损害语音语言模型性能。动态帧率codec（CodecSlime 的 DP 法、FlexiCodec 的余弦相似度法、VARSTok 的密度峰值聚类法）通过压缩生成可变长分段降低有效帧率。但 RVQ 具有层次性：浅层捕捉主结构、深层编码细节，深层残差变化更快。现有方法强制所有量化层共享同一分段边界，对多码本codec 是次优的。
+- **主要指标**：- 重构 DAC+DP+LACE（22.5Hz，约 8.6kbps）：WER 2.22%、UTMOS 3.81、PESQ 3.08、STOI 0.95、SpkSim 0.98（单次压缩为 4.92%/2.49/1.61/0.86/0.94） - 重构 EnCodec+DP+LACE：WER 2.18
+- **代码**：https://github.com/espnet/espnet | **Demo**：暂无
+
+---
 ## [KVAE: Family of Tokenizers for Multimodal Generative Models](https://arxiv.org/abs/2608.05798)
 
 - **方向**：多模态tokenizer | **子方向**：Codec | **评分**：7/10 | **日期**：2026-08-06
@@ -162,5 +180,14 @@
 - **关键技术点**：
 - **主要指标**：- 单奖励实验：各奖励主要提升自身指标，主观预测器不可互换 - 奖励差距分析：符号化奖励差距显著预测听者选择 - Best-of-8 重排结果：在感知上不劣于 GRPO
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [TokenMapper: A Step Toward Interoperable Speech Token Translation](https://arxiv.org/abs/2609.12563)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-09-11
+- **一句话贡献**：神经音频编解码器将语音离散化为 token 序列，但不同编解码器的词表与码本结构各异，导致跨模型 token 空间无法直接通信。现有方案必须先解码成波形、再用目标 tokenizer 重新编码，引入额外延迟并可能丢失信息。为此本文提出 TokenMapper，一种方向感知（direction-aware）的框架，在离散域直接实现异构语音 tokenizer 之间的 token 到 token 翻译
+- **关键技术点**：不同神经语音编解码器（如单码本的 GLM-4-Voice 与 8 码本 RVQ 的 MiMi、DualCodec）token 空间在词表和码本结构上互不兼容，阻碍了对话式语音智能体、语音到语音翻译等多语音模型的直接协作。跨系统传 token 目前须经波形解码再编码，既增加延迟又可能损失信息。
+- **主要指标**：- LibriSpeech WER：原生 3.29-4.75%，翻译 5.85-9.98%（最好 GLM→DualCodec 5.85%，最难 DualCodec→Moshi 9.98%，平均仅增 2.56-5.96% 绝对值）；VCTK WER 翻译 7.95-9.92%，差距 2.96-6.83
+- **代码**：暂无 | **Demo**：https://talkov.github.io/TokenMapper.github.io/
 
 ---

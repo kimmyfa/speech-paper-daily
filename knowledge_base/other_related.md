@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 20 篇
+共 28 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -110,6 +110,60 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [StepAudio 3 Gen Technical Report](https://arxiv.org/abs/2609.12945)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：本文提出StepAudio 3 Gen，一个统一的通用音频生成模型，在单一框架内支持零样本TTS、声音设计、人声生成、音效、音乐、vibe speech及多类音频混合生成。其核心是离散自回归生成器：StepAudio Tokenizer以12.5Hz、16×2048共享RVQ码空间对语音/音乐/环境音统一量化，同时融合语义与声学特征；LLM主干沿时间轴自回归预测第0层码本，轻量因果Transfor
+- **关键技术点**：TTS、文生音效、音乐与唱歌传统上沿各自独立技术路线发展，系统间表示、条件格式与生成管线互不兼容。近年统一音频生成分两大流派：连续隐空间扩散/流匹配（并行渲染高效）与离散unit的LM式序列建模（与LLM词表、因果目标、交错上下文天然兼容）。但高保真RVQ帧含多码本，展平后序列过长，仅用粗语义token又丢失声学细节；向文本LLM注入音频token还会因嵌入统计不匹配与残差码目标干扰，导致文本能力遗忘。
+- **主要指标**：- 1. RVQ Adaptor消融：AISHELL-1 CER 3.00%(vs 5.25%)、LibriSpeech test-clean WER 3.41%(vs 6.00%)、MMAU 51.70(vs 40.70)、CoVoST En→Zh/ Zh→En BLEU 30.56/18.59(
+- **代码**：暂无 | **Demo**：https://stepaudiollm.github.io/step-audio-3-gen/
+
+---
+## [Objective Intelligibility Prediction Using Distance Metrics on Speech Foundation Model Representations](https://arxiv.org/abs/2609.13046)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：预训练语音基础模型（SFM）的高维表征已被证明有利于客观语音质量和可懂度预测。已有神经可懂度预测工作通常利用这些表征进行任务特定微调，而本工作评估在不进行任何额外训练的情况下，这些表征对可懂度预测的效用。作者对多个语音基础模型进行了逐层分析，将各种嵌入距离与主观可懂度评分相关系联。结果表明，Whisper语音识别模型提取的嵌入最适合此任务，在采用Fréchet Audio Distance（FAD
+- **关键技术点**：语音助听器、编解码器、语音增强等技术的核心目标是保持或提升语音可懂度，需要高效的评估方法。主观测试虽是金标准但昂贵耗时，传统基于信号处理或ASR的概率/混合指标各有局限，WER类方法局限于英语、不可微。作者希望探究无需训练的、基于预训练SFM嵌入距离的、可微且跨语种稳健的可懂度预测方案。
+- **主要指标**：- 模型对比（cosD最好层）：Whisper Base在NCLEIR上PCC=-0.560/SRCC=-0.463，TMHINTQI上PCC=-0.583/SRCC=-0.621，全面优于WavLM、wav2vec 2.0及MFCC。逐层分析：FAD最稳健，最佳层为最后编码器/解码器层。模型规模：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CVSS-X: A Multilingual Speech-to-Speech Translation Corpus for 28 Languages](https://arxiv.org/abs/2609.13413)
+
+- **方向**：语音大模型（语音到语音翻译语料） | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：CVSS 语料仅支持 21 种语言到英语的多对一语音翻译，缺乏从英语出发的一对多训练数据。本文提出 CVSS-X，反向扩展 CVSS，构建从英语到 28 种目标语言（覆盖 12 个语系）的大规模合成语音到语音翻译语料，含 CVSS-X-C（每语言两个固定嗓音）与 CVSS-X-T（跨语言音色克隆）两个变体。语料约 24 万句对/语言，总量超 16,000 小时，为 CVSS 的 8 倍；质量评测中
+- **关键技术点**：真实并行的语音到语音翻译语料因跨语言对齐录制成本极高而稀缺；SpeechMatrix（41.8 万小时）为挖掘式对齐且仅覆盖 17 种欧洲语言，SeamlessAlign（37 语言）仅公开元数据需自行重建。现有最大规模开源语料 CVSS 仅支持 X→EN 单一方向，阻碍了从英语翻译及非英语语言对间的研究。
+- **主要指标**：- CVSS-X-C：UTMOS 3.55 | ASR-BLEU 82.4 | WER/CER 12.1% - CVSS-X-T：UTMOS 3.21 | ASR-BLEU 79.4 | WER/CER 14.1% | 说话人相似度 0.607 - CVSS-C 对照：UTMOS 4.43 | AS
+- **代码**：https://github.com/ErmisAI/XVSS-X | **Demo**：暂无
+
+---
+## [StepAudio 3 Realtime Technical Report](https://arxiv.org/abs/2609.14005)
+
+- **方向**：语音大模型（语音生成 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-12
+- **一句话贡献**：实时语音交互需要在深度推理、快速应答与自然的轮换控制之间取得平衡。论文提出 StepAudio 3 Realtime，一个约 196B 总参数（11B 激活）的端到端语音-语言基础模型，围绕"监听-对话-思考-行动"连续循环组织 Deep Perception、Seamless Duplex、Think-While-Speaking 与流式 Voice Agent 四大能力。实验表明其在 Step
+- **关键技术点**：全双工语音对话需在未说完的句内停顿与话轮结束之间、简短应和与实质打断之间做出区分，复杂请求还需在响应延迟与深思熟虑间权衡，工具调用又要求外部任务与对话并行推进。现有多数系统分别优化识别、理解或流式生成，缺乏对感知-推理-行动的统一协调。
+- **主要指标**：- ASR Max：LibriSpeech test-clean WER 1.18｜test-other 2.28｜AISHELL-1 CER 0.49｜ContextASR-Bench 英/中宏平均误差 5.67%/1.23%（均第一） - 音频理解宏平均：81.3（MMSU 90.6 领先 7.
+- **代码**：暂无 | **Demo**：https://stepaudiollm.github.io/step-audio-3-realtime/
+
+---
+## [CCMAN: Cognitive Instability-Aware Cross-Modal Attention Network for Interpretable Temporal Biomarkers of Verbal Fluency Speech](https://arxiv.org/abs/2609.14764)
+
+- **方向**：语音前端（语音医学检测 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-13
+- **一句话贡献**：现有基于语音的认知衰退自动检测多在整段录音上聚合特征，忽略言语流畅度任务中的词级时序动态与生成不稳定性。本文提出认知不稳定性感知的跨模态注意力网络（CCMAN）：先在12个记忆探测任务上预训练任务无关的多模态认知语音表征，再在60秒语义与语音流畅度任务上微调。在843名受试者共165.44小时语音上，语义流畅度二分类Macro-F1达0.81、多分类0.59，语音流畅度达0.77与0.53；独立P
+- **关键技术点**：传统语义/语音流畅度评分是粗粒度的静态指标；多数深度学习模型对录音级特征平均池化，丢失会话内的检索不稳定性信息，且缺乏跨数据集泛化与临床可解释性。
+- **主要指标**：- 语义流畅度二分类Macro-F1：0.81（LLM静态基线0.75） - 语义多分类Macro-F1：0.59（静态基线0.50） - 语音流畅度二分类/多分类：0.77 / 0.53（+5% / +7%） - 消融：Base 0.50→+Drift 0.52→+CrossAttn 0.54→+
+- **代码**：https://github.com/Madhurananda/CCMAN | **Demo**：暂无
+
+---
+## [CLASH: Counterfactual Auditing of Lexical and Prosodic Reliance in Spoken Sarcasm Detection](https://arxiv.org/abs/2609.16582)
+
+- **方向**：语音大模型（口语理解 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-16
+- **一句话贡献**：口语讽刺检测器可能依赖词汇、韵律或其交互，但常规评测无法揭示实际决策信号。本文提出 CLASH（Controlled Lexical-Acoustic Separation Harness），一种双语反事实诊断框架，对每条话语构造原始、保词汇、保韵律和近似中性四种条件，系统评测 eGeMAPS 手工特征、WavLM/wav2vec 自监督探针及大型音频语言模型。对仅目标话语的 Qwen3-Omni
+- **关键技术点**：现有口语讽刺检测研究集中于特征融合与不一致性建模以提升性能，但聚合性能提升无法证明系统真正使用了韵律；学习式语音表征将词汇与韵律信息纠缠在同一空间，有无音频特征的对比只能度量聚合贡献，无法隔离词汇、韵律及其交互。先前研究（如 LISTEN 揭示音频大模型的词汇主导）未提供中性参照，也未区分分数移动、标签判别力与二分化决策的差异。CLASH 用配对阶乘设计补充这些空白。
+- **主要指标**：- Qwen3-Omni 原始语音 AUROC：CMMA 0.734（Macro-F1 0.602）、MUStARD 0.775（Macro-F1 0.690） - 时长均衡后 A_L−A_P：CMMA 0.148（95%CI [0.103,0.193]）、MUStARD 0.135（95%CI [
+- **代码**：https://github.com/glam-imperial/clash | **Demo**：暂无
+
+---
 ## [Explicit and Stable Pseudospectral Time-Domain Method for Föppl-von Kármán Equations](https://arxiv.org/abs/2608.06139)
 
 - **方向**：声学模拟 | **子方向**：Other | **评分**：7/10 | **日期**：2026-08-06
@@ -180,5 +234,23 @@
 - **关键技术点**：真实印度场景中语音与车辆、动物、婴儿等非平稳背景噪声共存，噪声起止与语音的重叠关系直接决定识别误差与增强质量。现有语料要么合成混合（WHAM!、DESED 合成子集）、仅帧/片段级弱标签（AVA-Speech、FSD50K、AudioSet）、或无噪声标注（CHiME-6）；iNoise 与 Kathbath-Noisy 虽面向印度，却分别缺少语音与噪声事件标注。
 - **主要指标**：- 总规模：72,756 段 / 122.17 小时 / 38,541 位说话人 - 覆盖率：58 门语言、30 个邦、162 个地区（Hindi 占 83.9 小时为主） - 噪声事件：106,892 个时间戳事件，72,746 段含事件标注 - 质量层级：verified 11,111 段/21
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [X-Pred MeanFlow for Streaming Token-to-Mel Speech Decoding](https://arxiv.org/abs/2609.12728)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-11
+- **一句话贡献**：近期基于离散token的语音生成进展凸显了在流式与对话场景中高效token转波形合成的重要性。流匹配声学解码器能实现高质量的token转mel生成，但其迭代采样需要多次神经函数评估（NFE），限制了低延迟语音合成。MeanFlow通过建模时间区间内的平均速度来减少采样预算，但在极少步数下保持高音质仍具挑战。为此本文提出X-Pred MeanFlow，一种少步流式token转mel解码器，用mel空
+- **关键技术点**：LLM式TTS逐步转向在离散语音表示上进行序列建模，token转声学解码直接决定感知质量、每包计算量与流式能力。条件流匹配能高质量生成但迭代采样开销大（多次NFE），在流式合成中每包须在固定播放间隔内完成，而MeanFlow虽能用平均速度减少采样步数，但极少数步下高保真token转mel生成仍难；同时全局自注意力导致流式成本随句长增长。
+- **主要指标**：- 评估用100句未见说话人句子，指标UTMOS/WER/SIM（SEED-TTS官方工具）。少步质量（CFG=0）：Small X-Pred 2-NFE UTMOS 3.189/SIM 0.661/WER 6.89%，3-NFE 3.310/0.670/6.28%，10-NFE 3.464/0.6
+- **代码**：暂无 | **Demo**：https://renxiaming.github.io/xpred-meanflow-stream-demo/
+
+---
+## [Building a Production Greek-English Speech Recognizer](https://arxiv.org/abs/2609.13498)
+
+- **方向**：语音大模型（ASR） | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-11
+- **一句话贡献**：本文报告为希腊语与英语混合语音构建商业级双语ASR系统Sophea的多月工程实践。系统需同时通过九项生产门禁：四个希腊语和三英语WER上限、95%语种识别下限、非语音零幻觉。在23次训练迭代后发现关键负结果：希腊噪音门禁需约1500步密集噪音暴露，而英语LID门禁最多容忍250步，两区间相差约6倍且永不重叠，单一模型无法全部通过。最终交付模型家族加路由服务层与解码端修复，集成系统Sophea AS
+- **关键技术点**：希腊语音频多来自电话线、嘈杂会议室而非录音棚，且单句内希腊英混合切换，数据稀缺。固定容量双语模型面临"多语言诅咒"，其竞争本质是声学邻域而非语言数据量：加835小时纯净英语保护无济于事，而577小时噪声重叠会议英语即保住指标。
+- **主要指标**：- 希腊语脏环境WER：K1单模型25.88（首次单served模型破≤26门禁） - 希腊码转换WER：三模型投票23.84 vs 单模型59.74 - 重叠语音WER：53.35降到37.87（相对降29%） - K1七清洗集平均WER：4.35；LibriSpeech test-clean 1
+- **代码**：暂无 | **Demo**：https://huggingface.co/spaces/KIEFERSA/sophea-asr-k1-docs
 
 ---

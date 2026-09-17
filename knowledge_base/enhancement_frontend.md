@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 25 篇
+共 28 篇
 
 ## [Prototype-Rectified Iterative Self-supervised Manifold Denoising under Severe Acoustic Shift](https://arxiv.org/abs/2608.15037)
 
@@ -108,6 +108,15 @@
 - **关键技术点**：CFM 的目标向量场随时间变化，故需用 t 条件化速度网络。标准 OT-CFM 中源与目标统计独立，流状态 S(p_t)=W_2(p_t,p_1) 满足线性关系，t 是传输进度的可靠代理。但恢复任务初值 x_0=αx_1+βν，命题 2 证明存在不同的 (α,β,t) 组合产生相同边际分布，即同一状态可在不同 t 达成，全局插值坐标无法无歧义描述传输进度；近期工作（如 ARF）直接移除时间条件化，又丢失按进度自适应调节速度的机制。
 - **主要指标**：- SI-SDR：DFM 19.63 dB，优于 FlowSE 18.99、ARF 19.04、CFM+DL 19.47、BBED 19.10、SGMSE+ 16.86 - PESQ：DFM 2.96，优于 FlowSE 2.86、ARF 2.82、CFM+DL 2.87 - 真实录音 P.808 
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [DriftSE: Speech Enhancement with Generative Drifting](https://arxiv.org/abs/2609.12252)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-09-10
+- **一句话贡献**：本文提出DriftSE，一种将语音增强表述为潜在分布均衡问题的新型单步生成式框架。训练时，漂移场（drifting field）在潜在域中驱动生成器的推前分布与干净语音流形对齐；推理时丢弃漂移过程，实现严格的一次前向（1 NFE）生成。作者指出增强质量根本上取决于潜在表示的选择：语义潜在表示保留音韵结构但缺乏物理声学线索，而声学潜在表示重建物理信号却存在语言幻觉风险。为此引入双潜在漂移（dual-
+- **关键技术点**：基于扩散的语音增强虽性能优异，但推理需迭代求解高度弯曲的反向轨迹，通常需要10~100次函数评估（NFE），难以满足实时低延迟要求。级联与蒸馏等方法仍受连续轨迹建模约束，亟需一种不依赖轨迹建模、原生支持单步生成的生成式范式。
+- **主要指标**：- 指标含入侵式（WER/PESQ/SI-SDR/ESTOI）、非入侵式（DiMOS/WVMOS/NISQA/SCOREQ）与计算量（Para/GMACs/NFE）。EARS-WHAM离线NCSN++双潜在（DistilHuBERT+PANNs）WER 14.33%（SOTA）、PESQ 2.46、
+- **代码**：https://github.com/LiangXu123/DriftSE | **Demo**：https://github.com/LiangXu123/DriftSE
 
 ---
 ## [Separate First, Then Associate: A Two-Stage Approach for Real-World Audio-Visual Speech Enhancement](https://arxiv.org/abs/2608.14812)
@@ -225,5 +234,23 @@
 - **关键技术点**：开耳式助听器因耳道开放造成声学泄漏，传统BSE无法处理。早期方案需额外耳内麦克风。
 - **主要指标**：- 增强语音质量：优于现有BSE+ANC SOTA方法 - 声学泄漏抑制：有效降低耳道泄漏声压级
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [DualSpecSE: A Dual-Path Speech Enhancement Network Integrating Mel and Complex Spectrograms](https://arxiv.org/abs/2609.13911)
+
+- **方向**：语音前端（语音增强） | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-12
+- **一句话贡献**：Mel域增强方法虽可提升ASR性能，但必须级联预训练声码器才能重构波形，引入级联误差且丢失细粒度相位与幅度细节。本文提出DualSpecSE双路径框架，在不依赖外部声码器的前提下同时输出增强Mel谱与复数谱：Mel分支学习粗粒度ASR友好表征，复数分支精修细粒度谱细节。在DNS Challenge 2020测试集上，仅1.85M参数即达WB-PESQ 3.25、NB-PESQ 3.68、ESTOI
+- **关键技术点**：Mel谱紧凑且感知动机强，但现有Mel域增强方法重构波形需接入外部声码器，带来级联误差与相位/幅度信息丢失；而纯线性域复数谱方法缺失ASR友好的粗粒度语义约束。两域优势难以兼得。
+- **主要指标**：- WB-PESQ：3.25（CleanMel 2.91、TF-GridNet 3.12） - ESTOI：0.936（TF-GridNet 0.935） - CHiME-4 WER（波形输出，simu/real）：14.76% / 13.21%（CleanMel 15.95% / 14.03%） 
+- **代码**：https://github.com/StellanLi/SenSE-demo | **Demo**：https://github.com/StellanLi/SenSE-demo
+
+---
+## [Directivity-Conditioned Low-Latency Neural Filtering for Speech Enhancement in Hearing Aids](https://arxiv.org/abs/2609.15760)
+
+- **方向**：语音前端（助听器神经定向滤波） | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-14
+- **一句话贡献**：现有神经定向滤波（NDF）方法虽能在推理时自适应调节指向性方向与形状，但总时延高达40-50 ms，且忽略麦克风位置随头径变化、头影效应等听力设备真实约束。本文针对耳背式（BTE）助听器提出10 ms低时延双耳神经滤波框架 FiLM-OnlineSpatialNet（FiLM-OSN），将 FiLM 条件机制注入 OnlineSpatialNet 架构并引入余弦型可配置主瓣宽度。实验表明在 PES
+- **关键技术点**：助听器场景要求总时延≤10 ms，但现有 NDF 工作时延过高；降低 STFT 窗长虽可降时延，却因谱分辨率下降使宽频带 LSTM 序列变短而显著损伤性能。同时传统 DMA 指向性模式无法精确指定主瓣角宽，且完全抑制来向噪声不利于空间态势感知。
+- **主要指标**：- FiLM-OSN_{8ms,L1+IPD}：PESQ 2.06±0.46 | ESTOI 0.77±0.08 | SI-SDR 5.72±2.73 dB - FiLM-JNF（32 ms/40-50 ms）：PESQ 2.10±0.46 - FiLM-JNF（8 ms）：PESQ 1.72±0.
+- **代码**：暂无 | **Demo**：https://sp-uhh.github.io/film-osn/
 
 ---

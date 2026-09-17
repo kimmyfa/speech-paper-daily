@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 41 篇
+共 44 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -90,6 +90,15 @@
 - **关键技术点**：现有 AVSR 基准（LRS2/LRS3）基于脚本化、排练式广播语音，无重叠语音、无打断、声学环境单一，高分不保证真实对话鲁棒性；低 WER 常来自数据集模式与语言建模而非真实视觉表征。WildVSR、LRS-VoxMM 等虽趋于真实，但缺乏对话规模。
 - **主要指标**：- 零样本：AV-HuBERT 在 LRS3 AO 1.95/AV 1.47，Candor-LR AO 24.32/AV 22.76；Llama-AVSR Candor-LR AO 16.92、AV 16.92；Auto-AVSR-L Candor-LR AV 16.69 - 干净域内：LRS3 训
 - **代码**：https://github.com/rishabhjain16/lipreading-data-guide/tree/main/Candor | **Demo**：暂无
+
+---
+## [Differentiable and Severity-invariant Discrete Tokens for Dysarthric Speech Recognition](https://arxiv.org/abs/2609.16855)
+
+- **方向**：语音大模型（ASR） | **子方向**：ASR | **评分**：9/10 | **日期**：2026-09-16
+- **一句话贡献**：针对构音障碍语音识别中离散 token 存在训练目标失衡与说话人严重度异质性问题，本文提出可微且严重度不变（DSI）的离散 token 方案，集成迭代伪标签更新、与 Conformer 后端联合的可微端到端优化以及严重度不变正则化。在 UASpeech 与 TORGO 上相较 HuBERT 离散/连续基线分别取得 2.22%/0.78%（相对 9.14%/3.41%）与 1.78%/1.06%（相
+- **关键技术点**：现有离散 token 用于构音障碍识别面临两大局限：一是 token 提取与 ASR 后端训练目标错位导致任务相关信息损失，虽已有端到端优化的可微 K-means 缓解，在健康语音上仍有明显性能差距；二是病理导致的说话人异质性巨大，口音、性别等常规变异叠加言语病理严重度后，说话人间差异远超常规语音域，为面向典型语音设计的端到端 K-means 所难以处理。
+- **主要指标**：- UASpeech：DSI token 平均 WER 22.07%，较 K-means 离散基线 24.29% 降 2.22%，较连续 HuBERT SSL 基线 22.85% 降 0.78%；VL 最严重子组 WER 由 63.01%/59.73% 降至 55.90% - TORGO：平均 WE
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Phoenix-VAD: Streaming Semantic Endpoint Detection for Full-Duplex Speech Interaction](https://arxiv.org/abs/2509.20410)
@@ -279,6 +288,24 @@
 - **关键技术点**：笑声、叹息、呼吸、咳嗽等非语言发声（NVV）携带情感与交互信息，传统 ASR 常丢弃或归为通用符号；NVV-aware ASR 需在单一转录中同时给出词元内容、NVV 类别及转录相对位置，中英双语下难度进一步加大。现有公开语料声学多样性有限、标注质量不一。
 - **主要指标**：- FinalScore：33.32 → 53.61（+20.29）；中文 34.05 → 55.45；英文 32.59 → 51.76 - 中文 F1_micro 0.3325 → 0.5666；mNTD 0.6602 → 0.4443 - 单类：英/中分别提升 14/16、15/16 类；EN 
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Grounded in Sound: Reinforcement Learning with a Frozen Acoustic Judge to Curb ASR Insertion Hallucinations](https://arxiv.org/abs/2609.14455)
+
+- **方向**：语音大模型（ASR幻觉抑制 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-13
+- **一句话贡献**：针对ASR的RL后训练中奖励几乎全部位于文本空间、模型可借助LLM强语言先验在弱声学证据下"猜测"而非"听"，导致插入型幻觉激增（插入率由干净语音0.37%单调升至AMI-SDM 5.75%）的问题，本文提出声学保真度奖励：将GRPO奖励与一个独立预训练且永久冻结的字符级wav2vec2-CTC声学裁判（约0.3B）结合，裁判仅训练时提供奖励、推理时移除。以Qwen2-Audio-7B（LoRA）
+- **关键技术点**：现行语音LLM的后训练RL（GRPO等多采用-WER或文本规则奖励）只比较假设与参考文本，从不核对转录是否被音频支撑。干净语音下依赖先验解析成本极低，于是-WER奖励默许该捷径；一旦声学退化，模型持续凭先验补全，产生流畅但无依据的词语。
+- **主要指标**：- 插入相对降低：AMI-IHM 28.3%（1598→1145）；AMI-SDM 22.3%（4502→3498） - 净WER：AMI-SDM 35.89%→34.71%（显著）；AMI-IHM 16.70%→16.28%（n.s.） - 三种子复现：插入降低+28.6±0.7%（IHM）、+2
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Audio-Visual Turn-taking Prediction in Cocktail Party Scenarios](https://arxiv.org/abs/2609.17056)
+
+- **方向**：语音大模型（口语对话） | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-16
+- **一句话贡献**：在鸡尾酒会等高重叠、强噪声场景下，现有预测式话轮转接模型（PTTM）的跨域泛化能力尚属空白。本文基于 AVCocktail 数据集，提出从句子级转写自动推导 shift/hold 话轮标签的流程，并系统评测 Audio-VAP、Video-VAP、MM-VAP 三种模型。结果显示干净域训练的模型加权 F1 最多相对下降 38%，微调后 MM-VAP 相对提升约 30%（加权 F1 达 73.65%
+- **关键技术点**：PTTM 在 Switchboard、NoXi、Candor 等安静受控环境评测中表现优异，但真实鸡尾酒会充满重叠语音、背景噪声、频繁打断与竞争性视觉线索，其泛化性未被研究。鸡尾酒会带来声学（SNR 中位数约 15dB，而 Candor 近 90-100dB）与生理层面的双重域偏移：噪声引发 Lombard 效应（增大响度与基频），并改变面部表情与唇动分布，音频与视觉模态均面临显著分布差异。
+- **主要指标**：- MM-VAP（Candor 训练）：Candor 加权 F1 82.57%，AVCocktail 上降至 56.61%（总体相对降幅 2%-38%） - Audio-VAP（Candor 训练）：81.05% → AVCocktail 49.83%，仅略高于随机基线 45.08% - Video
+- **代码**：https://github.com/lggvu/mm-turn-taking | **Demo**：暂无
 
 ---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)

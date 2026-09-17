@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 95 篇
+共 108 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -153,6 +153,15 @@
 - **关键技术点**：现有ADD普遍假设单域、整段二分类（ASVspoof、CtrSVDD、EnvSDD各自独立）。但真实操控音频可为"混合真实性"：一段剪辑内可同时含真语音到合成歌唱的切换、叠在真实背景乐上的伪元素等。域专属检测器遇到域外声源失效，整段分类器易漏检局部操控，固定先分离再检测的流水线对无需分离的输入引入伪影，直接ALLM做分类器则是黑箱。
 - **主要指标**：- C-Avg（复合）：ToolDF 81.89，超最强单体XLSR-AASIST 78.17（+3.72） - 固定流水线C-Avg 67.50，ToolDF +14.39 - Oracle上界C-Avg 82.85，与ToolDF仅差0.96 - 定位（DCASE事件级宏F1）：Speech 9
 - **代码**：https://github.com/rlataewoo/tooldf | **Demo**：暂无
+
+---
+## [Language Orthogonalization for Zero-Shot Cross-Lingual Audio Deepfake Detection](https://arxiv.org/abs/2609.16458)
+
+- **方向**：语音前端（深伪检测） | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-16
+- **一句话贡献**：针对音频深伪检测器向训练外语言零样本迁移时性能急剧退化的问题，提出语言正交化方法：用源语言真实语音拟合从连续 LID 嵌入到 S3M 表示的 ridge 映射，并从每句表示中减去语言可预测分量，从而在无需目标语言任何标注的前提下消除语言混淆。在六种语言、六个 S3M 骨干（MMS-300M、XLS-R-300M、mHuBERT-147、wav2vec2-large、HuBERT-large、Wav
+- **关键技术点**：多语言语音合成覆盖超千种语言，而反欺骗基准高度英语中心化；S3M 虽在深伪检测中表现优异，但其表示编码语言身份，跨语言检测器常把语言条件化声学混淆为可迁移的伪造线索。先验工作表明 S3M 音系变化近似位于线性子空间，故可借子空间残差化消除跨语言混淆，但无需目标语言数据的严格客观设置尚未被充分探索。
+- **主要指标**：- 平均 Leave-N-Out EER：N=1 4.08→3.73（−9%）、N=2 5.42→4.76（−12%）、N=3 7.06→6.19（−12%）、N=4 9.83→8.19（−17%）、N=5 14.67→12.44（−15%），六个骨干全部一致下降 - 单语言训练（Leave-5-O
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Robust Speech Emotion Recognition under Tone-Word Conflict: A Benchmark and Framework](https://arxiv.org/abs/2609.04236)
@@ -614,6 +623,78 @@
 - **代码**：暂无 | **Demo**：https://nvv-locator.github.io/Demo-Page/
 
 ---
+## [Overview and Meta-Analysis of DCASE 2026 Challenge Task 6: Audio Moment Retrieval from Long Audio](https://arxiv.org/abs/2609.12484)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：本文是 DCASE 2026 挑战赛 Task 6「长音频的音频时刻检索（AMR）」的概览与元分析。AMR 任务输入数分钟长的音频与自由文本查询，要求系统返回与查询匹配的起始/结束时间戳，核心难题是跨模态对齐与长程时序建模。官方提供了定义、评估指标（主要指标 Recall1@0.7）、数据集、以及由预训练 MS-CLAP 特征提取器加基于 DETR（QD-DETR）的时刻检测网络组成的基线系统。在
+- **关键技术点**：长帧未裁剪音频（会议、播客、广播、声学监测等）日益常见，人工听搜目标片段费时且不可扩展。已有方法中，clip 级基于语言的检索假设音频已分段、不检测发生时刻；声音事件检测只针对预定义封闭事件集；最近的视频时刻检索（Moment-DETR、QD-DETR、UVCOM、CG-DETR 等）将 DETR 范式迁移到声学域，但长音频标注数据稀缺仍是核心瓶颈，且合成→真实域差距显著。
+- **主要指标**：- 主要指标 Recall1@0.7（最高置信度时刻 IoU≥0.7 的查询占比）：基线 13.56%；三支并列第一（Kibata YCU、Kim CAU、Sugawara YCU）48.59%，约为基线的 3.5 倍；第四 Ogawa(YCU) 46.89%。前三队伍次要指标：Kibata(YCU
+- **代码**：https://github.com/awkrail/dcase2026_task6_baseline | **Demo**：暂无
+
+---
+## [What Did the MLLM Hear? Token-Level Spectro-Temporal Grounding for Audio MLLM Explainability](https://arxiv.org/abs/2609.12663)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：音频多模态大模型（Audio MLLM）能生成流畅的开放词汇音频场景描述，但难以明确输入音频中哪些部分支撑了每个生成token，尤其是声学证据同时分布于时间与频率轴、同时间并发事件可占据不同频带。本文提出STAG，据我们所知首个用于音频MLLM生成字幕的token级谱时（spectro-temporal）定位事后解释框架。STAG通过目标token特定的词汇表投影估计每个生成token的时间支撑，
+- **关键技术点**：现有音频可解释性方法主要面向判别式模型，解释固定类别得分，无法处理MLLM自回归生成的token序列；通用归因方法（梯度、注意力、LRP等）只能沿时间维度给出相关性，难以分离同时间叠加但在不同频带的并发声事件，缺乏频率支撑。频率域的显著图又无法确定证据所在时刻，缺乏两者联合的token级谱时解释。
+- **主要指标**：- 1. 四个基准均取得最佳事件定位：在Omni-3B参考骨干下STAG的E/F1分别为AudioTime 54.42/67.82、AudioGrounding 42.45/57.49、TACoS 40.37/55.22、AudioSet-Strong 38.66/53.07（词法匹配协议）。 - 
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Kraken: LLM-based Speech-to-Speech Translation via Low-bitrate VQ and Dual-path Source Conditioning](https://arxiv.org/abs/2609.13045)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：语音到语音翻译（S2ST）虽然借助语音大模型（SLM）取得显著进展，可实现联合优化并保留非语言信息，但其在小规模模型上预测高比特率语音token仍然困难，且对说话人身份与韵律严格匹配的S2ST训练数据依赖过强。本文提出基于单层向量量化（VQ）的低比特率token（25Hz、325bps），该token以重建自监督学习（SSL）特征为目标进行训练；同时提出名为Autowave-X的独立token到波
+- **关键技术点**：端到端S2ST相比级联系统可避免ASR误差传播、更紧凑低延迟，还能保留文本中缺失的说话人身份与韵律。但现有SLM普遍需预测高比特率token，导致计算开销与架构复杂；同时端到端训练要求说话人与韵律匹配的双语录音，此类理想S2ST数据极难收集，制约了表达性S2ST的发展。
+- **主要指标**：- FLEURS X-En S2ST ASR-BLEU：Kraken平均32.3，优于SeamlessM4T-Large v2（32.1）与Qwen2.5-Omni（25.1），接近30B的Qwen3-Omni（33.6），且印地语（33.6）与日语（26.4）单项反超Qwen3-Omni；CVSS
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [MP-Bench: Evaluating Voice Agents as a Multiparty Conversation Participant](https://arxiv.org/abs/2609.13076)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-11
+- **一句话贡献**：语音对话代理近年进展显著，已可通过级联与端到端两种架构实现越来越自然的人机交互。然而，现有评测基准主要针对双人（dyadic）对话和被动音频理解，大大忽略了多人对话这一真实世界的常见场景。多人场景的评估远比双人对话复杂，语音代理要无缝融入人类群体互动，不仅要生成语境适当的回应，还必须具备对开放式轮流发言（open turn-taking）的细腻理解。为此本文提出MP-Bench，这是首个专门为客观
+- **关键技术点**：现有语音代理评测基准（如Full-Duplex-Bench、MTalk-Bench、SD-Eval等）主要覆盖双人全双工轮流发言、副语言、推理、工具调用等，缺乏多人对话的评测；现有多人基准（如MSU-Bench、M3-SLU）多聚焦被动理解，或仅限文本模态（如When2Speak）。多人场景需区分显式、隐式与负面三种轮流条件，须联合处理声学与语境线索，复杂度远超双人对话，而这正是真实人类互动中的核心场景。
+- **主要指标**：- 理解·Discussion Overall Acc：非实时Gemini-3.1-Pro最高73.30%，实时组最优Covo-Audio仅32.60%（Ultravox 21.36%、GPT-Realtime 14.00%、GLM-4-Voice 11.60%等）；Spk Name Acc（随机基
+- **代码**：https://github.com/atosystem/MP-Bench | **Demo**：暂无
+
+---
+## [Realtime-Venus：A full-duplex interaction system with asynchronous delegation](https://arxiv.org/abs/2609.13814)
+
+- **方向**：语音大模型（全双工语音交互系统） | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-12
+- **一句话贡献**：现有全双工语音模型（如 MiniCPM-o 4.5、Moshi）能连续感知与流式输出，但背景推理与工具执行通常阻塞交互或依赖外部 ASR/TTS 拼装。本文提出 Realtime-Venus，一个将全双工交互与异步委派（asynchronous delegation）结合的主动式交互系统，含两个独立训练的 9B 前端模型 Realtime-Venus-Omni（音视频）与 Realtime-Ven
+- **关键技术点**：连续交互与外部计算处于不同时间尺度，后台任务需要请求时刻的证据快照，但其结果必须在已演进的对话中重新解读。现有系统要么无法在播放中感知变化，要么将工具有效性限制在暂停式回合，任务捕获与结果回投缺乏统一时序。
+- **主要指标**：- StreamingBench：70.2%（在线模型最高） - OVO-Bench：64.7% | Daily-Omni：81.3% | OmniPro：29.0% - MMAU：78.0% | MMAU-Pro：63.2% | Speech CMMLU：67.8% | Llama Questio
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Inherited Heads: Audio language models track speakers with their text backbone's attention, and an attention-mass ranking retrieves a different set](https://arxiv.org/abs/2609.14174)
+
+- **方向**：语音大模型（音频语言模型可解释性 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-12
+- **一句话贡献**：针对音频语言模型（ALM）在说话人归属上表现差的问题（让模型描述六个轮流说话者之一的内容，仅6%–16%试次答对，低于随机猜测的16.7%），本文提出：向约100个注意力头（不足模型头数十分之一）的注意力logits加恒定偏置，无需任何训练即可把输出导向指定说话者，成功率90.7%–99.0%。进一步发现这些头大部分继承自文本骨干：仅按纯文本模型选出前100头号并原样迁移，即可在80.8%–95.
+- **关键技术点**：现有多模态模型通过注意力质量（mass）排序挑选"注视头"（Gaze Heads）来定位查询区域，但未区分"头部本来就关注该区域"与"注意力随问题变化"。ALM 的说话人追踪机制来源不明，且现成方法在部分模型上失效。本文用因果干预（steering）在音频模态中检验两种排序，首次对照文本骨干做头级比较。
+- **主要指标**：- 无干预说话人归属正确率：6%–16%（低于1/6随机） - 零训练注意力偏置定向成功率（3模型）：90.7%–99.0% - 文本骨干头迁移定向成功率 vs 随机控制：95.0% vs 12.5%（Qwen2-Audio）| 85.0% vs 45.0%（Ultravox）| 80.8% vs 
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Reducing the Output-Mode Gap in Speech Language Models via Joint-Output On-Policy Distillation](https://arxiv.org/abs/2609.15313)
+
+- **方向**：语音大模型（语音语言模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-14
+- **一句话贡献**：交错生成文本与声学token的语音大语言模型在流式口语应答时，已生成的声学token会进入后续文本预测的上下文，使相同语音输入下语音转文本及语音（S2TS）模式内部文本的答题准确率显著低于纯S2T模式，作者将此差异命名为「输出模式差距」（OMG）。Step-Audio-2-mini在Spoken-MQA和语音渲染GSM8K上的OMG分别高达42.87与29.72个百分点。本文提出联合输出在线蒸馏（
+- **关键技术点**：交错式文本-声学token自回归生成（如Step-Audio 2、Baichuan-Audio）支持流式口语输出，但声学token进入上下文后干扰后续文本预测，造成OMG。现有研究多聚焦输入侧模态差距，输出侧差异未被系统量化。
+- **主要指标**：- Step-Audio-2 Spoken-MQA：S2TS(T) 32.45→58.92，OMG 42.87→16.26 pp，S2T 维持75左右 - Step-Audio-2 GSM8K：S2TS(T) 39.50→56.86，OMG 29.72→13.04 pp - Baichuan-Aud
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SpiroPhonia: Non-Invasive Respiratory Health Assessment from Spontaneous Speech](https://arxiv.org/abs/2609.17350)
+
+- **方向**：语音前端（语音健康） | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-16
+- **一句话贡献**：为解决 COPD 检测依赖肺量计等设施、既有语音方法依赖受控录音的问题，本文提出 SpiroPhonia 框架，用自发性对话语音进行无创呼吸健康评估。基于 201 名说话者（102 例 COPD/呼吸疾病、99 例健康对照）的互联网真实对话录音，结合统计分析（t/Mann-Whitney U 检验）与递归特征消除（RFECV）筛选出紧凑判别性声学标记，最好模型达到 78% 准确率、80% F1、8
+- **关键技术点**：COPD 影响全球超 4 亿人，是全球第三大死因，其诊断依赖肺量计，需要临床环境与专业人员，导致早期漏诊与间断随访。现有语音研究多基于持续元音、照稿朗读或引导呼吸等诱发任务，在受控条件下采集，需要用户显式配合，不适合长期居家连续监测。核心问题：真实世界自发语音是否包含在非受控条件下仍具判别力的鲁棒呼吸生物标记。
+- **主要指标**：- Accuracy：78.05%（线性 SVM 与梯度提升并列最高，bootstrap 95% CI 65.8-90.2） - F1：梯度提升达 80.00%（敏感性 85.71%）；随机森林 AUC 最高 87.14%；线性 SVM 特异性最高 85.00% - 常见标记：jitter、shim
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -854,6 +935,42 @@
 - **一句话贡献**：为解决辅助生活环境中声学感知系统采集日常活动声时泄露居民言语内容的隐私问题，本文提出"隐私防火墙"流水线：卷积 U-Net 编解码器在 log-mel 频谱域去除语音分量、保留环境活动声，全程仅用合成数据训练；下游活动识别采用 VGGish+SVM 迁移学习。在 ESC-50 和 SINS 上所有语音电平下残言语音均降为 0% VAD 可检测（Silero），ESC-50 40% 语音电平下精确率
 - **关键技术点**：声学感知能非侵入监测老人日常活动，但居民与护理人员最担忧系统录制私人对话。ADAPTIVE 养老院部署中采用 VAD 触发静音捕获，遇广播语音频繁误触发导致大量活动信号丢失；且真实部署数据标注昂贵、收集窗口短，需契合实际工业部署约束（ADAPTIVE 项目经验启发）。
 - **主要指标**：- ESC-50 40% 语音电平去去除后精确率/召回率：85%/85%（无语音基线 84%/83%，语音污染时 81%/75%） - VAD 可检测语音：ESC-50 100% 语音电平由 67.5% 降至 0%；SINS 各电平均为 0% - 现成模型对比（ESC-50 100% 语音，残余 V
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Direct Preference Density Alignment for Conversational Audio Equalization](https://arxiv.org/abs/2609.12607)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-11
+- **一句话贡献**：大语言模型对齐通常依赖学习得到的代理奖励模型（RM），这会显著增加训练时的显存占用，且极易不稳定并遭受奖励黑客问题。离线方法如直接偏好优化（DPO）虽可绕开奖励模型，但丧失了在线探索能力；若不加优化约束，在受限连续空间中易导致格式崩溃。为此本文提出Direct Preference Density Alignment：一个无需学习代理奖励模型、同时严格保留在线强化学习优势的替代框架。作者利用约9万
+- **关键技术点**：将LLM对齐到主观连续控制任务仍是重大开放挑战。传统RLHF依赖PPO与可学习奖励模型，后者易受奖励黑客影响，且PPO训练需同时维持四个LLM（训练/参考/奖励/值模型），资源开销巨大。GRPO消除了值网络，DPO则同时消除值网络与奖励模型，但DPO属于离线对比学习，缺乏主动探索；在有界连续空间中无环境约束锚定，导致格式崩溃——模型忘记合法语法约束，生成对话文本或非法坐标。
+- **主要指标**：- GMRR（局部归一化贪心均值相对奖励，1.0为绝对偏好峰值）：Qwen2.5-1.5B的GRPO(β=0.5)为0.53±0.09@100%格式，混合GRPO+DPO(G=16)提升至0.60±0.17@100%格式（最优）；0.5B混合为0.56（97%）；对照ICL：Qwen2.5-0.5B
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Continue, Adapt, or Yield: In-Turn Adaptation to Overlapping Speech in Full-Duplex Agents](https://arxiv.org/abs/2609.13117)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-11
+- **一句话贡献**：全双工评测通常只关心智能体是继续说话还是停止，但二值判断无法表达人类常用的第三种行为：在继续说话的同时采纳听者刚做出的贡献（可能是补充的词、更正或澄清）。本文提出 Duplex Cue 评测框架，专门评测全双工语音智能体的"回合内适应"（in-turn adaptation）。该框架将听者意图（backchannel、协作、打断）与说话者行为（不变继续、回合内适应、让出话轮）分开标注。在单模型案例
+- **关键技术点**：现有多数全双工基准（如Full-Duplex-Bench、HumDial-FDBench）把重叠语音处理简化为打断时是否停止说话，用停止延迟或overlap等指标衡量，缺少描述"保留话轮的同时修正/采纳贡献"这一人类常用行为的响应类别。近期全双工综述中Repair虽出现在意图轴上，却在诊断表、状态机和覆盖表中缺失，响应轴也无"带修改地继续"这一取值，暴露出评测体系的结构性空缺。
+- **主要指标**：- 主要结果（208对可比样本）：人类侧协作cue适应率68.2%、不变继续22.7%、让出9.1%；PersonaPlex协作适应率34.8%、不变继续42.4%、让出22.7%（适应率差33.3个百分点）。backchannel上两者接近（继续71.6% vs 70.4%）；打断上模型更常让出（
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CRAF: Cross-View Residual-Aware Fusion for Deepfake Speech Detection](https://arxiv.org/abs/2609.13842)
+
+- **方向**：语音前端（深度伪造语音检测） | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-12
+- **一句话贡献**：针对深度伪造语音检测对未知新型欺骗攻击泛化不足的问题，本文提出跨视角残差感知融合框架 CRAF，以自监督（SSL）表示为主、听觉大语言模型（ALLM）为高层次指导，通过交叉注意力、残差学习与 SSL 优先融合联合建模互补信息。在 ASVspoof 5 开放条件下，CRAF（Kimi-Audio）取得 Eval EER 5.96%、minDCF 0.1192，优于 XLS-R+AASIST 的 9.
+- **关键技术点**：SSL 预训练模型捕获细粒度声学特征，ALLM 提供高层语义上下文，两者互补；但直接拼接式融合对两视角共享信息与各自特有互补信息不加区分，引入冗余并削弱检测关键的 SSL 细粒度信息。
+- **主要指标**：- CRAF (Kimi-Audio)：Eval EER 5.96% | minDCF 0.1192 | Dev EER 2.41% - 基线 XLS-R+AASIST：Eval EER 9.78% - 基线 Kimi-Audio+AASIST：Eval EER 7.35% - 近期单系统 ASTD
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Subphonetic Acoustic Modeling via Optimal Transport for Pronunciation Assessment](https://arxiv.org/abs/2609.13694)
+
+- **方向**：语音前端（发音评测 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-12
+- **一句话贡献**：发音评测需要时间精确、诊断上可解释且忠实于学习者实际发声的声学证据，但现有模型在识别与分割间存在根本权衡。作者提出拓扑感知的逐帧声学模型，将每个音素展开为有序次音素状态，并用最优时序传输分类（OTTC）学习稠密单调的帧到状态指派。在TIMIT、Buckeye、L2-ARCTIC上分割精度超过Charsiu等神经基线，并在SO762上取得0.084音素MSE、0.617 PCC的最佳音素级APA性能
+- **关键技术点**：HMM强制对齐依赖多状态拓扑获得音素内部结构，但解码受转录约束不灵活；CTC可免transcript识别但blank主导、后验尖峰，且次音素线索被忽略。
+- **主要指标**：- TDFA分割：Ours–10ms在TIMIT dev/test的TSE为36.37/38.12毫秒 - 消融：同拓扑下CTC换OTTC使TD F1 38.61→62.91、TSE 78.14→40.64ms - 下游APA（SO762）：音素MSE 0.084、PCC 0.617 - MDD F
 - **代码**：暂无 | **Demo**：暂无
 
 ---
