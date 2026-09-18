@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 28 篇
+共 29 篇
 
 ## [Prototype-Rectified Iterative Self-supervised Manifold Denoising under Severe Acoustic Shift](https://arxiv.org/abs/2608.15037)
 
@@ -252,5 +252,14 @@
 - **关键技术点**：助听器场景要求总时延≤10 ms，但现有 NDF 工作时延过高；降低 STFT 窗长虽可降时延，却因谱分辨率下降使宽频带 LSTM 序列变短而显著损伤性能。同时传统 DMA 指向性模式无法精确指定主瓣角宽，且完全抑制来向噪声不利于空间态势感知。
 - **主要指标**：- FiLM-OSN_{8ms,L1+IPD}：PESQ 2.06±0.46 | ESTOI 0.77±0.08 | SI-SDR 5.72±2.73 dB - FiLM-JNF（32 ms/40-50 ms）：PESQ 2.10±0.46 - FiLM-JNF（8 ms）：PESQ 1.72±0.
 - **代码**：暂无 | **Demo**：https://sp-uhh.github.io/film-osn/
+
+---
+## [Absolute Quality Ratings of Speech Enhancement Systems by Listeners of Different Ages and Degrees of Hearing Loss](https://arxiv.org/abs/2609.18714)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：本文考察 SE 系统的语音质量（SQ）评测结论能否从年轻健听者外推到老年及听力损失听众。作者组织 0–100 分绝对质量评定，筛查后保留 42 名年轻健听者与 67 名 60–95 岁老年听众，用 Netflix 真实影视对白素材评测含 Open-Unmix、DeepFilterNet2、理想相位敏感掩蔽及助听器放大变体在内的 9 种条件。结果显示：年轻组 4 个核心 SE 系统两两差值 4.4–
+- **关键技术点**：SE 文献与 ITU-T 等主观标准普遍依赖年轻健听者，客观 SQ 指标亦由此类数据驱动；而老年用户才是助听器、可访问音频等 SE 技术的主要受众，年轻听感下"有意义"的系统间质量差在老年群体是否成立尚不清楚。
+- **主要指标**：- 条件主效应：FF=181.2，p<0.001；条件×年龄-听损交互：FF=26.8，p<0.001 - 年轻组核心 SE 间差值：4.4–21.9 分（Holm 校正全显著）；老年组最大 ≤8.4 分，最小差值均不显著 - 压低效应：60+N1/N2/N3 较 60+N0 条件均分低 10.1/
+- **代码**：暂无 | **Demo**：暂无
 
 ---

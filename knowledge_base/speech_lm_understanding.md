@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 108 篇
+共 112 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -972,5 +972,41 @@
 - **关键技术点**：HMM强制对齐依赖多状态拓扑获得音素内部结构，但解码受转录约束不灵活；CTC可免transcript识别但blank主导、后验尖峰，且次音素线索被忽略。
 - **主要指标**：- TDFA分割：Ours–10ms在TIMIT dev/test的TSE为36.37/38.12毫秒 - 消融：同拓扑下CTC换OTTC使TD F1 38.61→62.91、TSE 78.14→40.64ms - 下游APA（SO762）：音素MSE 0.084、PCC 0.617 - MDD F
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [VoiceTrace: A Benchmark and Retrieval Framework for Who-Said-What Speech Retrieval](https://arxiv.org/abs/2609.18521)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：现有语音检索基准只回答"说了什么"，忽略"谁说的"。本文提出 who-said-what 混合检索任务：查询由文本与参考语音联合指定内容与说话人，并构建 VoiceTrace-Bench（训练 186K、人工质检评测 2,080 条）及两阶段框架 VoiceTrace（VoiceTrace-Emb 嵌入召回 + VoiceTrace-Reranker 联合判分）。实验显示 Reranker 在 L
+- **关键技术点**：现有基准（LibriSQA、SLUE 等）仅度量语义相关性；级联方案（ASR+文本检索+说话人识别）对两路信号独立处理、误差跨级传播，无法捕捉内容与说话人的联合相关性。会议、播客等真实场景需要用自然参考语音指定说话人，该任务此前无人系统化。
+- **主要指标**：- LibriSQA：Reranker R@1 0.9015、nDCG@10 0.9385，优于 CLSR（R@1 0.8504）与 Whisper+BGE（0.8370） - SLUE-SQA-5：nDCG@10 0.5593、R@10 0.8010，大幅领先 WavRAG 的 0.3623 - 
+- **代码**：https://caml-labs.github.io/VoiceTrace | **Demo**：https://caml-labs.github.io/VoiceTrace
+
+---
+## [Encoder Awakening via Adapters: Effective Domain-Adaptive Fine-tuning of Speech-LLMs](https://arxiv.org/abs/2609.17981)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：针对 Speech-LLM 在儿童语音、方言语音等声学域偏移场景下微调失效的问题（CE 损失仅作用于 LLM 输出，编码器难以获得充分适配且易灾难性遗忘），本文提出 EAVA 两阶段域自适应微调方法：先在每层编码器插入轻量残差 adapter 并仅训练 adapter"唤醒"编码器，再联合微调 adapter、编码器、投影层与 LLM LoRA。在 OGI、MyST、CORAAL 三个域偏移数据集
+- **关键技术点**：Speech-LLM（编码器+投影层+LLM）在通用域 ASR 上表现强劲，但迁移到儿童/方言语音时性能骤降。根本矛盾在于：占主导的 LLM 使 CE 梯度对编码器更新不足，而直接全量微调编码器又会破坏预训练知识；多阶段对齐方案面向从零整合原始编码器，不适用于域自适应微调。
+- **主要指标**：
+- **代码**：https://github.com/morganshi/EAVA | **Demo**：暂无
+
+---
+## [Correlation-Guided Encoder Selection for Multi-Encoder Large Audio-Language Models](https://arxiv.org/abs/2609.18041)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：针对多编码器大型音频语言模型（LALM）中编码器组合依赖直觉或穷举融合训练、搜索开销随组合数爆炸的问题，本文提出 CUES——一种免训练编码器选择启发式：仅用各编码器单独评测的聚合分数，计算类别级与任务级 Pearson 相关，据此分配锚点、互补与可选分歧角色。在 XARES-LLM 基准、冻结 SmolLM2-135M 骨干（LoRA）的五折交叉验证中，Track A 选出 Whisper-me
+- **关键技术点**：LALM 通常仅接 Whisper 类 ASR 编码器，对环境声与音乐能力弱；多编码器融合可补足，但选组合需逐一融合训练评估，12 编码器池选 3 即需训 220 个融合模型，单卡预算下不可行，且易引入冗余表示。
+- **主要指标**：- Track A 平均测试分：CUES 三件套 0.771±0.002，较最强单编码器 Wsp-med（0.739）相对 +4.3%，超最强贪心基线 0.755，并超 7 倍参数量的 Whisper-large-v3（0.746） - Track B 平均测试分：CUES 两件套 0.589±0.
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [TeleAntiFraud 2.0: A Refreshable, Profile-Grounded, and Audio-Based Benchmark for Telecom Fraud Detection](https://arxiv.org/abs/2609.18748)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：电信话费术快速演变且刻意仿照正规客服通话，现有音频欺诈基准既无法纳入新骗局模式，又因非欺诈负例来自无关话题而依赖词汇捷径。本文提出混合树反欺诈生成流水线：将在线案件摘要转为档案化场景，扩展为共享上下文的混合对话树，经六智能体协作生成对话后由 TTS 渲染为角色匹配语音，并以每月不可变冻结快照组织成 TeleAntiFraud 2.0（每快照 900 通中文通话，600 欺诈、300 近域非欺诈）。
+- **关键技术点**：固定测试集无法吸收发布后新出现的冒充机构、索要行为与话术模式；负例若来自无关领域，模型靠主题或数据源捷径即可满分，无法检验"凭完成轨迹中的欺诈行为定标签"的真实能力。TeleAntiFraud-28k 虽含音频但不可刷新，且音频文件名前缀与标签相关。
+- **主要指标**：- 负例难度探针：LR/SVM/RoBERTa 在无关与普通负例上 Macro-F1 均 1.000，近域兄弟负例跌至 0.650–0.680，bigram 重叠 0.005→0.274 - 线性可分性：同一 TF-IDF+SVM 在 TAF-28k-ASR 上 Macro-F1 0.995，本基准
+- **代码**：https://anonymous.4open.science/r/TeleAntiFraud-2_0-EEB2/ | **Demo**：暂无
 
 ---

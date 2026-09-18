@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 28 篇
+共 31 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -252,5 +252,32 @@
 - **关键技术点**：希腊语音频多来自电话线、嘈杂会议室而非录音棚，且单句内希腊英混合切换，数据稀缺。固定容量双语模型面临"多语言诅咒"，其竞争本质是声学邻域而非语言数据量：加835小时纯净英语保护无济于事，而577小时噪声重叠会议英语即保住指标。
 - **主要指标**：- 希腊语脏环境WER：K1单模型25.88（首次单served模型破≤26门禁） - 希腊码转换WER：三模型投票23.84 vs 单模型59.74 - 重叠语音WER：53.35降到37.87（相对降29%） - K1七清洗集平均WER：4.35；LibriSpeech test-clean 1
 - **代码**：暂无 | **Demo**：https://huggingface.co/spaces/KIEFERSA/sophea-asr-k1-docs
+
+---
+## [FRAUDSkill: Structured Frozen-Weight Skill Optimization for Audio Anti-Fraud Detection](https://arxiv.org/abs/2609.18766)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：面向电话反诈的音频大模型部署须遵循"服务场景识别→欺诈判定→条件欺诈类型分类"的三级闭集决策协议，现有微调与提示方法把任务规则烧进权重或手工提示，难以随欺诈模式与标签政策演进。本文提出 FRAUDSkill：完全冻结 Qwen2-Audio-7B-Instruct，仅优化外部技能程序、路由策略与决策规则，并配合闭集标签投影、路由规范化与验证集拟合的多路选择器。在 TeleAntiFraud 上 M
+- **关键技术点**：反欺诈是闭集链式决策：场景、欺诈、类型三路由互相条件依赖，上游非法输出会传导污染整条决策链。微调将标签约束隐式编码进权重、政策一变即需重训；提示法灵活但无法保证输出合法与跨路由一致。
+- **主要指标**：- Macro-F1：73.50%（加权 F1：79.40%，Acc：78.72%，联合准确率：58.87%，非法输出率：1.94%） - 关键对比：较共享冻结基线 41.54% 提升 +31.96pp；优于 SkillOpt（37.67%）与 EvoSkill（39.07%），高于 SFT 参考 
+- **代码**：https://anonymous.4open.science/r/FRAUDSKILL-114514 | **Demo**：暂无
+
+---
+## [Multi-Teacher Distillation for Cross-Domain Streaming Electrolaryngeal Speech Encoding](https://arxiv.org/abs/2609.18686)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：针对自监督语音表征在电喉（EL）病理域 zero-shot 性能差、EL 微调又会灾难性遗忘健康域、且基础模型过大无法端侧实时的问题，提出三阶段渐进式多教师蒸馏框架训练轻量流式内容编码器：先由冻结 mHuBERT 教师给出健康域离散音素聚类目标，再引入 EL 微调 ASR 教师的连续瓶颈特征回归，最后用 Whisper 引导的 DTW 路径做跨域对齐。最优 Mel-Conformer（21.9M）
+- **关键技术点**：全喉切除患者依赖电喉发声，信号机械单调且常被设备噪声淹没。SSL 基础模型在海量健康语音上预训练，zero-shot 迁移到 EL 严重域失配；EL 微调又损害健康域表征，且 300M+ 参数非因果架构无法低延迟流式部署。
+- **主要指标**：- EL WER：21.2%、EL CER：8.3%；HE WER：17.2%、CER：3.9% - 关键对比：较最强 zero-shot SSL 基线 WavLM-large（EL WER 39.3%）绝对降 18.1 点、约 46% 相对改善；距 EL 教师直接 CTC 解码（16.6%）仍受因
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Beyond EER: Multi-Dimensional Evaluation of Information Leakage in Speaker De-Identification](https://arxiv.org/abs/2609.18673)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：说话人去标识化（SDID）系统的隐私评估通常退化为单一指标——说话人验证 EER，忽略了软生物特征推断、嵌入级重识别与模板结构相似等关键泄露通道。本文提出五维整体评估框架：EER、软生物特征泄露分数（SBLS）、CMC 检索重识别、CCA/Procrustes 嵌入子空间对齐、WER 与语义相似度。在 IARPA ARTS 的 5 个 SDID 系统、约 347 万验证试次上证明各指标捕获独立的泄
+- **关键技术点**：现有 SDID 评估以说话人验证 EER 为中心（VoicePrivacy 范式），但 EER 只度量一对一比对抵抗性，无法反映攻击者从匿名语音恢复性别、年龄、口音，或在嵌入库中检索原始说话人、从匿名表示线性预测原始表示的能力，威胁不可链接性与不可逆性；且隐私必须与可用性联合量化。
+- **主要指标**：- oaoa EER：PHORTRESS 49.79% 最优，SHADOW 45.40%，VOXLET 仅 27.75% - SBLS（性别+年龄）：PHORTRESS 0.920 > 基线 0.877 > VOXLET 0.728 > RASP 0.617 > SHADOW 0.593（原始语音 
+- **代码**：暂无 | **Demo**：暂无
 
 ---

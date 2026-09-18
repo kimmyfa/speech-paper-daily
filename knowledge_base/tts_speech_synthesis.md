@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 53 篇
+共 54 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -477,5 +477,14 @@
 - **关键技术点**：传统TTS主要优化词法流畅性，NVV事件常在数据清洗中被滤除；现有零样本TTS仍无法在指定位置以令人信服的声学表现生成指定NVV。
 - **主要指标**：- 官方最终分数（ZH/EN/双语）：61.775 / 63.797 / 62.786（总榜第一） - 相比官方基线（双语61.431）提升1.355分，中文提升2.075分 - 中文CER：5.012%（基线6.267%）| 英文WER：2.194%（基线3.159%） - DNSMOS：3.22
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [GrainSpeech: Less Context, More Detail for Compact Speech Synthesis](https://arxiv.org/abs/2609.18856)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-17
+- **一句话贡献**：针对紧凑型声学模型"质量-容量"权衡困境，本文从编码器上下文与Mel监督两个瓶颈入手。作者通过受控感受野实验发现自注意力超过约15个音素后收益消失，据此提出固定感受野卷积编码器，将基频、能量、时长预测误差分别降低36.0%、17.3%、3.4%；又针对图像域GVar损失直接迁移导致UTMOS降至2.769的问题，提出Mel适配的Mel-GVar损失。最终模型仅264.8K参数，UTMOS达4.08
+- **关键技术点**：高质量声学模型动辄数百万参数，难以部署于资源受限设备；既有EfficientSpeech等紧凑模型仍受限于宽上下文自注意力编码器与逐点L1监督导致的Mel过平滑，且此前"架构vs上下文"对比未解耦、混淆变量。
+- **主要指标**：- UTMOS：4.086 [4.020, 4.148]（GT 4.366） - WER：3.27%，MCD-DTW：6.314 dB - 相对同预算ES-Tiny：UTMOS +0.496（CI [0.431, 0.562]），其中Mel-GVar贡献+0.354、编码器贡献+0.141 - 关键
+- **代码**：https://github.com/lab-emi/GrainSpeech | **Demo**：https://github.com/lab-emi/GrainSpeech
 
 ---
