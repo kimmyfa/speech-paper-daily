@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 46 篇
+共 50 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -414,5 +414,41 @@
 - **关键技术点**：上下文 ASR 的增益可能来自目标词显式注入而非语义联想，既有基准（文档域、实体列表、领域提示）无法解耦两者；不同分支用不同录音时，音质差异还会污染对比结论。
 - **主要指标**：- Qwen3-ASR-1.7B 隐式目标召回：中文 46.20%→69.92%，英文 43.95%→73.56% - 80/10/10 微调后隐式召回：中文 80.91%、英文 85.02%（较基线 +11.0/+11.5 个百分点） - 无关上下文稳健性：召回仅降 0.13/0.09 点，而 8
 - **代码**：https://github.com/OPPO-Mente-Lab/HearInContext | **Demo**：暂无
+
+---
+## [Alignment-Path Distillation from Non-streaming ASR-LLMs for Streaming Speech Recognition](https://arxiv.org/abs/2609.20121)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对交错式流式 ASR-LLM 中外部 CTC 强制对齐（FA）构造的语音-文本训练序列与 LLM 自身学到的对齐分布不一致的问题，本文提出"对齐路径蒸馏"框架：从冻结的非流式 ASR-LLM 教师提取文本-语音注意力，低置信行回退为 FA 分布，再经全局单调搜索得到对齐锚点以重构学生交错训练序列，并叠加 logit 与隐状态蒸馏。中英文 6 个测试集上，仅用教师对齐路径即取得 5.2% 相对错误
+- **关键技术点**：交错式流式 ASR-LLM 中文本 token 分配到哪个音频块决定其可获得的声学上下文，传统做法依赖外部 CTC 模型 FA 时间戳切分转写，但该对齐与 LLM 内部注意力学到的对齐不一致，限制了流式识别精度。
+- **主要指标**：- 汇总错误率：非流式教师 3.99%，FA 基线（MMS）9.35%，教师对齐 TA 8.86%（相对降 5.2%） - 完整框架 TA+COMBO 7.80%，较最强基线 MMS+COMBO（8.12%）相对降 3.9%，较无蒸馏 MMS 相对降 16.6% - 流式行为：TA+COMBO fl
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Multimodal Conversational Context for LLM-Based ASR: Data Construction, Training, and Benchmark](https://arxiv.org/abs/2609.19765)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对上下文 ASR 仅依赖历史文本转录、易传播识别错误且丢弃发音/说话人信息的问题，提出面向 LLM-ASR 的多模态对话上下文框架：以实体池为起点构造近音混淆对并生成五类受控场景对话，将历史用户语音与助手文本响应交织后做 SFT，使模型在当前轮转录中同时利用语义与声学线索；并发布 MM-ContextASR Bench。在 Qwen3-Omni 与 Step-Audio-2-mini 上，Spe
+- **关键技术点**：上下文 ASR 传统上依赖热点词或历史转录文本，历史 ASR 错误会经助手响应复用而在上下文中传播，且文本化丢弃发音、口音、说话人特征；现有工作缺乏对多模态对话历史的系统性受控评估与训练方案。
+- **主要指标**：- 整体实体召回：Qwen3-Omni Speech+Text 87.84%，Step-Audio-2-mini 85.20% - Repeated Error 场景：Speech-only 82.80% 显著高于 Text-only 77.20%；训练后 Speech+Text 比无上下文基线高 
+- **代码**：https://github.com/llh666521/MM-ContextASR | **Demo**：暂无
+
+---
+## [CircleMatch: Prototype Matching with Circular Temporal Statistics for Tiny Keyword Spotting](https://arxiv.org/abs/2609.20070)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对边缘设备关键词唤醒（KWS）在极小参数预算下精度难保证的问题，提出超轻量匹配框架 CircleMatch：编码器按子带独立压缩并融合为帧特征，与每类 5 个可学习原型的匹配产生时序响应曲线；再将时间位置绕到复数单位圆上，用无参数圆统计聚合响应分布与相对时序，配合动态规划有序路径分数与线性读出分类。1k～7k 参数四个变体在 GSC v1/v2 与 MSWC 英/西子集上取得有竞争力的精度—参数
+- **关键技术点**：资源受限设备 KWS 需在极小参数量下保持高精度；现有 tiny 模型依赖高效卷积或学习型紧凑表示，而均值池化等时序聚合丢失响应的时间分布与相对顺序信息，在 1k～10k 参数区间判别力不足。
+- **主要指标**：- GSC v2：96.23%±0.08（Circle-D32，6694 参数）；GSC v1：95.44%±0.30 - MSWC EN31：92.87%±0.27；ES20：93.66%±0.36 - 关键对比：Circle-D4 比 SparkNet-C4 少 30.6% 参数且高 3.44 
+- **代码**：https://github.com/ora942878/CircleMatch | **Demo**：暂无
+
+---
+## [Foreground Voice Activity Detection: Learning Speaker Selectivity from Supervision](https://arxiv.org/abs/2609.19856)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：本文形式化定义"前景 VAD（FVAD）"：无注册、帧级二分类，仅将"持续存在"的主动说话人标为正，单说话人时退化为传统 VAD。作者发现说话人选择性主要来自训练监督而非架构：用全自动化数据配方（前景标签+竞争说话人远场混叠）训练，即可让普通流式 VAD 获得选择能力。提出 BG-FAR 指标与 Mix-Interference 基准。Mamba-FVAD（约 0.6M 参数）前景 F1 达 0.
+- **关键技术点**：商用 VAD 把所有语音（含背景他人声）判为有效活动，在嘈杂场景引发 ASR 污染、轮次切换失效、虚假打断三类故障。既有补救（能量门控、增强前端、说话人注册）要么不可靠要么依赖外部先验，无法在单一轻量流式检测器内解决。
+- **主要指标**：- Mix-Interference 前景 F1：0.88–0.92，BG-FAR 0.05(17dB)–0.40(9dB) - VOiCES：tele 场景 BG-FAR 0.07 与 music 基线持平，babble 0.12 - 关键对比：同架构换 LibriVAD 普通配方后 BG-FAR
+- **代码**：暂无（承诺发布 Mix-Interference 基准） | **Demo**：暂无
 
 ---

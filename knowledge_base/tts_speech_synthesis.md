@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 54 篇
+共 56 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -486,5 +486,23 @@
 - **关键技术点**：高质量声学模型动辄数百万参数，难以部署于资源受限设备；既有EfficientSpeech等紧凑模型仍受限于宽上下文自注意力编码器与逐点L1监督导致的Mel过平滑，且此前"架构vs上下文"对比未解耦、混淆变量。
 - **主要指标**：- UTMOS：4.086 [4.020, 4.148]（GT 4.366） - WER：3.27%，MCD-DTW：6.314 dB - 相对同预算ES-Tiny：UTMOS +0.496（CI [0.431, 0.562]），其中Mel-GVar贡献+0.354、编码器贡献+0.141 - 关键
 - **代码**：https://github.com/lab-emi/GrainSpeech | **Demo**：https://github.com/lab-emi/GrainSpeech
+
+---
+## [Decaf: A privacy preserving speech codec using speaker disentanglement and canonical voice conversion](https://arxiv.org/abs/2609.19304)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对语音上云传输中的说话人身份泄露问题，提出隐私保护神经语音编解码器 DECAF：把压缩本身作为混淆机制——发送端经 CTC 监督的信息瓶颈将语音剥离为无说话人内容嵌入，RVQ 量化后仅传内容流；接收端用两端预共享的 canonical 音色重建波形，实现确定性匿名。论文引入 CTC 辅助目标并发现 WavLM-base+ 优于 WavLM-large 且推理提速 3 倍。0.5 kbps 下对 
+- **关键技术点**：语音上云需在保可懂度下隐藏说话人身份，现有信号处理、VC、对抗扰动及神经编解码匿名方法均把"先混淆、后编码"当作两个独立阶段，带宽成本付两次，且隐私-效用此消彼长，现有匿名系统即使高码率也带来数个百分点绝对 WER 退化。
+- **主要指标**：- EER（ECAPA-TDNN 攻击）：DECAF-small@0.5 kbps 平均 43.5%，Encodec@24 kbps 仅 16.4 - 微调 WER：平均 5.49%（clean 2.85/other 8.13），与原始音频差距 ≤1.8 个百分点 - 音质：0.5 kbps PES
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Multi-Dimensional Prosody Judgment For Live Streaming Speech Synthesis](https://arxiv.org/abs/2609.20124)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对直播场景 TTS 需评估情感、语调、能量等高表现力韵律、而传统 MOS 模型失效且 Gemini 等闭源大模型成本过高的问题，提出从 Gemini 蒸馏到 Qwen3-Omni 的成对评审模型 LPJ，定义直播韵律七维准则。针对多维评审中所有维度盲目对齐整体偏好的"判定耦合"缺陷，进一步提出 D-LPJ：去除整体判定目标、按维度掩码不确定标签、并用 span-local GRPO 将各维度优势
+- **关键技术点**：直播 TTS 需衡量流畅度、语调、情感、带货表现力等细粒度韵律，参考无关 MOS 回归模型无法捕获交互模式切换等复杂现象；现有 SpeechJudge、GSRM 评审不含直播域，直接调用 Gemini 无法承担大规模推理与 RL 反馈开销。
+- **主要指标**：- 人类标签一致率（10 样本）：LPJ v1+GRPO 71.22–83.50%，全部超过单次 Gemini（58.00–73.33%） - D-LPJ 四维池化一致率 86.10%，比单次 Gemini 高 7.45 点 - 位置偏差：LPJ 二槽加分差仅 +0.012（SpeechJudge-
+- **代码**：暂无 | **Demo**：暂无
 
 ---

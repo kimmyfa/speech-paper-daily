@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 15 篇
+共 16 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -135,5 +135,14 @@
 - **关键技术点**：多通道语音分离需要借助麦克风阵列的空间线索确定分离输出的排列顺序。基于位置训练（LBT）按声源方位角或距离确定输出排列，优于 PIT 方法。但对平面阵列采用覆盖全 360° 的圆形排序时，0°/360° 边界处的环绕不连续会造成排序突变，迫使网络将部分容量用于学习这一人为拓扑，限制了分离性能。
 - **主要指标**：- 评价指标为 SI-SDR 与 ESTOI。在 PET-3 与 URA-4+ 阵列、T60=0.65s 混响条件下：CLBT-FLOs 在 oracle 方位角（Δφ=0°）引导下较 LBT-CO 与各单个 LBT-FLO 获得一致改进，增益虽小但稳定；配对 Wilcoxon 符号秩检验效应量 r
 - **代码**：暂无 | **Demo**：https://aspire.ugent.be/demos/IWAENC2026KY/
+
+---
+## [Beyond the Stability–Plasticity Frontier in Streaming Target Speaker Extraction](https://arxiv.org/abs/2609.20463)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：流式目标说话人提取需在目标静默、被掩蔽或声学漂移时维持"提取谁"的状态，而手工 EMA/门控更新规则被困在稳定性–可塑性权衡前沿。本文冻结 2.9M 分离 Backbone 与 0.26M 说话人编码器，仅对 41k 参数的锚定快权重（AFW）记忆经闭环元训练，让更新器直面自身污染证据。AFW 在严重注册失配下达 10.9 dB SI-SNRi，较最佳启发式提升 3.0 dB，同时 30 秒静默后
+- **关键技术点**：流式 TSE 的说话人状态需在目标缺席时保持身份、在注册–混听失配时适应，两者互斥。在 22 种自适应启发式配置（含 oracle VAD 门控）上的系统测量表明该权衡构成前沿：即使完美目标活动检测也无法同时解决两轴——活动不等于身份，失配时残差仍会写入干扰者证据。
+- **主要指标**：- 严重失配 SI-SNRi：AFW 10.9 dB vs 最佳启发式 7.9 dB（+3.0 dB）、GRU 10.5 dB - 30s 缺席后恢复：AFW 6.2、GRU 7.3、静态 7.1 dB（差距 ≤0.9） - 说话人混淆率 4–5%（启发式 15–31%）；16s 缺席抑制 17.2
+- **代码**：https://github.com/ym2976/anchor-fast-weight | **Demo**：暂无
 
 ---

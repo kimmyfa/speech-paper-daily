@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 112 篇
+共 117 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1008,5 +1008,50 @@
 - **关键技术点**：固定测试集无法吸收发布后新出现的冒充机构、索要行为与话术模式；负例若来自无关领域，模型靠主题或数据源捷径即可满分，无法检验"凭完成轨迹中的欺诈行为定标签"的真实能力。TeleAntiFraud-28k 虽含音频但不可刷新，且音频文件名前缀与标签相关。
 - **主要指标**：- 负例难度探针：LR/SVM/RoBERTa 在无关与普通负例上 Macro-F1 均 1.000，近域兄弟负例跌至 0.650–0.680，bigram 重叠 0.005→0.274 - 线性可分性：同一 TF-IDF+SVM 在 TAF-28k-ASR 上 Macro-F1 0.995，本基准
 - **代码**：https://anonymous.4open.science/r/TeleAntiFraud-2_0-EEB2/ | **Demo**：暂无
+
+---
+## [CoReLoop: Parameter-Efficient Controlled Recurrent Refinement for Audio Deepfake Detection](https://arxiv.org/abs/2609.19818)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对音频深伪检测器对未见攻击泛化差、扩充攻击数据不现实的问题，提出 CoReLoop：在不改动冻结 SSL 检测器（W2V-BERT 24 层、598M 参数）任何原始参数、不新增数据的条件下，通过受控循环精炼让多次编码器前向真正提升检测。作者先诊断出朴素递归复用会把 pooled EER 从 4.85% 恶化至最高 64.68%，进而用 LoopBridge、循环专属 LoRA、UpdateGa
+- **关键技术点**：SSL 编码器加分类器的深伪检测器在未见攻击上泛化有限，而已有循环深度方法假设共享层可端到端训练，直接套用冻结检测器会因输入输出空间错配导致性能崩塌。
+- **主要指标**：- Pooled EER（T=2）：3.74%（基线 4.85%，相对降 22.9%，10/14 测试集改善） - 单趟 LoRA 对比 4.24%：CoReLoop 优 0.5 点，证明增益来自递归模块而非 LoRA 本身 - 自适应 halting：3.73%@平均 1.18 趟，较固定双趟降 
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Robust Workflow Generation via Adversarial Learning for Audio Deepfake Detection](https://arxiv.org/abs/2609.20063)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对音频深伪检测器在真实噪声、压缩、编解码等扰动下泛化失败的问题，提出 ROGUE 框架，把检测工作流构建为扰动下的序贯决策：扰动智能体从可学习类别分布中采样最具破坏性的音频变换，策略智能体（LLM/DSPy 控制器）自适应选择编排检测工具。在 15 种扰动上平均准确率 0.91，较无对抗 DSPy 基线（0.88）和最强专用检测器 DF_Arena_1B（0.89）均有提升，跨数据集平均 0.9
+- **关键技术点**：现有深伪检测器在受控条件下性能强，但在噪声、压缩、混响、神经编解码等真实损坏下严重退化，且没有单一检测器能在所有条件下稳定领先；既有 LLM 工作流生成只优化良性输入，缺乏对扰动与分布漂移的鲁棒建模。
+- **主要指标**：- 平均鲁棒准确率：0.91（DSPy 0.88，DF_Arena_1B 0.89） - EnCodec 压缩：0.67（HuBERT 0.56，DSPy 0.62）；Opus：0.72（基线最佳 0.69） - 跨数据集平均：0.95（DSPy 0.92），CodecFake/In-the-Wil
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [VākQA: A Benchmark and Evaluation Study for Telugu Spoken Factoid Question Answering](https://arxiv.org/abs/2609.19879)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对泰卢固语语音问答基准空白及低资源语言自动评测可靠性未量化的问题，提出 VākQA：首个泰卢固语语音事实问答基准，含 2,001 对问答、2.53 小时真实竞赛音频、双语转写与人工校验参考答案。先用 400 条人工评分校验评测方法，发现 Gemini-as-judge 与人类相关性最高（Spearman ρ=0.86）但严格度非均匀，小模型裁判会系统性错罚表述不同的正确答案。基准测试表明专有模型
+- **关键技术点**：现有 SQA 基准多为英语或以 TTS 合成/翻译而来，泰卢固语仅有文本基准；EM/F1 对释义与 ASR 噪声脆弱，LLM-as-a-judge 在低资源语言上的可信度此前未被系统验证。
+- **主要指标**：- 裁判与人类相关性：Gemini ρ=0.86、τ=0.77、MAE=0.46；EM ρ=0.37、F1 ρ=0.49 - QA 得分（1–5）：oracle 泰语文本 3.63、直接语音 3.28、ASR 文本 3.09–3.40、ASR→MT 级联 2.44–2.80 - 开源最佳 Gemma
+- **代码**：https://hf.co/datasets/Bhavanaakkiraju/VakQA | **Demo**：暂无
+
+---
+## [A Cross-Lingual Acoustic Disease-Alignment Framework for Respiratory Health Assessment from Spontaneous Speech](https://arxiv.org/abs/2609.19398)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：自发语音是无创评估呼吸健康（如 COPD）的可扩展信号，但疾病相关声学改变与语言特有音系、韵律变化纠缠，导致单语模型跨语言失效。本文提出跨语言疾病对齐框架 CL-DAF：基于 201 名英语者与 75 名新采集孟加拉语者构建共同 272 维声学表征，用带符号 rank-biserial 效应量与语言不变性分数（LIS）筛选疾病方向跨语言一致的特征。孟加拉语单语 COPD 检测 AUC 0.849，
+- **关键技术点**：现有呼吸语音研究均在单语队列内开发，缺乏跨语言可复用的声学标志物；单语内判别力强的特征在新语言中可能变弱甚至极性反转，单语 AUC 高并不代表适合多语临床建模，核心问题是"哪些疾病信号分量在语言切换后仍可靠"。
+- **主要指标**：- 孟加拉语单语内 AUC：0.849±0.026（BAcc 0.765） - 全 272 特征迁移 AUC（EN→BN / BN→EN）：0.663 / 0.488 - CL-DAF 26 特征迁移 AUC：0.825 / 0.722；符号反转子集仅 0.268 / 0.341（显著低于随机，负对
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Music Hallucination in Audio-Language Models: A Hierarchical Formulation and Empirical Study](https://arxiv.org/abs/2609.20195)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：音频语言模型常生成自信却无音频依据的音乐描述，而现有幻觉基准仅把音乐当泛音频、以"参考未提及即幻觉"误判。本文首次将音乐幻觉形式化为按可验证性划分的五层感知落地失败（声音事件/时序/调性/风格/情感），提出矛盾式三值判决与多范式诊断框架 MuseDiag：硬层用信号工具客观核验，软层用 LLM 裁判。评测 9 个模型后人声误知是普遍弱点、调性是架构分水岭，仅 Audio-Flamingo-3 三范
+- **关键技术点**：音乐描述天然选择性输出，正确属性未被提及不等于幻觉，单一目标存在性检查无法覆盖乐器、人声、速度、调性、风格、情感等异质证据需求；此前未回答"哪层失效、为何失效、缓解能否跨范式迁移"。
+- **主要指标**：- Audio-Flamingo-3 最优：探测 Acc 74.0%、总幻觉率 25.8%、软层 HR 9.7%、结构化 Avg Acc 61.0% - 人声幻觉率全模型居高 45.9%–61.3%；自由生成调性幻觉率跨 34.8%–90.5% - 调性分化：Qwen2.5-Omni key 准确率
+- **代码**：暂无 | **Demo**：暂无
 
 ---

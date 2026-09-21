@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 31 篇
+共 34 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -278,6 +278,33 @@
 - **一句话贡献**：说话人去标识化（SDID）系统的隐私评估通常退化为单一指标——说话人验证 EER，忽略了软生物特征推断、嵌入级重识别与模板结构相似等关键泄露通道。本文提出五维整体评估框架：EER、软生物特征泄露分数（SBLS）、CMC 检索重识别、CCA/Procrustes 嵌入子空间对齐、WER 与语义相似度。在 IARPA ARTS 的 5 个 SDID 系统、约 347 万验证试次上证明各指标捕获独立的泄
 - **关键技术点**：现有 SDID 评估以说话人验证 EER 为中心（VoicePrivacy 范式），但 EER 只度量一对一比对抵抗性，无法反映攻击者从匿名语音恢复性别、年龄、口音，或在嵌入库中检索原始说话人、从匿名表示线性预测原始表示的能力，威胁不可链接性与不可逆性；且隐私必须与可用性联合量化。
 - **主要指标**：- oaoa EER：PHORTRESS 49.79% 最优，SHADOW 45.40%，VOXLET 仅 27.75% - SBLS（性别+年龄）：PHORTRESS 0.920 > 基线 0.877 > VOXLET 0.728 > RASP 0.617 > SHADOW 0.593（原始语音 
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [PersianVox: A Prosody-Aware Approach for Speech Dataset Generation from In-the-Wild Data](https://arxiv.org/abs/2609.19324)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对低资源语言缺少大规模高保真语音数据、现成 in-the-wild 流水线用单模型 ASR 加静音 VAD 切分导致转写错误与韵律截断的问题，提出全自动数据生成流水线 PersianVox。核心是韵律感知切分（声学轮次检测+目标时长动态合并）与无真值的 dual-ASR 一致性过滤。最终从 6180 小时原始音频产出 2408.67 小时、625192 句、3248 说话人的当前最大开源波斯语数
+- **关键技术点**：零样本 TTS 受限于数据规模与质量：对齐法需逐字稿难扩展，Emilia/AutoPrep 类流水线依赖强 ASR 且用静音阈值切分，产生大量句中截断短句、破坏长程韵律；DNSMOS 在波斯语上泛化差不可靠。
+- **主要指标**：- TTS 合成 WER：2.1；CER：0.3；说话人 SECS：79.8 - 合成 MOS（SCOREQ）：4.27（参考真值 4.31） - SQA 相关性 PLCC/SRCC：SCOREQ 0.6658/0.6271，较最强基线 DNSMOS（0.5590/0.5182）提升约 0.107 
+- **代码**：https://huggingface.co/datasets/saeedzou/persianvox | **Demo**：https://saeedzou.github.io/persianvox-demo
+
+---
+## [Model-Agnostic and Language-Agnostic Voice Pipeline Improvement for the Agriculture Domain](https://arxiv.org/abs/2609.20504)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：针对小农户田间录音（廉价手机、农机噪声、旁帮说话人、密集成语农业词）下通用 ASR 转写差、且错误集中在改变语义的核心词的问题，提出包裹零改动 ASR 的五模块流水线：信号特征门控的 DeepFilterNet3 增强、说话人分离与目标人选择、可替换 ASR、加权农词词典规则修复、质量门控。在 Hindi/Telugu/Odia 人工标注语料上，完整流水线对三个云端 ASR 降低相对 WER 16
+- **关键技术点**：通用 ASR 在低信噪比、多说话人、语言混合的田间音频上严重劣化，且 WER 对内容词与功能词一视同仁，无法暴露作物/农药/剂量类词错误改变提问的危险；微调 ASR 与端到端多模态路线分别受限于标注不可靠、成本与可测性。
+- **主要指标**：- 全语料相对 WER 降幅：Gemini −22.8%（0.439→0.339）、Sarvam −19.3%、Azure −16%、端侧 IndicConformer −4.9% - 多说话人相对降幅：云端 −32%～−42%、端侧约 −16% - 分离 DER：微调 segmenter 0.21
+- **代码**：https://github.com/aakashdg/agri-voice-pipeline | **Demo**：https://huggingface.co/spaces/DigiGreen/farmerchat-voice-pipeline-demo
+
+---
+## [A Deep Neural Network for Predicting Continuous Human EEG Across the Auditory Pathway in Response to Sound](https://arxiv.org/abs/2609.20595)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：人类听觉计算模型通常只针对单一通路阶段或范式，难以跨神经时间尺度整合发现。本文提出人脑听觉电生理"基础模型"：完全因果的编码器—解码器网络，将双耳原始声波形端到端映射为高采样率连续 EEG，在 92 名被试、约 250 小时数据（纯音、语音、音乐）上训练。固定权重、零微调下，模型重现了 pABR 的刺激率/频率效应、自然语音皮层下与皮层 TRF 以及双耳交互成分（BIC 潜伏期 6.40 ms）；
+- **关键技术点**：传统手工听觉模型只覆盖单阶段单时间尺度，难以扩展至多神经发生器；已有数据驱动模型要么只瞄准单一通路环节、依赖动物侵入式记录，要么建模行为而非脑响应。
+- **主要指标**：- pABR 模型—人类总均值 Pearson 相关：0.604–0.944（500 Hz–8 kHz） - 皮层下/皮层语音 TRF 相关：0.39–0.93；率—幅曲线相关 ≥0.961 - 预测 BIC 潜伏期 6.40 ms（文献规范 5.58–6.90 ms 内）；幅值超规范但 Crawf
 - **代码**：暂无 | **Demo**：暂无
 
 ---
