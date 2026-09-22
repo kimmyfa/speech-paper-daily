@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 29 篇
+共 30 篇
 
 ## [Prototype-Rectified Iterative Self-supervised Manifold Denoising under Severe Acoustic Shift](https://arxiv.org/abs/2608.15037)
 
@@ -261,5 +261,14 @@
 - **关键技术点**：SE 文献与 ITU-T 等主观标准普遍依赖年轻健听者，客观 SQ 指标亦由此类数据驱动；而老年用户才是助听器、可访问音频等 SE 技术的主要受众，年轻听感下"有意义"的系统间质量差在老年群体是否成立尚不清楚。
 - **主要指标**：- 条件主效应：FF=181.2，p<0.001；条件×年龄-听损交互：FF=26.8，p<0.001 - 年轻组核心 SE 间差值：4.4–21.9 分（Holm 校正全显著）；老年组最大 ≤8.4 分，最小差值均不显著 - 压低效应：60+N1/N2/N3 较 60+N0 条件均分低 10.1/
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [BLINC: Blind Calibration For Training-Free Speech Enhancement Adaptation](https://arxiv.org/abs/2609.21898)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：语音增强模型在域偏移下性能退化，而多数测试时自适应（TTA）方法需反向传播更新权重，存在永久改变模型与误差累积风险。本文提出BLINC，一种免训练TTA：不动模型权重，用直方图匹配把预测的时频掩码重量化为双峰目标分布，分布参数仅由含噪信号的语音活动占比等盲特征估计，系数在验证域离线以PESQ拟合。在EARS/WHAM!/VoiceBank/DNS多域评测中，BLINC在AM与CMGAN两模型上取得
+- **关键技术点**：训练数据无法覆盖说话人与声学环境的全部多样性，SE模型部署时必然遭遇域偏移；含噪录音的干净参考不可恢复，自适应只能无监督。域偏移下掩码型SE模型的TF掩码丧失双峰特性、取值向中间堆积，增强性能随之下降。现有TTA用自监督损失更新部分权重，需要测试时梯度计算并永久改变模型。
+- **主要指标**：- 感知质量（跨目标域平均）：AM模型PESQ 2.17、CSIG 3.21、COVL 2.66，CMGAN模型PESQ 2.66、COVL 3.22，两模型均为全方法最高 - 关键对比：AM上PESQ较最强基线LaDen（2.13）高0.04，CMGAN上较MPol（2.64）高0.02；RTF 
+- **代码**：https://github.com/tobiaaa/SETTA | **Demo**：暂无
 
 ---

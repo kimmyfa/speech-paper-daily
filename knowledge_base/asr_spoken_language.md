@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 50 篇
+共 51 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -450,5 +450,14 @@
 - **关键技术点**：商用 VAD 把所有语音（含背景他人声）判为有效活动，在嘈杂场景引发 ASR 污染、轮次切换失效、虚假打断三类故障。既有补救（能量门控、增强前端、说话人注册）要么不可靠要么依赖外部先验，无法在单一轻量流式检测器内解决。
 - **主要指标**：- Mix-Interference 前景 F1：0.88–0.92，BG-FAR 0.05(17dB)–0.40(9dB) - VOiCES：tele 场景 BG-FAR 0.07 与 music 基线持平，babble 0.12 - 关键对比：同架构换 LibriVAD 普通配方后 BG-FAR
 - **代码**：暂无（承诺发布 Mix-Interference 基准） | **Demo**：暂无
+
+---
+## [CGaLore: Curvature-Guided GaLore for Memory-Efficient Continual Adaptation of ASR Foundation Models](https://arxiv.org/abs/2609.21336)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：ASR 基座模型适配新领域或口音时会灾难性遗忘预训练能力，全参微调又代价高；GaLore 以低秩梯度投影降低优化器显存，但投影基仅由当前梯度决定，无抗遗忘机制。本文提出 CGaLore：先用旧任务上估计的 KFAC 逆曲率（Kronecker 近似曲率）对当前任务梯度做预条件过滤，再对其做 SVD 选投影基，使低秩优化器子空间偏向利于新任务且不伤旧任务的方向。在 OWSM v3.2 small 口
+- **关键技术点**：语音基座模型在数十万小时多语种数据上预训练，适配新任务既要显存高效又不能覆盖旧能力。现有 ASR 持续学习方法或按任务存适配器、推理依赖任务身份，或依赖预训练期优化器状态与梯度，在仅有少量旧任务语音的公开模型适配场景均不可行，亟需务实设定下的高效抗遗忘方案。
+- **主要指标**：- 实验一：平均 WER 8.72、BWT -0.3，对比 GaLore 11.98、-4.7（消除 93.6% 遗忘），对比最强 PECL 基线 CSSVD 9.51（相对提升 8.3%，Wilcoxon 检验显著） - 实验二：平均 WER 17.68、BWT -2.7，对比 GaLore 28
+- **代码**：https://github.com/StevenVdEeckt/cgalore | **Demo**：暂无
 
 ---

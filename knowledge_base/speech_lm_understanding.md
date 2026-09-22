@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 117 篇
+共 122 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -695,6 +695,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [Omni Demand Understanding: A Benchmark for Contextual User-Intent Inference in Multimodal Interaction](https://arxiv.org/abs/2609.21392)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-21
+- **一句话贡献**：真实音视频交互中的用户需求常以省略形式表达，需综合视觉、声学线索与对话历史推断，且"类请求"语音易误触发助手响应，而现有基准只评响应质量、缺需求理解评测。本文提出 ODU 任务与 ODU-Bench（2078 个场景、五维评测），对 14 个原生音频/音视频 MLLM 测评：最强的 Gemini 3.1 Pro 对须依上下文推断的关键信息仅恢复 44.7%，11/14 模型在无需求场景误触发率超 
+- **关键技术点**：语音助手面对的是自然音视频输入而非组织好的文本，用户真实需求常不在话语中显式说出（如"同一个测试""这个"），需从手势与对话史补全；反之环境播放或对他人的抱怨式请求不应触发响应。需求理解因此是独立于响应生成的多模态上下文推理问题，此前从未被显式评测。
+- **主要指标**：- 综合均分：音视频最佳 Gemini 3.1 Pro 为 72.6，开源最佳 Qwen3-Omni-Think 仅 59.9，差 12.7 个点；GPT-5.4 文本基线 59.0 - 语义 M2：Gemini 3.1 Pro 音视频 63.4%、Seed 2.0 Lite 音频 78.0%，主评
+- **代码**：https://huggingface.co/datasets/qc316/odubench | **Demo**：https://odubench.github.io
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1053,5 +1062,41 @@
 - **关键技术点**：音乐描述天然选择性输出，正确属性未被提及不等于幻觉，单一目标存在性检查无法覆盖乐器、人声、速度、调性、风格、情感等异质证据需求；此前未回答"哪层失效、为何失效、缓解能否跨范式迁移"。
 - **主要指标**：- Audio-Flamingo-3 最优：探测 Acc 74.0%、总幻觉率 25.8%、软层 HR 9.7%、结构化 Avg Acc 61.0% - 人声幻觉率全模型居高 45.9%–61.3%；自由生成调性幻觉率跨 34.8%–90.5% - 调性分化：Qwen2.5-Omni key 准确率
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [OmniVChat: Synthesizing, Benchmarking, and Training for Native Audio-Visual Dialogue](https://arxiv.org/abs/2609.21465)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：论文定义OmniVChat任务：全模态模型直接同时接收用户音视频流并输出文本回复，查询隐含在音画内容中，不依赖文本提问、外部字幕或ASR级联，以降低延迟并保留韵律与视觉线索。针对真实数据稀缺与开放回复难以评估两大瓶颈，作者提出三件套：OmniVChat-Studio多智能体合成引擎（1080P/44.1kHz音视频对话+分级评分细则）、OmniVChat-Bench（2800条合成实例+360条真
+- **关键技术点**：全模态模型做原生视听对话时缺少"用户举着设备自拍提问"的公开数据，且好回复需兼顾环境、表情、附近物体，表达方式多样，关键词匹配式评测失效。近期智能体系统与视频生成的进展使"以生成服务理解"成为可行路径。
+- **主要指标**：- Bench均分：0.652（基线Qwen3-Omni-Instruct 0.465），真人集0.632（基线0.402），RE 18.38，风格0.992 - 关键对比：与最强基线Gemini系列相比，Mean上0.652略低于Gemini-3.5-Flash的0.667，但Human上0.63
+- **代码**：暂无（论文承诺后续开源Bench与RL训练代码） | **Demo**：暂无
+
+---
+## [GenTraceBench: A Benchmark for Tracing Audio Deepfakes Across Pre- and Post-training Stages](https://arxiv.org/abs/2609.21738)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：针对TTS部署普遍经SFT/DPO/GRPO适配后生成器指纹是否依然有效的问题，提出首个覆盖同一生成器系列预训练与后训练阶段的音频深伪溯源基准GenTraceBench：5架构、16变体、固定文本与说话人prompt生成的49728条语音，以train-on-foundation、test-on-adapted协议评测检测、归因与开集验证。DPO/GRPO大体保留指纹（归因变化不超过1.39点），
+- **关键技术点**：ASVspoof、WaveFake等现有音频深伪语料多评测固定的完整训练生成器，ShiftySpeech与STOPA面向跨系统与组件级扰动，均未回答生成器经过自身SFT与RL对齐后，取证前端捕获的模型特异指纹能否存续。
+- **主要指标**：- 归因下降（W2V-BERT三次验证选点均值）：RL对齐0.13±0.23点，CosyVoice2 SFT 0.64±0.06点，Vevo2 SingNet-only 10.15±0.97点，后两者bootstrap区间均不含零 - 检测：CosyVoice2 SFT降至87.28%，F5-TTS
+- **代码**：暂无（论文承诺将公开该基准） | **Demo**：暂无
+
+---
+## [Samsone: A Family of Open Small Audio Language Models for On-Device Inference](https://arxiv.org/abs/2609.21666)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：音频大模型动辄3B-9B参数，难以满足端侧低延迟与隐私需求，现有小模型推理弱且缺乏真实手机部署验证。本文提出Samsone家族（99M/134M/356M）：Whisper-Tiny编码器经特征池化与投影器接入SmolLM2-135M/360M解码器，在ReasonAQA+AudioSkillsXL公开数据上单阶段微调。Samsone-134M在MMAU以61.33平均分刷新同级SOTA并超越8.
+- **关键技术点**：音频SOTA大模型普遍3B-9B，隐私敏感与离线场景需要十亿参数以下的端侧模型；早期SALM如Pengi（323M）训练文本多样性不足难以推理，Mellow（167M）仅部分缓解，且移动部署验证几乎空白。
+- **主要指标**：- MMAU test平均分：Samsone-134M 61.33，较同级最强基线Mellow-167M（53.34）高8.0，语音子域47.90领先约12；99M即达58.13仍超Mellow，参数少40% - MMAU-Pro：134M 37.57、99M 36.83，对Mellow（27.50
+- **代码**：https://github.com/SamsungLabs/samsone | **Demo**：暂无
+
+---
+## [Enhancing Audio Reasoning via Semantic Summary Prediction](https://arxiv.org/abs/2609.20849)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：大型音频语言模型（LALM）存在"推理鸿沟"：显式 Chain-of-Thought 反而比直接回答准确率更低（SALMONN 上 MMAU 从 36.02% 跌至 18.03%），作者假设是长推理链使注意力漂离音频输入。本文提出 SPARE：在 CoT 序列前注入一个寄存器 token，用余弦相似度损失将其末层隐状态与结论的 Sentence-BERT 语义嵌入对齐，训练后丢弃全部辅助参数。SA
+- **关键技术点**：LALM 生成冗长中间推理步骤时，注意力从声学信号转向已生成的文本 token，导致流畅但脱离音频的答案，CoT 提示甚至低于直接回答。现有缓解方案依赖大规模监督数据堆叠或计算昂贵的强化学习，缺乏训练期架构正则化路线。
+- **主要指标**：- MMAU：58.03%（±1.50），MMAR：40.32%（±0.57） - 关键对比：较 SFT（54.65%）提升 3.38%，较 Audio MuToR（53.02%）提升 5.01%；零样本 CoT 崩溃至 18.03% 凸显推理鸿沟问题；与工业级模型仍有差距（Audio Flamin
+- **代码**：https://github.com/FrancescoBonzi/SPARE | **Demo**：https://my-demo-hub.github.io/spare/
 
 ---

@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 56 篇
+共 57 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -504,5 +504,14 @@
 - **关键技术点**：直播 TTS 需衡量流畅度、语调、情感、带货表现力等细粒度韵律，参考无关 MOS 回归模型无法捕获交互模式切换等复杂现象；现有 SpeechJudge、GSRM 评审不含直播域，直接调用 Gemini 无法承担大规模推理与 RL 反馈开销。
 - **主要指标**：- 人类标签一致率（10 样本）：LPJ v1+GRPO 71.22–83.50%，全部超过单次 Gemini（58.00–73.33%） - D-LPJ 四维池化一致率 86.10%，比单次 Gemini 高 7.45 点 - 位置偏差：LPJ 二槽加分差仅 +0.012（SpeechJudge-
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Towards Zero-Shot Attribution of Synthetic Speech via Audio-Text Contrastive Retrieval](https://arxiv.org/abs/2609.21581)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：现有合成语音溯源多为闭集分类，无法点名训练中未出现的TTS系统。本文将其重构为跨模态检索：用自然语言描述每个生成系统，在音频-文本联合嵌入空间中检索最近邻描述完成归因，新增系统只需写描述、无需重训。其FLAME模型在MLAAD v9（140个TTS、51种语言）上对未见系统达模型级MRR 58.4%、全库Hit@1 44.3%，远超约0.3%随机水平；即使归因错误仍能恢复声码器、语系等属性，实现优
+- **关键技术点**：音频深伪取证正从真假判定迈向来源归因。传统方法建模为多类分类或度量学习，只能覆盖训练时的系统；新TTS模型持续发布使闭集方案失效，而出域检测虽可标记未知样本，却无法提供任何来源线索。
+- **主要指标**：- 闭集系统级Hit@1：86.2%，低于专用分类器93.4%；模型级93.3%（分类器98.4%） - 零样本全库unseen-full：模型级MRR 58.4%、Hit@1 44.3%；系统级MRR 50.0%、Hit@1 34.7% - 受限库unseen-restricted：模型级MRR 
+- **代码**：https://github.com/neamtucristian26/flame | **Demo**：暂无
 
 ---

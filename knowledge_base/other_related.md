@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 34 篇
+共 40 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -305,6 +305,60 @@
 - **一句话贡献**：人类听觉计算模型通常只针对单一通路阶段或范式，难以跨神经时间尺度整合发现。本文提出人脑听觉电生理"基础模型"：完全因果的编码器—解码器网络，将双耳原始声波形端到端映射为高采样率连续 EEG，在 92 名被试、约 250 小时数据（纯音、语音、音乐）上训练。固定权重、零微调下，模型重现了 pABR 的刺激率/频率效应、自然语音皮层下与皮层 TRF 以及双耳交互成分（BIC 潜伏期 6.40 ms）；
 - **关键技术点**：传统手工听觉模型只覆盖单阶段单时间尺度，难以扩展至多神经发生器；已有数据驱动模型要么只瞄准单一通路环节、依赖动物侵入式记录，要么建模行为而非脑响应。
 - **主要指标**：- pABR 模型—人类总均值 Pearson 相关：0.604–0.944（500 Hz–8 kHz） - 皮层下/皮层语音 TRF 相关：0.39–0.93；率—幅曲线相关 ≥0.961 - 预测 BIC 潜伏期 6.40 ms（文献规范 5.58–6.90 ms 内）；幅值超规范但 Crawf
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Online Algorithms for Independent Low-Rank Matrix Analysis and Rank-Constrained Spatial Covariance Matrix Estimation Based on Maximum Weighted Likelihood Estimation](https://arxiv.org/abs/2609.21180)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-18
+- **一句话贡献**：扩散噪声下的实时多通道目标语音提取问题：此前块批式B-RCSCME假设批内空间特性平稳，说话人移动时性能骤降。本文将最大加权似然估计（MWLE）引入NSR-ILRMA与RCSCME，推导逐帧在线更新算法，并配套稳定化与加速技巧。仿真实验（JVS语音+DEMAND噪声+镜像法混响，T60约346毫秒）与东京大学实测录音中，所提O-RCSCME在全部六种噪声条件下SDR/SIR改善均优于O-IVA、O
+- **关键技术点**：离线最先进的RCSCME类方法（ILRMA/NSR-ILRMA前端加秩约束空间协方差估计后端）在扩散噪声下提取精度最高，但整流程难以在STFT移位长度内完成；已有块批实现B-RCSCME依赖批内空间平稳假设，且RCSCME初始化含 Moore-Penrose 伪逆等高开销矩阵运算，无法跟踪目标说话人移动。
+- **主要指标**：- 平稳仿真：O-RCSCME六种噪声下SDR/SIR全面领先四个基线；与潜在离线上界Potential差距小于1分贝SDR - 在线NSR-ILRMA单评：比块批B-NSR-ILRMA后期SDR改善高约2分贝 - 消融：Online-Online组合最优；在线RCSCME比块批版每帧最大处理时间少
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [All I Hear is Noise: Investigating Clever Hans Effects in Clinical Speech Datasets](https://arxiv.org/abs/2609.21080)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：既有发现在 Pitt 语料上仅用静默段即达到 Alzheimer 检测近 100% 准确率，引发对临床语音数据集捷径学习的担忧。本文对五个主流健康语音语料（DAIC-WoZ 抑郁、TORGO 构音障碍、Neurovoz 与 MDVR-KCL 帕金森、UCLASS 口吃）系统审计：对比仅首秒音频、VAD 非语音静默段、全音频在 eGeMAPS、Compare16、wav2vec 2.0 三种表征及原
+- **关键技术点**：临床语音语料采集条件异质（麦克风、环境、预处理流程不一），诊断标签可能与非临床因素产生虚假相关，模型借此捷径即可获得高分；除 Pitt 外该现象是否跨语料普遍存在尚不清楚。
+- **主要指标**：- TORGO：全音频 F1 0.72-0.87，静默段 0.82-0.90，去噪首秒 0.91（文献基线 0.98） - UCLASS：全音频 0.76-0.85，静默段最高 0.89，场地推断 F1 0.89 - DAIC-WoZ：首秒/全音频/静默三种条件几乎无差（0.66-0.75） - 仅
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [I'll Keep an Ear Out: Teaching AudioLLMs Proactive Audio Assistance](https://arxiv.org/abs/2609.21183)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：现有AudioLLM只能被动应答查询，无法持续监听并在恰当时机主动提醒。本文提出"主动音频辅助"新任务，面向听障用户可穿戴场景，设计模型无关的ISM范式：在LLM解码词表中嵌入特殊token实现四状态主动决策。基于Qwen2-Audio-7B训练后，ESC-50上打断F1达99.6%、去重召回100%；零样本迁移Epic-Sounds取得最高打断F1 67.5，流式平均延迟3.5秒。
+- **关键技术点**：传统声音感知系统按固定类别持续报警，不含用户意图与交互历史，导致同一持续事件反复提示造成"通知疲劳"。主动辅助要求模型仅凭一条watch-out意图，对流式音频逐步因果判断何时打断、何时静默，且须满足实时延迟约束。
+- **主要指标**：- ESC-50：打断F1 99.6%、打断精确率99.4%、S2去重召回100%、R_I1 99.8%；reactive分类准确率94.7%，与PANN持平、逼近AST 95.7%；零样本基线S2召回仅0.2%（肯定偏置）、reactive SFT的S2仅10.1% - Epic-Sounds零样
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Reusing Latent Speech Representations for Query-Conditioned Topic Localization in Transcripts](https://arxiv.org/abs/2609.21844)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：针对语音长转录输入下游 NLP 系统低效且含大量无关上下文的问题，本文研究"查询条件化主题定位"：给定主题标题作查询，预测转录中最佳对应句子跨度。方法将冻结的 Whisper large-v3 顶层编码器状态按句子对齐区间池化为句级声学表示，与文本句嵌入门控融合后输入 VSLNet 与 QMSum-Pointer 两类定位头。Euronews 上 VSLNet 的 EM 从 45.26 升至 69
+- **关键技术点**：长转录直接输入检索、问答与摘要管线时注意力开销随长度二次增长且易"丢失中间信息"，而固定窗口切分与查询无关的主题分段均无法对齐用户信息需求。现有跨度定位以文本/视觉为主，弃用了停顿、韵律、说话人与场景切换等可标示主题边界的声学线索，而这些线索天然存在于语音链路必经的 ASR 编码器内部状态中。
+- **主要指标**：- EM 与 R@1（IoU≥0.7/0.5/0.3）：VSLNet 在 Euronews 上 T+A 达 EM 69.11、R@1@0.5 79.66，YTSeg 达 EM 20.56、R@1@0.5 48.63，双数据集双定位头均最优。 - 与文本-only 基线差值：Euronews EM +
+- **代码**：https://github.com/steffrs/speech-topic-localization | **Demo**：暂无
+
+---
+## [Per-Aetiology Contrastive Severity Embeddings with Phonological Pseudo-Labelling for Multilingual Dysarthric Speech](https://arxiv.org/abs/2609.21789)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：多病因构音障碍严重度系统常把所有病因混入单一标签空间，本文首次在架构、配方、评测全对齐条件下检验该"混合假设"：同一 HuBERT-base 骨干与三阶段对比训练，分别训练 CP、PD、ALS 病因专属模型与混合基线，并用免训练音系 d-prime 伪标签扩充少数严重度类。说话人不相交、泄漏过滤的留出测试上，分病因模型全面胜出：CP macro F1 0.829 对 0.676（相对 +22.6%
+- **关键技术点**：CP、PD、ALS 的临床量表数值语义不可互换，音系退化模式亦不同：PD 少动型晚期才丢辅音对比，CP 痉挛型早期即崩解 stridency 与发音方式对比。SpICE 等大模型隐含假设严重度是跨病因单一可学习构念，从未受控验证。
+- **主要指标**：- CP：macro F1 0.829（准确率 88.5%）对混合 0.676，差 +0.153（+22.6%） - PD：0.715 对 0.511（+40.0%）；ALS：0.788 对 0.596（+32.3%），mild/moderate/severe 逐类同升 - 伪标签消融：CP 纯临床
+- **代码**：暂无（录用后开源） | **Demo**：暂无
+
+---
+## [Partial Accent-Control Editing in Frozen Speech Representations for Accent Conversion](https://arxiv.org/abs/2609.22031)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-21
+- **一句话贡献**：口音转换系统多依赖训练生成器，转换强度在推理时不可控。本文提出 PACE：一种免生成器训练的口音转换框架，在冻结 WavLM 第6层1024维表征上做局部编辑——先用非平衡最优传输估计目标口音参考并沿口音预测子空间加性更新源特征，再在目标口音参考库上 top-k 检索并按权重 γ 受控融合。在 L2-ARCTIC 5000 对跨口音协议下，默认工作点口音分类器准确率 39.0%（DART 28.2
+- **关键技术点**：口音转换需在保留语言内容与说话人属性的同时使语音贴近目标口音。现有方法以训练好的生成模型为主，口音修改强度由模型或条件输入固化，推理时无法调节，难以量化"口音强度—源保持"的折中。
+- **主要指标**：- 默认 PACE：WER 16.0%、CER 8.3%、STOI 0.802、SECS 0.583、准确率 39.0% - γ 从 0.3 到 0.7：准确率 10.6%→39.0%，WER 12.9%→16.0%，SECS 0.770→0.583 - 关键对比：较最强基线 DART 准确率 +1
 - **代码**：暂无 | **Demo**：暂无
 
 ---
