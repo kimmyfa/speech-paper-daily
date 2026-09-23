@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 122 篇
+共 128 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -704,6 +704,15 @@
 - **代码**：https://huggingface.co/datasets/qc316/odubench | **Demo**：https://odubench.github.io
 
 ---
+## [MuLA-Bench: A Multilingual Long-Form Audio Understanding Benchmark via Multi-Tier Auditing](https://arxiv.org/abs/2609.23416)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-22
+- **一句话贡献**：长音频理解能力常被上下文长度与聚合准确率两个单一指标概括，掩盖了语言、证据与任务共同塑造的条件化难度。本文提出MuLA-Bench：基于1769条野生长录音（共1377.9小时）构建5038道开放式问题，覆盖16种语言、8个领域；语义轨在每个语言×领域格点严格均衡30题，声学轨保留自然出现的非语音事件，经证据锚定、捷径测试与母语专家复审做可审计质检。对10个音频-语言模型评测显示，最强Gemini
+- **关键技术点**：
+- **主要指标**：- 总体准确率：Gemini 3.8 Flash 73.40%、Gemini 3.7 Flash 73.12%；Qwen3.5-Omni-Plus 60.92% - 声学-语义差：3.8 Flash为55.26/79.06；Gemini 3.1 Pro声学仅26.63，其事实题语义89.75对声学1
+- **代码**：https://github.com/QwenLM/Omnilingua-Bench/tree/main/MuLA-Bench | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1098,5 +1107,50 @@
 - **关键技术点**：LALM 生成冗长中间推理步骤时，注意力从声学信号转向已生成的文本 token，导致流畅但脱离音频的答案，CoT 提示甚至低于直接回答。现有缓解方案依赖大规模监督数据堆叠或计算昂贵的强化学习，缺乏训练期架构正则化路线。
 - **主要指标**：- MMAU：58.03%（±1.50），MMAR：40.32%（±0.57） - 关键对比：较 SFT（54.65%）提升 3.38%，较 Audio MuToR（53.02%）提升 5.01%；零样本 CoT 崩溃至 18.03% 凸显推理鸿沟问题；与工业级模型仍有差距（Audio Flamin
 - **代码**：https://github.com/FrancescoBonzi/SPARE | **Demo**：https://my-demo-hub.github.io/spare/
+
+---
+## [AURA: Uncertainty-Routed Activation Editing for Acoustic Grounding in Speech Foundation Models](https://arxiv.org/abs/2609.23979)
+
+- **方向**：语音大模型；**作者**：Natarajan Balaji Shankar, Zilai Wang, Zihan Wang, Mohan Shi, Kaiyuan Zhang, Abeer Alwan；**机构**：加州大学洛杉矶分校（UCLA）电子与计算机工程系；**发布日期**：2026-09-22 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：Whisper等AED语音基础模型ASR性能优异，但在非语音、弱声学证据或 imperfect 标签输入下仍会输出流畅却无声学支撑的幻觉文本。本文提出AURA超高效表示编辑方法：冻结全部预训练权重，对解码器交叉注意力头施加稀疏缩放-平移编辑，并用三个交叉注意力不确定性特征（过度集中、熵弥散、帧间跳变）动态路由编辑强度。在非语音音频上无需预先识别幻觉头，将幻觉率从89.18%降至1.94%且不损坏干
+- **关键技术点**：
+- **主要指标**：- HRnorm：89.18%降至1.94%（15轮），25轮达0.93% - MyST WER：14.2（Large-v3），优于LoRA 14.4与全量微调14.9 - TED-LIUM 3 WER：7.8，与LoRA 7.9持平 - FluencyBank WER：16.4（Medium），零
+- **代码**：https://github.com/balaji1312/aura | **Demo**：暂无
+
+---
+## [OmniEcho: Spatial Audio Understanding for Embodied Agents](https://arxiv.org/abs/2609.23407)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：本文聚焦具身智能体的空间音频理解问题：现有全模态大模型几乎只处理单声道语义音频，无法利用一阶高保真环绕声（FOA）线索对视野外或遮挡声源进行定位与导航。作者提出 OmniEchoBench——覆盖 6 类任务、基于 30 个真实环境采集、含 197 个场景、2972 条问答与 900 条导航样本的统一基准，并配套可控空间音频渲染管线合成人机视觉一致的百万级训练数据。模型 OmniEcho 在 Qw
+- **关键技术点**：
+- **主要指标**：- 整体准确率（音视频）：28.5，对比基座 Qwen3-Omni 18.5，差值 +10.0；最强空间音频基线 SO-7B 为 11.4 - 音频单模态整体：21.8，超过所有单声道与 FOA 基线 - 导航 SR/SPL：16.2/11.5，与文本引导最强基线 InternVLA-N1（17.8
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Listen Then Reason: Perception-Grounded Test-Time Reinforcement Learning for Large Audio-Language Models](https://arxiv.org/abs/2609.23589)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：LALM 推理常依赖语言先验而非真实声学证据，且现有无标签测试时强化学习（TTRL）的多数投票奖励与模态无关，易强化语言捷径、加剧感知欠利用。本文通过注意力掩码量化逐层感知依赖，发现依赖峰值位于中间层，其与任务准确率（r≈0.51）及音频因果贡献（r≈0.59）正相关；据此提出感知接地 TTRL（PG-TTRL），以轨迹级声学接地分数校准 GRPO 优势，在 MMAR、MMAU 上最高提升 4.6
+- **关键技术点**：
+- **主要指标**：- Greedy（MMAR，7B）：56.0，较 Base +2.8、较最强基线 TTRL +0.1 - Avg@8（MMAR，7B）：51.9，较 Base +4.6、较 TTRL +3.9 - Avg@8（MMAU，7B）：67.2，较 Base +4.9、较 TTRL +3.0 - Maj@8
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ParA-LLM: A Unified Approach to Paralinguistic and Acoustic Speech Understanding](https://arxiv.org/abs/2609.22771)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：现有音频大模型在ASR上接近人类，但对副语言层面（说话人特质、表达变化、声学环境）理解薄弱：GPT-4o-Audio在自建基准仅36%准确率，而人类达78%。本文提出涵盖22项副语言特性的分类体系，通过声学仿真与模板/LLM生成构建120万条音频-QA数据，采用"原子属性到多属性联合"的两阶段课程训练ParA-LLM，并发布6000题的ParA-Bench。ParA-LLM总准确率43.53%，超
+- **关键技术点**：
+- **主要指标**：- ParA-Bench总准确率：43.53% - Speaker-Speech：55.85%（全场最优） - Acoustic：34.80%（低于GPT-4o-Audio的41.85%） - MMAU-Pro Speech：42.09%（较基线+1.13） - MMAR Speech：42.86%
+- **代码**：暂无（论文承诺发布模型、基准与数据） | **Demo**：https://nishitanand.github.io/paralinguistic-understanding-llm/
+
+---
+## [MECT: Mixture of Experts with CNN-Transformer Network for Speaker verification](https://arxiv.org/abs/2609.24061)
+
+- **方向**：语音大模型；**作者**：Yu Zheng、Jinghan Peng、ChangHao Zhang、Jian Liu（通讯）、Weiqiang Wang；**机构**：蚂蚁集团机器智能部（Ant Group, Machine Intelligence）；**发布日期**：2026-09-22 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：说话人验证全监督模型此前从未引入混合专家机制。本文提出MECT，首个在CNN-Transformer骨干中集成MoE的全监督SV模型，系统比较句子级/帧级与稠密/稀疏四种路由方案，仅增加0.17M参数即较无MoE基线取得平均EER相对提升4.7%、minDCF提升7.8%。MECT-B2（9.57M参数）在VoxCeleb1刷新SOTA，Vox1-O/E/H minDCF达0.012/0.026/
+- **关键技术点**：现有SV中的MoE仅用于自监督预训练模型的层间融合微调，全监督端到端模型尚未利用动态专家路由；同时流式嵌入提取在短分块下性能严重退化。
+- **主要指标**：- Vox1-O minDCF：0.012（EER 0.22%） - Vox1-E minDCF：0.026（EER 0.28%） - Vox1-H minDCF：0.048（EER 0.52%） - CN-Celeb EER：4.87%（minDCF 0.297） - 流式100ms块 Vox1-
+- **代码**：https://github.com/ant-research/AntSpeaker | **Demo**：暂无
 
 ---

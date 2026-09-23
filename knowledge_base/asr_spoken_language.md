@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 51 篇
+共 52 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -459,5 +459,14 @@
 - **关键技术点**：语音基座模型在数十万小时多语种数据上预训练，适配新任务既要显存高效又不能覆盖旧能力。现有 ASR 持续学习方法或按任务存适配器、推理依赖任务身份，或依赖预训练期优化器状态与梯度，在仅有少量旧任务语音的公开模型适配场景均不可行，亟需务实设定下的高效抗遗忘方案。
 - **主要指标**：- 实验一：平均 WER 8.72、BWT -0.3，对比 GaLore 11.98、-4.7（消除 93.6% 遗忘），对比最强 PECL 基线 CSSVD 9.51（相对提升 8.3%，Wilcoxon 检验显著） - 实验二：平均 WER 17.68、BWT -2.7，对比 GaLore 28
 - **代码**：https://github.com/StevenVdEeckt/cgalore | **Demo**：暂无
+
+---
+## [Beyond Encoder Fusion: Multi-View Discrete Token Augmentation for LLM-Based ASR](https://arxiv.org/abs/2609.23525)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：基于离散语音 token 的大模型 ASR 对编码器选择高度敏感，而已有多编码器方法在输入层融合编码器输出，既不稳定又需多编码器推理。本文提出多视角离散 token 增强：把冻结的 HuBERT、WavLM、MMS-300M 视为同一语音的替代分词器，生成多种 token 视角联合训练一个共享 LLM 解码器，推理仅用单编码器即可。LibriSpeech 上全部视角超越独立基线，WavLM 视角达
+- **关键技术点**：
+- **主要指标**：- test-clean WER：3.30%（多视角 WavLM 视角，相对基线降 0.78 点） - test-other WER：8.13%（相对基线降 1.42 点） - ROVER 三假设融合：3.03% / 7.38%（全文最优） - Oracle：2.39% / 5.96%；Loq. d
+- **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 57 篇
+共 61 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -513,5 +513,41 @@
 - **关键技术点**：音频深伪取证正从真假判定迈向来源归因。传统方法建模为多类分类或度量学习，只能覆盖训练时的系统；新TTS模型持续发布使闭集方案失效，而出域检测虽可标记未知样本，却无法提供任何来源线索。
 - **主要指标**：- 闭集系统级Hit@1：86.2%，低于专用分类器93.4%；模型级93.3%（分类器98.4%） - 零样本全库unseen-full：模型级MRR 58.4%、Hit@1 44.3%；系统级MRR 50.0%、Hit@1 34.7% - 受限库unseen-restricted：模型级MRR 
 - **代码**：https://github.com/neamtucristian26/flame | **Demo**：暂无
+
+---
+## [COT-TTS: Audio Context-Aware Text-to-Speech with Chain-of-Thought Reasoning](https://arxiv.org/abs/2609.22697)
+
+- **方向**：语音大模型；**作者**：Weizhen Bian、Sitong Cheng、Rongxiu Zhong、Junlan Feng、Bei Liu、Wei Xue 等；**机构**：香港科技大学、中国移动九天研究院、北京大学多媒体信息处理国家重点实验室；**发布日期**：2026-09-22 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：现有TTS的表现力依赖用户显式风格指令，而自然对话中的说话方式应由上下文推断。本文提出音频上下文感知的推理式TTS任务COT-TTS：给定历史多说话人对话音频、目标文本与参考音色，模型先生成带情绪标签的历史转写和显式说话方式推理（CoT），再合成目标语音。作者构建了9M样本双语训练集（含1M高质量子集）与800条人审源隔离测试基准，并训练0.6B/1.7B端到端自回归模型，以约1/30的参数量达到
+- **关键技术点**：
+- **主要指标**：- Human MOS（英文）：4.15（0.6B），最强基线3.60，提升约0.55 - 时长误差：1.16s/1.10s（英/中），基线多在5.1–12.5s，优4倍以上 - 情绪一致性：约0.95，优于全部基线（0.91–0.95） - UTMOSv2：2.94（英文），低于Fish Audi
+- **代码**：暂无（承诺发布数据构建管线、数据集、模型与训练代码） | **Demo**：https://luckybian.github.io/COT-TTS
+
+---
+## [Listen, Critique, and Refine: RL-Based Self-Refinement for Instruction-Following Speech Synthesis](https://arxiv.org/abs/2609.24163)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：指令跟随语音合成在需同时控制音高、语速、情感的复杂指令下，单遍生成常只实现部分属性。本文将自我反思推理范式首次扩展到音频token空间：单个大音频语言模型先生成语音草稿，"听"自己的输出并用文本 critiques 声学缺陷，再据此生成精炼版语音，形成生成-批评-精炼闭环。以GRPO强化学习训练，引入基于草稿改进量的refinement-aware奖励。InstructTTSEval上精炼输出相对
+- **关键技术点**：
+- **主要指标**：- CLSP均值：0.538（零样本0.505、RL单跳0.527），弥合到真值差距64.7% - Gemini-2.5-Pro风格一致性：65.9%（零样本61.5%、单跳64.2%） - 人评指令遵循48.5、自然度54.7，较零样本相对提升24.4%、9.2% 关键对比：优于最强开源基线Vox
+- **代码**：https://github.com/Chee-En-Yu/ReflectTTS | **Demo**：暂无
+
+---
+## [TTS-Guard: Black-Box Ownership Verification of Text-to-Speech Models via Adaptive Adversarial Speaker-Pair Fingerprints](https://arxiv.org/abs/2609.23729)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：零样本TTS使高保真声音克隆泛滥，专有模型被窃取后经微调、量化、蒸馏洗白转售的黑市兴起，而TTS模型级版权验证长期空白。本文提出TTS-Guard，首个面向TTS的黑箱所有权验证框架：模型属主在关键说话人对的参考音频上优化对抗扰动构成"说话人对指纹"，向疑似API提交该音频并检验合成结果是否被误判归属目标说话人，以此证明衍生关系。在五个主流TTS上平均指纹成功率FSR达96.4%、单查询误报率FP
+- **关键技术点**：
+- **主要指标**：- FSR（平均）：96.4% - 单查询FPR：5.8%；决策级FPR：4.7%（K=20）、≤0.5%（K=40） - STOI：0.822；NISQA-MOS：3.87，与干净参考差≤0.05 **关键对比**：对比跨域移植的IPGuard与指令指纹IF，基线干净FSR仅0.78/0.86，蒸
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [StreamTN: A Low-Latency Streaming Chinese Text Normalization Model for Streaming TTS in Dialogue Systems](https://arxiv.org/abs/2609.24267)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：级联语音对话系统中，LLM生成的文本含大量非标词，送入流式TTS前必须完成文本规范化（TN）；规则方法泛化差，LLM提示方法首包延迟高且易幻觉。本文提出基于Qwen3-0.6B的轻量中文流式TN模型StreamTN，采用双流流式架构，用token延迟参数显式控制首包延迟。4帧配置下Micro-F1达0.8937、模型侧首包延迟仅213毫秒，并构建覆盖14类的对话TN基准（95793条训练、1262
+- **关键技术点**：级联对话系统中上游LLM按token流式输出，下游流式TTS要求TN增量产出规范化文本。离线TN需等完整句子，推高端到端延迟；规则系统依赖人工工程且难以覆盖未见模式；提示式LLM不稳定、有幻觉，微调核心LLM又会损伤其推理能力。
+- **主要指标**：- Micro-F1：0.8937±0.0009（4帧，FPD 213ms）；Micro-P：0.8931 - 非流式上限Micro-F1：0.9639；延迟1帧增至16帧，F1从0.7030升至0.9239，FPD从75ms增至756ms - 分类别：物理单位0.977最优，复杂数学公式0.750
+- **代码**：暂无（承诺随论文发表释放模型与基准） | **Demo**：https://supernova-neko.github.io/Stream-TN/
 
 ---

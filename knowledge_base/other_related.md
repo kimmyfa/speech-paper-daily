@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 40 篇
+共 41 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -162,6 +162,15 @@
 - **关键技术点**：现有口语讽刺检测研究集中于特征融合与不一致性建模以提升性能，但聚合性能提升无法证明系统真正使用了韵律；学习式语音表征将词汇与韵律信息纠缠在同一空间，有无音频特征的对比只能度量聚合贡献，无法隔离词汇、韵律及其交互。先前研究（如 LISTEN 揭示音频大模型的词汇主导）未提供中性参照，也未区分分数移动、标签判别力与二分化决策的差异。CLASH 用配对阶乘设计补充这些空白。
 - **主要指标**：- Qwen3-Omni 原始语音 AUROC：CMMA 0.734（Macro-F1 0.602）、MUStARD 0.775（Macro-F1 0.690） - 时长均衡后 A_L−A_P：CMMA 0.148（95%CI [0.103,0.193]）、MUStARD 0.135（95%CI [
 - **代码**：https://github.com/glam-imperial/clash | **Demo**：暂无
+
+---
+## [EquiSELD: Efficient training of equivariant sound event localization and detection networks](https://arxiv.org/abs/2609.23156)
+
+- **方向**：语音前端；**作者**：Goksenin Yuksel、Marcel van Gerven、Kiki van der Heijden；**机构**：拉德堡德大学Donders研究所；哥伦比亚大学Zuckerman研究所；**发布日期**：2026-09-22 | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-22
+- **一句话贡献**：一阶 ambisonics（FOA）信号具有严格的O(3)旋转反射对称性，但现有声事件定位与检测（SELD）方法要么靠旋转增广近似学习该对称性，要么使用计算昂贵的SO(3)等变网络，无法处理同类重叠声源且未利用反射对称。本文提出EquiSELD，首个对完整O(3)群精确等变的SELD注意力网络：将每个时频token处理为"O(3)不变标量+等变声强向量"双流，经Multi-ACCDOA读出不变活动
+- **关键技术点**：
+- **主要指标**：- TAU2021 ℰS：0.40（最强基线SELDNet+ 0.47、CGNet-STS 0.51，差-0.11） - STARSS23 ℰS：0.56（SELDNet+ 0.60、CGNet-STS 0.72，差-0.04/-0.16） - TAU2021：LE 16.4°、F20° 49.8%
+- **代码**：https://github.com/labhamlet/equiSELD | **Demo**：暂无
 
 ---
 ## [Explicit and Stable Pseudospectral Time-Domain Method for Föppl-von Kármán Equations](https://arxiv.org/abs/2608.06139)

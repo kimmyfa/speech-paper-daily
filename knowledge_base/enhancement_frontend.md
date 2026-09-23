@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 30 篇
+共 33 篇
 
 ## [Prototype-Rectified Iterative Self-supervised Manifold Denoising under Severe Acoustic Shift](https://arxiv.org/abs/2608.15037)
 
@@ -270,5 +270,32 @@
 - **关键技术点**：训练数据无法覆盖说话人与声学环境的全部多样性，SE模型部署时必然遭遇域偏移；含噪录音的干净参考不可恢复，自适应只能无监督。域偏移下掩码型SE模型的TF掩码丧失双峰特性、取值向中间堆积，增强性能随之下降。现有TTA用自监督损失更新部分权重，需要测试时梯度计算并永久改变模型。
 - **主要指标**：- 感知质量（跨目标域平均）：AM模型PESQ 2.17、CSIG 3.21、COVL 2.66，CMGAN模型PESQ 2.66、COVL 3.22，两模型均为全方法最高 - 关键对比：AM上PESQ较最强基线LaDen（2.13）高0.04，CMGAN上较MPol（2.64）高0.02；RTF 
 - **代码**：https://github.com/tobiaaa/SETTA | **Demo**：暂无
+
+---
+## [Bearings: Self-Supervised Soundfield Embeddings from First-Order Ambisonics](https://arxiv.org/abs/2609.23152)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：主流自监督音频编码器只回答"是什么"而缺失"在哪里"，对空间近乎失明。本文提出 Bearings，一个从无标注一阶环绕声（FOA）中学习可复用声场嵌入的自监督框架：以掩码自编码方式重构方向分布与双时间尺度扩散度，解码器交叉注意冻结单通道编码器的声学嵌入。所得声场嵌入经轻量融合头即可直接接入任意冻结声学编码器，无需重训任一模型，使 SELD 的定位相关 F 分数从 4 以下跃至 50.4（TAU-N
+- **关键技术点**：通用自监督音频表征（BEATs、Dasheng 等）仅建模单声道内容；现有空间音频预训练（w2v-SELD、GRAM-Ambisonics、BAT）把空间与声学纠缠于单一骨干并绑定特定 SELD 配置，空间表征难以复用到不断更新的冻结声学编码器上。
+- **主要指标**：- TAU-NIGENS 2021（GRAM-Clean 融合）：F20° 2.8→50.4，ER20° 0.83→0.55，LE_CD 102.1°→19.3° - STARSS23：F20° 2.5→38.9，ER20° 0.83→0.51，LE_CD 147.8°→22.0° - 对比联合预训
+- **代码**：https://github.com/labhamlet/Bearings | **Demo**：暂无
+
+---
+## [Generative Learning for Ambisonic Upscaling](https://arxiv.org/abs/2609.23479)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：Ambisonic上混（AU）长期由确定性方法主导：混响中扩散声场破坏方向稀疏假设，使模型基与判别式网络的输出出现空间模糊、性能骤降。本文将AU重构为给定低阶观测下高阶球谐分量的条件生成问题，首次系统比较两大连续时间范式——得分模型（SGM）与流匹配（FM）。混响HARP测试集上FM高阶通道平均STFT-SDR达7.53 dB，较最强判别基线CTN（4.90 dB）高2.63 dB，方向角误差低至
+- **关键技术点**：
+- **主要指标**：- STFT-SDR（混响HARP四人数平均）：FM 7.53 dB，较CTN（4.90）+2.63、较SGM（4.69）+2.84、较COMPASS（3.27）+4.26 dB - STFT-SDR（消声平均）：FM 15.03 dB优于CTN 10.97，SGM因随机噪声注入反降至10.02 -
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [P2Flow: Phoneme-aware Progressive Flow Matching for Extreme Speech Super-Resolution](https://arxiv.org/abs/2609.24138)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：生成模型在语音超分辨（SSR）中潜力显著，但现有工作集中于标准或通用设定，1/2 kHz→16 kHz 的极端带宽受限场景几乎空白，当前方法在此出现显著性能崩塌。本文提出 P2Flow，一个音素感知渐进流匹配框架：以 HuBERT 音素后验引导补全缺失高频，配合分频带渐进重建与声码器后训练。在 TIMIT、VCTK 的 2 kHz→16 kHz 设定下取得 LSD 0.935、ViSQOL 3.9
+- **关键技术点**：
+- **主要指标**：- LSD：0.935（TIMIT 2k→16k），较最强基线 AP-BWE 0.998 低 0.063 - ViSQOL：3.954，较 FLowHigh 3.712 高 0.242；STOI：0.908，较 AP-BWE 0.875 高 0.033 - VCTK 同样全面领先：LSD 0.979
+- **代码**：https://github.com/ningyuan33/P2Flow | **Demo**：暂无
 
 ---
