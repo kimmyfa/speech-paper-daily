@@ -11,7 +11,7 @@
 
 ## [1] Qwen-Audio-3.1-Realtime: Towards Reliable Agentic Voice Interaction
 
-arXiv ID：2609.25176|方向：语音大模型|作者：Alibaba Token Foundry（团队署名）|机构：阿里巴巴集团|发布日期：2026-09-22|论文：https://arxiv.org/abs/2609.25176 |PDF：https://arxiv.org/pdf/2609.25176 |代码：暂无|Demo：暂无
+arXiv ID：2609.25176|方向：语音大模型|作者：Alibaba Token Foundry（团队署名）|机构：阿里巴巴集团|发布日期：2026-09-23|论文：https://arxiv.org/abs/2609.25176 |PDF：https://arxiv.org/pdf/2609.25176 |代码：暂无|Demo：暂无
 
 ### 📌 简介
 面向可靠的代理式语音交互，本文提出 Qwen-Audio-3.1-Realtime，围绕"思考-行动-表达与协调"三层设计：以 Core-Cocktail SFT 与 M2-OPD 双路在线蒸馏夯实音频推理底座，用自演化可执行环境与多粒度 GRPO 轨迹学习工具调用与长程任务完成，并显式对齐"怎么说、何时说、是否说或做"的会话策略。相较 3.0，τ-Voice 半双工任务成功率由 78.4% 升至 82.0%，FDB v1.5 背景语音响应率由 73% 降至 13%，多语言 BBA 均值 +6.4 分，FLEURS WER 9.01→3.98。
@@ -39,7 +39,7 @@ arXiv ID：2609.25197
 方向：语音大模型
 作者：Yuan Tseng、Aishwarya Fursule、Andrew Zijun Ma、Vamshi Nallaguntla、Anderson Avila、Shruti Kshirsagar、David Harwath
 机构：德克萨斯大学奥斯汀分校、法国国家科学研究院（INRS）、威奇托州立大学
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.25197
 PDF：https://arxiv.org/pdf/2609.25197
 代码：https://huggingface.co/datasets/rogertseng/spade
@@ -63,7 +63,7 @@ arXiv ID：2609.26427
 方向：语音大模型
 作者：Zixiang Wan, Delin Chen, Wei Shi, Haihua Xu, Youxi Xie, Yuexian Zou（通讯）
 机构：北京大学深圳研究生院、时空壶 Timekettle AI Lab
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.26427
 PDF：https://arxiv.org/pdf/2609.26427
 代码：https://github.com/ggiggit/PDO_S2TT
@@ -102,7 +102,7 @@ Demo：暂无
 
 ## [4] Qwen-Audio-Agent Technical Report
 
-arXiv ID：2609.25195|方向：语音大模型|作者：Chong Deng、Yunjie Ji、Yuxiang Kong、Xiangang Li、Xu Li、Binbin Zhang、Haina Zhu、Jianheng Zhuo|机构：Alibaba Token Foundry，阿里巴巴集团|发布日期：2026-09-22|链接：论文 https://arxiv.org/abs/2609.25195|PDF https://arxiv.org/pdf/2609.25195|代码 https://github.com/QwenAudio/qwen-audio-agent|Demo：暂无
+arXiv ID：2609.25195|方向：语音大模型|作者：Chong Deng、Yunjie Ji、Yuxiang Kong、Xiangang Li、Xu Li、Binbin Zhang、Haina Zhu、Jianheng Zhuo|机构：Alibaba Token Foundry，阿里巴巴集团|发布日期：2026-09-23|链接：论文 https://arxiv.org/abs/2609.25195|PDF https://arxiv.org/pdf/2609.25195|代码 https://github.com/QwenAudio/qwen-audio-agent|Demo：暂无
 
 ### 📌 简介
 全双工语音Agent需在任务执行期间保持对话连贯：用户常在搜索进行中修改请求、在交易过程中补充约束，打断语音不应隐式取消任务，任务完成也需等待合适时机交付结果。本文提出Qwen-Audio-Agent，一个前台-后台异步协调运行时（harness）：Frontend Agent维持全双工对话，经spawn_thinking委托Backend Agent在独立上下文执行多步任务，Orchestration Runtime统一管理任务生命周期与结果调度。在134例自研座舱基准上，混合执行任务成功率91.04%，较直接调用与全委托策略分别高18.65与10.44个百分点，平均执行时延降低26.73%与30.91%。
@@ -126,7 +126,7 @@ arXiv ID：2609.25195|方向：语音大模型|作者：Chong Deng、Yunjie Ji�
 ## [5] Interactive TTS: Dynamic Speaking Style Adaptation for Expressive Speech Synthesis
 
 arXiv ID：2609.25707|方向：语音大模型
-作者：Wenjie Tian, Kangxiang Xia, Jingbin Hu, Xinfa Zhu, Lei Xie, Jin Xu 等|机构：阿里巴巴通义实验室（ATH Token Foundry）|发布日期：2026-09-22
+作者：Wenjie Tian, Kangxiang Xia, Jingbin Hu, Xinfa Zhu, Lei Xie, Jin Xu 等|机构：阿里巴巴通义实验室（ATH Token Foundry）|发布日期：2026-09-23
 链接：论文 https://arxiv.org/abs/2609.25707|PDF https://arxiv.org/pdf/2609.25707|代码：暂无|Demo https://wjtian-wonderful.github.io/InteractiveTTS/
 
 ### 📌 简介
@@ -162,7 +162,7 @@ arXiv ID：2609.26488
 方向：语音大模型
 作者：Junyi Ao, Kainan Peng, Mingbo Ma, Shun Zhang, Zhenyu Tang, Xutai Ma 等，含 Zhizheng Wu、Haizhou Li、Qing He、Xubo Liu 等
 机构：Meta Superintelligence Labs；香港中文大学（深圳）
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.26488 ｜ PDF：https://arxiv.org/pdf/2609.26488 ｜ 代码：暂无 ｜ Demo：暂无
 
 ### 📌 简介
@@ -203,7 +203,7 @@ arXiv ID：2609.25822
 方向：语音大模型
 作者：Zhe Ye, Xiangui Kang, Minhua Huang, Kai Wu, Kong Aik Lee, Chng Eng Siong
 机构：中山大学计算机学院（广东省信息安全重点实验室）、中国移动互联网公司、香港理工大学、新加坡南洋理工大学
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.25822
 PDF：https://arxiv.org/pdf/2609.25822
 代码：暂无（承诺录用后开源）
@@ -248,7 +248,7 @@ arXiv ID：2609.25719
 方向：语音大模型
 作者：Annan Wu, Wen-Chin Huang, Tomoki Toda
 机构：名古屋大学（日本）
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.25719
 PDF：https://arxiv.org/pdf/2609.25719v1
 代码：https://github.com/goannan/NeuMark
@@ -292,7 +292,7 @@ arXiv ID：2609.26028
 方向：语音大模型
 作者：Hongjin Song、Jiasheng Kuang、Xinyu Yang、Qiuyu Fang、Ziyu Wu、Guowu Tan、Xiang Xie（通讯）
 机构：北京理工大学（珠海），中国广东
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.26028
 PDF：https://arxiv.org/pdf/2609.26028v1
 代码：暂无（论文承诺后续在 GitHub 发布处理/评测/复杂度分析脚本）
@@ -332,7 +332,7 @@ arXiv ID：2609.25411
 方向：语音大模型
 作者：Biel Tura-Vecino、Yoach Lacombe、Julian Weber、Zbigniew Łatka、Haitong Zhang、Logan Hart、Eren Gölge
 机构：Cantina Labs（团队含 Coqui XTTS/亚马逊 Alexa 语音背景）
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.25411
 PDF：https://arxiv.org/pdf/2609.25411
 代码：暂无
@@ -371,7 +371,7 @@ arXiv ID：2609.26255
 方向：语音大模型
 作者：Yizhong Geng、Yanliang Li（共同一作）、Jinghan Yang、Tianhan Jiang、Yingming Gao、Ya Li（通讯）
 机构：北京邮电大学、北京深度逻辑智能科技、加州大学圣地亚哥分校（投稿ACM MM 2026 Dataset Track）
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.26255
 PDF：https://arxiv.org/pdf/2609.26255
 代码：https://piedpiperg.github.io/scenetts-bench/
@@ -411,7 +411,7 @@ arXiv ID：2609.25951
 方向：语音大模型
 作者：Jiayi Lu, Yizhong Geng, Jinghan Yang, Tianhan Jiang, Boxun An, Yingming Gao, Ya Li
 机构：北京逻辑智能科技、华盛顿大学、北京邮电大学、加州大学、西北大学
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.25951
 PDF：https://arxiv.org/pdf/2609.25951
 代码：未明示公开（论文未给出代码仓库链接）
@@ -456,7 +456,7 @@ arXiv ID：2609.25007
 方向：语音大模型
 作者：Hyunku Kang, Minkyu Cho, Chanwoo Kim
 机构：Korea University（高丽大学）等
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.25007
 PDF：https://arxiv.org/pdf/2609.25007
 代码：https://github.com/slp-lab-research/vam_ecapa
@@ -491,7 +491,7 @@ arXiv ID：2609.25379
 方向：语音前端
 作者：Dahong Luo、Anannya Trehan、Aritrik Ghosh、Nirupam Roy（University of Maryland, College Park）
 机构：马里兰大学帕克分校
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.25379
 PDF：https://arxiv.org/pdf/2609.25379
 代码：暂无
@@ -535,7 +535,7 @@ arXiv ID：2609.26000
 方向：语音前端
 作者：Andreas Bagge、Andreas Nymand、Michael Riis Andersen、Bjørn Sand Jensen
 机构：Aarhus University
-发布日期：2026-09-22
+发布日期：2026-09-23
 论文：https://arxiv.org/abs/2609.26000
 PDF：https://arxiv.org/pdf/2609.26000
 代码：https://anonymous.4open.science/r/Latent-DSB

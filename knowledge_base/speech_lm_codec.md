@@ -193,7 +193,7 @@
 ---
 ## [NeuMark: Neural Codec Resynthesis-Robust Audio Watermarking in the Codec Latent Space](https://arxiv.org/abs/2609.25719)
 
-- **方向**： | **子方向**：Codec | **评分**：7/10 | **日期**：2026-09-22
+- **方向**： | **子方向**：Codec | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：现有音频水印多嵌入于波形、音色特征或生成潜变量，可抗传统DSP攻击，但当生成语音经VALL-E、CosyVoice等语音大模型所用神经音频编解码器（EnCodec、DAC、WavTokenizer）重合成后，与编解码器保留结构不对齐的水印证据会被抹除，溯源失效。NeuMark提出编解码潜空间水印框架：以冻结的SpeechTokenizer编码语音得到8层RVQ声学token流，通过Transfor
 - **关键技术点**：
 - **主要指标**：
