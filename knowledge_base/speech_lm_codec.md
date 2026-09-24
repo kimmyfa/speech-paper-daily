@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 21 篇
+共 22 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -189,5 +189,14 @@
 - **关键技术点**：不同神经语音编解码器（如单码本的 GLM-4-Voice 与 8 码本 RVQ 的 MiMi、DualCodec）token 空间在词表和码本结构上互不兼容，阻碍了对话式语音智能体、语音到语音翻译等多语音模型的直接协作。跨系统传 token 目前须经波形解码再编码，既增加延迟又可能损失信息。
 - **主要指标**：- LibriSpeech WER：原生 3.29-4.75%，翻译 5.85-9.98%（最好 GLM→DualCodec 5.85%，最难 DualCodec→Moshi 9.98%，平均仅增 2.56-5.96% 绝对值）；VCTK WER 翻译 7.95-9.92%，差距 2.96-6.83
 - **代码**：暂无 | **Demo**：https://talkov.github.io/TokenMapper.github.io/
+
+---
+## [NeuMark: Neural Codec Resynthesis-Robust Audio Watermarking in the Codec Latent Space](https://arxiv.org/abs/2609.25719)
+
+- **方向**： | **子方向**：Codec | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：现有音频水印多嵌入于波形、音色特征或生成潜变量，可抗传统DSP攻击，但当生成语音经VALL-E、CosyVoice等语音大模型所用神经音频编解码器（EnCodec、DAC、WavTokenizer）重合成后，与编解码器保留结构不对齐的水印证据会被抹除，溯源失效。NeuMark提出编解码潜空间水印框架：以冻结的SpeechTokenizer编码语音得到8层RVQ声学token流，通过Transfor
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
 
 ---

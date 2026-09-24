@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 61 篇
+共 65 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -549,5 +549,41 @@
 - **关键技术点**：级联对话系统中上游LLM按token流式输出，下游流式TTS要求TN增量产出规范化文本。离线TN需等完整句子，推高端到端延迟；规则系统依赖人工工程且难以覆盖未见模式；提示式LLM不稳定、有幻觉，微调核心LLM又会损伤其推理能力。
 - **主要指标**：- Micro-F1：0.8937±0.0009（4帧，FPD 213ms）；Micro-P：0.8931 - 非流式上限Micro-F1：0.9639；延迟1帧增至16帧，F1从0.7030升至0.9239，FPD从75ms增至756ms - 分类别：物理单位0.977最优，复杂数学公式0.750
 - **代码**：暂无（承诺随论文发表释放模型与基准） | **Demo**：https://supernova-neko.github.io/Stream-TN/
+
+---
+## [Interactive TTS: Dynamic Speaking Style Adaptation for Expressive Speech Synthesis](https://arxiv.org/abs/2609.25707)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：针对现有上下文感知TTS将对话语境端到端隐式映射为语音、风格决策难以监督、风格与音色纠缠导致多轮音色漂移的问题，提出交互式TTS框架：用Context-to-Instruction模块把多模态对话语境显式解析为可执行风格指令，再经Iterative RSFT与CADPO多目标对齐指令条件生成器。VStyle综合3.82分超全部CTTS基线，共情维度3.55为TTS系统最佳；SpeechParali
+- **关键技术点**：多轮多模态交互要求系统按用户意图动态调整语速、情绪、音量并维持说话人身份。现有CTTS三大瓶颈：风格决策被吸收进隐式声学映射、难以监督与解释；训练目标仅对齐真值语音、不校验表达是否合语境；风格与音色、内容纠缠，强风格变化引发跨轮音色漂移。
+- **主要指标**：- VStyle综合：3.82，超最强CTTS基线HarnessTTS（3.47）0.35分，亦超商用Qwen-Audio-3.0-Realtime（3.64） - VStyle共情：3.55，全部参评系统TTS类最高 - SpeechParaling-Bench：总胜率49.8%，情境适应80.3
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Learnable Classifier-Free Guidance Null Embeddings for Enhanced Controllable Speech Synthesis](https://arxiv.org/abs/2609.25411)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：CFG 已广泛用于 LLM 类 TTS 以提升生成质量与条件保真度，但其无条件分支惯用固定零向量作"空表示"，既可能偏离训练分布引发数值与训练不稳定，也无法区分说话人与文本这两类正交条件。本文提出为每个条件模态学习一个专属空嵌入作为无条件基线，并据此解耦说话人与文本两路引导强度，推理时可用引导权重作旋钮，在音色相似度与稳定性、表达力与自然度之间精细权衡。客观与主观实验均验证可学习空嵌入优于固定零向
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SceneTTS-Bench: A Benchmark for Scene-Level TTS in Drama Dubbing](https://arxiv.org/abs/2609.26255)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：面向短剧配音的场景级TTS评测基准：现有评测停留在句级，无法暴露音色漂移、表演不足、语速不连续三类配音关键失效。SceneTTS-Bench沿音色一致性、情感表现力、节奏连贯性三维构建，语料含真实与生成剧本共160个中英双语场景、约10300句；以引擎无关的规范中间表示（Canonical IR）统一四类TTS后端输入，配套SCS/UAR/RDR三条自动管线输出逐句诊断。实验表明无系统在三维同时占
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [From Reliable Text to Real Voices: Trust-Aware Progressive Adaptation for Low-Resource TTS](https://arxiv.org/abs/2609.25951)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：低资源语言缺乏文本-语音成对数据且人工转写昂贵，现成零样本TTS难以直接适配。该文发现监督顺序决定适配权衡：合成语音发音准但韵律平、音色单一，先以其训练可建立文本-语音对应、提升内容准确率却损伤说话人相似度；真实录音伪标签韵律自然、音色多样，但ASR转写带噪，反序（真实→合成）又会丢失相似度。据此提出信任感知渐进适配：先合成后真实的合成到真实两阶段训练，并以两个固定独立ASR转写的一致度作为伪标签
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
 
 ---

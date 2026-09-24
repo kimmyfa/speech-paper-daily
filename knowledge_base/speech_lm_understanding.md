@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 128 篇
+共 131 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -713,6 +713,15 @@
 - **代码**：https://github.com/QwenLM/Omnilingua-Bench/tree/main/MuLA-Bench | **Demo**：暂无
 
 ---
+## [SPADE: A Multilingual Dataset for Speech Partial Deepfake Detection and Localization](https://arxiv.org/abs/2609.25197)
+
+- **方向**： | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-22
+- **一句话贡献**：语音局部篡改深伪检测的核心瓶颈已从模型算法转向训练与评测数据。以往多语言局部深伪数据集仅覆盖一两种生成系统，难以考察检测器对未见系统与未见语言的泛化能力。本文提出 SPADE：覆盖 12 种主要语言、每语言最多 5 种语音合成与编辑系统生成、含内容改变与内容不变两类局部编辑样本的检测与定位数据集，同时提供训练集与评测基准。作者用其训练帧级定位模型，系统研究跨生成系统、跨语言、跨声学环境三个维度的泛
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1152,5 +1161,23 @@
 - **关键技术点**：现有SV中的MoE仅用于自监督预训练模型的层间融合微调，全监督端到端模型尚未利用动态专家路由；同时流式嵌入提取在短分块下性能严重退化。
 - **主要指标**：- Vox1-O minDCF：0.012（EER 0.22%） - Vox1-E minDCF：0.026（EER 0.28%） - Vox1-H minDCF：0.048（EER 0.52%） - CN-Celeb EER：4.87%（minDCF 0.297） - 流式100ms块 Vox1-
 - **代码**：https://github.com/ant-research/AntSpeaker | **Demo**：暂无
+
+---
+## [Boundary and Intra-Segment Learning for Partial Audio Deepfake Localization](https://arxiv.org/abs/2609.25822)
+
+- **方向**： | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：针对仅篡改语音局部区域的部分音频深度伪造定位难题，本文提出边界与段内学习框架 BISL。现有方法多依赖边界位置识别，却忽略真实与伪造转换处的特征变化建模，同时连续真伪区段的整体特性未被充分挖掘。BISL 通过对相邻帧特征差分构建边界标签以刻画可信度转换，并利用段内均值与标准差聚合表示及紧致性损失捕捉区段整体特性，联合帧级、边界级与段级三任务监督实现细粒度定位。在 PartialSpoof 上取得 
+- **关键技术点**：部分音频伪造只替换语句中选定区域，真伪内容在同一话语内共存，需在帧级别定位篡改区间。现有定位方法或做帧级检测，或利用边界注意力与图网络挖掘转换信息，但普遍只关注边界位置判别，未显式建模表征真伪转换的特征差异；同时连续真/假段落的整体统计特性长期被忽视，限制了细粒度定位精度。
+- **主要指标**：- PS EER：2.52%（优于 BFC-Net 2.73%、SAL 3.07%、BAM 3.58%，相对 SOTA 降低 7.69%） - PS F1：97.40%（SAL 97.06%、BFC-Net 96.69%） - HAD EER：0.07%，与 SAL 0.06% 相当 - HAD F
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [REVE: Efficient Hallucination Correction for Large Audio-Language Models via Reused Encoder States](https://arxiv.org/abs/2609.26028)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：大型音频-语言模型（LALM）生成的描述常提及输入中不存在的声学事件，且幻觉发生在事件提及级别，仅凭文本或 token 概率难以核验。现有事后方案需外接 CED 等独立音频标签器，被迫引入第二个音频编码器并再次波形前向编码，参数与延迟开销显著。本文提出 REVE，直接复用目标模型生成描述时已计算的投影前音频编码器状态作为声学证据：帧级分数统计读出与四段时序均值读出互补刻画事件存在性，经类别感知校准
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
 
 ---

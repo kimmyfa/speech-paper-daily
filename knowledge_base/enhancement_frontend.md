@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 33 篇
+共 34 篇
 
 ## [Prototype-Rectified Iterative Self-supervised Manifold Denoising under Severe Acoustic Shift](https://arxiv.org/abs/2608.15037)
 
@@ -297,5 +297,14 @@
 - **关键技术点**：
 - **主要指标**：- LSD：0.935（TIMIT 2k→16k），较最强基线 AP-BWE 0.998 低 0.063 - ViSQOL：3.954，较 FLowHigh 3.712 高 0.242；STOI：0.908，较 AP-BWE 0.875 高 0.033 - VCTK 同样全面领先：LSD 0.979
 - **代码**：https://github.com/ningyuan33/P2Flow | **Demo**：暂无
+
+---
+## [SE-MSB: End-to-End Unpaired Speech Enhancement using Mamba Schrödinger Bridges](https://arxiv.org/abs/2609.26000)
+
+- **方向**：语音大模型 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-22
+- **一句话贡献**：真实语音的混响、噪声、削波难以精确模拟，配对数据几乎不可得，监督式增强在跨域环境性能受限。本文提出 SE-MSB，首个完全非配对、端到端在原始波形上运行的语音增强框架：以扩散薛定谔桥（DSB）学习干净与退化语音分布间的随机输运过程，仅用两独立分布样本训练；搭配自研高效 Mamba 扩散网络，借线性序列复杂度与少步采样能力，同等计算预算下超越非配对基线，推理快约两个数量级，并在混合退化任务上逼近监督
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
 
 ---
