@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 65 篇
+共 69 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -582,6 +582,42 @@
 
 - **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：低资源语言缺乏文本-语音成对数据且人工转写昂贵，现成零样本TTS难以直接适配。该文发现监督顺序决定适配权衡：合成语音发音准但韵律平、音色单一，先以其训练可建立文本-语音对应、提升内容准确率却损伤说话人相似度；真实录音伪标签韵律自然、音色多样，但ASR转写带噪，反序（真实→合成）又会丢失相似度。据此提出信任感知渐进适配：先合成后真实的合成到真实两阶段训练，并以两个固定独立ASR转写的一致度作为伪标签
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [EditVoice: Variable-Length Non-Autoregressive Zero-Shot TTS and Speech Editing with Edit Flows](https://arxiv.org/abs/2609.29889)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：本文提出 EditVoice，据作者所知首个变长非自回归零样本 TTS 模型。它基于 Edit Flows 离散流匹配框架，通过插入、删除、替换操作在采样时联合更新语音内容与序列长度，摆脱了传统 NAR 模型需预先指定目标长度的限制。模型采用随机区间语音填充训练，统一了零样本 TTS 与文本驱动的语音编辑，并支持前缀/后缀两种 prompt 位置。作者进一步提出互补 prompt 采样（CPS）融
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AdaptDuplex: from static to adaptive full-duplex spoken dialogue](https://arxiv.org/abs/2609.29217)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：现有全双工语音对话模型（如 DuplexOmni、MiniCPM-o 4.5）在设计与训练期就把窗口时长和可用动作集合写死，打断、附和、静默监听等行为沦为静态操作点，无法随对话节奏与认知负荷逐时刻调整。AdaptDuplex 以 Qwen3-Omni 为底座，围绕"每个行为决策都是一个显式 token"这一原则进行三层协同设计：紧凑的规范化 token 序列协议、动态预测短/中/长三档窗长并可叠加
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ReaFlow-TTS: Realization-Conditioned Flow Matching for High-Quality and Controllable Speech Synthesis](https://arxiv.org/abs/2609.28906)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：针对流匹配TTS中同文本不同语音实现（realization）导致目标速度不一致、确定性网络只学到条件均值而抹平实现变化的问题，本文提出ReaFlow-TTS：引入话语级随机实现潜变量z并在整条流轨迹上条件化速度预测，同时用VAD（效价-唤醒-支配）语义结构化潜空间。推理时可直接从先验采样、无需目标语音，并沿VAD轴做分级属性操控。实验在音质上超越F5-TTS基线，且潜变量跨初始噪声可复现地影响音
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Depth through recurrence: Looped transformers for flow-matching TTS](https://arxiv.org/abs/2609.29768)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：本文系统研究在 flow-matching TTS 的 velocity 网络中如何用"循环深度"（权重跨层复用、迭代加深）组织 Transformer，即以参数共享的若干 block 在同一网络前向内被多次执行，用更少独特参数保留等效执行深度。作者在统一目标、采样器与宽度下比较七种复用布局（全共享环、相邻序列重复、部分共享的前/中/后段），在 Seed-TTS 与 LibriSpeech-PC 
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无

@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 131 篇
+共 138 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1176,6 +1176,69 @@
 
 - **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：大型音频-语言模型（LALM）生成的描述常提及输入中不存在的声学事件，且幻觉发生在事件提及级别，仅凭文本或 token 概率难以核验。现有事后方案需外接 CED 等独立音频标签器，被迫引入第二个音频编码器并再次波形前向编码，参数与延迟开销显著。本文提出 REVE，直接复用目标模型生成描述时已计算的投影前音频编码器状态作为声学证据：帧级分数统计读出与四段时序均值读出互补刻画事件存在性，经类别感知校准
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Reward-Tilted On-Policy Distillation for Acoustic Grounding in Audio-Language Models](https://arxiv.org/abs/2609.28778)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：音频语言模型（ALM）常借助文本捷径答题而忽视声学证据，导致"伪接地"。本文提出奖励倾斜在线蒸馏 RT-OPD：在同一问题与学生自生成文本下，让冻结教师分别在有音频与无音频条件下预测下一 token，以两者对数概率之差定义全词表奖励，用指数倾斜重塑教师分布，得到突出声学证据的蒸馏目标，再沿学生在线轨迹做反向 KL 蒸馏。在 MMAU、MMAR、ADQA-clean 三个基准上稳定超越 Vanill
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [TEMA: Evidence-Grounded Temporal Question Answering in Multi-Turn Multi-Audio Dialogs](https://arxiv.org/abs/2609.30029)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：多轮多音频时序问答要求模型在追问、录音切换与历史引用中持续追踪目标事件，恢复每条时间轴上的完整实例及其边界，才能完成时间计算与比较。本文提出TEMA框架：每轮依次生成Route（限定音频范围）、Span（把所有匹配区间描述为条件化音频字幕）、Reason与Answer，将事件感知与循证回答连接起来。配套构建40,704段对话的TEMA-Dialog语料与证据-答案联合评测的TEMA-Bench，训
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AEGIS: Audio Endogenous Guarding via Internal Signals Against Large Audio-Language Model Jailbreaks](https://arxiv.org/abs/2609.29287)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：本文针对大型音频语言模型（LALM）面临的异构音频越狱攻击（语义混淆、多语言、副语言风格、波形扰动等），提出一个关键问题：越狱成功究竟是模型没识别出有害意图，还是识别之后没能触发拒绝？作者通过逐层探针分析发现风险信息在中间层仍可解码，但深层拒绝倾向接近于零，将此解耦现象命名为"风险-拒绝鸿沟"。据此提出 AEGIS 端到端防御：用轻量 MLP 风险门读取中层隐藏状态得到连续风险分，据此选择性激活后
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [PTC-Bias: Phoneme-Level Temporal Competition for Bias Retrieval and Post-Decoding Correction in Speech LLMs](https://arxiv.org/abs/2609.28727)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：本文提出 PTC-Bias，一个面向 SpeechLLM 的音素级时序竞争两阶段上下文偏置框架。预填充阶段，PTC Retrieval 在帧同步音素解码基础上对候选发音做时序竞争，产出精简偏置词表及对应语音区间；解码后，PTC Correction 在区间内对检索词与不匹配转写片段做第二次局部竞争，选择性纠正近同音与词切分错误，同时保留正确转写。两阶段共享同一音素后验，无需额外 SpeechLLM
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [A Harness for Synthesizing Diverse Naturalistic Full-Duplex Conversations](https://arxiv.org/abs/2609.28806)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：本文提出一个可编程控制的语音数据合成harness（管线），用于批量生成带意图标注的英/中双语两通道全双工对话语音，直指真实语料对打断、附和、旁聊等事件缺乏可控性与意图标签的痛点。LLM仅编写含说话人、文本、对话行为与依附关系的关系事件列表，不预测绝对时间戳；随后经TTS独立渲染、强制对齐测词界、按锚点与偏移装配到共享时钟上，覆盖8大家族42种现象。论文以生成消融、语义VAD标注恢复和Moshi微
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [To Trust or Not to Trust: Retrieval-Augmented Fact Checking in Speech](https://arxiv.org/abs/2609.30227)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：本文提出 VeriSpeak：面向大音频语言模型（LALM）的语音事实核查探针基准，含 3879 条时间、地理、关系三类语音声明，标签真假平衡，声学与文本证据跨模态。论文系统检验核查能力能否从文本迁移到语音，以及检索与显式推理能否弥合模态差。核心发现是该迁移并不自动发生：语音输入平均准确率骤降约 5 个点到 86.1% 之间波动，单纯检索收益有限，模型常把检索文本误当作待核查声明，而"检索加推理"
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Exploring a Single Autoregressive LLM for Unified Target Speech Extraction across Synchronous and Asynchronous Inference](https://arxiv.org/abs/2609.29238)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：本文提出 TSE-Omni，用单一自回归 LLM 主干统一目标语音提取的两类线索：时间同步线索（唇动、协同手势）与时间异步线索（注册语音、文本）。传统范式按线索单独训练部署提取器，视觉体系还需损坏匹配训练才鲁棒。TSE-Omni 利用 next-token prediction 的天然属性：每一步都以自身已预测的目标语音语义 token 为条件，形成连续刷新的"自注册"上下文，初值来自异步音频或文
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无

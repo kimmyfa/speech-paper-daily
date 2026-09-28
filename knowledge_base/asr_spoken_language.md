@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 52 篇
+共 54 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -467,6 +467,24 @@
 - **一句话贡献**：基于离散语音 token 的大模型 ASR 对编码器选择高度敏感，而已有多编码器方法在输入层融合编码器输出，既不稳定又需多编码器推理。本文提出多视角离散 token 增强：把冻结的 HuBERT、WavLM、MMS-300M 视为同一语音的替代分词器，生成多种 token 视角联合训练一个共享 LLM 解码器，推理仅用单编码器即可。LibriSpeech 上全部视角超越独立基线，WavLM 视角达
 - **关键技术点**：
 - **主要指标**：- test-clean WER：3.30%（多视角 WavLM 视角，相对基线降 0.78 点） - test-other WER：8.13%（相对基线降 1.42 点） - ROVER 三假设融合：3.03% / 7.38%（全文最优） - Oracle：2.39% / 5.96%；Loq. d
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [TS-OPD: Reconciling ASR and QA in Speech Language Models via Task-Specific On-Policy Distillation](https://arxiv.org/abs/2609.29464)
+
+- **方向**： | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：语音大模型（SLM）继承自预训练LLM的指令跟随能力，但ASR专用微调往往导致其大幅退化：本文实测QA准确率从42.57%崩塌至2.86%。为此提出任务级在线蒸馏TS-OPD，将ASR特化前后的模型分别作为QA与ASR两个互补教师，学生在两种任务提示下独立生成on-policy轨迹，各轨迹仅由对应教师监督，从而缓解双监督信号冲突。实验表明该方法显著提升基础与上下文ASR性能的同时完整保留甚至略增Q
+- **关键技术点**：SLM在ASR特化微调中出现灾难性能力遗忘，现有模型合并、权重平均、离线蒸馏等多靠参数约束或数据设计保留能力，未在轨迹层面化解ASR与QA两种监督分布的直接竞争。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [STAM-ASR: Speaker-Temporal Anchoring with Memory for Multi-Speaker ASR](https://arxiv.org/abs/2609.29805)
+
+- **方向**： | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-25
+- **一句话贡献**：多说话人会议转写需同时回答"说了什么、谁说、何时说"。本文提出STAM-ASR，一个在预训练AudioLLM（Qwen2.5-Omni-7B，编码器冻结）之上的轻量扩展框架：不依赖外部日志系统、不做显式语音分离，直接从AudioLLM中间层特征学习说话人活动与说话人表征，以残差FiLM方式把"谁、何时"线索注入语义表征；并用共享Q-Former维护固定长度的说话人记忆与会话记忆，跨轮次携带互补上下
+- **关键技术点**：
+- **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
 
 ---

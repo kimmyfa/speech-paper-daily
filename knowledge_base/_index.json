@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-09-24",
-  "total_papers": 367,
+  "generated_at": "2026-09-28",
+  "total_papers": 380,
   "min_score": 7.0,
   "by_file": {
-    "tts_speech_synthesis.md": 65,
-    "asr_spoken_language.md": 52,
+    "tts_speech_synthesis.md": 69,
+    "asr_spoken_language.md": 54,
     "speech_lm_codec.md": 22,
-    "speech_lm_understanding.md": 131,
+    "speech_lm_understanding.md": 138,
     "enhancement_frontend.md": 34,
     "separation_diarization.md": 16,
     "other_related.md": 47
