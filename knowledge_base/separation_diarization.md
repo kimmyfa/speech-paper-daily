@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 16 篇
+共 17 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -144,5 +144,14 @@
 - **关键技术点**：流式 TSE 的说话人状态需在目标缺席时保持身份、在注册–混听失配时适应，两者互斥。在 22 种自适应启发式配置（含 oracle VAD 门控）上的系统测量表明该权衡构成前沿：即使完美目标活动检测也无法同时解决两轴——活动不等于身份，失配时残差仍会写入干扰者证据。
 - **主要指标**：- 严重失配 SI-SNRi：AFW 10.9 dB vs 最佳启发式 7.9 dB（+3.0 dB）、GRU 10.5 dB - 30s 缺席后恢复：AFW 6.2、GRU 7.3、静态 7.1 dB（差距 ≤0.9） - 说话人混淆率 4–5%（启发式 15–31%）；16s 缺席抑制 17.2
 - **代码**：https://github.com/ym2976/anchor-fast-weight | **Demo**：暂无
+
+---
+## [Dialogue-Based Streaming Audio-Visual Target Speaker Extraction with Predictive Dialogue Information](https://arxiv.org/abs/2609.30774)
+
+- **方向**： | **子方向**：Separation | **评分**：7/10 | **日期**：2026-09-28
+- **一句话贡献**：面向面对面实时对话场景，系统需在自然停顿、轮换与 backchannel 中持续追踪目标说话人，同时抑制对话伙伴与无关第三方插话。本文构建了首个基于完整双人类对话并叠加独立第三方干扰的在线流式音视频目标说话人提取（AV-TSE）基准，保留真实轮换结构而非模拟拼接。并提出基于语音大模型的目标说话人语音活动预测模块 TS-VAP，从重叠混合的语义、声学与面部线索中预测目标与对话伙伴的未来活动，作为预测
+- **关键技术点**：现有 AV-TSE 多在完全重叠或人工模拟稀疏重叠混合上评测，缺乏真实对话的轮换结构；流式模型不可见未来帧，目标在轮次边界沉默处歧义最大。传统语音活动投影（VAP）仅在干净单通道训练，靠停顿与韵律预测，未利用决定轮换的语言知识（提问预示回答、句满即交接）。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
 
 ---

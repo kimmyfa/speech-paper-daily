@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 34 篇
+共 35 篇
 
 ## [Prototype-Rectified Iterative Self-supervised Manifold Denoising under Severe Acoustic Shift](https://arxiv.org/abs/2608.15037)
 
@@ -117,6 +117,15 @@
 - **关键技术点**：基于扩散的语音增强虽性能优异，但推理需迭代求解高度弯曲的反向轨迹，通常需要10~100次函数评估（NFE），难以满足实时低延迟要求。级联与蒸馏等方法仍受连续轨迹建模约束，亟需一种不依赖轨迹建模、原生支持单步生成的生成式范式。
 - **主要指标**：- 指标含入侵式（WER/PESQ/SI-SDR/ESTOI）、非入侵式（DiMOS/WVMOS/NISQA/SCOREQ）与计算量（Para/GMACs/NFE）。EARS-WHAM离线NCSN++双潜在（DistilHuBERT+PANNs）WER 14.33%（SOTA）、PESQ 2.46、
 - **代码**：https://github.com/LiangXu123/DriftSE | **Demo**：https://github.com/LiangXu123/DriftSE
+
+---
+## [Adapting Personalized Speech Enhancement for Low-Latency Audio-Visual Target-Speaker Extraction](https://arxiv.org/abs/2609.30631)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-09-28
+- **一句话贡献**：本文提出 AV-PVQE，反向的思路是从个性化语音增强模型 PVQE 出发适配到在线音视频目标说话人提取（TSE）。PVQE 虽输出音质高，但在双人混合中有 46% 的概率错误恢复竞争说话人（目标混淆）。作者在 PVQE 的说话人条件输入上引入 AV-HuBERT 唇动特征并与注册向量以门控残差融合，联合微调视觉网络与重建网络，将目标混淆降至 1.6%，且无未来帧、算法延迟仅 20 ms。在 LR
+- **关键技术点**：现有在线视听 TSE 模型多从零训练、只在合成双人混合上评估，监听音质与真实会议行为缺乏验证；而个性化语音增强模型音质好却在混合中频繁选错目标说话人。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Separate First, Then Associate: A Two-Stage Approach for Real-World Audio-Visual Speech Enhancement](https://arxiv.org/abs/2608.14812)

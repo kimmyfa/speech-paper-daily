@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 138 篇
+共 141 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -722,6 +722,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [Acoustic-to-Text KV Compression for Full-Duplex Speech Models](https://arxiv.org/abs/2609.31224)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-28
+- **一句话贡献**：全双工语音大模型在持续监听中不断累积声学KV状态，长时间交互内存开销巨大。本文提出声学到文本的KV压缩：利用"监听空闲时间"（约900ms）引入转录旁路通道，将语音转为紧凑文本记忆，缓存超预算时驱逐旧声学状态而保留转录与近期声学窗口。在MiniCPM-o 4.5上实现：10分钟LongSpeech会话峰值流式KV缓存降低64.6%，转录、时序问答与摘要均优于原生流式，且保持实时性与打断、轮转等全双
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1240,6 +1249,24 @@
 - **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文提出 TSE-Omni，用单一自回归 LLM 主干统一目标语音提取的两类线索：时间同步线索（唇动、协同手势）与时间异步线索（注册语音、文本）。传统范式按线索单独训练部署提取器，视觉体系还需损坏匹配训练才鲁棒。TSE-Omni 利用 next-token prediction 的天然属性：每一步都以自身已预测的目标语音语义 token 为条件，形成连续刷新的"自注册"上下文，初值来自异步音频或文
 - **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Learning Natural Conversational Behavior in Tandem Speech-to-Speech Models with Randomized Guidance](https://arxiv.org/abs/2609.30773)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-28
+- **一句话贡献**：串联式语音到语音（tandem S2S）架构如 KAME 用异步 LLM 后端在用户说话期间向前端持续推送候选回复作为引导流，从而兼得全双工交互的低延迟与文本 LLM 的知识能力。但监督微调需要中间引导轨迹，而真实对话录音只包含最终回复，KAME 原本要逐条样本调用模拟器 LLM 生成逐渐收敛到目标回复的引导序列，成为规模化使用真实语音的数据准备瓶颈。本文提出随机中间引导：训练时末位更新用目标回复
+- **关键技术点**：级联 ASR-LLM-TTS 延迟破坏对话流畅性，Moshi 等全双工模型知识推理有限；KAME 让异步文本 LLM 以 2 Hz（每 0.5 秒）基于用户部分输入向全双工语音前端推送候选回复组成引导流（原文称"oracle"流）。训练时普通对话数据缺少该中间引导，原方案需对每条训练对话逐例 LLM 模拟生成收敛到目标回复 y 的引导轨迹，无法扩展到大规模真实语料。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Who Says What: Symbolic Trimodal Binding Mechanisms in Audio-Visual LLMs](https://arxiv.org/abs/2609.31193)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-28
+- **一句话贡献**：本文系统研究音视频大模型（AVLLM）在多说话人对话视频中如何完成"文本-语音-视觉"三模态符号绑定。作者发现模型涌现出模态特异的符号ID机制：听觉属性被编码为记录说话时序的时间ID，视觉属性被编码为记录画面位置的空间ID，绑定经锚点ID提取、目标ID选择、特征检索三阶段完成。借助表征相似性分析（RSA）与因果中介分析（CMA），作者定位绑定失败主要发生在目标ID选择阶段，即音-画对齐的根本缺陷，
+- **关键技术点**：video-SALMONN2+（7B）、Qwen2.5-Omni（3B/7B）、MiniCPM-o-4.5（9B）等AVLLM在单镜头多说话人视频（画面每帧同时出现多个候选人）中频繁把话语归属到错误人脸。LLM/VLM的一模态与双模态绑定已被证实使用内容无关的符号ID，但AVLLM的三模态绑定机制与失败位置仍是黑箱。 **方法：** 作者构造4只动物说话人分布在四象限、各说一个随机国家名的玩具数据集，定义AAVR（声音锚点检索视觉目标）与VAAR（视觉锚点检索语音内容）两个双向绑定任务。先用上下文priming诱导正确绑定，对每层注意力输出做RSA，与时间ID、空间ID、语义内容三个假设空间算
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
 
