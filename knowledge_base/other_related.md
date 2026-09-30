@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 47 篇
+共 50 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -186,6 +186,24 @@
 
 - **方向**： | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-23
 - **一句话贡献**：支持修订的流式语音翻译（S2TT）可纠正早期草稿，但基于可见文本的过程奖励会把"早输出"功劳记给随后被撤回的临时内容，造成可见性与最终交付的错位。本文提出持久性交付优化 PDO：中间奖励只分配给能在全部后续修订中存活的内容（当前草稿与其后所有草稿的最长公共前缀），最终译文质量另行单独计分；轨迹级回报让后续修订反过来影响早期输出的信用。仅用 7.49 小时 FLEURS 适配数据，PDO 在 5 个
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [WenetSpeech-Min: A Large-Scale Minnan Speech Corpus with Dual Transcriptions for Dialectal Speech Processing](https://arxiv.org/abs/2609.36834)
+
+- **方向**： | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-30
+- **一句话贡献**：闽南语长期缺乏大规模真实场景、同时配对"方言转写+书面普通话转写"的语料。本文发布WenetSpeech-Min：约10,000小时多源在线媒体闽南语音库，每条话语均配对闽南语方言转写与普通话转写双文本；并建立覆盖双转写目标的ASR基准（6小时人工校验）与闽南语TTS基准（Easy 500句+Hard 250句），配套发布在语料上微调的Qwen3-ASR、FireRedASR2、CosyVoice
+- **关键技术点**：闽南语覆盖福建、台湾及东南亚，但公开资源稀少：Common Voice仅小规模朗读语料，MinSpeech数千小时只有普通话转写，YT-THDC有方言-普通话配对却仅30小时，Breeze Taigi评测集不公开，跨模型公平比较与可复现评测缺失。 **数据管线：** 采集多源媒体音频后VAD切分，以SNR、时长计算WV-MOS声学质量分，经DaSheng事件检测过滤非语音、pyannote估计说话人数作元数据；用1,600小时人工闽南语转写分别微调Qwen3-ASR、FireRedASR2-AED、Fun-ASR-Nano作三个互补标注器，ROVER融合生成方言转写；有内嵌字幕的媒体用WeSu
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Almost Human, Except When It Matters: VoxParity and the Decisions a Voice Should Change](https://arxiv.org/abs/2609.35922)
+
+- **方向**： | **子方向**：Other | **评分**：8/10 | **日期**：2026-09-30
+- **一句话贡献**：语音智能体已在真实电话线中执行转账、药品续方、关停服务、紧急派发等动作，而急救调度、反电诈、民航话务、赌博年龄核验等行业规范均承认：来电者"听起来如何"可以改变正确动作。VoxParity 是针对此盲区的基准：同一转写文本保持不变，只改变声音（哭泣、监护仪报警、背景中的 Mayday、儿童嗓音、噪声掩盖药名），正确的工具调用随之翻转。它以纯文本管线作对照零假设，检验模型是否真正因"听见"而改变决策
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
@@ -423,5 +441,14 @@
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Perception-Inspired Bayesian Causal Fusion for Audiovisual Source Localization](https://arxiv.org/abs/2609.36441)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-09-30
+- **一句话贡献**：多模态融合只有在模态共享同一因果来源时才有益；声源被遮挡或位于视野外时，视觉通道与目标条件独立，盲目融合只会污染估计。本文将"是否融合"的决策建模为贝叶斯因果推断，借鉴人类多感知最优观察者模型（Körding 等），在冻结的音频与视觉模型之上实现即插即用的因果门控层，用于声事件定位与检测（SELD）。模型先对可见候选物体推断共因后验，再按该后验对精度加权融合进行门控。实验显示无条件融合使方向误差翻
+- **关键技术点**：
+- **主要指标**：
+- **代码**：未开源（依赖公开的 DCASE2025 SELD 基线 checkpoints、DCASE2024 ngcc-seld 模型与 Grounding DINO） | **Demo**：无
 
 ---

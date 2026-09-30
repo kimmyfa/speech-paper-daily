@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 141 篇
+共 148 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -731,6 +731,33 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [MultiTalk: Scaling Full-Duplex Speech Models to Long, Multi-Party, Bilingual Conversation](https://arxiv.org/abs/2609.36903)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-30
+- **一句话贡献**：现有端到端全双工语音模型受数据与评测双重瓶颈制约，难以支撑长时、多方、双语并存的真实会话（如会议、机器人接待）。MultiTalk沿长时序与多方两轴联合扩展Moshi范式：发布57.6k小时英中合成全双工并行流语料（MultiTalkPT 54.4k小时+MultiTalkFT 3.2k小时）及自动数据引擎；基于真实人类录音构建MultiTalkBench（104条、平均32.6分钟）；训练双语M
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [HEAR: Real Voices, Real Bias: A Large-Scale Human-Recorded, Demographically Diverse Benchmark for Audio Language Models](https://arxiv.org/abs/2609.35952)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-30
+- **一句话贡献**：Meta 推出 HEAR，是首个完全基于真实人声（非 TTS 合成）的大规模 Audio-LLM 人口统计偏见评测基准，含 87k 条真人录音、843 名人口多样性的美国参与者，覆盖性别、年龄、母语等维度。任务分 Spoken BBQ 多选题与开放式长回答两类，同时评测端到端 speech-to-speech 与 speech-to-text 两种架构。结果揭示语音条件偏见是模型特有属性，个性化系
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Learning as Deepfakes Evolve: RF-Prompt for Continual Audio Deepfake Detection](https://arxiv.org/abs/2609.37586)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-30
+- **一句话贡献**：语音生成系统（Qwen3-TTS、Seed-TTS、GPT-Live、Gemini Live 等）以周或月为周期快速迭代，部署后的音频深伪检测器面对的是持续移动的靶标：必须在不遗忘历史真伪知识的前提下纳入新出现的伪造方法。现有持续学习评测普遍按数据集组织任务，把真实语音域变化与伪造机制变化耦合在一起，难以分辨究竟在更新何种知识。本文从任务组织与检测器自适应两个维度联合入手：提出真实锚定机制增量协议
+- **关键技术点**：
+- **主要指标**：
+- **代码**：https://github.com/xieyuankun/RF-Prompt | **Demo**：论文未提供公开演示页面，开源代码库即为验证入口
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1267,6 +1294,42 @@
 - **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-28
 - **一句话贡献**：本文系统研究音视频大模型（AVLLM）在多说话人对话视频中如何完成"文本-语音-视觉"三模态符号绑定。作者发现模型涌现出模态特异的符号ID机制：听觉属性被编码为记录说话时序的时间ID，视觉属性被编码为记录画面位置的空间ID，绑定经锚点ID提取、目标ID选择、特征检索三阶段完成。借助表征相似性分析（RSA）与因果中介分析（CMA），作者定位绑定失败主要发生在目标ID选择阶段，即音-画对齐的根本缺陷，
 - **关键技术点**：video-SALMONN2+（7B）、Qwen2.5-Omni（3B/7B）、MiniCPM-o-4.5（9B）等AVLLM在单镜头多说话人视频（画面每帧同时出现多个候选人）中频繁把话语归属到错误人脸。LLM/VLM的一模态与双模态绑定已被证实使用内容无关的符号ID，但AVLLM的三模态绑定机制与失败位置仍是黑箱。 **方法：** 作者构造4只动物说话人分布在四象限、各说一个随机国家名的玩具数据集，定义AAVR（声音锚点检索视觉目标）与VAAR（视觉锚点检索语音内容）两个双向绑定任务。先用上下文priming诱导正确绑定，对每层注意力输出做RSA，与时间ID、空间ID、语义内容三个假设空间算
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Louder, Longer, Livelier: Acoustic Shortcuts and Underspecified Rationales in Speech LLM Judges](https://arxiv.org/abs/2609.36979)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
+- **一句话贡献**：语音大模型正日益充当TTS与语音交互质量"评审"甚至训练奖励信号。本文首次系统刻画语音评审的模态特有风险"声学捷径"：评审把易感知的声学线索（音量、内容丰富度、情绪演绎）误当作质量证据，或给予远超人类听众的权重。作者对六个语音评审做控制变量审计，发现评审系统性偏好更响、内容更丰富的音频，并把 Happy 等情绪演绎转成质量偏好；更令人担忧的是，其配套理由解释反复复用水泛化的"自然度、韵律"等评价词
+- **关键技术点**：语音质量多维且依赖细粒度声学感知，MOS等人工听测慢而昂贵，神经MOS预测器不透明、难泛化；SpeechJudge、SQ-LLM、UniSRM等专用评审与Gemini等通用音频大模型正被用于打分、偏好选择与奖励建模。文本评审已知存在位置、长度偏差，但语音评审是否以目标准则可辩护的方式使用声学线索，此前从未被系统检验。 **方法：** 提出声学捷径审计框架：对语音刺激做单一因子控制操纵，检验其是否系统性改变最终判断，并在改变发生时追问理由是否点名该线索；对可能合理影响感知的因子引入人类偏好校准作为基准。共审计六个评审：SpeechJudge-BTRM、SpeechJudge-GRM、UniSRM
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ReDimNet2+: Multi-Corpus Data Scaling for Robust Speaker Verification](https://arxiv.org/abs/2609.37014)
+
+- **方向**： | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-30
+- **一句话贡献**：面向设备、房间与压缩链路差异导致的说话人验证退化问题，本文在固定 ReDimNet2 紧凑骨干（12.3M 参数）的前提下，通过七个公开语料（63,934 说话人、约 8,675 小时）的数据规模化、编解码器与波形增强、大间隔微调（LMFT）以及图结构检索重排序，在统一的随机 4 秒评估窗口协议下将 VoxCeleb1 池化 EER 从 2.42% 降至 0.82%，26 条件鲁棒性压力测试 EE
+- **关键技术点**：现代 ASV 系统在干净基准上 EER 已低于 1%，但在未见信道、激进压缩、短片段与开放集检索下显著退化。作者分析 VoxBlink2 子集（训练 673,277 条、11,053 人、约 1,458 小时；评估 134,697 条）发现域失配：FLAC 中位字节率从训练侧 21,040 B/s 降到评估侧 14,021 B/s，NISQA 色彩度预测低于 2.0 的文件占比从 6.2% 升至 41.4%，884 位多录音说话人的组内字节率标准差中位数为 1,753，提示录音通道与压缩异质性，由此引出显式编解码器仿真。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Pruning for Efficiency, Paying in Fairness: Demographic Disparities in Pruned Speech-LLMs](https://arxiv.org/abs/2609.38106)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
+- **一句话贡献**：语音大模型推理开销大，剪枝压缩是部署前的常规步骤，但业界普遍只用聚合词错误率（WER）验收剪枝模型，可能掩盖其对不同人口学群体的不均衡损害。本文对SLAM-ASR管线（冻结Whisper编码器+可训练投影器+冻结Qwen2.5-3B）开展首个系统性公平性审计：在Fair-Speech与Common Voice上逐步剪枝编码器并在每个深度重训投影器，逐群体测量WER。结果剪枝使种族与性别差距扩大，聚
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [τ-Multilingual: Benchmarking Voice Agents Across Languages](https://arxiv.org/abs/2609.35820)
+
+- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
+- **一句话贡献**：现有语音智能体基准几乎只测英语，仅覆盖行为分布的狭窄切片。本文提出 τ-Multilingual，将 τ-Voice（τ-bench 系列的全双工语音版）扩展到西班牙语、巴西葡萄牙语、印地语、韩语、中文五语言，构建由母语者审核、同时度量任务完成、交互质量与生成质量的多语言全双工语音智能体基准，含九百个本地化任务实例、五种语音配置四千五百通电话并设文本对照。结果显示西/葡/印地语基本保持、韩语与中文
+- **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
 

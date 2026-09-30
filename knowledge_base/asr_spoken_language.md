@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 58 篇
+共 59 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -520,6 +520,15 @@
 - **方向**： | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-28
 - **一句话贡献**：
 - **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [FD-VAD: Semantic Endpoint Detection for Streaming Full-Duplex Speech](https://arxiv.org/abs/2609.35791)
+
+- **方向**： | **子方向**：ASR | **评分**：7/10 | **日期**：2026-09-30
+- **一句话贡献**：全双工流式语音交互需要从partial语音判断暂停是犹豫还是语义完整，传统声学VAD只能检测静音、无法感知语义完整性，而ASR级联方案又引入转录错误与额外延迟。本文将语义端点检测重构为因果音频-语言推理任务，提出FD-VAD：一个免ASR的流式endpointer，把有界因果音频窗口直接映射为Continue/Stop决策，以语义端点检测取代声学VAD。模型由冻结语音编码器、轻量模态适配器与参数高
+- **关键技术点**：全双工语音代理中端点误差是非对称的：过早Stop会打断用户，保守决策只增加延迟。声学VAD如Silero误判犹豫停顿，chunk级false-stop率高达22.5%；Whisper+TEN级联整体语句准确仅0.800且无法流式。端点判断本质是语义问题，且必须在因果partial音频下持续更新。
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
 
