@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 71 篇
+共 72 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -639,5 +639,14 @@
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Region-Aware Masking for Accent-Robust Cross-Lingual Text-to-Speech](https://arxiv.org/abs/2610.07524)
+
+- **方向**：语音大模型；**作者**：Haoqi Li、Shivam Mehta、Ravi Teja Gadde、Yinghong Lan；**机构**：Netflix Inc., USA；**发布日期**：2026-10-07 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-07
+- **一句话贡献**：跨语言零样本TTS常出现口音泄漏：模型在保留参考音色的同时，把源语言发音习惯带入目标语言输出。在掩码重建式TTS中，训练用同语言上下文、推理却用跨语言上下文，该失配进一步放大问题。本文提出区域感知掩蔽：将两种语言语句拼接为一条训练样本，掩码相对语言边界放置，使训练复现推理的跨语言提示模式，无需语言ID、口音标签、平行语料或架构改动。母语听者评测将感知口音从4.3降至0.5（0-5分制），清晰度与自
+- **关键技术点**：Voicebox、E2 TTS、F5-TTS等掩码重建范式训练时从同语言上下文复原被掩码区域，跨语言推理却须依赖外语声学上下文，模型倾向从参考音频复制语言相关属性（尤其中口音）。同说话人平行跨语言语料稀缺昂贵，语言ID、对抗口音抑制等显式解耦方案条件复杂。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：https://doubleblindauthor.github.io/region-aware-masking-TTS-demo
 
 ---

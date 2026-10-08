@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 148 篇
+共 155 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -758,6 +758,15 @@
 - **代码**：https://github.com/xieyuankun/RF-Prompt | **Demo**：论文未提供公开演示页面，开源代码库即为验证入口
 
 ---
+## [Conversation Is a Two-Body Problem: Dyadic Evaluation of Full-Duplex Dialogue Models](https://arxiv.org/abs/2610.08125)
+
+- **方向**：语音大模型；**作者**：Sungnyun Kim、Sungwoo Cho、Jihwan Oh、Se-Young Yun；**机构**：韩国科学技术院（KAIST）；**发布日期**：2026-10-07 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-07
+- **一句话贡献**：全双工语音对话模型能边听边说，但现有基准普遍按"单边"会话打分：对无法反应的预录音频，或对只按固定题序提问、自身不被评分的自动考官。本文指出对话是两位说话人持续互相塑造的双体问题，单边评测只测了一半。作者提出DyaFDB双边评测框架：让两个全双工模型在同一帧级时钟平台上直接对话，各自持有分配的、常常冲突的角色，环内不设考官，双方录音由外部LLM法官离线共同打分。框架探针覆盖轮流发言、角色维持、信道
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂未链接，计划发布场景、角色提示与录制/评分协议 | **Demo**：无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1329,6 +1338,60 @@
 
 - **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
 - **一句话贡献**：现有语音智能体基准几乎只测英语，仅覆盖行为分布的狭窄切片。本文提出 τ-Multilingual，将 τ-Voice（τ-bench 系列的全双工语音版）扩展到西班牙语、巴西葡萄牙语、印地语、韩语、中文五语言，构建由母语者审核、同时度量任务完成、交互质量与生成质量的多语言全双工语音智能体基准，含九百个本地化任务实例、五种语音配置四千五百通电话并设文本对照。结果显示西/葡/印地语基本保持、韩语与中文
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Logbook: Extremely Long-form Audio Event Understanding](https://arxiv.org/abs/2610.07338)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
+- **一句话贡献**：本文提出 Logbook，首个小时级（10 分钟至 6 天）连续音频事件理解基准。任务要求系统对不间断录音输出无缝隙、无重叠的切分，每段附带一个事件标签与自由文本描述。作者将 Ego4D、EgoLife、SINS 三个公开数据集统一为日志式标注格式，评测 52 个系统（48 个级联 + 4 个端到端），并对微调、上下文窗口与推理预算做消融。结论：任务可行但最佳系统仍低于人工基线；过分割普遍存在，端
+- **关键技术点**：现有音频基准建立在短且预切分的片段上（AudioSet、Clotho 等），长音频基准上限仅 20-30 分钟且偏重语音；声音事件检测器依赖固定词表，captioning 模型无论输入多长只输出一句话，导致模型设计无法应对全天连续听音场景。
+- **主要指标**：
+- **代码**：https://github.com/facebookresearch/logbook | **Demo**：无
+
+---
+## [HiPLEX: Hierarchical Policy Factorization for Full Duplex Speech Language Models](https://arxiv.org/abs/2610.07727)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
+- **一句话贡献**：全双工语音模型要在流式帧里同时决定「说什么」与「何时说/停」。现有 RL 只把时机优势打到扁平 token 流或干脆不管内容语义。HiPLEX 把 Moshi 的文本策略无损拆成两层：控制层每帧选 pad/epad/cont（要不要出内容），条件内容层只在 cont 时选 token。交互奖励经事件因果掩码归到控制层，LLM-judge 语义优势归到内容层，双因子共用同一个头，零新增参数。在 Fu
+- **关键技术点**：全双工 SLM 需在 80ms 帧粒度上持续听用户音频同时生成流式语音，涉及 turn-taking、user pause 静默、backchannel 短应答、barge-in 让位/重入四类时序行为；同时不能牺牲文本内容质量。先前工作（DuplexPO 只在标注窗口内做纯时序 GRPO）把语义排除在外，作者实测发现「纯时序训练」会拖低 Judge 分数并引发复读。
+- **主要指标**：
+- **代码**：未发布 | **Demo**：-
+
+---
+## [AdaLoop: Adaptive-Depth Latent Reasoning for Audio Language Models](https://arxiv.org/abs/2610.06949)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
+- **一句话贡献**：音频大模型（LALMs）存在显著的"语义强、感知弱"失衡：音高比较、响度排序等信号级任务需要迭代式精细声学分析，而现有架构对难易问题消耗相同计算深度。AdaLoop在音频编码器与语言模型之间的连接器位置插入轻量循环潜块（RLB），共享权重反复迭代，并由以问题为条件、可学习的停机单元（ACT机制）自主决定每个样本精化的轮数（上限K_max=8）。新增参数仅占基座2.4%至2.9%，且不改动编码器与L
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [EMODE: Dynamic Para-Semantic Experts for Emotion-Aware Speech Language Modeling](https://arxiv.org/abs/2610.06956)
+
+- **方向**：语音大模型；**作者**：Jianan Pan、Yiwen Gu、Xinze Li、Rui Wang、Kejie Huang；**机构**：浙江大学（杭州）；**发布日期**：2026-10-07 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
+- **一句话贡献**：大型语音-语言模型在跨模态理解与生成上表现强劲，但情感等副语言信息难以保留：单一纠缠声学表征使语言模型过度依赖转写出的词汇内容走捷径。本文提出情感感知语音语言模型 EMODE，核心模块为动态副语义专家 DPSE，将连续语音特征解耦为语义与副语言双通路，动态路由后融合再送入语言模型；配合三阶段课程训练与正交专家引导、语义-声学对齐、门控多样性正则三项约束。在九数据集 SER、SpeechAlpaca
+- **关键技术点**：现有语音连接器以语义转写为优化目标，情感隐含在单一表征中易丢失；模型可用词汇捷径完成情感任务，缺少对韵律、音色等声学证据的真正依赖，且自然带情感标注的对话语料稀缺。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无（已被 ACM Multimedia 2026 接收）
+
+---
+## [Hiding Tool Latency in On-Device Cascaded Voice Agent through Speculative Execution](https://arxiv.org/abs/2610.07641)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
+- **一句话贡献**：本文针对端侧级联（ASR-LLM-TTS）语音智能体中工具延迟串行暴露的问题，提出投机式工具执行框架。核心思想是利用流式ASR的部分识别假设，在用户尚未说完时提前预测并发起高延迟只读工具（如网页搜索）调用，将结果缓存并直接注入LLM提示，把工具延迟隐藏在用户说话时间内。方法由规则预测器、缓存校验回退与LLM自主回退三重机制组成，保证最坏情况不劣于串行基线。在完整实现的Android语音助手真机实测
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SkillFormer: Skill-Decomposed Adaptation for Audio Language Models](https://arxiv.org/abs/2610.07533)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
+- **一句话贡献**：音频大模型需同时掌握音高对比、说话人计数、音乐节奏估计、情感识别等数十种技能，联合训练存在明显的技能干扰：提升一项往往以牺牲另一项为代价。本文提出 SkillFormer，将音频理解为技能分解式适配问题：把不同技能路由到不同的低秩适配器参数上，推理时由问题条件路由器动态选择并加权组合 K=6 个技能专属 LoRA，使音高查询与曲风分类走不同参数路径。交替训练调度先让各适配器在专属技能簇上独立专精，
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
