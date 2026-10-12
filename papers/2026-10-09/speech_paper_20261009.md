@@ -1,220 +1,337 @@
 # 2026-10-09 语音论文速递
 
-**共收录**: 25 篇 | **语音大模型**: 19 篇 | **语音前端**: 6 篇
+**共收录**: 23 篇 | **语音大模型**: 14 篇 | **语音前端**: 9 篇
 
-> 目标日期 2026-10-09（北京时间）arXiv 语音相关论文共命中 25 篇。
+> 目标日期 2026-10-09（北京时间）arXiv 语音相关论文共命中 23 篇。
 > 以下是按评分排序的结果。
 
-### 速递说明
-
-本批次精选前 15 篇进行完整模板精读，按评分由高到低排序；其余 10 篇论文仅列出基础信息（标题 / arXiv ID / 方向 / 评分 / 链接），未展开精读。
-
 ---
 
-## Conversational Voice Aesthetic Model with Reinforcement Learning from Human Listeners
+## 语音大模型
 
-**arXiv ID**：arXiv:2610.10868 | **方向**：语音大模型
+## 1. MiDashengLM-Spatial: Unifying General Audio Understanding and Spatial Awareness
 
-**作者**：Xilin Jiang, Shun Zhang, Tejas Jayashankar, Yinghao Aaron Li, Osama Hanna
+**arXiv ID**：2610.11156 | **方向**：语音大模型
 
-**机构**：Columbia University、Meta Superintelligence Labs
+**作者**：Jinbo Hu, Hang Su, Lichun Fan, Heinrich Dinkel, Jian Luan, Cong Zou, Heng Qu 等
 
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10868 | **PDF**：https://arxiv.org/pdf/2610.10868.pdf | **代码**：暂无 | **Demo**：暂无
+**机构**：小米集团（Xiaomi Inc., China）
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11156 | **PDF**：https://arxiv.org/pdf/2610.11156.pdf | **代码**：https://github.com/xiaomi-research/midashenglm-spatial | **Demo**：暂无
 
 ### 📌 简介
-本文提出基于Qwen2.5-Omni 7B的对话语音审美模型CVAM，给定上文语境与真实或合成应答语音，输出四段证据化描述与九个类别标签（性别、音高、语速、情绪、delivery）。针对情绪/delivery等主观维度缺乏确定真值的问题，团队对CANDOR衍生3k条应答采集每条约10份人工投票，先以30k条Gemini 3.1 Pro合成标注SFT，再用GRPO对齐人类投票分布。最终感知字段平均macro-F1达50.1%，超过Gemini 3.1 Pro（44.2%）与各开源语音LLM，并高于单个标注者对其余人的平均一致性（43.5%）。
+主流LALM基于单声道训练、丢失声道间空间线索，专用空间音频大模型又牺牲通用理解能力。本文提出首个开源端到端统一音频大模型MiDashengLM-Spatial（7B），在MiDashengLM上以层级语义-空间条件（HSSC）单向双分支编码器接入Spatial-Dasheng，并构建约1.3万小时双耳合成数据管线。其STAR-Bench SR子集准确率70.3%（最强基线Gemini-3.6-Flash仅47.0%）、MMAU-Pro空间子集55.4%，单声道基准与8B级SOTA相当。
 
 ### 🔧 技术方案
 
-**问题背景：** 现有语音质量度量与LLM评判（AudioJudge、WavReward、SpeechJudge等）多为孤立话语级判断，忽视情绪、delivery等属性依赖对话上文；同时人类感知主观不一致，单点标签无法刻画群体分布，合成标注还会继承LLM标注者的失准。
+**问题背景：** 主流LALM处理多通道音频时折叠声道维度（如跨通道平均），丢失空间感知所需线索；现有空间大模型（BAT/OWL等）需大量架构改造并在空间数据上微调，损害通用音频理解能力，且闭集标签限制了对复杂空间场景的开放描述。
 
-**模型架构：** CVAM以Qwen2.5-Omni 7B为骨干，输入3–30秒语境语音与应答语音，禁用talker头、仅用thinker输出JSON（四描述+九标签）。客观标签由工具测定：Praat取F0（均值阈值[100,150,200,250] Hz、标准差[2,3,4,5]半音）、faster-whisper-large-v3转写加NeMo强制对齐得音素速率[7,9,11,13]/s。
+**模型架构：** 7B LLM加双分支音频编码器。语义分支为未改动的32层Dasheng语义编码器处理单声道音频；空间分支为12层Spatial-Dasheng，基于MAE预训练的帧级ViT，前置轻量CNN将多通道特征融合为单通道，采用multi-ACCDOA输出（N条轨道，每帧输出活动耦合DOA向量与距离），实现重叠声源帧级检测、定位与运动跟踪。HSSC将语义分支每8层中间表示经MLP适配器单向注入空间分支每3层（共4处），末端融合为统一音频token E_Audio=E_Sem+Adapter(E_Spa)送入LLM。
 
-**核心创新：** (1) 真实与合成同标准评测数据：CANDOR每条真实应答经Qwen3-TTS扩展voice-clone与voice-design版本使数据三倍，voice-design由Qwen3-Omni按统一采样的情绪/唤醒度/温暖度/自信度标签生成prompts，补足罕见情感覆盖。(2) 两阶段后训练：先在30k合成标注上SFT建立输出格式与描述能力，再在1.5k人类投票数据上RL，兼避纯合成失准与纯人类数据饥饿。(3) 留一法分布奖励：G=16 rollouts，感知奖励为φ=-∂D(p,q)/∂q(c)，即以人类对该标签的支持度对比其余rollout（排除自身、λ=1拉普拉斯平滑）的频率，奖励稀有标签、抑制过产标签；对比Frac/TVD/前向KL/反向KL四类奖励。
+**核心创新：** (1) HSSC层级语义-空间条件：语义中间表示逐层注入空间分支对应深度，为重叠声源建立语义-空间关联；单向设计保持语义分支前向结构不变，消融显示优于双向连接方案。 (2) Spatial-Dasheng空间编码器：在MAE预训练编码器上引入多通道CNN融合与multi-ACCDOA帧级输出，并以排列不变训练（PIT：ACCDOA用MSE、距离用MAPE）解决轨道错位，实现重叠声源帧级检测与DOA/距离估计。 (3) 可扩展空间数据合成管线：镜像源法预计算数千房间RIR并叠加HRTF渲染含静态/移动声源（最多3个重叠）的双耳场景，LLM合成场景级空间描述，元数据确定性构造多选空间QA，共100万片段、600万QA、约1.3万小时。
 
-**训练策略：** 两阶段均LoRA（rank 32、α=64）调thinker全部线性层，冻结音频编码器与aligner；各训1 epoch，cosine调度+5% warmup，bfloat16；SFT lr=1e-4（2×8 A100），GRPO lr=1e-5（4×8 A100），rollout温度1.0，对冻结SFT策略KL系数β=0.04；性别+四客观标签用accuracy reward占5/9，四感知字段占4/9；框架为ms-swift+vLLM加速rollout。
-
-### 📊 实验结果
-**数据集**：CANDOR英语自然对话语料，10k+0.5k训练与0.5k测试turn（×3版本=30k合成标注样本；1.5k+1.5k条人工标注，平均9.7/9.8票，测试集14,664条judgment/字段）
-
-**主要指标**：
-- 感知平均macro-F1：50.1%（SFT_synth+GRPO前向KL），Gemini 3.1 Pro为44.2%、单人对其余43.5%、Qwen2.5-Omni基座31.1%
-- 感知平均accuracy：77.8%（Frac奖励，最高acc）对Gemini 60.2%
-- 分字段F1（KL模型 vs Gemini）：Emotion 40.5 vs 37.9、Arousal 59.3 vs 46.3、Warmth 51.9 vs 44.4、Confidence 48.6 vs 48.4
-- 客观字段（不注入工具测量）：性别Acc 99.0、音高均值73.1、语速71.2
-- 关键对比：比最强基线Gemini 3.1 Pro提升约5.9pp macro-F1，且超出人类单体一致性水平
-
-**是否开源**：暂无（论文未给出代码或Demo链接）
-
-### ⭐ 评分：8/10
-评分理由：将语音审美描述纳入对话语境并以人类群体投票分布为对齐目标，留一法分布奖励推导严谨，且用Frac与KL奖励实证了 Majority精度与稀有类覆盖的权衡，方法论贡献清晰。实验含多基线、奖励消融、真实/克隆/设计版本分解与混淆矩阵分析，"超单人一致性"的结论尤有说服力。局限在于仅英语CANDOR单一语料、测试规模1.5k、模型数据未开源，落地复用成本较高。
-
----
-
-## DuplexAgent-RSI: Recursive Harness Improvement for Full-Duplex Voice Agent Collaboration
-
-**arXiv ID**：arXiv:2610.11299 | **方向**：语音大模型
-
-**作者**：Yingda Shen, Yuxiang Wang, Kunyu Feng, Qinke Ni, Jiaqi Li, Minghao Hsu, Junan Zhang, Dekun Chen, Yutong Bian, Zhizheng Wu
-
-**机构**：The Chinese University of Hong Kong, Shenzhen；Amphion Technology Co., Ltd
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11299 | **PDF**：https://arxiv.org/pdf/2610.11299.pdf | **代码**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/ | **Demo**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/
-
-### 📌 简介
-全双工语音智能体常把交互模型与长时任务的协调耦合进启发式harness，故障难归因、修复难验证。本文提出DuplexAgent：全双工模型驻守实时通道，推理LLM与编码智能体委托池处理复杂任务，harness拆为Policy/Intake/Hold/Worker/Deliver/Memory六个可编辑模块；并提出Duplex-Harness-RSI闭环，由模拟器生成定时测试与失败轨迹，同一池兼任Exam Planner与Harness Editor修订模块。VoiceChat上十轮RSI把固定核心协作分从54.6升至85.3，BFCL均分75.8，超越同接口委托基线。
-
-### 🔧 技术方案
-
-**问题背景：** 全双工模型能持续听说但推理与工具能力有限，编码智能体可长程执行却顾不了实时通道；Qwen-Audio-Agent、Realtime-Venus等方案把接受、更新、取消、交付决策耦合进系统特定启发式，故障难归因到环节，有界修复难隔离、评估与迁移。
-
-**模型架构：** 系统S=(F,B,H)：F为全双工交互模型（VoiceChat-11B或Qwen-Realtime），B为推理LLM+编码智能体委托池，H为六模块harness——Policy决定回答/委托/任务控制路由，Intake解析请求并关联活跃任务，Hold维护回执与进度，Worker选择delegate与结果契约，Deliver控制返回时机，Memory共享对话与后台上下文；辅以任务账本session engine与模型adapter。
-
-**核心创新：** (1) 六模块把故障归因到有界可编辑面，Diagnoser从trace输出失败签名(cause,module,pattern)，区分任务未更新与旧结果误交付，修复变为可检验假设。(2) 同一池兼任改进角色：Exam Planner按归因与repair archive在19种请求类型×22种交互模式上加权重排考试（固定核心40%、每轮30新变体），Harness Editor每轮出3个候选、至多2次细化。(3) 可验证保留：配对wins/losses依次过development/protection两道gate并检查六条协作不变量，被拒候选存档防重复犯错。
-
-**训练策略：** 全程不更新模型权重；DeepSeek-v4-flash生成测试内容，Qwen3-TTS合成多风格语音并加噪声与信道增广，composer在实时时间轴注入轮次与延迟/失败，按60/20/20切分dev/protection/sealed三集，VoiceChat与Qwen-Realtime各跑独立战役。
+**训练策略：** 三阶段课程：Stage I在合成SELD数据上预训练Spatial-Dasheng（帧级活动+DOA+距离，不建模声源类别，PIT损失）；Stage II用其初始化空间编码器并在空间音频-文本对（事件级+场景级）上微调；Stage III在单声道+双耳全量数据上整体微调并侧重空间QA。学习率/优化器/轮数/batch等超参数未单独披露，沿用MiDashengLM；音频统一16kHz、限60秒，双通道64-bin log-mel（512点Hann窗、hop 160）。
 
 ### 📊 实验结果
-**数据集**：VoiceBench（OBQA、MMSU），BFCL-v3（5个单轮子集），FDB-v3（不流畅语音工具调用），FDB-v1（pause/turn/interrupt），均为百分比口径。
+
+**数据集**：SELD：EasyCom、MRSSound、STARSS23立体声版（真实录音）及合成双耳测试集；空间理解：MMAU-Pro空间子集、STAR-Bench SR子集（真实录音）；通用音频覆盖MMAU、MuChoMusic、MusicQA、LibriSpeech、AISHELL-2、GigaSpeech2、MusicCaps等；训练源音频来自ACAVCaps、AudioCaps、LibriSpeech等。
 
 **主要指标**：
-- BFCL-v3均分：90.8%（Qwen-Realtime）、75.8%（VoiceChat），vs 独立模型82.0/53.5、Qwen-Audio-Agent 80.8/24.9
-- FDB-v3 Pass@1：49.0%（Qwen-Realtime）、47.0%（VoiceChat），比Qwen-Audio-Agent高19.0与42.0个百分点
-- OBQA/MMSU：92.1%/82.7%（Qwen-Realtime）、80.6%/80.5%（VoiceChat）
-- 中断TOR：0.97（Qwen-Realtime）、0.965（VoiceChat）
-- harness消融：VoiceChat固定核心Q从54.6到85.3，高于顺序编辑23.4分、one-shot编辑27.9分；Qwen-Realtime从g0 47.1到g8 84.8
+- STAR-Bench（SR）空间准确率：70.3%（最强基线Gemini-3.6-Flash 47.0%，+23.3个点）
+- MMAU-Pro空间子集准确率：55.4%（Gemini 48.3%，提升7.1；单声道开源大模型26.8%-43.1%）
+- STAR-Bench通道交换ACR：72.6%（随机11.1%，其他LALM 0-17%）
+- EasyCom SELD F45°/1：31.6（PSELDNets 26.1，+5.5）；MRSSound F45°/1：26.4（+10.5）
+- 空间QA（纯多通道训练）：总体准确率OV1为80.6%、OV2为66.9%（随机28.8%），三轴位置精确匹配F分数44.7%升至50.8%
+- 通用音频：MuChoMusic 76.7、MusicCaps FENSE 60.0、LibriSpeech test-clean WER 1.8%，与8B级SOTA相当
 
-**是否开源**：项目主页与代码入口均为 https://amphionteam.github.io/DuplexAgent-RSI-Demo/ ，论文称实验采用已发布实现的默认配置。
+**是否开源**：代码与模型权重已开源 @ https://github.com/xiaomi-research/midashenglm-spatial （HuggingFace: mispeech/midashenglm-spatial）
 
 ### ⭐ 评分：8/10
-评分理由：将全双工协作从模型能力问题重构为harness工程问题，模块化解耦加证据驱动的递归修复是系统性创新，双交互模型上外部基准、消融与逐模块归因证据链完整，对语音智能体落地价值高。不足是改进依赖强外部LLM与编码代理，模拟器自建Q指标与外部基准不可直接比较，且synthetic pause TOR出现回退，属有实质贡献的系统型工作。
+评分理由：首个开源端到端统一"通用理解+空间感知"音频大模型，单向HSSC设计精巧、消融充分，1.3万小时合成数据管线可复现、实用价值高。空间基准大幅超越最强基线，通道交换实验严谨验证双耳线索依赖，SELD的sim-to-real泛化亦有实证。扣分项：细粒度空间能力偏弱（运动轨迹精确匹配低于20%、OV2空间计数39.5%），超参数披露不足。
 
----
+## 2. DiffuPlex: Accelerating Full-Duplex Spoken Dialog Models via Rolling Masked Diffusion
 
-## DiffuPlex: Accelerating Full-Duplex Spoken Dialog Models via Rolling Masked Diffusion
-
-**arXiv ID**：arXiv:2610.12214 | **方向**：语音大模型
+**arXiv ID**：2610.12214 | **方向**：语音大模型
 
 **作者**：Heeseung Kim
 
-**机构**：Department of Artificial Intelligence, University of Seoul（韩国首尔）
+**机构**：首尔大学人工智能系（韩国首尔）
 
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.12214 | **PDF**：https://arxiv.org/pdf/2610.12214.pdf | **代码**：暂无 | **Demo**：https://diffuplex.github.io/
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.12214 | **PDF**：https://arxiv.org/pdf/2610.12214.pdf | **代码**：暂无（拟评审后开放） | **Demo**：https://diffuplex.github.io/
 
 ### 📌 简介
-细粒度全双工语音对话模型（Moshi、PersonaPlex 系列）每 80ms 交互帧都必须执行一次时间骨干自回归前向，计算量随对话时长线性增长。本文提出 DiffuPlex 滚动掩码扩散框架：每次"骨干唤醒"用可学习 MASK token 并行预测未来最多 W=16 帧的用户与助手流，仅消费高置信前缀并按原帧率播放；当真实用户输入偏离预测时，保留已播放内容、只修订未播出未来。在 Full-Duplex-Bench v1.0 上 Listen/Speak 两策略平均每唤醒推进 1.91/2.23 帧，取得 1.46x/1.59x 部署路径墙钟加速与 1.61x/1.80x Core LM 加速，唤醒帧 p99 延迟全部低于 80ms；Listen 基本保持音质与对话质量（NMOS 3.92 对基线 3.93）。
+全双工语音对话模型（Moshi、PersonaPlex等）每80ms交互帧都需调用一次时间骨干网络，逐帧自回归推理成为部署瓶颈。本文提出DiffuPlex滚动掩码扩散框架：每次骨干"wake"用流专属MASK token一次性预测多个未来用户/助手帧，仅消费高置信前缀，若用户实际输入偏离预测则只修订未播放的未来部分。基于personaplex-rl-seamless骨干，Listen与Speak两种推理策略平均每次wake推进1.91/2.23帧，实现1.46×/1.59×部署墙钟加速与1.61×/1.80×核心语言模型加速，所有骨干调用均在80ms内完成；人评显示Listen的语音自然度（NMOS 3.92）与对话质量（DMOS 4.08）基本无损。
 
 ### 🔧 技术方案
 
-**问题背景：** 现有端到端全双工模型以 12.5Hz（每帧 80ms）逐帧自回归推进骨干，即使实测 95.3% 活跃对话时间仅单方在说话；粗粒度 chunk 序列化方法虽省电计算，但牺牲对打断、重叠、backchannel 的即时反应能力。
+**问题背景：** 现有全双工语音模型采用单流序列化或并行用户/助手双流，每80ms交互帧都要前向一次时间骨干（Moshi、PersonaPlex均如此）；细粒度利于响应打断与附和，但逐帧顺序计算使累计GPU开销极高。而双人对话中95.3%时间为单说话人，未来帧本可联合预测，但全双工场景验证助手草稿所需的用户语音尚未到达，使投机解码难以直接迁移。
 
-**模型架构：** 基于 personaplex-rl-seamless 骨干（Mimi 8 码本×双流 17 路输入流、12.5Hz、80ms 交互网格）。每次唤醒按各流原生延迟的"阶梯式"规则将尚不可用的未来输入替换为流专属可学习 MASK，一次前向同时预测 W=16 个未来位置的用户与助手流，depth transformer 仍在帧内对码本保持自回归。训练采用 block diffusion 的 clean-context 布局：干净序列与按均匀采样块长 1..W 平铺的掩码副本拼接。骨干完全冻结，仅训练 MASK 嵌入与未来门控 LoRA（rank 128、scale 2.0、门控 g(h)=1[h>=2]，同时作用于时间骨干与 depth transformer），h=1 保持原始自回归路径。
+**模型架构：** 骨干为personaplex-rl-seamless（PersonaPlex的强化学习后训练版，Moshi式架构，12.5Hz即80ms/帧，17流布局：1条助手文本流+用户/助手各8个Mimi音素代码本，其中cb0为语义码、cb1-7为声学码），由时间骨干建模交互序列、深度Transformer帧内自回归解码音频代码本。DiffuPlex冻结骨干，仅训练流专属MASK嵌入与未来门控LoRA（rank 128，门控g(h)=1[h≥2]，深度Transformer同步施加同门控）。数据流：每次backbone wake将不可用的未来流按角色与原生延迟阶梯式替换为MASK，联合预测W=16个未来位置（h=1保持原自回归路径，h≥2走学习得到的扩散路径），输出助手草稿与用户预测；草稿高置信前缀按原80ms速率播放，用户预测存储备查，新到达用户帧触发校验与修订，实现"预测-消费-修订"滚动循环。
 
-**核心创新：** (1) 全双工场景的联合掩码未来预测：区别于文本投机解码和 VocalNet-MDM 等语音块扩散（更远输出可由已有输入推出），全双工对话的助手未来依赖尚未到达的用户语音，DiffuPlex 将用户流与助手流在同一未来区间联合预测，使用户预测可稍后充当草稿一致性校验依据。(2) 滚动草稿生成与双保留策略：按置信度 C_h=softmax(z_h) 前缀保留，阈值 τ_conf=0.80，h=1 恒保留保证每唤醒至少推进一帧；Listen 仅在预测助手状态保持 PAD（持续聆听）时消费未来（最短保留 m=6），Speak 放宽至 EPAD/词元状态（m=2），形成"保守省时"与"激进省时"的两档推理策略。(3) 用户感知草稿修订：唤醒时存下用户分布 q_h，实际用户语义 token 到达后无需再唤醒即可校验，按近似后验几率分数 -log q_h(x_h)+log P_h(A_h(y_h))-log P_h(y_h) >= τ_rev=-0.5 触发修订；已播出助手音频全部保留，仅丢弃未播出未来从最新交互状态重新唤醒预测，保证交互连续性与实时节拍。
+**核心创新：** (1) 掩码未来预测与蒸馏训练：用变长块（L_blk从{1..W}均匀采样）clean-context拼接构造训练序列，以冻结自回归模型为teacher，对文本token与PAD/EPAD/词法三态分布及Q个音频流加权KL蒸馏对齐掩码学生路径；与投机解码用小模型draft、PredGen等将计算前移但序列仍逐帧自回归不同，此处骨干自身在单次前向中并行预测多个未来交互帧。(2) 滚动草稿生成（Rolling Draft Generation）：按策略允许的状态集合与置信度C_h=softmax(z_h)的y_h≥τconf(=0.80)保留最长连续前缀，Listen仅限PAD静音态且最小保留长度m=6，Speak允许全部状态m=2；h=1恒保留保证每次wake至少推进一帧，保留前缀播放期间不再唤醒骨干，仅存储对应用户预测。(3) 用户感知草稿修订（User-Aware Draft Revision）：以-log q_h(x_h)+log P_h(A_h(y_h))-log P_h(y_h)≥τrev(=-0.5)触发修订，该判据近似保留/修订假设的后验赔率检验；触发时丢弃全部未播放未来并从更新后的交互上下文重新唤醒骨干，已播放助手内容与已收用户帧完整保留，避免重播已输出音频。
 
-**训练策略：** 以冻结 AR 骨干在干净序列上的分布为教师，对掩码学生做 KL 蒸馏，覆盖助手文本、PAD/EPAD/lexical 三态分组分布（与文本 KL 等权以保对话动态）、音频码本（说话人语义 cb0 权重 1，cb1–7 权重 0.02）。数据为 Seamless Interaction 面对面双通道对话，重采样 24kHz、Qwen3-ASR-1.7B 转写、ForcedAligner-0.6B 词级对齐、Silero VAD 与串扰/单边/低语音密度过滤后保留 42,413 会话共 2,728.5h（双声道角色互换得 84,183 例）。窗口上限 2,048 时间位（约 163.8s）；AdamW，lr 1e-4、wd 0.1、梯度裁剪 1.0、OneCycle 15% 预热+bfloat16+梯度检查点，每卡 batch 4、梯度累积 2、4 张 RTX A6000（有效 batch 32），训练 526 步、消耗 16,832 窗口约 702h 音频，取第 526 步检查点。
+**训练策略：** 数据为Seamless Interaction面对面双人语料（原始4000+h、4000+说话人），双声道联合处理保持原始停顿/重叠/打断时序；24kHz重采样、Qwen3-ASR-1.7B转写、Qwen3-ForcedAligner-0.6B词级对齐、Silero VAD、Mimi编码为12.5Hz×8代码本；实际训练16,832窗口（来自8,480个session，约702h对话音频）。损失为掩码蒸馏KL（文本token KL+三态文本KL+音频流加权KL）。AdamW，学习率1e-4，权重衰减0.1，梯度裁剪1.0，OneCycle调度（15% warmup+余弦衰减），bfloat16+梯度检查点，单卡batch 4×2梯度累积×4块RTX A6000（等效batch 32），共526步，W=16，LoRA rank 128。
 
 ### 📊 实验结果
-**数据集**：Full-Duplex-Bench v1.0/v1.5、VoiceBench、OpenAudioBench；60-clip 固定运行时子集（单张 NVIDIA RTX A6000 测速）
+
+**数据集**：Full-Duplex-Bench v1.0（停顿/附和/轮替/打断四类）与v1.5（重叠、干扰语音）；VoiceBench、OpenAudioBench（通用语音能力，s→t与s→s口径）；固定60片段运行时子集（单卡RTX A6000，每类15条）。
 
 **主要指标**：
-- 每唤醒平均推进帧数 c：1.91（Listen）/ 2.23（Speak），自回归基线为 1.00
-- 部署路径墙钟加速：1.455x（Listen）/ 1.590x（Speak）；Core LM 加速：1.608x / 1.797x，对 RL-Seamless 基线净省 248s/291s
-- 唤醒帧墙钟 p99：61.34ms / 61.41ms，超 80ms 帧占比 0%
-- 人评 NMOS：3.92±0.11（Listen，基线 3.93±0.12，仅差 0.01）；Speak 3.54±0.12（降 0.39）；DMOS：4.08±0.13 对 4.09±0.14
-- VoiceBench s→t：31.93（Listen）对骨干 31.95，通用语音能力基本无损
-- 关键对比：免训练 deferred 基线 R=6 时 PAD 达 2.05x 墙钟加速但 backchannel 频率从 0.163 跌至 0.048、轮换延迟从 0.124s 恶化至 0.423s，DiffuPlex 以约 1.5x 换取交互行为近乎保持
+- 骨干调用效率：Listen/Speak每次wake推进1.91/2.23帧（AR为1.00）
+- 部署墙钟加速：1.455×/1.590×；端到端GPU加速1.458×/1.593×
+- Core LM累计耗时：656.8s降至408.4s/365.5s，加速1.608×/1.797×
+- 实时性：wake帧p99延迟61.34ms/61.41ms，超80ms窗口的帧占比0%
+- 人评：Listen NMOS 3.92±0.11、DMOS 4.08±0.13（基线3.93±0.12/4.09±0.14）；Speak DMOS 4.07±0.13但NMOS降至3.54±0.12
+- 通用能力：VoiceBench s→t 31.93（Listen）/31.20（Speak）对基线31.95；OpenAudioBench s→s 33.53/32.12对34.03
+- 关键对比：相比最强基线personaplex-rl-seamless，Listen在Core LM 1.608×加速下各交互指标与基线无显著差异（Holm校正）；免训练延迟执行PAD基线（R=6）墙钟达2.05×但附和频率从0.163跌至0.048、轮替延迟由0.124s增至0.423s，劣于DiffuPlex
 
-**是否开源**：代码与权重暂未开源（工件表仅列外部依赖），匿名演示页 https://diffuplex.github.io/ 提供音频样例与定性 Demo
+**是否开源**：代码暂未开源（宣布评审后发布实现与评测脚本），Demo页可用 @ https://diffuplex.github.io/
 
 ### ⭐ 评分：8/10
-评分理由：把掩码扩散的并行预测迁移到"验证所需的用户未来尚未到达"这一全双工特有约束，用户-助手联合预测加深存草稿修订规则是真正针对该场景的设计创新；基准、人评、运行时三线验证完备，80ms 实时性论证扎实且 ablation 充分。不足在：1.5x 级绝对加速幅度有限，Speak 策略的 NMOS 明显退化暴露省时与音质权衡未解决，且无代码开源复现门槛较高，单作者工作。整体属系统向的实质性贡献，对全双工语音推理效率研究有直接参考价值。
+评分理由：将滚动掩码扩散与置信修订机制迁移至全双工语音对话，思路新颖且机制自洽，系统性解决了逐帧骨干调用瓶颈。实验非常充分，覆盖全双工两个版本基准、通用能力、人评、运行时测量及大量消融与配对统计检验。加速幅度约1.6倍属务实改进，且Speak策略语音自然度下降、方法绑定特定骨干未跨架构验证，故未达突破性顶会水准，为高完成度的实质贡献。
 
----
-
-## Edit Who Speaks, Control How They Speak: Global Timbre Editing and Local Instruction Control for TTS
+## 3. Edit Who Speaks, Control How They Speak: Global Timbre Editing and Local Instruction Control for TTS
 
 **arXiv ID**：2610.11437 | **方向**：语音大模型
 
 **作者**：Junchuan Zhao, Chenglin Xu, Wei Zeng, Haoyang Li, Yiwen Guo, Ye Wang
 
-**机构**：新加坡国立大学、LIGHTSPEED、南洋理工大学、独立研究者
+**机构**：新加坡国立大学（NUS）、LIGHTSPEED、南洋理工大学（NTU）、独立研究员
 
 **发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11437 | **PDF**：https://arxiv.org/pdf/2610.11437.pdf | **代码**：暂无 | **Demo**：https://danny-nus.github.io/EDICT-demopage/
 
 ### 📌 简介
-指令式TTS的语音克隆与声音设计两类接口都无法对给定参考音色做"相对编辑"，且句级指令对内部各文本段的语气措辞欠规定。EDICT以两级级联统一全局音色编辑与局部指令控制：可训练的音色编辑器在codec token空间生成编辑后参考，作为全句共享的语音锚点；冻结的TTS主干逐段生成并在指令边界重建KV缓存刷新条件。在自建TimbreEdit-Bench与IntraTTS-Bench上，目标相似度WavLM SIM-T达0.819、段级指令准确率82.30%，分别超最强基线0.118与8.05个百分点。
+本文针对TTS中"全局音色编辑+局部表达控制"的双重瓶颈：现有接口只能克隆参考声音或用文本描述新声音，无法直接编辑给定参考音色并用其合成；整句级指令也无法对应到不同文本片段。提出EDICT框架：第一阶段训练1.7B音色编辑器，按九维属性相对编辑指令在codec空间生成经编辑的参考音色；第二阶段在冻结TTS骨干的段落边界重建KV缓存实现局部指令控制并抑制控制泄漏。在自建TimbreEdit-Bench与IntraTTS-Bench上，EDICT取得最高目标相似度SIM-T 0.793/0.648与类别编辑准确率91.7%，Stage II的SegAcc达82.3%、过渡质量82.0%，分别较TED-TTS高约8pp与4pp。
 
 ### 🔧 技术方案
 
-**问题背景：** 现有可控TTS要么声学克隆、要么文本造声，缺少以参考为基准"改指定属性、保留未提及属性"的编辑接口；句内分段控制上，TED-TTS的掩蔽不刷新声学历史，缓存KV携带前段条件导致控制泄漏，全部保留会削弱新指令、全部丢弃又失去自然衔接。
+**问题背景：** 现有声音指定接口分为声音克隆（声学参考）与声音设计（文本描述）两类，均无法直接修改给定参考音色并用编辑后的新声音合成新文本；多数指令式TTS对整句使用单一prompt，TED-TTS等仅用注意力掩码而不刷新声学历史，旧KV状态把前段条件带入后续片段造成控制泄漏，保留全部历史又会削弱新指令、丢弃又失去连续性所需的上下文。
 
-**模型架构：** 两级级联。可训练编辑器从Qwen3-TTS-12Hz-1.7B-Base初始化并全参微调，输入源参考codec序列、序列化编辑操作与编辑参考文本，输出编辑后codec参考；冻结主干采用Qwen3-TTS-VD并以CosyVoice 2为第二主干，该参考在N个(文本,指令)对间保持不变，逐段生成拼为一条连续codec流再解码波形。推理时Qwen3-14B先把自然请求解析为9类属性操作：性别、年龄、音高域、明亮度、嗓音重量、共鸣焦点、粗糙度、气声、鼻音。
+**模型架构：** 整体为可训练音色编辑器与冻结自回归TTS骨干的两级级联。Stage I：Qwen3-14B在推理时把全局编辑请求解析为九维属性操作（感知性别、年龄印象为类别型，音高区、亮度、声厚、共鸣焦点、粗糙度、气息感、鼻音为三档有序，未提及属性置为<keep>）并序列化为z_edit；编辑器（自Qwen3-TTS-12Hz-1.7B-Base初始化，含codec预测器，全参数训练）以(源参考codec序列, z_edit, 编辑参考文本)为条件生成codec域编辑参考。Stage II：编辑参考全句固定为共享声音锚点，冻结骨干（Qwen3-TTS-VD为主、CosyVoice 2为第二骨干）逐段生成；每个非终<EOS>边界丢弃旧KV缓存，用"新指令+新文本+编辑参考+声学输入前S=4与最近K=5位置"重新prefill，保留声学状态的KV在新条件下前向重算，段内缓存正常增长，各段汇入单一codec流解码为一条波形。
 
-**核心创新：** (1) 操作化音色编辑：未提及属性记为<keep>，等级变化编成<brightness_up_1/2>等有序操作按固定顺序序列化，编辑器在codec空间产出可复用的编辑参考，使"改声"直接嵌入TTS流水线驱动新文本合成，区别于VoxEditor等仅输出编辑语音的语音编辑。(2) 段边界KV缓存重建：非末尾<EOS>触发以新指令与新文本、共享编辑参考及头部S=4、尾部K=5声学token组装fresh prefill，对声学上下文因果前向重算KV，刷新指令条件同时保留有界上下文，主干零额外训练。(3) 双语双基准解耦评测：TimbreEdit-Bench分别考核请求的编辑操作与未提及属性保持，IntraTTS-Bench联合考核局部依从、说话人一致与转换质量。
+**核心创新：** (1) 参考锚定的相对音色编辑：不做绝对目标声音指定，而是相对源声音的逐属性操作（如<brightness_up_1>），由LLM把自由描述映射为结构化操作，<keep>显式保持未编辑属性，输出可复用的codec声音锚点，支持任意新文本与演绎条件的零样本合成，区别于声音克隆（需目标声音样本）与经典语音转换（仅同文本内容）。 (2) 奖励加权DPO后训练（wDPO）：不用人工偏好对，而以生成候选与配对目标声音的WavLM说话人嵌入余弦相似度为奖励，正样本奖励差作偏好对权重，并叠加辅助SFT交叉熵（λ=0.01）稳定对齐目标音色；候选离线采样M=16个且偏好对冻结，避免在线采样开销。 (3) 段边界KV缓存重建：每次指令切换以"新指令+编辑参考+初始S位置+最近K位置"重新prefill并在更新条件下重算保留声学KV，初始上下文保声音身份、最近上下文保续接自然，是有界历史机制；不同于TED-TTS纯掩码（旧缓存仍携带前段条件），消除控制泄漏并支持多次切换，且无需骨干额外训练，可泛化到任意自回归TTS。
 
-**训练策略：** 由5800个九属性音色profile经Qwen3-14B描述、Qwen3-TTS-VD合成中英语音构建1M有向编辑对，200个profile留出且不用于任一侧。SFT 50轮teacher-forced交叉熵（残差码本损失权重0.3、条件dropout 0.1），AdamW，lr 4e-6，有效batch 1024，weight decay 0.1，余弦衰减加10%预热；随后一轮wDPO：20K条件各采M=16候选，以WavLM说话人嵌入与目标的余弦相似定偏好对与权重，β=0.1、辅助SFT系数0.01，恒定lr 1e-6。
+**训练策略：** 编辑器全参数微调：SFT在1M编辑对上训练50 epochs，AdamW，lr 4e-6，有效batch 1024，weight decay 0.1，余弦衰减+10%预热；损失为全部codebook上的teacher-forced交叉熵，残差codebook损失权重0.3，条件dropout 0.1。数据由5,800个九维音色profile（留200个、训练对两侧均排除）经Qwen3-TTS-VD合成中英中性演绎配对语音，编辑操作源自source-target profile差异，覆盖单属性/组合编辑、同异文本、跨语言；再经一轮wDPO：20K训练条件各采样M=16候选，lr恒1e-6，每更新8条件，β=0.1，λ_SFT=0.01。
 
 ### 📊 实验结果
-**数据集**：TimbreEdit-Bench（1955条源-目标编辑对、九类编辑、中英双语）、IntraTTS-Bench（997条含2-3段的句内投递指令请求）
+
+**数据集**：1M合成中英编辑对（训练）；TimbreEdit-Bench：1,955对源-目标、9编辑类别、3名标注员筛选、中英双语；IntraTTS-Bench：997条2-3片段多指令请求、中英双语；另有ESD真人录音参考集与500条MED-TTS。
 
 **主要指标**：
-- SIM-T（WavLM）：结构化/描叙式编辑下EDICT-Stage I为0.819/0.793，Qwen3-TTS-VD为0.701/0.676，Δ（目标减源）转正+0.199
-- Category Acc：89.3%/91.7%，对比CosyVoice 2的57.7%/69.0%
-- SegAcc/EmoAcc/Trans（Qwen3-TTS-VD主干）：82.30%/83.60%/82.00%，较TED-TTS提升+8.05/+9.58/+3.97pt；CosyVoice 2上Trans较Joint提升+12.26pt
-- 联合控制：WavLM SIM-T 0.788、Trans 83.45%、UTMOS 3.795、SIM-I 0.917
-- 主观评测：19人五点制，指令条件下Edit-MOS/S-MOS与Instr-MOS/Trans-MOS均最高，代价是CER由1.1%小幅升至1.8%
+- 音色编辑SIM-T（TimbreEdit-Bench，描述式指令）：EDICT-Stage I 0.793（WavLM）/0.648（ERes2Net），指令条件系统中最优
+- 编辑Δ（目标-源相似度差）：+0.195/+0.207，为唯一输出比源更靠近目标的指令条件系统（Qwen3-TTS-VD为-0.156/-0.279）
+- 类别属性编辑准确率：91.7%（描述式）/89.3%（结构化）；Up/Down方向准确率77.9%/70.8%
+- 句内指令控制（IntraTTS-Bench，Qwen3-TTS-VD）：EDICT-Stage II SegAcc 82.30%、EmoAcc 83.60%、Trans 82.00%、SIM-I 0.915
+- 联合控制（EDICT全流程）：SIM-T 0.788/0.609最高、SIM-I 0.917、UTMOS 3.795、DNSMOS 3.921最高
+- 关键对比：相对最强局部控制基线TED-TTS，Stage II的SegAcc提升+8.05pp（Qwen3-TTS-VD）与+2.46pp（CosyVoice 2），Trans提升+3.97pp与+12.26pp
+- 代价：WER/CER较Joint设定升高（英文WER 3.8→5.1、中文CER 1.3→1.8），说话一致性保持（SIM-I 0.915 vs 0.922）
 
-**是否开源**：代码暂未开源，音频演示见 https://danny-nus.github.io/EDICT-demopage/
+**是否开源**：代码未开源，仅提供参考音频demo页。
 
-### ⭐ 评分：7/10
-评分理由：首个把参考相对音色编辑与句内分段指令控制统一进同一TTS流水线的框架，KV缓存重建免训练且在两个主干上验证有效，客观、主观与消融较完备。不足在于训练数据与基准全由Qwen3-TTS-VD自合成、偏好奖励又取自带评测的WavLM嵌入，存在循环偏置风险；属性保持仍落后Qwen3-TTS-VD，内容准确率有小幅退化，且代码未开放，复现受限。
+### ⭐ 评分：8/10
+评分理由：问题定义新颖，首次统一全局参考音色编辑与局部分段指令控制，KV缓存重建设计巧妙，免骨干训练且验证于两个骨干，消融确认初始/最近上下文互补作用；自建双基准加客观指标、Gemini评审与19名听感主观三重评测，实验充分。不足在于训练数据与基准均为合成语音，真实泛化仅在ESD上有限验证，内容保真有可见代价（英文WER 3.8→5.1），且代码未开源。整体是扎实实用的方法论贡献。
 
----
+## 4. Listen-to-Reason: Listen with Experts, Retrieve over a Graph, Reason with LLMs
 
-## Monaural Continuous-Radius Regional Speech Extraction with Cross-Radius Consistency Learning
+**arXiv ID**：2610.10749 | **方向**：语音大模型
 
-**arXiv ID**：arXiv:2610.11507 | **方向**：语音前端
+**作者**：Pooneh Mousavi, Mirco Ravanelli, Cem Subakan
 
-**作者**：Biao Dong, Jie Chen, Jianwei Fang, Wei Xiao, Jiqing Han, Yongjun He
+**机构**：Concordia University; Mila – Quebec AI Institute（Subakan 另属 Laval University）
 
-**机构**：哈尔滨工业大学计算学部、中国联合网络通信（北京）
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11507 | **PDF**：https://arxiv.org/pdf/2610.11507.pdf | **代码**：https://dongb001.github.io/CRadius-RSE/ | **Demo**：https://dongb001.github.io/CRadius-RSE/
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10749 | **PDF**：https://arxiv.org/pdf/2610.10749.pdf | **代码**：https://poonehmousavi.github.io/listen-to-reason/ | **Demo**：https://poonehmousavi.github.io/listen-to-reason/
 
 ### 📌 简介
-本文研究单通道条件下的连续半径区域语音抽取：以麦克风为圆心、查询半径为边界，保留半径内全部说话人语音并抑制半径外语音。现有单通道距离方法只能做固定阈值（DSS）或本地距离窗（QD-TSE）抽取，难以用单一模型对0到4米内任意半径做连续累积区域控制。作者将查询半径编码为连续标量并经FiLM注入TF-GridNet式时频网络，提出跨半径一致性学习（CRC），利用目标说话人集合的嵌套不变性稳定相邻半径预测。在dEchorate实测RIR上取得SI-SDR 29.25 dB、SI-SDRi 4.40 dB、衰减62.01 dB、RCE 0.46%，全面优于基线。
+LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重训，且答案无法追溯到所听内容。本文提出Listen-to-Reason（L2R）：四级多模态知识树（39属性/363类/668叶）加冻结专家编码器上的小路由头，把音频块映射为可命名树节点，与ASR转写拼成文本上下文，由冻结纯文本LLM作答，任意图灵能替换reader，新域只需训练一个小头。7B reader在SAKURA达80.1%超越所有对比LALM（最佳73.3%），MMAU/MMAR仅落后6.8/12.0分，且仅训练7.7M参数（约为Omni-7B的1/1400）；新域每类5条样本即超过QLoRA微调13–26分。
 
 ### 🔧 技术方案
 
-**问题背景：** 传统目标说话人抽取依赖声纹注册，目标未知或动态变化时灵活性差；基于声源-麦克风距离的单通道方法DSS仅支持近/远固定阈值切换，QD-TSE只抽取局部距离窗内说话人，均无法直接建模以麦克风为中心的累积区域；已有区域抽取方案多依赖麦克风阵列，连续半径的单通道区域抽取此前欠探索。
+**问题背景：** LALM将音频编码器输出以连续嵌入接入LLM并多阶段训练，编码器与LLM深度耦合：换更强LLM或新编码器、适配新领域都要重新微调，且可能遗忘旧能力；其CoT是决策后由同一网络生成的事后叙述，不忠实于决策，答案无法追溯到模型实际听到的证据。
 
-**模型架构：** 采用轻量TF-GridNet骨架：对混合信号做STFT（FFT 192、hop 128），取幅度归一化的实部、虚部与对数幅度拼接并投影为C×T×F特征，堆叠6个TF块，每块沿频率轴和时间轴各做一次LN加BiLSTM加线性投影的残差建模，末端解码复数谱经iSTFT重建波形。查询半径在[0, Rmax=4]m归一化后经三层MLP编码器映射为特征表示，通过5个FiLM模块仅在相邻TF块之间注入特征仿射调制，推理时只需用户指定物理半径、无需估计声源距离。模型规模约0.66M参数（特征维度32、BiLSTM隐层64）。
+**模型架构：** 管线分四步。Listen：构建树状多模态知识树——地域（语音/音乐/环境声）→属性（性别、情绪、乐器等39个）→闭集类（363）→开放词表叶（668，如"engine knocking"），由4,054条19来源片段经专家分类器+Qwen3-Omni-30B按严格模板混合标注建成。Retrieve：每个短块由适配该属性的冻结编码器（CLAP管声音音乐、emotion2vec管情绪等）提取嵌入，经共享1–3层MLP小体（宽256）+每属性一个头打分；类得分取该类节点与其叶的log-sum-exp，叶置信才输出否则回退到类（如engine knocking→engine），region gate决定块激活哪些地域。Reason：整片节点按属性去重分组成可读文本（如speech gender: female; sound animal: dog (Bark)），拼接Whisper-large-v3转写与带时间的事件列表，冻结文本LLM仅凭该上下文作答。Adapt：新域作为新属性挂入树，用一个冻结编码器+小头承接。
 
-**核心创新：** (1) 连续半径条件化抽取：把查询半径作为连续标量注入网络，单模型对训练范围内任意半径一次前向即得累积区域目标y_r对半径内说话人求和，空区域以全零为监督，区别于DSS的多模型固定阈值与QD-TSE需多次前向的区间求和。(2) 跨半径一致性学习CRC：利用半径间目标集合的嵌套关系S(r1)⊆S(r2)，对同一混合均匀采样Q=4个半径，仅对未跨越说话人边界的相邻半径对施加按公共目标RMS归一化的波形L1一致性损失，并以tau=1e-4剔除近静音对，避免过度平滑且显著抑制相邻半径输出的抖动。(3) 区域自适应损失：目标非空时用对数域归一化MSE重建损失，空目标时用alpha=100加权的预测幅值均值惩罚迫使输出静音，总损失为区域抽取损失加0.1倍一致性损失，使同一模型同时学全、部分与空三种区域状态。
+**核心创新：** (1) 可解释性源于设计：音频只以树节点+转写文本进入LLM，答案的解释即其输入，错答可定位到单个节点并修正而不触碰reader；干预实验证明节点是因果的——SAKURA单跳将路由节点换成干扰节点使78.3%正确答翻错，注入金节点修复90.9%错答（动物/情绪/性别达93.8–99.8%），与LALM的不可追溯CoT本质不同。(2) 统一分层词表+蒸馏路由头：用单一层级词汇覆盖语音、音乐与环境声（非SAR-LM拼接多抽取器标签空间），小头从仅训练期的教师模型（如VGGSound软标签）蒸馏，推理时同一套头无planning地服务所有片段。(3) 感知与推理文本化解耦：任何LLM可零训练当reader（实测0.5B–72B共26个，72B/32B在MMAU-Pro超AF3）；新域=新头（0.17M–0.34M）在冻结编码器上几分钟训完，双域添加后原任务掉点≤0.6，无灾难性遗忘，而LALM需QLoRA重调。
 
-**训练策略：** 用gpuRIR仿真1000间房间生成RIR（长宽[2,12]m、高[2,5]m、RT60在[0.1,1.0]s、声源距离[0.3,5.0]m），语音取自AISHELL-1、AISHELL-2、THCHS-30、VCTK，DNS噪声按0.5概率在SNR[0,15]dB叠加，16kHz采样、4.5s片段、训练为双人混合。Adam优化器，初始学习率6e-4，warmup 2000步，ReduceLROnPlateau调度，batch size为1，最多50轮，结果取3个随机种子平均。
+**训练策略：** 仅训7.7M可训参数（各路由头小体），约1,400×少于Qwen2.5-Omni-7B；损失为属性掩码下的类交叉熵/BCE（单选softmax、多选二元）加父类内叶交叉熵，叶学习不移动类间概率；叶需≥5条样本（情绪/性别≥3）才成节点，稀有叶回归父类节点。AdamW，学习率3e-4–1e-3，批64，60–80 epoch；数据共约0.2M标注片段（AudioSet、FSD50K、ESC-50、MusicCaps、IRMAS、FLEURS等），数量级小于LALM语料（Omni-7B仅二阶段用300B音频token）。
 
 ### 📊 实验结果
-**数据集**：测试为dEchorate实测RIR（检验真实房间泛化），训练/验证为gpuRIR仿真1000房间混合中文/英文语音（16kHz）；查询半径1/2/3/4m。
+
+**数据集**：MMAU test-mini（1,000题）、MMAR（1,000题）、SAKURA（4,000题）、MMAU-Pro单音频多选子集（4,133题）；新域：BirdSet鸟类48种（938题）、BEANS海洋哺乳31种（678题），均为四选一只选，随机25%。
 
 **主要指标**：
-- 全目标SI-SDR：29.25 dB（DSS为22.03 dB、QD-TSE加区间求和为25.99 dB，分别提升7.22/3.26 dB）
-- 部分目标SI-SDRi：4.40 dB（基线0.39/1.12 dB，提升4.01/3.28 dB）
-- 空目标衰减：62.01 dB（基线56.12/54.10 dB，提升5.89/7.91 dB）
-- 跨半径一致性误差RCE：0.46%（消融：离散编码1.04%，连续编码0.85%，连续加CRC 0.46%）
-- 挑战条件：三人干净26.17 dB（RCE 1.12%）、2人5dB噪声RCE 3.17%、3人10dB SI-SDRi 3.10 dB仍可用
+- SAKURA：7B reader 80.1%，超全部LALM（Omni-7B 73.3%、Qwen3-Omni-30B 73.0%、AF3 68.2%）
+- MMAU：68.3%（Omni-7B 75.1%，差6.8分）；72B reader提至70.5%，Phi-4达71.7%
+- MMAR：51.6%（Omni-7B 63.6%，差12.0分）；MMAU-Pro 45.7%（vs 57.4%）
+- 因果与判官：节点置换破坏78.3%正确答、金节点注入修复90.9%错答；3个音频LLM判官在97–99%的1,200条留样上给L2R节点高于对照组
+- 新域5条/种：鸟类79.6%、海洋76.2%应为65.2%，对比QLoRA 54.1%/52.2%（13–26分领先；QLoRA训40.4M参数，多120–240×）
+- 关键对比：训练参数7.7M vs LALM数亿至数十亿，约为Omni-7B的1/1400、音频数据少数量级；推理单MMAU题5.3 TMACs/0.57s，高于Omni-7B的2.7/0.12（Whisper占约半）
 
-**是否开源**：论文声明Demo样本与代码发布于项目页 https://dongb001.github.io/CRadius-RSE/，正文未给出独立GitHub仓库直链。
+**是否开源**：代码已开源 @ https://poonehmousavi.github.io/listen-to-reason/（含checkpoint、示例与树交互查看器）
 
-### ⭐ 评分：7/10
-评分理由：把单通道距离抽取从固定阈值与局部窗推进到连续半径累积区域查询，任务定义清晰且贴合可听设备、移动录音的实际需求；CRC利用目标集合嵌套这一物理不变量设计一致性约束，直觉良好，消融充分证明连续编码与CRC各自独立有效。0.66M模型单次前向即完成任意半径查询，效率优势明确。不足在于实验以两人、最长4.5s仿真混合为主，缺少主观听评，噪声下RCE退化至5倍左右，且一致性对的构造依赖训练期声源距离真值。
+### ⭐ 评分：8/10
+评分理由：以可读知识树作文本瓶颈解耦感知与推理，思路原创且动机扎实；节点因果干预与判官评估为音频领域少见的定量可解释性证据，26个reader扩展与两个新域的few-shot实验充分可信。但MMAU/MMAR仍落后LALM 6–12分，暴露树词汇在细粒度声学推理上的信息损耗，且推理开销明显高于同规模稠密LALM，故给8分。
 
----
+## 5. EgoVoice: Proactive Spoken Assistance from Egocentric Multimodal Streams
 
-## SteerablePlex: Can We Steer Full-Duplex Models?
+**arXiv ID**：2610.12248 | **方向**：语音大模型
 
-**arXiv ID**：arXiv:2610.12201 | **方向**：语音大模型
+**作者**：Heeseung Kim
+
+**机构**：首尔大学AI系
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.12248 | **PDF**：https://arxiv.org/pdf/2610.12248.pdf | **代码**：暂无 | **Demo**：https://egocentricvoice.github.io/
+
+### 📌 简介
+可穿戴AR助手需从连续第一人称视听流中自主决定何时开口，但现有omni-modal模型均为被动对话，主动视频助手只能输出文本。本文提出EgoVoice：用源分离与语音重合成将HoloAssist真实教练指导录音转成91.7小时干净训练数据，微调MiniCPM-o 4.5学习"倾听或开口"的秒级决策，再以DPO精化干预时机。170个测试会话上，闭源API开场F1仅0.02-0.03，EgoVoice-SFT/DPO达0.274/0.324，end-vs-action间隔+1.57s/+1.75s，显著优于zero-shot基座（F1=0.113，间隔-4.69s），接近人类教练水平。
+
+### 🔧 技术方案
+
+**问题背景：** 真实物理任务中用户常忙碌或无法察觉何时需要帮助，而现有语音助手是反应式的，依赖显式提问或VAD触发；主动视频助手（如ProAssist）只产出文本。尚无工作将"何时说话+说什么"统一到单一模型中从连续第一人称视听流训练。
+
+**模型架构：** 基于MiniCPM-o 4.5（9B，流式全双工omni-modal LLM）。每个1秒chunk编码一帧第一人称视频与1秒音频（背景音+用户语音），预测Listen或Speak；Speak chunk上LLM自回归生成BPE文本，0.3B语音token解码器产出S3 token，流式flow-matching解码器转为波形。教练语音仅作为输出目标；以每次干预为中心构造60秒训练窗口，共13,676个。
+
+**核心创新：** (1) 解决"文本指令→语音播放"时间错配问题的真实语音数据管线：从1,673个HoloAssist会话出发，SAM-Audio以语音区间为提示分离出背景通道，Silero VAD校验无语音残留；转录用gpt-5.4-mini归一（删除9.0%无关话语），IndexTTS2按会话重合成（2,498训练/340评测参考说话人），Qwen3-ASR验证ASR精确匹配，最终得1,249训练+170测试会话。(2) 两阶段训练：SFT损失为L_LM+0.1·L_S3，并在LLM隐状态处切断语音损失梯度（消融显示不切断F1略高但评分下降）；DPO每窗口采10个候选，F1最高者为正例、F1最低三者中随机取负例（F1差≥0.10）构成5,335对，用长度归一DPO精化时机。(3) 四维评估协议：非对称开场窗口（提前2.5s/延后1.5s）配Hungarian匹配算Prec/Rec/F1；end-vs-action间隔度量"用户行动前是否说完"（行动链接子集942/2,067语句）；余弦相似度度量内容相关；LLM评审按正确性/及时性/效率/总体四轴1-5打分，并分text-llm与text-asr双通道评估意图与实际听感。
+
+**训练策略：** SFT：LoRA（r=32，α=64）同时施加于LLM骨干与语音解码器，视觉/音频编码器冻结，5 epochs，学习率2e-4，batch size 32。DPO：仅LLM骨干加LoRA，长度归一DPO，β=0.1，学习率5e-6，batch size 16，1 epoch，S3语音token不参与DPO似然。
+
+### 📊 实验结果
+
+**数据集**：HoloAssist（1,673会话/124.8小时第一人称任务指导录音，清洗后91.7小时训练、12.9小时测试；60秒窗口、1秒chunk粒度）
+
+**主要指标**：
+- 开场时机F1：EgoVoice-SFT 0.274，EgoVoice-DPO 0.324（zero-shot MiniCPM-o 4.5仅0.113；Gemini Live 0.022、gpt-realtime 0.030、gpt-realtime-2 0.024）
+- 内容相关余弦相似度：SFT 0.684，DPO 0.649（zero-shot 0.519，ProAssist 0.594）
+- 语句结束vs行动间隔（均值/中位数，正值=用户行动前说完）：SFT +1.57s/+1.52s，DPO +1.75s/+1.62s，zero-shot -4.69s/-0.40s，人类教练+1.69s/+1.38s
+- LLM评审总体分（1-5）：SFT 2.23，DPO 2.18，zero-shot 1.41，ProAssist 2.06
+- 人类偏好胜率：SFT对zero-shot 45.6%（p=0.01），DPO对zero-shot 45.3%（p=0.02），DPO对SFT 36.1%对33.3%不显著（p=0.60）
+- 关键对比：SFT较zero-shot基座F1提升0.161（p<10⁻¹²），超文本基线ProAssist 0.079（p<10⁻⁴）；DPO较SFT再提升0.050（p=0.0007）；干预顺序Kendall's τb DPO 0.868 vs zero-shot 0.749
+
+**是否开源**：暂无（项目页：https://egocentricvoice.github.io/）
+
+### ⭐ 评分：8/10
+评分理由：选题新颖重要，首次将第一人称"何时说+说什么"统一进单一omni-modal语音模型，数据处理管线与四维评估协议扎实、工程严谨。含闭源/API、开源文本与全双工基线、消融、显著性检验与真人评估，实验充分。召回率0.285与人类差距明显、数据局限于组装类任务，但贡献实质，属优秀工作。
+
+## 6. DuplexAgent-RSI: Recursive Harness Improvement for Full-Duplex Voice Agent Collaboration
+
+**arXiv ID**：2610.11299 | **方向**：语音大模型
+
+**作者**：Yingda Shen, Yuxiang Wang, Kunyu Feng, Qinke Ni, Jiaqi Li, Minghao Hsu, Junan Zhang, Dekun Chen, Yutong Bian, Zhizheng Wu
+
+**机构**：香港中文大学（深圳）；Amphion Technology Co., Ltd.
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11299 | **PDF**：https://arxiv.org/pdf/2610.11299.pdf | **代码**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/ | **Demo**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/
+
+### 📌 简介
+全双工对话模型推理与工具执行能力弱，顺序编码代理缺乏直播对话的实时性；现有异步委托协作的任务更新、取消、替换与结果交付决策耦合在系统特定启发式里，难以从痕迹中定位与修复。本文提出DuplexAgent全双工协作系统，将协作流程显式化为六个可编辑harness模块，并给出Duplex-Harness-RSI闭环：委托池推理LLM任Exam Planner、编码代理任Harness Editor，依据交互痕迹与修复档案迭代修订模块。在Qwen-Realtime上MMSU由64.8升至82.7、FDB-v3 Pass@1由39.0升至49.0，固定核心协作分较初始harness提升37.7分。
+
+### 🔧 技术方案
+
+**问题背景：** 领域正收敛到"全双工模型守活频道、推理/编码代理异步承接任务"的协作范式，但用户修改请求时如何更新、取消或替换进行中的任务、结果何时开口交付并无定论。现有系统用手写耦合启发式实现交接、确认与交付控制，同一失败反复出现时痕迹无法明确指向委托、解释、执行还是交付环节，有界修复难以隔离、评估与迁移。
+
+**模型架构：** 系统分解为S=(F,B,H)：F为全双工交互模型（VoiceChat-11B或Qwen-Realtime），B为委托池（DeepSeek-v4-flash推理、Codex编码），H为协作harness含六个模块：Policy决定应答路由（直答/委托/任务控制）、Intake解析请求及其关联的在途任务、Hold在工作挂起期间维持确认与进度播报、Worker选择代理并定义结果契约、Deliver控制结果返回的说话窗口与成败呈现、Memory维护对话与后台共享的上下文（组装、保留、压缩、复位恢复）。底层由会话引擎任务台账（accept/run/complete/deliver/cancel/replace六态，迟到的返回不能复活过期任务）与模型适配器支撑，使harness决策与传输细节解耦。RSI闭环组件：Observer记录痕迹（语音活动、转写、模块决策、代理返回、交付事件）；Diagnoser给出(cause,module,pattern)失败签名，按固定优先级映射到感知/路由/解释/连续性/执行/交付/上下文家族；Exam Planner依据归因失败与修复档案在19种请求类型×22种交互模式上调整下轮考试采样并保留固定核心；Harness Editor在隔离工作区仅修订诊断指名的模块的声明可编辑面（指令、schema、结果契约、覆盖规则），给出可检验假设；评估器校验六条协作不变量，候选须过配对开发门（胜>负）与不相交保护门（胜≥负）才保留，接受与拒绝的经验写入修复档案供下轮使用，交互模型权重全程不动。
+
+**核心创新：** (1) 协作harness的六模块可编辑分解：将协调决策变成输入、决策、可观测效果明确的模块并声明可编辑面，任何失败都能归因到有限模块并被独立检验；与Qwen-Audio-Agent、Realtime-Venus、Gander等系统以自然语言描述或任务标题做交接、决策相互耦合不可分的关键区别在于"任务身份+说话时机+上下文共享"被显式建模。 (2) Duplex-Harness-RSI递归改进闭环：复用服务用户的委托池改进系统自身，推理LLM作Exam Planner从归因失败与修复档案设计自适应测试，编码代理作Harness Editor产生修复假设，以固定核心配对胜负与保护集独立裁决保留与否；相比一次性/顺序编辑多了每轮诊断与档案经验，采样权移动有界、保护集对编辑器隐藏、禁止插入情景特定答案。 (3) 可复用全双工协作模拟器：请求类型与交互模式解耦，确定性composer把回合排上实时时间线并定义期望任务转换与说话窗口，内容先切分开发/保护/封存(60/20/20)防泄漏，再经Qwen3-TTS渲染与噪声信道增强生成带时间戳的测试对话，可产出模块级失败归因。
+
+**训练策略：** 系统类工作，不训练任何交互模型权重。闭环按交互模型各跑10轮独立campaign：固定核心占比40%，每轮新变体预算30，每轮最多3个候选、每候选最多2次修正；Exam Planner对请求类型/模式/输入条件的采样权移动有界且设请求覆盖下限。外部评测按实时时钟流式输入，OBQA/MMSU、BFCL-v3、FDB-v3、FDB-v1各自独立评分；协作分Q为固定核心上剔除感知失败后的成功率。
+
+### 📊 实验结果
+
+**数据集**：VoiceBench（OBQA、MMSU）、BFCL-v3（五单轮子集）、FDB-v3、FDB-v1；自建模拟器测试对话（19请求类型×22交互模式，60/20/20切分）
+
+**主要指标**：
+- MMSU：80.5（VoiceChat）/82.7（Qwen-Realtime），对比独立交互模型36.1/64.8
+- OBQA：80.6/92.1，对比独立54.2/86.3
+- BFCL-v3均值：75.8/90.8，对比独立53.5/82.0（Qwen-Audio-Agent 24.9/80.8）
+- FDB-v3 Pass@1：47.0/49.0，对比独立16.0/39.0（Qwen-Audio-Agent 5.0/30.0）
+- FDB-v1打断TOR：0.965（VoiceChat）/0.970（Qwen-Realtime），不低于所附模型1.000/0.890
+- Harness消融（VoiceChat固定核心）：初始54.6→一次性编辑57.4→顺序编辑61.9→RSI 85.3；Qwen-Realtime初始47.1→第8保留版84.8
+- 关键对比：RSI r10较初始harness提升30.7分、较顺序编辑提升23.4分；漏委托由30.3%降至1.3%，额外交付由3.9%略升至6.6%
+
+**是否开源**：代码已开源 @ https://amphionteam.github.io/DuplexAgent-RSI-Demo/（项目页同址）
+
+### ⭐ 评分：8/10
+评分理由：将全双工协作显式化为六模块可编辑harness、并复用委托池做递归自改进，思路新颖且闭环完整可复现。实验充分：双交互模型×四组外部基准，加一次性/顺序/RSI消融与模块级修复证据，数据扎实。不足是改进止于harness层、触不到模型自身感知与时机，模拟器评测偏自建。对真实语音代理落地实用价值高。
+
+## 7. SAVU-BENCH: A Real-World Benchmark for Spatial Audio-Visual Understanding
+
+**arXiv ID**：2610.10624 | **方向**：语音大模型
+
+**作者**：Yu Chen, Ruihang Liu, Yangguang Xu, Xinyue Jiang, Mohammed Bennamoun, Farid Boussaid, Xinyuan Qian, Qiuhong Ke
+
+**机构**：University of Western Australia、University of Science and Technology Beijing、Monash University
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10624 | **PDF**：https://arxiv.org/pdf/2610.10624.pdf | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+现有空间音频-视觉基准多依赖仿真场景且孤立评估单项空间能力，缺乏对失败机制的诊断。作者提出SAVU-Bench：基于6个真实数据来源、覆盖"感知-对齐-推理"三级能力与7项任务（1066条问答，平均片段6.12秒）的实景空间音频-视觉理解基准，并设计场景链接诊断集SAVU-Diag（611条/81场景），将推理题分解为前置接地与对齐子任务。评测12个模型显示：视觉接地最高95.4%，音频接地仅55.6%，空间推理最高45.8%（chance 42.2%）。免训练基线SAVU-EA将音频接地提升30.7个百分点。
+
+### 🔧 技术方案
+
+**问题背景：** 当前AV-LLM能识别"有什么"，但难以定位视觉实体与声源并解析其跨模态空间关系。现有基准存在三局限：一、重度依赖仿真环境，无法反映真实录音复杂度；二、孤立评估单项空间技能，难以在同一场景系统考察感知、对齐、推理的协同；三、任务级准确率缺乏诊断性，无法区分推理错误源于定位失败还是关系组合失败。
+
+**模型架构：** 基准将7任务按难度升序组织为三级：感知层含Audio/Visual Grounding，各细分粗定位、相对位置、空间动态（含水平与深度运动）三类；对齐层含语义对齐（可听事件是否匹配可见对象）、空间对齐（声源轨迹与其视觉 counterpart 运动是否一致，负样本保持类别级语义兼容只改变空间关系）、A2V/V2A联合匹配（候选为匹配项+语义负例+空间负例）；推理层含相对方向（以视觉参考定位画面外声源）、空间排序（原地旋转遭遇声源方向序列）、自我中心推理（换算到由场景实体定义方位与朝向的虚拟观察者视角）。推理实例围绕双模态互补线索构造：静默视觉锚点+画面内发声源+画外声源，以画面内源为共同参照连接视觉与听觉空间布局。数据源自MRSAudio、STARSS23、YT360、D-SAV360、MULTIVOX、QoEVAVE六个真实来源；全景录像切分出有限视场视图，FOA音频按ViSAGe约定水平重居中并与视觉参考系对齐；GPT-5.4仅生成候选草稿，人工核验修正，推理题链由标注者确认后生成；三位领域专家独立作答、至少两位正确方可保留。SAVU-Diag将每道推理题的前置事实转写为同场景、同时间窗、同参考系的独立诊断任务，把推理错误分解为接地对错×对齐对错的2×2模式。
+
+**核心创新：** (1) 真实场景统一的三维能力评测框架：首次在同一无仿真实景设定中贯通感知、对齐、推理，并以全部选项循环置换消除选项位置偏差、按AA_circ计准确率。(2) SAVU-Diag场景链接诊断：将推理题与同场景前置接地/对齐任务绑定，可区分"空间证据获取失败"与"证据组合失败"两类错误，揭示相似推理准确率背后截然不同的前置错误模式。(3) SAVU-EA免训练证据增强基线：以SELD与VLM提取显式空间线索注入输入，作为干预实验量化感知瓶颈与残存推理差距的价值。
+
+**训练策略：** 基准评测协议为多选判定，每题在选项全循环置换下评测；Spatial-Omni保留四通道FOA输入其专用空间编码器，其余模型走单声道downmix，人工评测用HRTF渲染双耳音频，模型与人同场景同题可比。SAVU-EA为免训练推理策略：OpenVocabularySELD从FOA音频提取声事件及空间轨迹，Qwen3.5-Omni-Plus从静默视频提取可见对象、位置与运动，将预测空间线索连同原始输入、提问一并提供给Gemini-3.6-Flash；感知任务仅注入对应模态的线索。
+
+### 📊 实验结果
+
+**数据集**：SAVU-Bench（1066条问答、7任务、平均片段时长6.12秒、平均题长15.41词，真实FOA一阶Ambisonics音频+有限视场视频）；SAVU-Diag（611条诊断问答、81场景、平均每场景7.54条）。
+
+**主要指标**：
+- 视觉vs音频接地：最高Visual Grounding 95.4%（DOTS-3）对最高Audio Grounding 55.6%（Spatial-Omni），差距约40个百分点
+- 联合匹配：最佳A2V 35.6%、V2A 42.8%，相对33.3%随机基线仅提升约2-10个百分点
+- 空间推理：最佳45.8%（Gemini-2.5-Pro、SO-7B），仅高于42.2%随机水平3.6个百分点；30题人评子集上人类达85.0%，与最佳模型差距38.3个百分点
+- SAVU-Diag：OmniVideo-7B的推理错误61.4%为纯接地失败；Spatial-Omni仅17.9%纯接地失败，46.2%为双前置失败，且前置全对时仍存在推理错误
+- SAVU-EA：Audio Grounding +30.7点、Joint A2V +19.1、V2A +21.7、Spatial Reasoning +14；oracle前置事实下推理从49.38%升至77.78%（+28.4）
+
+**是否开源**：暂无（作者声明被接收后计划公开基准、评测代码与构建脚本）
+
+### ⭐ 评分：8/10
+评分理由：真实场景三级七任务体系与SAVU-Diag场景链接诊断设计新颖，填补现有仿真/孤立基准空白；12模型评测、人评子集、oracle与捷径消融实验齐备，数据管线含专家三重校验，结论扎实。SAVU-EA干预有效量化感知瓶颈与组合差距。不足是诊断集规模偏小（81场景/611条），代码数据尚未开源，且QA生成依赖GPT草稿的人工质量控制难以完全排除偏差。
+
+## 8. SmoothConv and DuplexConv: Complementary Mandarin Multi-Party Conversational Speech Corpora for Speech Interaction
+
+**arXiv ID**：2610.11150 | **方向**：语音大模型
+
+**作者**：Chengyou Wang, Mingchen Shao, Chunjiang He, Zeyu Zhu, Jierui Guo, Bingshen Mu, Zikai Liu, Hanke Xie, Yuhang Dai, Zhou Zhu, Lei Xie
+
+**机构**：ASLP@NPU、Soul AI Lab、QualiaLabs（arXiv未提供逐作者机构对应）
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11150 | **PDF**：https://arxiv.org/pdf/2610.11150.pdf | **代码**：https://github.com/qualialabsAI/SmoothConv-DuplexConv | **Demo**：暂无
+
+### 📌 简介
+语音交互系统需建模轮次交替、重叠语音等会话行为，但现有多方普通话语料缺乏参与者级同步音轨与细粒度交互标注。本文发布SmoothConv与DuplexConv两个互补语料库，共2100小时普通话多人群会话，覆盖辅导与社交聊天场景，每人提供同步音轨及轮次状态、副语言、说话人属性细粒度标注；SmoothConv（100小时）经人工多轮核验，DuplexConv（2000小时）由自动标注流水线构建。在SmoothConv基准上评测语音分离、多说话人ASR与轮次检测三任务，基于对话数据适配后MSASR的cpWER由27.04%降至16.87%，轮次检测incomplete召回达74.66%。
+
+### 🔧 技术方案
+
+**问题背景：** LALM驱动的交互式语音系统需理解轮次交接、响应时机等会话行为，而Switchboard/Fisher仅限英文双人电话，CHiME-5/AMI/AliMeeting/AISHELL-4或缺乏同步参与者级音轨、或缺少交互行为细粒度标注，公开普通话多人群资源不足以支撑真实多人交互建模。
+
+**模型架构：** 数据来源为真实线上交互（Tutoring与Social Chat双场景，知情同意并匿名化），非脚本式录制，保留自然抢话、重叠与长程交互上下文。标注体系含三维细粒度标注：轮次状态（complete/incomplete/backchannel/wait四态）、副语言（12类预定义情绪加哭闹/咳嗽/清嗓/打喷嚏/叹气等非言语发声事件）、说话人属性（性别与儿童/青少年/成人/中年/老年五档年龄）。双库互补：SmoothConv 100小时/2503片段，每段4名标注员标注加3名资深复核，供可靠分析与评测；DuplexConv 2000小时/93709片段，平均片段76.8s（8-618s），自动构建供大规模训练。
+
+**核心创新：** (1) 人工核验小规模与自动标注大规模的双轨设计：SmoothConv提供可靠监督用于评测，DuplexConv提供可扩展训练数据；自动流水线在随机抽样20小时子集上人工核验通过率82.4%，轮次状态标签与专家标注一致率达91%。 (2) LLM驱动的两阶段自动标注：逐通道VAD加多ASR（FunASR、FireRedASR、Qwen3-ASR等）ROVER融合转写，Pyannote说话人日志加Qwen3-ForcedAligner边界精化，3D-Speaker全局聚类；轮次状态由Qwen3-32B从文本预测候选、Qwen3-Omni结合声学复核，incomplete/backchannel以韵律线索重要者优先采用音频判定。 (3) 任务导向的SmoothConv基准：分离/MSASR共享评测集9.48小时/255片段、严格说话人不重叠划分、平均重叠率3.33%；轮次检测集覆盖四态并按自然比例采样，wait态稀疏处用DeepSeek V3加IndexTTS2合成1000条且人工核验，仅用于评测。
+
+**训练策略：** 分离任务以SPMamba训练，各配置480小时（模拟混音WSJ0-2mix/WHAM!/WHAMR!/Libri2Mix、DuplexConv参与者轨派生混音及混合）；MSASR在SoulX-Transcriber骨干上用LoRA微调（1 epoch、lr 1e-5、warmup 0.05、rank 8、α=32），DER配0.25s collar；轮次检测训练FastTurn（EasyTurn、DC、DC+SC三配置）。全程训练/测试严格分离，无共享会话或说话人，SmoothConv作训练集时剔除对应评测样本防泄漏。
+
+### 📊 实验结果
+
+**数据集**：SmoothConv（100h/2503片段，2-4人，人工核验）；DuplexConv（2000h/93709片段，自动标注）；SmoothConv Benchmark（分离/MSASR评测集9.48h/255片段、重叠3.33%；轮次检测集22432条/约12.9h，含1000条合成wait样本）
+
+**主要指标**：
+- 语音分离（SPMamba）：DuplexConv对话混音训练在SmoothConv集SI-SDRi 17.26dB/CER 32.15%，显著优于纯模拟混音（13.55dB/81.24%）；混合配置OOD上AISHELL-4 CER 36.04%、AliMeeting CER 45.48%
+- MSASR（SoulX-Transcriber+LoRA）：SmoothConv-Bench上DER/cpWER/tcpWER由基线40.89%/27.04%/27.95%降至DC+SC的12.73%/16.87%/17.62%；AliMeeting-Near cpWER 11.65%→7.43%，AMI-SDM DER 16.15%→14.57%
+- 轮次检测（FastTurn召回%）：SmoothConv-Bench上DC+SC四态89.20/74.66/94.15/91.30，incomplete与backchannel优于纯DC（72.85/93.78）与EasyTurn（73.03/92.57）
+- 关键对比：与Switchboard/Fisher/AMI/AliMeeting/AISHELL-4等相比，仅本语料同时覆盖多轨、轮次、副语言、说话人属性四维度（Table 1），且DuplexConv 2000小时规模远超AISHELL-4（120h）/AliMeeting（118h）等普通话多方语料
+
+**是否开源**：数据、基准及相关资源已开源 @ https://github.com/qualialabsAI/SmoothConv-DuplexConv
+
+### ⭐ 评分：8/10
+评分理由：人工核验与自动扩缩容的双轨设计对语音交互资源极具创新性，2100小时四维细粒度标注填补公开普通话资源空白，LLM两阶段轮次标注91%一致率可信；实验覆盖分离、MSASR、轮次检测三任务，MSASR提升幅度实质；不足在于wait态依赖合成样本、远场跨域性能退化，且模型侧仅为LoRA适配未做全量训练验证。
+
+## 9. SteerablePlex: Can We Steer Full-Duplex Models?
+
+**arXiv ID**：2610.12201 | **方向**：语音大模型
 
 **作者**：Haolong Zheng, Maike Züfle, Dominik Macháček, Peter Polák, Xulin Fan, Xavier Sumba, Siyin Wang, Ondřej Klejch, Mark Hasegawa-Johnson
 
@@ -223,429 +340,293 @@
 **发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.12201 | **PDF**：https://arxiv.org/pdf/2610.12201.pdf | **代码**：暂无 | **Demo**：暂无
 
 ### 📌 简介
-全双工语音模型虽能边听边说，但随会话历史增长越来越难控制，作为用户模拟器会偏离既定场景、污染评测结论。本文提出 SimIF-Bench，量化考察模拟器的主题遵循、自然度、目标完成与目标顺序；并在 PersonaPlex 上设计特殊符指令注入接口与 GDPO 多奖励 RL 配方，训练出可在对话中接受运行时文本指令的 SteerablePlex，再连接异步 LLM 导演组成 Actor-Director 系统。200 个场景上，in-domain 变体在多目标完成与精确顺序上超过 GPT-Realtime，且在全双工轮次指标 10 项中有 6 项优于基座，证明全双工前端可被后端模型可靠转向。
+全双工语音模型作为用户模拟器时会随对话历史增长偏离预设场景，导致评估失真。本文提出SimIF-Bench基准，量化考官模型的主题遵循、自然度、目标完成与顺序约束，发现GPT-Realtime及开源模型在多阶段顺序完成上均不可靠。进而提出SteerablePlex：以特殊token分隔的在线指令注入接口加GDPO多奖励强化学习配方，使全双工模型在对话中实时遵循文本指令并保持轮替能力。配合异步后端LLM导演，in-domain版在SimIF-Bench的目标完成与精确顺序上双双超过GPT-Realtime，轮替能力10项指标中6项优于基座模型。
 
 ### 🔧 技术方案
 
-**问题背景：** 全双工模型持续生成、无明确的行为调整边界，仅靠系统提示的遵循度随对话变长而漂移；低延迟预算又限制模型规模与长程计划能力。Full-Duplex-Bench v2 用 GPT-Realtime 当考官，但考官不遵循脚本会削弱评估有效性，现有开源全双工模型在此类约束下差距更大。
+**问题背景：** 全双工模型边听边说、无明确干预边界，现有系统仅靠系统提示词控制，而提示词遵循度随对话历史增长发生漂移；严格时延预算又限制模型规模与长程规划能力，"能否在运行时控制全双工模型"成为开放问题。
 
-**模型架构：** 基座 PersonaPlex 含用户音频、模型音频、模型文本三条同步流。指令由原有 tokenizer 编码后，以起止特殊符拼接进模型文本流，插入期间两路音频流填充静音符且会话时间不推进；异步文本 LLM 导演（Qwen3-27B）基于 Parakeet-TDT-0.6B-v2 流式 ASR 与模型文本流每 2s 更新目标状态，生成候选指令并给出 send/wait/none 动作，构成 Actor-Director 双层系统。
+**模型架构：** Actor-Director双角色系统。Actor构建于PersonaPlex的三条同步流（用户音频、模型音频、模型文本，其中模型文本作为音频token的时间对齐语义前缀），将特殊起止token分隔的指令token拼接进模型文本流，注入步内两路音频填充静音token且对话时间冻结。Director为异步文本LLM（Qwen3.8-27B），输入来自Parakeet-TDT-0.6B-v2流式ASR与内部模型文本的上下文，每2秒更新目标状态并输出send/wait/none三态动作，仅在必要时注入指令。
 
-**核心创新：** (1) 运行时指令融合接口：复用预训练模型对文本流的语义理解，把带分隔符的文本段当作指令而非新控制模态；观察到基座零样本已能遵循短祈使句指令，为直接 RL 提供初始能力。(2) GDPO 训练配方：对目标完成、自然度、轮换等多维异质奖励在组内逐维 z 归一化后再加权合成并二次归一化，避免高方差奖励分量主导 GRPO 优势项，同时以 KL 项锚定 adapter-off 基座防止对话能力漂移。(3) 防作弊奖励设计：用规则化 VAD 事件定义重叠惩罚、抢话惩罚、应答延迟惩罚与 backchannel F1 四项轮换奖励，堵住"直接喊出目标内容"和"压着对方说话刷完成度"两类捷径。
+**核心创新：** (1) 在线指令注入接口：复用现有tokenizer将祈使句指令嵌入模型文本流，借助预训练模型对文本流的语义理解降低学习成本，无需学习新控制模态；区别于KAME持续由后端模型驱动前端，此处仅在需要时干预，保留基座原生轮替策略。(2) GDPO多奖励训练配方：将GRPO扩展到多奖励场景，对每个奖励维度在组内独立归一化为z=(r−μ)/σ，未定义或无差异维度置零，加权求和后再组内归一化得优势值，避免高方差奖励分量主导梯度。(3) 六维奖励设计：目标完成（0/0.5/1分档）与自然度（0/1，惩罚自问自答、替对方发言）抑制"直接喊出目标内容"与"抢话制造机会"两类捷径，再加重叠、接管、响应延迟、backchannel F1四个VAD轮替奖励防止霸占话轮，KL项锚定adapter-off的PersonaPlex策略防止漂移。
 
-**训练策略：** Fisher 语料经 Qwen3-32B 逐轮生成祈使指令，得 9,417 条 RL 样本、130.8 小时 rollout；按 Behavior-SD 管线从 200 个 FDB-v2 场景合成 2,000 条四目标重叠语音对话（84.1 小时立体声，200 条留出）。rollout 用 30s 双方录音上下文、插入指令后采样 20s 模型窗口、对方流原样回放。LoRA 秩 128/32、scale 2.0，lr 1e-5，G=8，音频/文本采样温度 0.8/0.7、top-k 250/25；task-independent 版 β 从 0.05 自适应至 KL 目标 0.3，in-domain 版固定 β=0.01。Silero VAD 阈值 0.5。
-
-### 📊 实验结果
-**数据集**：SimIF-Bench（200 个 Full-Duplex-Bench v2 分阶段场景，单通上限 120s，LLM 裁判三遍多数表决）与 Full-Duplex-Bench 轮换能力集
-
-**主要指标**：
-- 平滑轮换 TOR：1.000（PersonaPlex 为 0.983）
-- 打断响应 TOR：1.000（PersonaPlex 为 0.935）
-- 打断质量评分：4.790/5（PersonaPlex 为 4.684）
-- 停顿误启动率：0.394（PersonaPlex 为 0.642，越低越好）
-- 关键对比：相对 PersonaPlex 10 项指标提升 6 项；in-domain 变体在 200 场景的目标完成与四目标精确顺序均超 GPT-Realtime，且在未参与训练的 20 个场景上保持优势；KAME 持续转向则明显损害 backchannel 表现
-
-**是否开源**：正文未给出代码或模型发布链接，暂无
-
-### ⭐ 评分：7/10
-评分理由：首次把"模拟器指令遵循"确立为可量化评测维度并给出 SimIF-Bench，填补了全双工可控性评测空白；特殊符注入 + GDPO 的配方工程细节扎实、六路奖励设计针对性强，实验同时验证了控制能力与轮次能力不互相牺牲。不足是 SimIF-Bench 主结果以图呈现、缺精确数值表，裁判依赖单一 LLM，且多指令长程协调仍不稳定，开源缺失也限制复现。
-
----
-
-## Local Prototype Reconstruction for Text-Compatible Speech-to-LLM Bridge Pretraining
-
-**arXiv ID**：arXiv:2610.11159 | **方向**：语音大模型
-
-**作者**：Xinnian Zhao, Chia-Hua Wu, Pu Wang, Hugo Van Hamme
-
-**机构**：KU Leuven电子工程系（ESAT）；中央研究院信息学研究所
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11159 | **PDF**：https://arxiv.org/pdf/2610.11159.pdf | **代码**：暂无 | **Demo**：暂无
-
-### 📌 简介
-语音转LLM系统中桥接冻结语音编码器与冻结LLM的轻量模块决定了接口几何，而NWP与句级对比预训练只优化全局语义对齐，未约束桥接token与LLM词嵌入流形的局部兼容性。本文提出固定、无头、无时间戳的接口兼容性诊断，并引入LPR（局部原型重构）：仅训练期要求每个转写对齐的桥接token能由冻结LLM输入嵌入的K个局部原型邻域凸组合重构。在CoVoST2多语种ASR/ST上，LPR将平均WER从7.75%降至7.22%、ST BLEU从39.09升至41.11，低资源增益最大，且诊断指标与下游迁移显著相关。
-
-### 🔧 技术方案
-
-**问题背景：** 当语音编码器与LLM同时冻结时，可训练桥接层定义speech-to-LLM接口几何，其是否可复用取决于预训练目标。NWP只优化语音条件下的生成；句级对比损失作用于池化话语表征，虽使全局检索接近满分（utterance R@1约0.999），token级余弦兼容性仍很低（0.06），词法兼容性欠约束且此前无法度量。
-
-**模型架构：** 冻结Whisper-large-v3编码器接冻结Llama-3-8B-Instruct；桥接为窗口级Q-Former（2层Transformer，隐维4096、8头、窗口10，约177M可训练参数），骨干为句级InfoNCE对比损失（可学习温度、多LLM层平均）。LPR在其上增加：bias-free投影Wq/Wk把4096维降至512维计算转写条件软对齐得s_u；从预构建的高频token原型库检索以金标签E(y_u)为中心的K个冻结LLM嵌入近邻，softmax加权凸组合得重构r_u。
-
-**核心创新：** (1) 提出固定、独立于训练头的诊断（话语R@1、MRE、金标签R@1/MRR、原型熵、对齐熵），可统一施加于NWP/对比/LPR检查点，证明全局检索饱和后仍无法区分桥接质量，而MRE可预测迁移。(2) LPR作为连续局部流形正则器：以余弦重构损失检验token是否落在词法流形邻域而非整个词表附近，保留语音连续性、不绑定离散tokenizer；K=1时退化为对金标签token的硬锚定，两种约束互补。(3) 纯训练期介入：转写、对齐头与原型检索仅在预训练使用，部署只保留编码器-桥接-LLM路径，推理行为与对比基线完全一致。
-
-**训练策略：** 五语言联合预训练单一多语桥接（CoVoST2约431h），ASR/ST从同一起点分别微调；预训练最多6轮、batch 32、单张H100 80GB；微调自回归上限8万步、早停patience 3；AdamW峰值学习率3e-5、warmup 0.03；评测beam=3。LPR超参：d_a=512、K=16、tau_a=tau_p=0.1、lambda_a=lambda_r=0.5，lambda置零即回退对比基线。
+**训练策略：** 数据分两部分：Fisher语料派生9,417条回合级指令RL样本（合计130.8小时rollout）；按Behavior-SD流水线从Full-Duplex-Bench v2的200个场景合成2,000段重叠语音对话（84.1小时立体声，其中200段留出）。LoRA适配器训练（temporal/depth秩128/32，缩放2.0）；GDPO组大小G=8，音频/文本采样温度0.8/0.7、top-k 250/25；学习率1e-5，任务无关训练自0.05起自适应β朝KL目标0.3调整，in-domain训练固定β=0.01；VAD处理合并小于0.3秒间隔、丢弃短于0.1秒片段，backchannel不超过1秒且须覆盖对方语音至少50%。
 
 ### 📊 实验结果
-**数据集**：CoVoST2（源自CommonVoice），De/Fr/Es/It/Pt转En五语种，训练约431h、dev 83h、test 88h，另有10%低资源子集约43h
+
+**数据集**：SimIF-Bench（复用Full-Duplex-Bench v2的200个分阶段场景，PersonaPlex固定为受试者，通话120秒，LLM判分三遍取多数/中位数）；轮替能力评测用Full-Duplex-Bench。
 
 **主要指标**：
-- 全资源ASR平均WER：LPR(full) 7.22%，对比7.56%、NWP 7.67%、无预训练7.75%，相对无预训练降6.8%
-- 全资源ST平均BLEU：LPR(full) 41.11，较对比基线+0.75、较无预训练+2.02
-- 低资源适配：WER从10.28%降至9.08%；BLEU从35.24升至39.49（对比仅36.55，NWP跌至32.68）
-- 诊断关联：LPR(full) MRE 0.645对比1.835；MRE与下游增益相关系数全资源r=-0.51(ASR)/-0.69(ST)，低资源r=-0.90/-0.88（n=25）
-
-**是否开源**：暂无（论文正文未提供代码或Demo链接）
-
-### ⭐ 评分：7/10
-评分理由：将局部词法流形兼容性确立为可量化、可预测迁移的接口属性，诊断独立于LPR训练目标且能排序未优化该信号的NWP/对比检查点，方法学扎实；LPR零推理开销、即插即用，低资源与ST收益最明显。不足：整体增益幅度较小，仅单一基准与单一8B LLM组合，相关性分析样本少（n=25），且未开源复现。属增量但有清晰洞见的贡献。
-
----
-
-## Selective Listening: Mechanism-Guided Control of Audio Influence in Large Audio-Language Models
-
-**arXiv ID**：arXiv:2610.11196 | **方向**：语音大模型
-
-**作者**：Yulin Sun, Kele Xu, Yong Dou
-
-**机构**：College of Computer Science and Technology, National University of Defense Technology；State Key Laboratory of Complex & Critical Software Environment
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11196 | **PDF**：https://arxiv.org/pdf/2610.11196.pdf | **代码**：暂无 | **Demo**：暂无
-
-### 📌 简介
-本文研究大型音频语言模型（LALM）中任务无关音频改变文本推理决策的问题，指出聚合准确率会掩盖音频"修复"与"破坏"相互抵消的成对漂移。通过 clean/干扰成对评估与通路缩放干预，定位出对决策具有可操作影响的晚期音频通路作为控制点，提出 ICAP-Gate：按任务指令调制通路输出，明确音频需求时 g=1，否则乘模型特定衰减 λ_m。在 4 个 LALM、2 个推理基准、2 类干扰的 16 项全量评测中 IR 与 Flip 点估计均低于无门控；固定抑制导致 ASR WER 剧增，ICAP-Gate 则保持与无门控一致，并以单次生成获得接近 8 样本 Self-Consistency 的稳定性。
-
-### 🔧 技术方案
-
-**问题背景：** 无关音频可改变文本推理决策而聚合准确率几乎不变（cw/wc 转移相互抵消）；已有缓解仅作用于输入（prompting）或输出聚合（Self-Consistency），未触及内部机制，且 8 样本解码带来 7–9 倍延迟，模型内部缺少"何时让音频参与计算"的可干预接口。
-
-**模型架构：** 免训练的推理时框架。对深度 ℓ_m 处的晚期音频通路模块输出 z，施加 ẑ=g(I)·z：任务指令含明确音频需求时 g=1，否则 g=λ_m。控制点按架构离线校准：Qwen2.5-Omni-7B/3B 为 audio_tower.layers.25（相对深度 0.81=26/32，λ=0.25），Phi-4-MM 为 audio_embed.encoder.encoders.23（24/24，λ=0.10），Voxtral-Mini-3B 为 audio_tower.layers.30（0.97=31/32，λ=0.25）。线上推理仅需一次指令路由决策与一次临时通路缩放，每查询单次生成。
-
-**核心创新：** (1) 成对漂移度量框架：定义 Influence Rate、Answer Flip、NetC2W、NetAnswer，并给出与聚合准确率 ΔAcc 的精确抵消关系，暴露"个体预测大量变动而总分稳定"的隐藏失效模式。(2) 机制性因果定位：以通路缩放干预（0≤α≤1）证明晚期通路携带可操作影响——C2W 样本与稳定样本在晚期位点激活 RMS 相近但 clean gold-answer margin 差异显著，说明控制点由决策相关性而非激活幅度决定，且同类可操作位点在三种异构音频架构中重复出现。(3) 选择性模态影响控制原则：模态可得不等于模态影响计算，指令条件化门控对显式音频请求保留通路，无需 clean 参考路径或辅助相关性模型，规则透明可审计。
-
-**训练策略：** 方法免训练、无损失函数：(ℓ_m,λ_m) 由离线干预分析校准得到。干扰构造：FSD 为每题配对一条 FSD50K 真实环境声；SIB 用 LibriSpeech dev-clean 语音独立配对（MMLU 共 14,042 对、2,694 条源语音、40 说话人、平均复用 5.212 次）；三条推理路径共享文本、配对音频与模型解码配置，bfloat16 推理，统计用 20,000 次配对 bootstrap（seed 0）的 95% CI 确认。
-
-### 📊 实验结果
-**数据集**：ARC-Challenge 与 MMLU 全量测试集（推理）；FSD50K 环境声与 LibriSpeech dev-clean 自然语音（干扰）；每模型 400 条 dev-clean 语音（ASR 副作用）
-
-**主要指标**：
-- Influence Rate：Qwen2.5-Omni-7B MMLU-FSD 为 11.80%→9.16%，Answer Flip 16.06%→12.60%，而 Accuracy 67.58%→67.55% 几乎不变
-- 16 项全量评测 IR/Flip 点估计均低于无门控，ΔIR 最大 4.01pt（Qwen-3B ARC-FSD：11.77%→7.76%）
-- 对比 mitigation prompting：MMLU-SIB 上 IR 低 8.87pt、Flip 低 11.76pt（配对 95% CI 不含零）；8 样本 Self-Consistency 漂移略优（ARC-SIB ΔIR −2.99pt）但 ICAP-Gate 延迟仅 0.894–1.057× 无门控，SC 为 7.03–9.22×
-- ASR WER：固定抑制剧增（Qwen-7B 17.74%→98.60%、Voxtral 16.72%→61.05%）；ICAP-Gate 与无门控完全一致（17.74/60.82/2.45/16.72%）
-- 路由审计（n=240）：显式音频请求 40/40 保留，问题文本难负样本 0/40 误触发（整句匹配则 40/40 误判）
-
-**是否开源**：论文与 HTML 全文未提供代码/Demo 链接，暂无开源
-
-### ⭐ 评分：7/10
-评分理由：首次将无关音频鲁棒性转化为"机制定位+条件门控"的模型内干预，从成对漂移度量、因果定位到门控验证的证据链完整，覆盖 4 模型、2 类干扰与全量数据的显著性检验也较扎实，单次生成即接近 SC 稳定性且零 ASR 损失，工程价值明确。不足：漂移降幅多为 2–4 个百分点，Phi-4-MM 上收益尤小；门控依赖指令显式线索，隐式音频需求的泛化存疑；因果定位主要在 Qwen 完成，代码未开源。
-
----
-
-## Toward Accurate Speaker Inventories for Online Speaker Diarization
-
-**arXiv ID**：2610.11278 | **方向**：语音前端
-
-**作者**：Youngki Kwon, Hee-Soo Heo, Minjae Lee, Bong-Jin Lee
-
-**机构**：NAVER Cloud Corporation, South Korea
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11278 | **PDF**：https://arxiv.org/pdf/2610.11278.pdf | **代码**：暂无 | **Demo**：暂无
-
-### 📌 简介
-在线说话人分离系统实时维护一份可被应用直接读取的说话人清单，现有方法要么预先固定清单容量（超出者被合并），要么仅凭距离无界增长清单（噪声与话轮边界造成分裂），而这两种失败都无法从DER看出：VoxSRC-23上固定容量系统少报44-46%说话人，DER最低的无界追踪器多报63%。本文在DC-OST嵌入追踪器上只改动注册触发机制：候选说话人池要求新说话人积攒K个相互兼容的嵌入后才注册，提交门控标签分配在候选未决时挂起输出、不确认不露出。九个数据集上宏平均说话人数错误从225%降至21%，宏DER从17.59%降至15.95%，全部输出平均仅增加0.109秒延迟。
-
-### 🔧 技术方案
-
-**问题背景：** 在线系统各自以attractor、speaker cache、speaker-tracing buffer等名义维护说话人清单，增长规则预先固定且标签一旦发出不可撤销：固定容量在真实人数超过上限时把说话人合并，无界注册则让每一个足够远的嵌入都成为新说话人，单次观测即可播种幽灵说话人。DER按说话人所占时长加权，对人数及其增减方向完全沉默，掩盖了清单层面的系统性错误。
-
-**模型架构：** 流式管线由FireRedVAD检测器（0.6M参数因果DFSMN，零前视）检测语音，ReDimNet2检查点b6-vb2+vox2_v0-lm.pt在1.5秒窗上每0.5秒产生一个嵌入，基础延迟0.5秒。追踪器维护三部分组成：已提交质心注册表、按候选分开的说话人池、按步序释放的挂起队列；路由沿用DC-OST自适应阈值τ_t=min(τ_base+λN_t, τ_max)。
-
-**核心创新：** (1)证据门控注册：将单一共享缓冲改为彼此隔离的候选池，新嵌入与各候选成员两两余弦距离取中位数，在τ_pool=0.45内并入最近候选，否则新建候选；候选积满K=5个成员才以归一化均值质心注册，单元素候选静默超过30秒即丢弃，同时消除了交替未知说话人的合并与单点外点引发的分裂。(2)提交门控标签分配：未决输出以（回退标签，候选临时身份）双重身份入队，候选注册即以临时身份释放，等待超过延迟预算L_prov=2.0秒才以回退最近已注册说话人释放，无任何说话人先于确认出现在输出中，前视只花在8.6%的输出上。(3)计数错误评测轴：提出|e|=Σ|N_sys−N_ref|/ΣN_ref（双向均计），把清单准确性与DER并列为第一级指标，并给出队头阻塞等延迟构成分析。
-
-**训练策略：** 方法为免训练的推理决策规则；K=5、τ_pool=0.45、L_prov=2.0s在DIHARD III与VoxConverse开发集上按DER与|e|折中调定，T_e=30s未调（0.45/0.005/0.8沿用DC-OST超参），无任何评测集参与调参；前端完全复用公开预训练权重（ReDimNet2训练于VoxBlink2+VoxCeleb2，均不在九个评测集内）。
-
-### 📊 实验结果
-**数据集**：九个公开数据集共1,907条录音（DIHARD I-III、VoxConverse、VoxSRC 2021-2023、AMI、AliMeeting，单条1-28人，合计1,473,619个输出）；与现有系统对比用VoxSRC-23与DIHARD III评测集。
-
-**主要指标**：
-- 宏说话人数错误（统一0.15s collar）：基线规则225.0%降至全系统20.7%；宏DER 17.59%降至15.95%（SC 5.95%至4.31%）
-- VoxSRC-23：DER 6.76%、|e| 16.0%，对比系统两轴同时最低（基线规则DER 7.40%但人数超报63.1%；Sortformer/LS-EEND人数缺报46.2%/43.7%）
-- 关键对比：DIHARD III上DER 24.31%落后Streaming Sortformer 4.6%p（19.76%）、S2SND-M 7.2%p（17.12%），|e| 23.2%落后LS-EEND 8.7%p
-- 延迟：平均全体输出额外0.109 s，被挂起的8.6%平均1.27 s，最大4.16 s（总延迟0.50 s+δ）
-- 消融：池使SC在DIHARD III降3.55%p、AMI降2.47%p；延迟使Vox系SC再降1.17-1.53%p；唯一例外AliMeeting因重叠混入嵌入DER持平（34.60→34.76%）但|e|从440%降至13%
-
-**是否开源**：论文正文未提供本方法代码链接，暂无；其前端与对比系统均基于公开实现（FireRedVAD、ReDimNet2、DIART、Streaming Sortformer、LS-EEND）。
-
-### ⭐ 评分：7/10
-评分理由：把DER长期掩盖的说话人计数问题显式化并提出可复核的|e|指标，问题定义有原创性与实用价值；两道门不改管线、纯决策规则即可部署，延迟记账精确到输出的8.6%与1.27秒，工程可信。九数据集双轴对照与敏感性分析充分。不足是相对DC-OST仅增量改动、DER绝对收益有限，高重叠会议场景仍是明显短板，且未发布代码影响复现。
-
----
-
-## SAVU-BENCH: A Real-World Benchmark for Spatial Audio-Visual Understanding
-
-**arXiv ID**：arXiv:2610.10624 | **方向**：语音大模型
-
-**作者**：Yu Chen, Ruihang Liu, Yangguang Xu, Xinyue Jiang, Mohammed Bennamoun, Farid Boussaid, Xinyuan Qian, Qiuhong Ke
-
-**机构**：西澳大利亚大学、北京科技大学、蒙纳士大学
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10624 | **PDF**：https://arxiv.org/pdf/2610.10624.pdf | **代码**：暂无 | **Demo**：暂无
-
-### 📌 简介
-本文提出完全基于真实录制的空间视听理解基准SAVU-Bench，解决现有评测偏仿真场景、能力孤立且缺乏失败机理诊断的问题。基准由六个真实空间视听数据源经四阶段human-LLM标注管线构建，含1,066道多选题，覆盖感知、对齐、推理三层级七类任务；SAVU-Diag将推理题分解为同场景的前置grounding/alignment子任务（611题、81场景）。12个AV-LLM评测显示音频空间定位是核心瓶颈：Audio Grounding最高仅55.6，最佳空间推理45.8只超随机基线3.6个百分点，人类达85.0；训练免调的SAVU-EA注入显式空间线索可将Audio Grounding提升30.7个百分点，但推理差距仍在。
-
-### 🔧 技术方案
-
-**问题背景：** 现有空间视听基准大量依赖仿真环境、只孤立评测定位或匹配单项能力，任务级准确率无法区分推理错误源于感知、跨模态对齐还是关系组合，难以衡量真实录制条件下的泛化水平。
-
-**模型架构：** 本文是评测体系而非新模型。视觉侧从全景录制提取受限FoV视图，FOA一阶球声音频按ViSAGe方式对齐到视觉参考系；任务体系分三层七任务：Perception（Audio/Visual Grounding，含粗定位、相对位置、空间动态）、Alignment（语义对齐、空间对齐、A2V/V2A联合匹配，候选集含语义负例与保持类别兼容的空间负例）、Reasoning（相对方向、空间顺序、自我中心转换推理）。每个推理实例围绕静默视觉锚点、画面内声源与画面外声源构造双模态互补线索。
-
-**核心创新：** (1) 真实场景系统化基准：1,066题横跨MRSAudio、STARSS23、YT360、D-SAV360、MULTIVOX、QoEVAVE六源，平均片段6.12秒，统一评测感知-对齐-推理能力梯度。(2) 场景联动诊断SAVU-Diag：将推理题的前置事实与跨模态对应转成共享同一录音、时间窗与参考系的独立子任务，分离证据获取失败与关系组合失败两类模式。(3) 训练免调证据增强基线SAVU-EA：用OpenVocabularySELD从FOA提取声事件与空间轨迹、Qwen3.5-Omni-Plus提取视觉对象与运动，作为显式空间线索注入Gemini-3.6-Flash，构成知觉瓶颈的干预实验。
-
-**构建与评测策略（论文无模型训练）：** 四阶段管线：场景筛选与结构化（BEATs声事件标签、Grounded SAM 2视觉目标与轨迹、缺空间标注时用OpenVocabularySELD估计方向）、GPT-5.4生成题目候选、人工标注并手工构造推理链、三位领域专家独立作答仅保留至少两人答对的题目；选项循环排列计算平均准确率AA去除位置敏感；除保留4通道FOA的Spatial-Omni外模型均输入单声道downmix，人类经HRTF听双耳音频，人类评测每任务随机抽30题。
-
-### 📊 实验结果
-**数据集**：SAVU-Bench（1,066题、7任务）与SAVU-Diag（611诊断题、81场景、平均每场景7.54题），来自六个真实录制源。
-
-**主要指标**：
-- Audio Grounding：最佳Spatial-Omni SO-7B为55.6（随机50.0），人类89.33
-- Visual Grounding：DOTS-3-Note-Preview达95.4
-- Joint A2V与Joint V2A：最佳35.6与42.8，A2V仅超随机33.3约2.3个百分点
-- Spatial Reasoning：Gemini-2.5-Pro与SO-7B并列最高45.8，超随机基线42.2仅3.6个百分点，人类85.00
-- SAVU-Diag诊断：OmniVideo-7B仅有61.4%推理错误属grounding-only；SO-7B为grounding-only 17.9%、alignment-only 23.1%、双失败46.2%
-- SAVU-EA增益：Audio Grounding +30.7、Joint A2V +19.1、Joint V2A +21.7、Spatial Reasoning +14个百分点
-
-**是否开源**：暂未开源，论文声明接收后计划公开基准、评测代码与构建脚本
-
-### ⭐ 评分：7/10
-评分理由：以真实录制数据统一三层能力评测，并用场景联动诊断定量分离此前混淆的两类推理失败模式，12个模型对比加人类基线充分；评测协议（循环排列、随机基线计算）严谨。局限在于纯基准工作、SAVU-EA依赖外部SELD与视觉模型的正确性存在级联误差，且未给出消除推理差距的端到端方案；千题规模适中，对空间音频大模型研究方向指引价值高。
-
----
-
-## EgoVoice: Proactive Spoken Assistance from Egocentric Multimodal Streams
-
-**arXiv ID**：arXiv:2610.12248 | **方向**：语音大模型
-
-**作者**：Heeseung Kim
-
-**机构**：Department of AI, University of Seoul
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.12248 | **PDF**：https://arxiv.org/pdf/2610.12248.pdf | **代码**：暂无 | **Demo**：https://egocentricvoice.github.io/
-
-### 📌 简介
-面向可穿戴AR场景中的持续第一视角视频/音频流，本文提出 proactive egocentric spoken assistance：助手需自主决定何时开口、说什么，而现有语音系统多为反应式，主动视频助手仅输出文本。作者从HoloAssist真实导师录音出发，经音频分离与语音重合成构建流式语音监督数据，在MiniCPM-o 4.5上做SFT并用DPO优化干预时机。EgoVoice-DPO将onset F1提升至0.324（零样本骨干0.113、ProAssist 0.195），end-vs-action +1.75s接近人类导师+1.69s，并在人工偏好对比中显著胜出基线。
-
-### 🔧 技术方案
-
-**问题背景：** 语音交互系统依赖VAD/轮次触发，用户在体力任务中几乎不说话则模型极少介入；文本主动助手的指令时间戳与语音播放时长错位，且无法涵盖真实环境声。尚无单一模型联合学习连续egocentric流上的干预时机与语音内容。
-
-**模型架构：** 以9B流式全双工Omni模型MiniCPM-o 4.5为骨干，每1秒chunk输入1帧视频与混合音频（背景声+用户语音），输出Listen或Speak决策；Speak后经LLM生成BPE文本，0.3B语音token解码器转为S3 speech token，再由流式flow-matching解码器合成波形。系统prompt含任务名与逐步recipe。
-
-**核心创新：** (1) 语音数据工程管线：SAM-Audio以语音区间为prompt分离去除变调人声、仅保留背景残差并用Silero VAD校验；GPT-5-mini规范文本并剔除9.0%无关 remarks，IndexTTS2以MLS每会话参考音色分别重合成用户/导师语音，多候选中仅保留Qwen3-ASR转写完全一致且时长不超原文者，使干预时刻与真实行为天然对齐。(2) 逐秒chunk的Listen/Speak流式监督：每条导师话语构造中心对齐的60秒窗口（带时间抖动），每epoch 13,676窗口，文本与语音token联合监督；(3) 以指标为奖励的时机偏好优化：同上下文采样N=10候选，按onset F1择优（最小差0.10）构造5,335对，采用length-normalized DPO直接校准"何时说话"。
-
-**训练策略：** LoRA r=32/α=64/dropout 0.05，冻结视觉与音频编码器；SFT损失L_LM+0.1·L_S3并做主干-解码头梯度detach，lr 2e-4、batch 32、5 epochs（2,140步）；DPO仅调LLM、语音解码器冻结，β=0.1、lr 5e-6、batch 16、1 epoch（334步）；cosine+5% warmup、weight decay 0.01、梯度裁剪1.0、bf16+FlashAttention-2。
-
-### 📊 实验结果
-**数据集**：HoloAssist加工版（原1,673会话124.8h→1,249训练91.7h/170评测12.9h），主报text-asr通道
-
-**主要指标**：
-- Onset F1：DPO 0.324、SFT 0.274（ProAssist 0.195、零样本MiniCPM-o 0.113、Gemini Live 0.022）
-- Content cosine：SFT 0.684（ProAssist 0.594，+0.090）
-- end-vs-action：DPO +1.75s/SFT +1.57s，人类导师+1.69s；ASR/TTS级联为-0.44s
-- LLM Judge Overall：SFT 2.23、DPO 2.18 vs 零样本1.41
-- 人工偏好：SFT胜45.6%/负31.3%（p=0.01），DPO胜45.3%/负33.0%（p=0.02）
-- 关键对比：相对零样本骨干，SFT的F1提升+0.161（p<1e-12）
-
-**是否开源**：项目页提供数据音频样本与对比demo；作者声明将以CDLAv2兼容方式释放数据集、代码与模型，预印本阶段代码仓库暂无。
-
-### ⭐ 评分：7/10
-评分理由：首次把"何时说+说什么"合并为可训练的持续第一视角语音助手任务，数据管线严谨、评测协议（双通道+end-vs-action分解+显著性检验）完整，SFT/DPO互补分析与消融充分。局限在于单一装配域、recall仅0.285、录制式评测非交互式，骨干复读/语言切换伪影残留，且正式发布尚未落地代码，实用价值有待开源验证。
-
----
-
-## Detection-Guided Adaptive Purification with Diffusion Models for Robust Audio Deepfake Detection
-
-**arXiv ID**：arXiv:2610.10752 | **方向**：语音大模型
-
-**作者**：Muhammed Salih Kayhan, Qiben Yan
-
-**机构**：Michigan State University
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10752 | **PDF**：https://arxiv.org/pdf/2610.10752.pdf | **代码**：https://github.com/msalih98/DGAP | **Demo**：暂无
-
-### 📌 简介
-音频深伪检测器易被微量对抗扰动欺骗为真人语音。本文提出 DGAP，一种不修改、不重训检测器的扩散净化防御：低噪声级轻度净化使对抗样本的 bonafide 分数偏移远大于良性样本，以该分数差为无参考对抗标志，仅对被标记输入施加强净化，其余原样通过。在 ASVspoof 2019 LA 上对 AASIST、RawGAT-ST、Res-TSSDNet 与 PGD l_inf/l_2、C&W 评测，综合目标 y 为 5.61/5.18/21.65%，优于最强扩散基线 DiffPure 的 12.56/11.26/29.69%，EER_clean 几乎无损，防御感知攻击下仍最优。
-
-### 🔧 技术方案
-
-**问题背景：** 对抗训练依赖攻击感知重训，加噪类防御引入额外失真；现有扩散净化（DiffPure、AudioPure、WavePurifier）对所有输入固定同一强度，过强抹除微弱合成伪影，过弱残留扰动，难以兼顾去扰动、保伪影与保良性。
-
-**模型架构：** probe、gate、purify 三段流水线。净化骨干为微调后的 OpenAI guided-diffusion（Dhariwal 256x256 权重，VP-SDE 线性调度，N=1000）：波形经 512 点/hop 128/Hann 窗 STFT 取幅度谱，dB 归一后切方形窗口独立净化，保留相位 iSTFT 重建后送入冻结检测器。
-
-**核心创新：** (1) 检测器引导的逐输入强度自适应：以 t_g 级探针净化后的 bonafide 分数差为对抗指标，无需干净参考、攻击类型与预算知识。(2) 统计门控：阈值取良性校准集分数差的均值加 gamma 倍标准差，仅超标输入进入强 t_p 净化；并由前向加噪下对抗与干净表示差异随 alpha_bar 单调收缩论证轻探针可放大两类响应差。(3) t_g 与 t_p 解耦，(t_g,t_p,gamma) 在开发集按 y=EER_clean+lambda·EER_adv 搜索，每检测器一套攻击无关配置。
-
-**训练策略：** 净化器在 LA 训练集提取的 55,001 个频谱窗口上微调，窗口兼取 bonafide 与 spoof 两类；16 kHz，dB 偏移 -20、归一 [-120,25] 至 [0,1]；网格 t=20-300 共 15 级、gamma 0.5-3.0（步长 0.01）、lambda=1；攻击 PGD l_inf eps=0.005、l_2 eps=1.0（迭代 10-100），C&W k=10、c=1.0、200 步；正文未披露优化器与学习率。
-
-### 📊 实验结果
-**数据集**：ASVspoof 2019 LA（16 kHz；train/dev/eval 25,380/24,844/71,237 条；测试 600 条 spoof 配等量 bonafide）
-
-**主要指标**：
-- 综合 y（%）：5.61/5.18/21.65，DiffPure 12.56/11.26/29.69，无防御 53.78/23.99/50.85
-- EER_clean（%）：1.83/1.67/2.83，接近无防御 1.17/1.25/2.17
-- EER_adv（%）：PGD l_inf 4.25/4.33/19.37；C&W 2.08/1.61/21.40（无防御 46.5/20.7/38.5）
-- 消融（%）：AASIST 同 t_p 下由均匀净化 24.40 降为有门控 9.30
-- 自适应 BPDA+EOT：RawGAT-ST y=14.17 仍最优，仅 33.3/34.2% 对抗被门控
-- 耗时：良性约 8-15 s，对抗约 31-52 s（RTX A6000）
-
-**是否开源**：代码已开源 @ https://github.com/msalih98/DGAP
-
-### ⭐ 评分：7/10
-评分理由：以检测器自身响应驱动净化强度，无需参考与重训即可插拔，思路新颖并有单调性论证；3 检测器 x 3 攻击 x 9 基线加防御感知攻击，评测充分、指标全面领先。局限是 1000 步扩散令单条耗时达秒级至数十秒，离实时部署较远，且仅在 ASVspoof 2019 验证，跨数据集泛化与效率待补。
-
----
-
-## Disentangling Linguistic and Paralinguistic Information with Routed Sparse Autoencoders
-
-**arXiv ID**：arXiv:2610.10865 | **方向**：语音大模型
-
-**作者**：Beimnet Bekele Guta, Xiaoyu Yang, Guangzhi Sun, Philip C. Woodland
-
-**机构**：University of Cambridge, Department of Engineering
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10865 | **PDF**：https://arxiv.org/pdf/2610.10865.pdf | **代码**：暂无 | **Demo**：暂无
-
-### 📌 简介
-自监督语音编码器（WavLM/SPEAR）在同一表征空间中混合语言与副语言信息，难以对单一因子做选择性读取或移除。本文在冻结编码器上叠加TopK稀疏自编码器，通过单元级路由、路由内任务监督与跨因子对抗训练，将稀疏码划分为语言与副语言两条路由。独立探针显示：SPEAR固定路由下语言路由音素错误率PER为10.02%而说话人识别准确率仅6.2%，副语言路由SID达99.8%而PER升至99.60%；在LibriSpeech习得的路由组织可迁移至MSP-Podcast，路由交换实验实现99.57%的音素保留与98.00%的供体说话人转移，证明路由具备功能级双重分离。
-
-### 🔧 技术方案
-
-**问题背景：** SSL语音表征中音素、说话人、情感、韵律纠缠于同一激活，扰动不变性、信息瓶颈与对抗训练等方法只能整体地削弱某一因子；已有语音/音频SAE研究侧重分析自发发现的特征，稀疏性本身并不保证学到的单元对应事先选定的因子分解。
-
-**模型架构：** 冻结语音编码器输出帧级D维表征x_t（SPEAR XLarge与WavLM Large，逐层无参数LayerNorm后均匀跨层平均）；线性SAE投影到K>D过完备字典并取TopK后解码重建。激活单元经互补掩码（m_L[u]+m_P[u]=1）分为语言路由z_L与副语言路由z_P，分别接入PR（CTC）任务头与SID/情感/韵律任务头，反方向由各对抗头经梯度反转层作用。
-
-**核心创新：** (1) 首次把SAE从特征解释工具转为有监督因子分离工具：单元级路由掩码将TopK单元划入两条路由，掩码互补保证z_t=z_L+z_P、整体稀疏码仍可完整重建编码器表征。(2) 可学习路由用直通Gumbel-Softmax硬分配加路由熵惩罚促使决断性分配，并提出固定路由与在第4000步冻结分配、按均激活率转为各路线额（quota-freeze）的两种组织策略。(3) 跨因子对抗：phone对抗作用于z_P、speaker/emotion/prosody对抗作用于z_L，配合任务监督同时实现目标因子保留与跨因子抑制，消融证明二者互补。
-
-**训练策略：** 总目标为λ_recon·L_recon + λ_AuxK·L_AuxK + L_task + L_adv（可学习路由期加路由熵项），AuxK以64预算、权重1/32复活死单元。字典宽K=5120、激活预算k=256；固定路由用连续K_L/K_P=4096/1024与激活预算k_L/k_P=240/16；quota-freeze在step 4000由20个采样batch的均激活率设定冻结后预算；SPEAR重建/固定模型训12000步，WavLM 12000步、quota-freeze 16000步；论文未披露学习率、优化器与batch size。
-
-### 📊 实验结果
-**数据集**：LibriSpeech train-clean-100（251说话人闭合集SID，74符号音素表，PR用dev-clean/test-clean）；MSP-Podcast 51,017子集（700说话人，41,067/4,975/4,975划分，SID随机水平0.143%）
-
-**主要指标**：
-- 语言路由（SPEAR固定）：PER 10.02%、SID准确率6.2%；副语言路由：SID 99.8%、PER 99.60%
-- quota-freeze语言路由：PER 8.94%、SID 0.6%（对比仅重建SAE的SID 99.6%，跨因子抑制幅度约99个百分点）
-- 零重训跨库迁移：固定路由z_L/z_P PER 43.92%/99.72%、SID 12.82%/82.71%，路由组织在MSP-Podcast保持
-- 路由交换：P-swap后音素保留99.57%、供体说话人匹配98.00%；L-swap后受体说话人保留96.00%、供体音素保留99.10%
-- 对比最强基线Eta-WavLM：其h_η PER仅7.25%但SID仍有95.41%，选择性抑制远弱于路由SAE
+- SimIF-Bench 200场景：SteerablePlex(in-domain)在目标完成与精确顺序两项上均超过最强基线GPT-Realtime（论文正文未给出表中具体数值，见Figure 2），在20个留出场景上优势保持
+- 轮替能力（Table 1，对比基座PersonaPlex）：停顿处理Syn. 0.642→0.394、backchannel TOR 0.418→0.218、平滑轮替TOR 0.983→1.000、打断TOR 0.935→1.000、打断评分4.684→4.790
+- 关键对比：对基座10项轮替指标中6项提升（如打断评分+0.106），backchannel分布与基座接近；持续驱动的KAME各backchannel与打断指标明显退化，验证显式轮替奖励防止交互策略被破坏
 
 **是否开源**：暂无
 
 ### ⭐ 评分：7/10
-评分理由：把SAE引入语音解耦并配齐"路由+任务监督+双向对抗"的归纳偏置，在两个冻结编码器、两个语料、独立探针与受控路由交换下均得到一致的双重分离证据，实验设计严谨可信。不足是语言路由PER较仅重建基线劣化约3-4个百分点、训练超参披露不全、情感/韵律仅单库验证，且未开源限制了可复现性与即插即用价值。
+评分理由：首个系统性回答"全双工模型可否运行时受控"的工作，指令注入接口、Actor-Director协同与GDPO多奖励配方组合具备明确新颖性，对用户模拟器场景实用价值高。实验覆盖200场景、对比GPT-Realtime/KAME/Raon等多组基线并双基准验证；但SimIF-Bench主结果仅以图呈现、正文缺具体数值与消融，故定为实质贡献。
 
----
+## 10. Selective Listening: Mechanism-Guided Control of Audio Influence in Large Audio-Language Models
 
-## How Much Audio Is Left In An Embedding? An Inversion Audit Of Audio Encoders
+**arXiv ID**：2610.11196 | **方向**：语音大模型
 
-**arXiv ID**：arXiv:2610.12250 | **方向**：语音大模型
+**作者**：Yulin Sun, Kele Xu, Yong Dou
 
-**作者**：Marios Glytsos, Brian McFee
+**机构**：国防科技大学计算机学院；复杂关键软件环境全国重点实验室
 
-**机构**：Music and Audio Research Laboratory, New York University
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.12250 | **PDF**：https://arxiv.org/pdf/2610.12250.pdf | **代码**：https://mariosgly.github.io/research/audio-embedding-inversion/ | **Demo**：https://mariosgly.github.io/research/audio-embedding-inversion/
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11196 | **PDF**：https://arxiv.org/pdf/2610.11196.pdf | **代码**：暂无 | **Demo**：暂无
 
 ### 📌 简介
-预训练编码器常被复用于未知下游任务，甚至作为音频替代品在隐私与版权场景分发，其嵌入残留多少源信息缺乏标准度量。本文提出统一逆转向审计：以同一Stable Audio Open潜空间扩散解码器为探针，分别用VGGish、CLAP、ConvNeXt、EnCodec四族冻结表征微调配对源重建，在Million Song Dataset音乐上评测。EnCodec在同一探针下配对源检索R@1达0.894（其原生解码器为1.000），VGGish仅0.004；同编码器内更细粒度接口一致提升可恢复性，表明面向任务的压缩嵌入仍保留可测量的源特异性与高层音乐内容。
+针对LALM在纯文本推理任务中受任务无关音频干扰、且聚合准确率会因修复与损害相消掩盖单样本决策漂移的问题，论文提出配对漂移分析（Influence Rate/Answer Flip）与机制引导的指令条件音频通路门控ICAP-Gate：离线定位各模型干预敏感的晚期音频通路，推理时按指令是否显式需求音频将其输出乘以模型特定衰减系数λ（0.10-0.25）或保持原样，每查询仅一次生成。在4个LALM、ARC与MMLU、环境声与自然语音干扰共16个全量设置上，IR与Answer Flip均低于无门控；ASR的WER与无门控完全一致。
 
 ### 🔧 技术方案
 
-**问题背景：** 以嵌入替代音频分发时，下游可用性无法揭示保留了多少源细节；逐编码器自适应攻击使跨家族比较混淆，且难以分离嵌入信息缺失与探针能力限制。
+**问题背景：**LALM中模态可用不等于任务相关：环境声或无关语音可改变文本推理决策，而净准确率把正确→错误与错误→正确的转移相消，掩盖个体漂移；既有缓解（提示、多采样Self-Consistency）作用于输入层或输出层，无法定位并控制模型内部影响音频的因果通路。
 
-**模型架构：** 探针初始化自Stable Audio Open 2.0：固定VAE将5秒44.1kHz立体声压为64通道潜变量（降采样比2048），去噪主干为24层/宽1536/24头扩散Transformer，交叉注意力读取768维token。原T5接口替换为各冻结表征经线性层投影至768维：VGGish 128x(6-7)、CLAP 512x1或512x5、ConvNeXt 768或5376x(16-17)、EnCodec z_q 128x750；除接口外其余条件完全一致。
+**模型架构：**免训练方法，部署于Qwen2.5-Omni-7B/3B、Phi-4-MM（5.6B）、Voxtral-Mini-3B四个现成LALM。ICAP-Gate作用于机制定位出的晚期音频通路模块并对模块输出施加门控：z̃_ℓm = g(I)·z_ℓm，其中Qwen-7B/3B取audio_tower.layers.25（归一化深度0.81，26/32层）、Phi-4-MM取audio_embed.encoder.encoders.23（1.00，24/24）、Voxtral取audio_tower.layers.30（0.97，31/32）；门控g(I)∈{1, λm}，λm为离线校准的模型特定衰减系数（Qwen 0.25、Phi 0.10、Voxtral 0.25）。
 
-**核心创新：** (1) 统一生成式探针：所有条件共享同一预训练扩散先验、按接口分别微调，以标准化审计替代最坏情况攻击，使可重建性跨家族可比；新投影近零初始化，缓解条件接口替换的训练扰动。(2) 时间局部注意力先验：交叉注意力分数加按头可学的时间差分桶偏置，并以|t-s|<=0.2硬掩码使潜变量对齐时间对应区段，亦助益EnCodec等稠密接口的算力受限微调。(3) 接口级消融与双指标校准：同编码器构造CLAP 5s/1s、ConvNeXt池化/展平变体以隔离时频压缩本身的影响；MR-STFT距离与SAO-VAE余弦相似度并用，后者以200k随机源-源对校准，分离波形误差与解码器表征局限。
+**核心创新：** (1) 配对漂移度量：将准确率差拆解为方向性转移，定义IR=（干净对→错+干净错→对）/N与Answer Flip（含错答互换），揭示聚合Acc几乎不变时个体决策大量移动的隐藏失败模式。 (2) 机制引导通路定位：以通路缩放、模块级消融（z̃ℓ=α·zℓ, 0≤α≤1）及NetC2W/NetAnswer配对转移与金标答案logit margin分析，在Qwen2.5-Omni因果定位干预敏感晚期音频通路，并在三类异构架构中复现同类控制点，区别于仅凭激活幅度的解释。 (3) 指令条件门控：仅解析任务指令中的显式音频需求指示r(I)∈{0,1}（不做问题正文词法匹配），需求时保持通路开放（g=1）否则衰减（g=λm），单次生成、免clean参考路径、免辅助相关性模型，实现"抑制无关影响+保留ASR能力"。
 
-**训练策略：** v-prediction潜空间扩散损失；因目标是重建配对源，条件dropout为0、guidance权重w=1；推理用150步确定性DDIM（eta=0）。MSD按artist不相交划分为219,810/26,190/26,367条、覆盖15个流派；先用Demucs去人声以匹配SAO器乐先验域。4 GPU、单卡batch size 32，每个接口微调约36小时。
+**训练策略：**推理期方法，无参数更新、无训练损失；(ℓm, λm)由离线pathway scaling干预校准得到，在线仅需一次指令路由决策与一次临时通路缩放；Qwen用确定性解码，Voxtral用nucleus T=0.2、p=0.95、max_new_tokens=1024，clean/无门控/ICAP三条件共用同一解码配置；ASR侧效果每模型用400条LibriSpeech dev-clean语料评测。
 
 ### 📊 实验结果
-**数据集**：Million Song Dataset（含Tagtraum流派标注）5秒44.1kHz立体声器乐片段，测试26,367条。
+
+**数据集**：ARC-Challenge全量1,172题、MMLU测试集14,042题；FSD为FSD50K真实环境声配对，SIB为LibriSpeech dev-clean随机配对的5秒16kHz单声道自然语音（2,694条唯一语音、40/97章节覆盖）；ASR侧效果用每模型400条dev-clean语音。
 
 **主要指标**：
-- MR-STFT距离（越低越好）：EnCodec 0.13、CLAP 1s 0.19、VGGish 0.21，原生EnCodec 0.10为参照
-- SAO-VAE余弦相似度：EnCodec 0.47，ConvNeXt展平 0.24，VGGish 0.15，原生EnCodec 0.89
-- 配对源检索R@1/R@10（在26,367个测试片段中）：EnCodec 0.894/0.913，ConvNeXt展平0.352/0.539（池化0.094/0.201），CLAP 1s 0.024/0.091（5s 0.006/0.034），VGGish 0.004/0.021
-- MusicNN标签重合度：EnCodec 0.847，VGGish 0.733
-- 关键对比：EnCodec较VGGish的R@1高0.890；同编码器ConvNeXt展平较池化提升R@1约0.258
+- IR（无门控→ICAP）：16个全量设置点估计全部下降，如Qwen2.5-Omni-7B MMLU-SIB 13.65%→11.19%（降2.46pp），Voxtral-Mini-3B MMLU-SIB 28.41%→25.88%（降2.53pp），Phi-4-MM MMLU-SIB无门控最高达30.00%
+- Answer Flip：7B MMLU-SIB 18.89%→15.58%（降3.31pp），3B MMLU-SIB 25.17%→20.65%（降4.52pp），NetC2W与NetAnswer恢复最多+303/+635
+- ASR WER（%）：ICAP与无门控完全一致（17.74/60.82/2.45/16.72），固定抑制升高16.28-123.76pp（Qwen-7B升至98.60）
+- 路由审计：240个硬案例中指令级路由0/40误报（全文匹配40/40误报），显式音频请求40/40正确开路
+- 关键对比：vs缓解提示，4个设置IR/Flip均更低，MMLU-SIB分别低8.87/11.76pp（配对95%CI不含零）；vs 8样本Self-Consistency，SCS漂移略低（最多-2.99pp）但延迟为无门控7.03-9.22倍，ICAP仅0.89-1.06倍
 
-**是否开源**：代码与试听样例经上述项目页面发布，论文未提供独立GitHub仓库。
+**是否开源**：暂无（仅提供匿名补充代码存档）
 
-### ⭐ 评分：6/10
-评分理由：将逆转重构为受控的跨家族可重建性审计，接口消融与双指标校准的方法学干净，对嵌入代音频流通的隐私版权风险有直接警示价值。局限在仅覆盖音乐域与单一数据集，绝对重建保真度有限，只能给出保留信息下界而非泄漏量，且结论受生成先验域限制。属增量但扎实、可复用的审计工作。
+### ⭐ 评分：7/10
+评分理由：提出"模态可用≠模态影响"的机制引导任务条件控制范式，概念新颖且闭环完整；配对漂移度量直击聚合指标盲区，4模型×16全量设置加ASR保持、路由审计与配对bootstrap统计，证据充分、可复现性文档详尽。不足在于可控通路限于单一模块、部分模型（Phi-4-MM ARC）收益有限；SIB仅随机5秒片段，语义相似/多说话人等更真实干扰留待未来；漂移控制弱于多采样Self-Consistency；代码未公开。
 
----
+## 11. Beyond Speech Captions: Speech-Rewarded Style Planning for Conversational Text-to-Speech
 
-## Controlled Acquisition and Abstention in Three-Channel Score Conflicts
+**arXiv ID**：2610.11461 | **方向**：语音大模型
 
-**arXiv ID**：arXiv:2610.10808 | **方向**：语音大模型
+**作者**：Shiao Zhu, Lianbo Liu, Sizhen Lyu, Yuzhe Wang, Sheng Li, Takahiro Shinozaki
 
-**作者**：Mengzhe Geng
+**机构**：Institute of Science Tokyo, Independent Researcher（Tokyo, Japan）
 
-**机构**：National Research Council Canada
-
-**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10808 | **PDF**：https://arxiv.org/pdf/2610.10808.pdf | **代码**：https://github.com/MENGZHEGENG/audio-video-text-conflicts | **Demo**：暂无
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11461 | **PDF**：https://arxiv.org/pdf/2610.11461.pdf | **代码**：暂无 | **Demo**：暂无
 
 ### 📌 简介
-当音频、视频、文本通道冲突时，仅凭准确率无法回答"是否值得获取第三个信源、何时应弃权"。本文构建受控三符号分数基准：策略先观察两路分数，可付费0.10请求第三路，也可付费0.20弃权，且弃权仅对指定 ambiguity 机制判对。在部分留出分片上，固定阈值策略以83个随机种子达到0.789±0.006定向决策准确率与0.481±0.014效用，优于三分数 majority 基线（0.626/0.252）；但该优势强依赖奖励口径与信息预算，学习式查询选择器整体不敌简单阈值与不确定性排序。
+会话式TTS依赖自然语言风格描述衔接LLM推理与可控合成，但描述式伪标签监督与下游声学控制有效性脱节。本文提出SRSP框架，以冻结CosyVoice3 TTS对目标语音token的teacher-forced似然作为奖励，用GRPO训练Qwen3.5-9B风格规划器，无需目标风格caption。在ISCSLP 2026 CoT-TTS英文子集上，SRSP五项下游声学指标全面优于Base LLM与目标音频辅助captioning基线：S2S达0.3632，MCD-DTW降至5.9569（test_in），Gemini盲测在语境恰当性与参考一致性上全胜。
 
 ### 🔧 技术方案
 
-**问题背景：** 现有融合模型始终输出标签，隐藏了缺失源是否值得获取、观测能否支撑安全答案两个决策；冲突基准与可信度融合聚焦回答生成，缺少对获取+弃权的显式成本化评测。
+**问题背景：** 现有工作（如Chain-Talker）以语音captioner（StyleCap/SECap/AlignCap）的描述文本作为伪标签训练风格规划器，但目标声学细节被压缩进文字而丢失；更关键的是预测目标描述与为特定合成器生成有效指令是两个不同目标，准确描述未必诱导最接近目标的声学实现。作者实证表明CLAPScore等语音-文本对齐分数与下游声学相似度近乎零相关，按T2S选指令与随机无异。
 
-**模型架构：** ConflictBench 生成器由潜二值事件产生三通道分数 x_m=(2y-1)s+ε（s=1，σ=0.22），叠加 invert/swap/dropout/mixed/burst/ambiguity 机制。基线含 Majority/Median/Weighted、MLP（6→32→16→3）、Gated 与学习式获取打分器（4→24→12→1，特权全分数目标）；时序用宽度96、深度4的 fusion/gated 网络处理 [3,T] 轨迹。阈值策略：两符号冲突或任一分量幅值<τ=0.35 即请求第三源；获取后仅当≥2个分数幅值≥τ且同号才回答，否则弃权。
+**模型架构：** 整体为"风格规划器+冻结下游TTS"管线。规划器基座为Qwen3.5-9B（LoRA微调），输入文本对话历史H与响应文本y，输出单句英文风格指令z；z与y、同说话人prompt音频p共同条件冻结的Fun-CosyVoice3-0.5B（自回归LLM+声码器）合成语音。推理时仅需(H,y)，目标语音token s仅在训练期用于构造奖励，不进入规划器输入。
 
-**核心创新：** (1) 把获取与终局动作解耦的匹配控制：τ>0 时 always-query 与阈值策略逐样本终局一致，效用差恰为省下的请求费 0.10×(1-0.6344)=0.03656。(2) 机制特异奖励：弃权只对 ambiguity 判对、对 mixed 照常收费，并用 mixed-reward 与弃权全错变体证明效用排序是奖励掩码下的适应结果。(3) 匹配预算选择器实验：统一 sum-rule 终止，比较 train-only ridge 价值选择器（α=1，7维特征）、pair 不确定性、匹配随机与不可部署 oracle，在 10%–63.7% 预算下量化请求前选择价值。
+**核心创新：** (1) 提出语音token似然奖励：对每个候选指令zi，冻结TTS的自回归LLM在目标语音token序列上计算teacher-forced平均交叉熵，取负值为奖励Ri=−LTTS(zi)−Pi，使规划器直接优化合成器实际声学输出而非描述一致性；同组候选共享(y,s)，相对损失差直接度量各指令对同一目标的差异化控制效果。 (2) 以GRPO完成免caption规划器训练：每样本采G=8条指令，组内奖励标准化得优势值，配合clip目标与对参考策略的KL约束更新策略，无需任何目标风格描述标注。 (3) 给出描述对齐弱代理的候选级证据：8条候选指令的句内Spearman相关显示T2S与S2S/情感相似度/MCD近零相关；AF-Next基线T2S全最高但五项下游指标全垫底，反证合成感知反馈的必要性。
 
-**训练策略：** Adam 训练90轮、batch size 256、学习率0.0015、梯度裁剪范数5；分类用交叉熵、查询打分器用二元交叉熵；6000条训练样本，打分器阈值在校准分片上从{0.1,…,0.9}按效用选定；时序模型 AdamW、800优化步；主研究83种子、10000次配对bootstrap。
+**训练策略：** Qwen3.5-9B在全线性层做rank-16 LoRA（α=32，dropout 0.02）；GRPO训练1个epoch，G=8，学习率2×10⁻⁶，clip η=0.2，KL权重β=0.075，TRL 1.3.0默认token级重要性采样加DAPO式损失归一化；采样温度训练1.3、测试0.7。辅助惩罚：指令短于6词罚5、6-11词罚0.5，重复二元/三元组按0.01罚（每worker滚动2048条历史）。每实例随机采0-3条CosyVoice风格示例作in-context演示（组内共享），推理采2条。数据规模：277.60小时英文训练语料。
 
 ### 📊 实验结果
-**数据集**：合成三分数生成器（6000训练/4000评测；时序含207个设置-种子运行）；媒体诊断含 CMU-MOSEI 描述符、1244段演员留出 CREMA-D、AMI 244例。
+
+**数据集**：ISCSLP 2026 CoT-TTS语料英文子集（总池299.75小时，筛选条件：时长3-15s、活跃语音比≥0.70、响度≥-40dBFS、转写≤300字符、参考相似度≥0.65、自然度≥3.0、噪声分≥3.5）；训练277.60小时；dev_in/test_in按整场景留出、dev_out/test_out按整部电影留出，各2750句（约5小时）。
 
 **主要指标**：
-- 定向决策准确率（部分留出）：阈值 0.789±0.006、学习式获取 0.746±0.010、多数表决 0.626±0.008
-- 效用：阈值 0.481±0.014 对比多数表决 0.252±0.016（差 +0.230 [0.226, 0.233]）；弃权全错口径下 majority 反超（0.252 对比 -0.064）
-- 机制分解：作答时条件准确率 0.918±0.005，新 ambiguity 弃权率 0.992，mixed 效用 -0.839
-- 匹配预算：价值选择器 10% 预算 +0.0138、25% +0.0041，50%/63.7% 为 -0.0795/-0.1493，全预算段不及 pair 不确定性
-- CREMA-D 八帧融合减音频 +5.87%（wav2vec 2.0+ViT）与 -2.49%，演员置信区间均含零
+- S2S(ParaCLAP-C)：SRSP 0.3632/0.3627，Base LLM 0.3166/0.3220，AF-Next 0.2874/0.2982（test_in/test_out）
+- S2S(CLSP)：SRSP 0.8329/0.8296，Base LLM 0.8150/0.8146
+- 情感相似度(emotion2vec)：SRSP 0.6417/0.6269，Base LLM 0.6124/0.5927
+- MCD-DTW：SRSP 5.9569/6.1637，Base LLM 6.3395/6.5072
+- Gemini盲测胜率：SRSP对Base LLM语境恰当54.19%/53.67%、参考一致60.91%/57.75%
+- 关键对比：较Base LLM，S2S(ParaCLAP-C)提升+0.0466/+0.0407、情感相似度+0.0293/+0.0342、MCD降低0.38/0.34；且全面优于可直接使用真实目标音频的特权captioning基线AF-Next与Qwen3-Omni；40项下游对比中38项Wilcoxon+Holm检验显著（p<.05）
 
-**是否开源**：代码已开源 @ https://github.com/MENGZHEGENG/audio-video-text-conflicts（MIT）。
+**是否开源**：暂无
 
-### ⭐ 评分：6/10
-评分理由：方法学严谨，匹配控制的效用差恒等式、多种子配对bootstrap与诚实的负结果报告是诊断式评测的好示范；但核心增益强绑定特定奖励口径，学习策略全预算段不敌固定阈值与不确定性基线，媒体实验置信区间含零，对语音系统缺乏可直接部署的收获，价值主要在评测协议设计层面。
+### ⭐ 评分：7/10
+评分理由：以冻结TTS的目标语音token似然作GRPO奖励、免caption训练风格规划器的思路清晰且有新颖性，辅以T2S弱相关的候选级实证，动机扎实；实验覆盖双分区、五项声学指标与LLM表达力盲评，统计检验充分。但方法绑定CosyVoice3单一后端、奖励计算与合成同源，缺乏人类听感验证，且未开源代码，相关似然奖励与GRPO已有先例，故为实质贡献而非突破性工作。
 
 ---
 
-## 📄 更多语音论文（紧凑列表）
+## 语音前端
 
-> 以下 10 篇为当日语音相关论文，未进入精读队列，仅列出基础信息（标题 / arXiv ID / 方向 / 评分 / 链接），按预估评分从高到低排列。
+## 12. SepGen: Multi-Stem Audio-Video Separation and Generation in a Single Model
 
-**SmoothConv and DuplexConv: Complementary Mandarin Multi-Party Conversational Speech Corpora for Speech Interaction**
-- **arXiv ID**：arXiv:2610.11150 | **方向**：语音大模型 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.11150（未精读，按摘要评分）
+**arXiv ID**：2610.11361 | **方向**：语音前端
 
-**Listen-to-Reason: Listen with Experts, Retrieve over a Graph, Reason with LLMs**
-- **arXiv ID**：arXiv:2610.10749 | **方向**：语音大模型 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.10749（未精读，按摘要评分）
+**作者**：Aviad Dahan, Rajaei Khatib, Yonatan Bitton, Idan Szpektor, Lior Wolf, Raja Giryes
 
-**SEER: Source-Conditioned Emotion Enhancement via Retrieval for Cochlear-Implant Speech**
-- **arXiv ID**：arXiv:2610.11131 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.11131（未精读，按摘要评分）
+**机构**：特拉维夫大学、Google
 
-**Using the enrollment gallery as evidence: affine-invariant score calibration for target speaker tagging**
-- **arXiv ID**：arXiv:2610.11272 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.11272（未精读，按摘要评分）
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11361 | **PDF**：https://arxiv.org/pdf/2610.11361.pdf | **代码**：https://sepgen.github.io/ | **Demo**：https://sepgen.github.io/
 
-**MiDashengLM-Spatial: Unifying General Audio Understanding and Spatial Awareness**
-- **arXiv ID**：arXiv:2610.11156 | **方向**：语音大模型 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.11156（未精读，按摘要评分）
+### 📌 简介
+现有联合音视频生成器只输出一条混合声轨，声源无法被单独编辑或在新视角下空间化重渲染。SepGen将预训练LTX-2.5 22B音视频生成器扩展为多stem模型，一次采样同时输出视频、混合轨与每个声源一条波形，同一套权重通过噪声水平切换生成/分离双模式。在Veo基准分离上Judge 4.36、J-swap 2.61、语音自台词WER 0.05（去除台词后仍0.50领先全部基线）；129个带参考stem场景上包络相关0.82、LSD 6.39dB全面第一。
 
-**Beyond Speech Captions: Speech-Rewarded Style Planning for Conversational Text-to-Speech**
-- **arXiv ID**：arXiv:2610.11461 | **方向**：语音大模型 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.11461（未精读，按摘要评分）
+### 🔧 技术方案
 
-**Cross-Lingual Speaker Verification with Self-Supervised Pre-Trained Models**
-- **arXiv ID**：arXiv:2610.11099 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.11099（未精读，按摘要评分）
+**问题背景：** 现有联合音视频生成器（LTX-2、Ovi、Veo 3.1 Lite）只输出整场景一条audio-mix，声源不可移动、删除或单独重渲染，4D场景换视角重渲染时没有任何可交给空间音频渲染器的逐源波形。语言查询分离器（AudioSep、FlowSep、SAM Audio）逐条caption独立处理，同一类别两个说话人时可能两次返回同一个人。
 
-**Self-Supervised Speech Representations for Cross-Speaker Dysarthria Detection During Awake Craniotomy**
-- **arXiv ID**：arXiv:2610.11825 | **方向**：语音大模型 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.11825（未精读，按摘要评分）
+**模型架构：** 在冻结的LTX-2.5 22B双流flow-matching Transformer上，把每条stem的VAE latent沿token轴拼在audio-mix后面构成za=[zs1|zs2|zm]，各通道保持预训练时序位置、共享旋转位置编码实现时间对齐。stem token可自注意力、互注意、注意audio-mix与视频，但只注意自己的caption（块对角路由）；audio-mix只注意自己与场景caption，视频与mix均不注意任何stem，信息单向从场景流向stem。audio-mix是"保护通道"：其token上的LoRA增量被门控置零（g_j=1[j∉J_m]），配合注意力掩码Λ，实验验证开关适配器后mix与视频逐层bit级一致。
 
-**Towards Automated Clinical Behavioral Coding with Large Language Models: A Case study Using BOSCC recordings of Children**
-- **arXiv ID**：arXiv:2610.11106 | **方向**：语音大模型 | **评分**：5/10 | **链接**：https://arxiv.org/abs/2610.11106（未精读，按摘要评分）
+**核心创新：** (1) 多stem单模型输出：stem作为音频流附加通道与mix联合去噪，各stem跟随自己caption并共享场景时间轴，单次采样输出视频+mix+逐源波形；保护通道与单向信息流保证预训练输出不被扰动，消融显示独立两遍生成会崩溃（Judge 4.07→2.43、WER 0.09→1.05）。 (2) 噪声水平选模式：去噪基座中分离保持观察mix零噪声、生成则与stem共同去噪；推理σk≤σg=0.97后stem改注意当前步mix的干净估计ẑ0,m（Estimated Separation），Stage2按30%干净/其余σm=min(σm′,σs)覆盖两种噪声态，单checkpoint双模式且互不退化。 (3) 跨stem注意力引导CSAG：在caption交叉注意力内以兄弟caption为负支路施加归一化注意力引导NAG（λ=2、τ=2.5、α=0.5），抑制两stem内容互相泄漏，比单纯块对角路由更有效。
 
-**Open-Vocabulary Audio-Visual Event Localization via Complex-Valued Fusion**
-- **arXiv ID**：arXiv:2610.11846 | **方向**：语音前端 | **评分**：5/10 | **链接**：https://arxiv.org/abs/2610.11846（未精读，按摘要评分）
+**训练策略：** 冻结LTX-2.5 22B基座（int8量化），只训练音频流LoRA（rank 128、480模块、327M参数）。数据为4843条双声源样本（CelebV-HQ 1658、URMP 1437、自生成749、VGGSound×MUSIC-21跨视频合成999），语义/位置/简短三级caption每步随机抽取；损失为flow-matching速度MSE，仅supervise stem token。Stage1分离12000步（σm=0），Stage2续训3000步生成；AdamW、batch size 1、学习率1e-4线性衰减、bfloat16、单卡A6000，片段113帧@25fps、768×512。
 
-*Subagents used for reading: 15* | Generated on 2026-10-09 语音论文批次, by Kimmy's research agent | Powered by VAgent SpeechAI Researcher
+### 📊 实验结果
+
+**数据集**：生成基准194条双源prompt（134音效+60双人对话，4.5s）；Veo基准149个Veo 3.1 Lite渲染场景（104音效+45语音，48kHz立体声，取前5.7s评分）；LTX-2.3基准64条（5s）；SAM-Audio-bench 172条真实录音（乐器55音效48说话人，10s窗口）；参考stem评估129个留出场景（258条stem）
+
+**主要指标**：
+- 语音分离（Veo）：SepGen自台词WER 0.05（含台词）/0.50（去台词）vs AudioSep 0.93/1.03、FlowSep 0.98/0.99；说话人余弦0.61/0.53 vs 基线0.89–0.96（越低越 distinct）
+- 音效分离（Veo）：Judge 4.36 / J-swap 2.61 / C-swap 0.23 vs AudioSep 3.46/1.60/0.16、SAM large 3.14/0.50/0.04
+- 真实录音（SAM-Audio-bench）：Judge 3.70 / J-swap 1.52 vs SAM large-tv 3.12/0.78、AudioSep 2.81/0.82
+- 联合生成（joint run）：Judge 3.82 / J-swap 2.07 / WER 0.07 / 说话人余弦0.66全第一；self-separation二次分离Judge 4.21、J-swap 2.29
+- 波形级（129参考场景）：包络相关0.82 / LSD 6.39dB vs AudioSep 0.76/11.0dB、SAM large 0.39/18.9dB
+- 用户研究：分离偏好0.58 vs SAM Audio 0.25（真实录音0.64 vs 0.20）；生成0.63 vs AudioSep 0.28（语音0.87 vs 0.10）
+- 关键对比：语音上SepGen自台词WER比最强级联基线AudioSep低0.88（0.05 vs 0.93，含引用台词）；去掉台词后0.50 vs 1.03领先保持（90条中仅4-5条stem变静音）；专用语音分离器SepFormer仅在去台词设定下接近
+
+**是否开源**：代码、checkpoints与数据集已开源 @ https://sepgen.github.io/
+
+### ⭐ 评分：8/10
+评分理由：首个把预训练联合音视频生成器改造为多stem生成/分离双模式框架，噪声水平切模式、保护通道与CSAG设计精巧且消融充分；四类基准加用户研究、显著性检验与波形级验证，全面胜过级联与专用语音分离器并完全开源。局限是固定2个stem且未端到端验证4D空间渲染，故给8分。
+
+## 13. SEER: Source-Conditioned Emotion Enhancement via Retrieval for Cochlear-Implant Speech
+
+**arXiv ID**：2610.11131 | **方向**：语音前端
+
+**作者**：Hsing-Hang Chou, Yun-Shao Lin, Ching-Chin Sung, Chi-Chun Lee
+
+**机构**：国立清华大学电机工程学系；中研院资讯创新研究中心（台湾）
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11131 | **PDF**：https://arxiv.org/pdf/2610.11131.pdf | **代码**：https://github.com/HenryChou36/SEER | **Demo**：https://github.com/HenryChou36/SEER
+
+### 📌 简介
+CI语音丢失F0等情感线索，听者情感识别显著退化，而现有CI情感增强依赖正常/强情感平行录音与强度标签。本文提出SEER，一个源条件检索框架：以Maestro-EVC参考条件情感语音转换为基座，用CI-aware奖励学习效用评分器，为每个源语音挑选同情感参考使CI处理后仍可识别，并以LinUCB式不确定性探索避免穷举配对评估，无需平行录音与强度标签。RAVDESS/ESD上N8源macro-F1分别提升7.30/11.66分，16人听测各条件均显著提升，且可懂度损失小于固定参考法。
+
+### 🔧 技术方案
+
+**问题背景：**电听觉无法有效传递F0线索，CI-vocoder语音的情感识别准确率下降，CI用户易给出Neutral判断，SER模型在CI模拟下同样退化。以往JD-NMF增强需同一说话人、同一句子的正常/强情感平行录音及显式强度标注，难以迁移到通用类别情感语料，且穷举源—参考转换评估代价随语料规模快速增长。
+
+**模型架构：**先构建参考池：仅当预训练Emotion2Vec+ Large对录音的原始版与CI模拟版均判对目标情感时才入库（RAVDESS 281条/ESD 6630条）。源侧用Transformer时序编码器聚合Maestro-EVC情感编码器输出为h_x∈R128并接辅助情感分类器；参考侧由2064维描述子（情感嵌入均值/标准差、平滑mel能量帧与平均归一F0的统计量、清音帧比例、时长）投影为h_r∈R128；评分器对[|h_x−h_r|; h_x⊙h_r]输出预测效用û，其中64维中间表示z_θ复用于探索；推理仅选正分参考否则保留源。探索借鉴Neural-LinUCB浅层探索：z_θ归一化后加偏置得ψ_θ∈R65，维护单位岭矩阵V（α=1，历史至多16384个唯一配对），按取a=û+α√(ψ⊤V⁻¹ψ)最高的每源前4个参考做转换，与原始基线一并评估生成奖励目标。
+
+**核心创新：** (1) CI-aware源相对效用奖励：用Emotion2Vec+对转换输出与源在CI前后评分，定义u(x,r)=c(x̃_r)−c(x)+0.1·[q(x̃_r)−q(x)]，指示项c给出+1修复/−1损伤信号，q再叠加CI后置信度，把"CI处理后是否仍可识别"直接编码为监督信号。 (2) 源条件效用检索器：联合学习源/参考隐空间与成对评分器，从少量采样转换结果推断"哪个参考对哪个源有益"，回避O(N×M)穷举转换评估，使通用类别情感语料可直接用作参考库。 (3) 不确定性引导参考探索：LinUCB式获取函数在采样时平衡预测与不确定性，避免贪心查询固化早期偏置，最终检索仅用预测效用保证在线可用。
+
+**训练策略：**RAVDESS/ESD均限定Angry/Happy/Sad；每数据集单独训练Maestro-EVC骨干（目标情感+Neutral+Surprise）；以22通道CI24式PSHC激励器的N8为优化目标（N4/N16仅测试），按验证N8 macro-F1选检查点。奖励权重τ=0.1，探索系数α=1，每源评估前4参考，岭矩阵V每16次更新重建，损失L=MSE(û,u)+CE(p_x,e_x)。
+
+### 📊 实验结果
+
+**数据集**：RAVDESS（24位演员，384/96/96按演员不重叠划分，参考池281条）；ESD英文（10位说话人，9000/600/900，参考池6630条）；CI模拟用22通道CI24 PSHC激励器（N4/N8/N16）。
+
+**主要指标**：
+- 源macro-F1：RAVDESS N8 78.26→85.56（+7.30）、N16 80.33→95.82（+15.48，显著）、N4 80.35→80.13（不显著）；ESD N4/N8/N16为58.71→68.23、57.09→68.75（+11.66）、70.46→82.06，三条件均显著
+- WER（Whisper large-v3-turbo）：SEER较固定参考在所有条件下WER更低（RAVDESS N8 2.43%→1.39%、ESD N8 14.19%→10.00%），减少强制统一参考的可懂度代价
+- 16人听测：主观macro-F1在N4/N8/N16为68.37/70.14/67.39，较Source（46.42/52.66/58.71）提升21.94/17.48/8.68分，Holm校正后均显著，超JD-NMF 1.68–7.17分
+- 关键对比：客观上超JD-NMF达8.96–22.98分（全部6个数据—CI组合）；N8下Angry识别31.3%→82.0%、Neutral 42.2%→5.5%，但Happy/Angry与Sad/Neutral边界仍难分离
+
+**是否开源**：代码与demo已开源 @ https://github.com/HenryChou36/SEER
+
+### ⭐ 评分：8/10
+评分理由：问题定位清晰，把参考选择形式化为源条件检索加分臂决策新颖，CI-aware奖励与LinUCB探索结合方法学扎实；客观+16人听测+三级激励条件与显著性检验齐备且开源。扣分在于仅三情感两数据集、客观评估依赖Emotion2Vec+而非真实CI听者，且RAVDESS N4客观增益不显著，泛化性待进一步验证。
+
+## 14. Disentangling Linguistic and Paralinguistic Information with Routed Sparse Autoencoders
+
+**arXiv ID**：2610.10865 | **方向**：语音前端
+
+**作者**：Beimnet Bekele Guta, Xiaoyu Yang, Guangzhi Sun, Philip C. Woodland
+
+**机构**：剑桥大学工程研究所（Department of Engineering, University of Cambridge, UK）
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.10865 | **PDF**：https://arxiv.org/pdf/2610.10865.pdf | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+自监督语音编码器把音素内容、说话人身份、情感、韵律等语言与副语言因子混在同一纠缠表征空间，难以对单个因子做选择性解读与修改。本文在冻结编码器之上构建TopK稀疏自编码器，用互补可学习路由掩码把稀疏码划分为语言/副语言双路由，配合路由特定任务监督与跨因子对抗。在SPEAR XLarge与WavLM Large上，独立探针显示语言路由强保留音素（PER 8.94%）、副语言路由高保留说话人（SID 99.8%）且跨因子可恢复性显著受抑，MSP-Podcast上模式保持，路由交换实现双分离。
+
+### 🔧 技术方案
+
+**问题背景：**自监督语音编码器同一激活同时携带音素、说话人、韵律、情感等信息，选择性移除或修改单一因子困难；已有稀疏自编码器仅分析自动发现特征，并不保证单元对应预选因子，难以施加显式解纠缠目标。
+
+**模型架构：**冻结SSL编码器（逐层无参LayerNorm后均匀平均）输出帧级表征，经TopK SAE（K=5120，k=256）投影为过完备稀疏码，含L2重构与AuxK（预算64、权重1/32，用非活跃单元预测残差防死单元）。互补可学习掩码m_L+m_P=1将稀疏码划分为z_L与z_P（z_t=z_L+z_P），提供三种路由：学习路由（直通硬Gumbel-Softmax加L_routing决择损失）、固定路由（预定成员与独立预算k_L/k_P=240/16）、配额冻结（4000步学分配后按平均活跃度定配额转各路由独立TopK）。监督：z_L由PR-CTC监督，z_P由SID/情感（加权）分类与逐帧log-F0及能量MSE监督。对抗：音素对抗作用于z_P，说话人/情感/韵律对抗作用于z_L，经GRL梯度反转（-γ）实现互抑。
+
+**核心创新：** (1) 将路由稀疏自编码器引入语音解纠缠，以互补掩码将SAE潜空间组织为语言/副语言路由，在保持重构的同时实现因子级选择读写，并给出固定与配额冻结两种变体权衡重构与选择性。 (2) 路由特定任务监督使每条路由与目标因子直接对齐，弥补"稀疏性本身无法恢复预选因子分解"的缺口。 (3) 跨因子对抗叠加独立后验探针与受控路由交换验证，证明路由是功能性而非仅统计性双分离，消融显示两类对抗互补抑制。
+
+**训练策略：**编码器全程冻结，仅训SAE、掩码与任务头；数据为LibriSpeech train-clean-100（74音素词表，CMU词表加G2P回退）；K=5120、k=256、AuxK预算64权重1/32；固定路由K_L/K_P=4096/1024、k_L/k_P=240/16；训练12000步（WavLM配额冻结16000步）；损失=λ_recon·L_recon+λ_AuxK·L_AuxK+L_task+L_adv（学习路由另加L_routing）。
+
+### 📊 实验结果
+
+**数据集**：LibriSpeech（train-clean-100训练，dev-clean验证，test-clean测试）；MSP-Podcast（51,017句、700说话人、41,067/4,975/4,975划分，封闭SID随机水平0.143%）
+
+**主要指标**：
+- 语言路由保留（LibriSpeech）：z_L PER 8.94%（SPEAR配额冻结）/9.40%（WavLM配额冻结），z_L SID仅0.6%/14.8%
+- 副语言路由保留：z_P SID 99.8%（两编码器），z_P PER升至80.26%（SPEAR）/80.84%（WavLM）
+- 消融抑制：去掉对抗后z_L SID 6.2%→99.8%（固定），说明对抗是跨因子抑制关键
+- 路由交换（250对，SPEAR）：PP交换自留音素99.57%且转移捐赠人说话人98.00%；LL交换替换为捐赠人音素94.26%且自留说话人96.00%
+- MSP-Podcast跨语料迁移（不重训）：固定路由z_L/z_P PER 43.92/99.72%、SID 12.82/82.71%
+- 关键对比：SPEAR/WavLM跨编码器一致——固定路由更抑制z_L副语言，配额冻结更抑制z_P语言且重构更均衡
+
+**是否开源**：暂无
+
+### ⭐ 评分：8/10
+评分理由：路由掩码+路由监督+跨因子对抗组合优雅，独立探针与路由交换干预的评估设计严谨；因子选择性分离在两编码器、两语料、两路由变体上一致，说服力强。不足：监督任务限于PR/SID/情感/韵律，重构MSE明显上升（0.066→0.179），且缺下游端到端任务验证。
+
+## 15. Cross-Lingual Speaker Verification with Self-Supervised Pre-Trained Models
+
+**arXiv ID**：2610.11099 | **方向**：语音前端
+
+**作者**：Jinghan Peng, Yu Zheng, Weiqiang Wang, Jian Liu
+
+**机构**：蚂蚁集团机器智能部（上海，Ant Group）
+
+**发布日期**：2026-10-09 | **论文**：https://arxiv.org/abs/2610.11099 | **PDF**：https://arxiv.org/pdf/2610.11099.pdf | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+说话人验证在跨语言、语言失配场景下，因说话人身份与语言相关声学线索纠缠而性能显著退化。本文采用w2v-BERT 2.0自监督预训练模型（PTM）作为前端特征提取器，经逐层Adapter投影与多尺度特征聚合并经ASPPooling输出256维说话人嵌入，配套三阶段训练范式与QMF分数校准及多系统融合。团队T02在TidyVoice2026基准上取得tv26_eval-A EER 2.21%、tv26_eval-U EER 2.99%，在全未见语言集上较ReDimNet基线优约0.6个百分点，验证了PTM前端的跨语言泛化优势。
+
+### 🔧 技术方案
+
+**问题背景：** 当注册与验证发生在不同语言时，说话人身份被语言相关声学特性混淆，交叉语言SV精度明显下降。已有PTM基SV工作多在VoxCeleb等同域基准上验证PTM前端有效性，尚缺面向全跨语言、含未见语言评测场景下对PTM选型、特征聚合与训练策略的系统性研究。
+
+**模型架构：** 输入log-Mel特征送入w2v-BERT 2.0（580M参数、143种语言）SSL骨干，抽取全部层隐表示；每层经独立两层MLP Adapter投影至统一256维；多尺度聚合模块考察平均、层加权、通道加权、通道拼接、时间拼接、层次交叉注意力六种融合方式，最终采用通道拼接（无新增参数且EER最优）；帧级特征经ASPPooling得到固定维utterance表示，再投影为256维说话人嵌入，以AAM-Softmax损失训练。对照与融合用轻量ReDimNet-B5（9.2M）/B6（15M），输出192维嵌入、SF2-C损失，最终对各系统QMF校准后分数取均值融合。
+
+**核心创新：** (1) 构建PTM跨语言SV管线：以w2v-BERT 2.0多语言无标注预训练知识学习语言无关说话人表征，解耦说话人身份与语言特定特征，实证其在完全未见语言测试集上显著优于同数据训练的传统ReDimNet前端。 (2) 系统消融多尺度特征聚合：对比六种层融合机制，通道拼接以最简结构取得最低EER（2.09%对平均融合2.21%），层次交叉注意力minDCF最优（0.648），给出低开销工程选型依据。 (3) 提出三阶段渐进训练范式：冻结骨干训练下游、全参数微调、目标域LM-FT大边距精调逐级验证，并叠加分数级融合，在评测集上取得团队提交系统中最好成绩。
+
+**训练策略：** PTM对比：w2v-BERT 2.0显著优于Whisper-Large-v3（3.15%）、XLS-R-300M/1B/2B（2.94%/3.10%/3.10%）、MMS-300M/1B（3.27%/3.46%），dev EER为2.09%。数据：TidyVoiceX_Train（3666人/40语言）+VoxCeleb2（5994人）+VoxBlink2（111284人）+CN-Celeb1&2（2793人）+WenetSpeech过滤集（35285人）+3D-Speaker（10000人）。阶段：①冻结骨干60epoch、2s片段、batch 16384、margin 0→0.2（epoch20-30）、LR 0.1→5e-5；②解冻PTM 20epoch、margin 0.2、LR 1e-4→1e-6；③仅在TidyVoiceX_Train上LM-FT 6epoch、6s片段、margin 0.5、batch 512。AdamW（weight decay 2e-5）；增强概率：混响0.3、音乐0.1（SNR 5-15dB）、噪声0.1（0-15dB）、babble 0.1（10-30dB），无变速。
+
+### 📊 实验结果
+
+**数据集**：训练集为TidyVoiceX_Train（3666说话人、40语言）及VoxCeleb2、VoxBlink2、CN-Celeb1&2、WenetSpeech、3D-Speaker等多语语料；TidyVoiceX_Dev（808人、1200万trials）用于开发与阈值校准；评测TidyVoiceX2，tv26_eval-A为部分语言失配，tv26_eval-U为注册与测试均为38种训练/开发中完全未见语言。
+
+**主要指标**：
+- tv26_eval-A（部分语言失配）：融合系统EER 2.21%，minDCF 0.1797
+- tv26_eval-U（全未见语言）：融合系统EER 2.99%，minDCF 0.2045
+- 单系统：w2v-BERT2.0+QMF 2.73%/2.84%；ReDimNet-B6+QMF 2.52%/3.43%
+- PTM消融（dev）：w2v-BERT2.0 2.09%，较XLS-R/MMS/Whisper系列优0.85-1.37个百分点
+- 关键对比：eval-U上PTM系统较ReDimNet-B6低0.59个百分点，未见语言泛化更强；融合系统较最佳单系统优0.31/0.44个百分点（A/U集）
+
+**是否开源**：暂无（论文未提供代码链接）
+
+### ⭐ 评分：7/10
+评分理由：方法本身组合PTM前端、Adapter投影、多尺度聚合与三阶段训练等成熟组件，无突破性创新；但实验体系完整，PTM选型、聚合方式、训练阶段消融充分，且在新型跨语言基准TidyVoice2026上实证w2v-BERT 2.0优于传统前端，EER 2.21%/2.99%有实用参考价值，属扎实增量工作。
+
+---
+
+## 其他论文（未进入前 15，仅列标题）
+
+16. **Conversational Voice Aesthetic Model with Reinforcement Learning from Human Listeners** | 语音大模型 | arXiv: 2610.10868 | 评分：7/10 | https://arxiv.org/abs/2610.10868
+
+17. **Local Prototype Reconstruction for Text-Compatible Speech-to-LLM Bridge Pretraining** | 语音大模型 | arXiv: 2610.11159 | 评分：7/10 | https://arxiv.org/abs/2610.11159
+
+18. **Towards Automated Clinical Behavioral Coding with Large Language Models: A Case study Using BOSCC recordings of Children** | 语音大模型 | arXiv: 2610.11106 | 评分：6/10 | https://arxiv.org/abs/2610.11106
+
+19. **Monaural Continuous-Radius Regional Speech Extraction with Cross-Radius Consistency Learning** | 语音前端 | arXiv: 2610.11507 | 评分：7/10 | https://arxiv.org/abs/2610.11507
+
+20. **Toward accurate speaker inventories for online speaker diarization** | 语音前端 | arXiv: 2610.11278 | 评分：7/10 | https://arxiv.org/abs/2610.11278
+
+21. **Using the enrollment gallery as evidence: affine-invariant score calibration for target speaker tagging** | 语音前端 | arXiv: 2610.11272 | 评分：7/10 | https://arxiv.org/abs/2610.11272
+
+22. **Detection-Guided Adaptive Purification with Diffusion Models for Robust Audio Deepfake Detection** | 语音前端 | arXiv: 2610.10752 | 评分：7/10 | https://arxiv.org/abs/2610.10752
+
+23. **Self-Supervised Speech Representations for Cross-Speaker Dysarthria Detection During Awake Craniotomy** | 语音前端 | arXiv: 2610.11825 | 评分：7/10 | https://arxiv.org/abs/2610.11825
+
+---
+
+*Generated on 2026-10-09*
