@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 59 篇
+共 60 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -306,6 +306,15 @@
 - **关键技术点**：PTTM 在 Switchboard、NoXi、Candor 等安静受控环境评测中表现优异，但真实鸡尾酒会充满重叠语音、背景噪声、频繁打断与竞争性视觉线索，其泛化性未被研究。鸡尾酒会带来声学（SNR 中位数约 15dB，而 Candor 近 90-100dB）与生理层面的双重域偏移：噪声引发 Lombard 效应（增大响度与基频），并改变面部表情与唇动分布，音频与视觉模态均面临显著分布差异。
 - **主要指标**：- MM-VAP（Candor 训练）：Candor 加权 F1 82.57%，AVCocktail 上降至 56.61%（总体相对降幅 2%-38%） - Audio-VAP（Candor 训练）：81.05% → AVCocktail 49.83%，仅略高于随机基线 45.08% - Video
 - **代码**：https://github.com/lggvu/mm-turn-taking | **Demo**：暂无
+
+---
+## [Lossless Inference Acceleration for ASR via EAGLE-Style Speculative Decoding](https://arxiv.org/abs/2610.13506)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-10-12
+- **一句话贡献**：针对自回归 ASR 逐 token 解码延迟高，而现有推测解码要么草稿质量差、要么依赖外部分布对齐草稿模型的问题，本文提出 EAGLE-ASR 框架。核心是轻量自回归 Speech-Draft 模块（仅 1 层 Transformer decoder 块，复用目标模型 embedding 与 LM head），联合编码器的声学特征与解码器低/中/高层级表示生成草稿，并配合自蒸馏训练数据和多步生成训
+- **关键技术点**：自回归 Transformer/Conformer ASR 顺序生成 token 形成解码瓶颈；模型压缩与非AR解码会牺牲精度；已有 ASR 推测解码要么需与目标同族的外部草稿模型（跨架构时接受率骤降），要么如 Whisper-Medusa 独立多头预测忽略时序依赖且需微调目标层导致 WER 退化，无法同时做到高质量草稿、通用性与无损。
+- **主要指标**：- Whisper-large-v3 加速比：1.91×（clean）/1.79×（other），τ=3.79/3.55，ΔWER=0.00 - Conformer AED 加速比：2.43×/2.30×，τ=4.98/4.50，ΔWER=0.00 - 多语种 ASR 平均加速 2.09×（τ≈4.
+- **代码**：https://github.com/ssss-sen/eagle-asr | **Demo**：暂无
 
 ---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)

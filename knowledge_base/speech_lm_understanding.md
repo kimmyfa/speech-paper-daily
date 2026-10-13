@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 155 篇
+共 161 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -767,6 +767,15 @@
 - **代码**：暂未链接，计划发布场景、角色提示与录制/评分协议 | **Demo**：无
 
 ---
+## [Phonology-Aware Speaker Extraction Frontend for Audio LLMs](https://arxiv.org/abs/2610.13500)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-12
+- **一句话贡献**：针对固定深度目标说话人提取（TSE）在多语种混合语音上"难样本处理不足、易样本算力浪费"的矛盾，本文提出5.2M参数的音系感知自适应前端LATTE，由声学Difficulty Estimator、任务自适应phonology-informed prior（PDI）与共享多出口Adaptive Hourglass Extractor（2/4/6块三档出口）组成，推理无需语言标识。在自建PolyExt
+- **关键技术点**：不同语言的声调、发声态、节奏差异显著改变混合语音的提取难度，固定深度系统对多语种条件只能"一刀切"；现有Audio-LLM适配方法（如LoRA）既未显式建模语言相关的提取需求，也难以保持与冻结下游模型的即插即用兼容性。
+- **主要指标**：- 宏SI-SNRi：15.07 dB @0.30 GFLOPs，较最强基线TF-GridNet（13.8 dB @1.42 GFLOPs）高+1.27 dB，较大模型AD-Flow TSE（14.6 dB @5.8 GFLOPs）高+0.47 dB - 宏PESQ/STOI：3.22 / 0.92
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1394,6 +1403,51 @@
 - **一句话贡献**：音频大模型需同时掌握音高对比、说话人计数、音乐节奏估计、情感识别等数十种技能，联合训练存在明显的技能干扰：提升一项往往以牺牲另一项为代价。本文提出 SkillFormer，将音频理解为技能分解式适配问题：把不同技能路由到不同的低秩适配器参数上，推理时由问题条件路由器动态选择并加权组合 K=6 个技能专属 LoRA，使音高查询与曲风分类走不同参数路径。交替训练调度先让各适配器在专属技能簇上独立专精，
 - **关键技术点**：
 - **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AudioTETRIS: Token Elimination via Transitional Importance Signals for Efficient Audio LLMs](https://arxiv.org/abs/2610.13600)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-12
+- **一句话贡献**：大音频语言模型（LALM）的编码器为几秒语音生成数百个token，自注意力二次方开销推高推理成本；现有免训练压缩仅凭粗粒度注意力或特征相似度剪枝，抹平了承载关键信息的音素过渡区。AudioTETRIS提出两阶段免训练框架：先从编码器中间层隐状态相邻帧平方L2距离导数构建音素过渡声学先验，再在LLM解码器内与深度自适应注意力分数相乘融合，于两个剪枝层做渐进式top-k选择。在Qwen2-Audio-
+- **关键技术点**：语音信息密度集中于快速声学过渡而非稳态段，均匀token化本身冗余；但SpeechPrune依赖早期层注意力、LTBM依赖局部特征相似度，均将音频token视作各向同性特征，破坏音素级过渡细节，导致ASR等需精确词法恢复的任务在强压缩下急剧退化。
+- **主要指标**：
+- **代码**：https://github.com/ShreyaSajid/AudioTETRIS | **Demo**：暂无
+
+---
+## [Does Location Matter? A Black-Box Causal Audit Reveals Model-Dependent Audio Grounding in LALM Hallucination](https://arxiv.org/abs/2610.13112)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-12
+- **一句话贡献**：LALM 常幻觉出不存在的声音事件，现有 AAD 方法用全零"blank"波形做对比，但 blank 分布外，混淆了"证据缺失"与"输入畸形"。本文提出 CAUSA 黑盒因果审计：用滑窗 CLAP 定位 claim 依赖的时频谱区，STFT 频谱门控仅剔除该区域，与等尺寸随机窗口、blank、纯语言先验对照，在 Qwen2-Audio-7B、Audio Flamingo 3、Qwen2.5-Omn
+- **关键技术点**：AAD 等推理期缓解方法以全零波形为对比基线，该输入对音频编码器分布外，其 logit 差同时反映"证据不存在"和"输入损坏"两种效应，无法判断模型是否真在依赖局部声音证据；已有白盒因果工作需梯度或内部激活访问，闭源模型不可用。
+- **主要指标**：- 检测 AUROC（n=4355）：CAUSA 5 特征 ensemble 0.743，高于 AAD blank 基线 0.721（+0.022）；单格局部剔除 0.613 vs 随机窗 0.577 - 固定时长配对：P(yes) 均值下降 0.041 vs 0.016（Qwen2-Audio，p
+- **代码**：https://github.com/khalooei/causa | **Demo**：暂无
+
+---
+## [OpenSVBench: Diagnosing Speaker Verification Generalization Across Deployment Scenarios](https://arxiv.org/abs/2610.13760)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-12
+- **一句话贡献**：说话人验证（SV）系统在VoxCeleb等标准协议上错误率已极低，但单一聚合分无法刻画多场景部署泛化。本文提出OpenSVBench跨场景SV诊断基准：以16个公开语料构建固定核心，含26个trial集、11个场景组、共915万验证对，冻结目标/非目标密钥与元数据，并配套提交套件与在线榜单输出trial集分解、场景画像与宏EER/minDCF。评测18个公开checkpoint：最优W2V-BER
+- **关键技术点**：SV进展主要用VoxCeleb1-O/E/H锚点评测（如w2v-BERT 2.0报0.14% EER），而真实部署存在短语音、远场、声道/设备、噪声混响、重叠、口音、耳语、老化时长间隔等注册-测试失配；CN-Celeb、3D-Speaker、SVeritas等评估偏场景特定，缺少统一的跨场景泛化视图。 **基准设计：** 16个公开源（VoxCeleb、CN-Celeb、3D-Speaker、FFSVC、TidyVoiceX2、GLOBE、HI-MIA、VOiCES、AliMeeting、CHiME-6、Whisper40、Lombard、ESD、VoxKnesset、VoxPopuli、GS
+- **主要指标**：- 宏EER：W2V-BERT2 9.96%居首，ReDimNet2 10.53%、SAM-R100 10.58% - 宏minDCF：W2V-BERT2 0.361、SAM-R100 0.390 - 最弱基线：x-vector 23.35%、UniSAT-SV 25.67%，比最优差13.39–1
+- **代码**：https://github.com/shangguanqituan/opensvbench-submission-kit | **Demo**：https://opensvbench.xyz/
+
+---
+## [OpenPA: Forced-Alignment-free Multi-granular Pronunciation Assessment with Mixed-transcript Adaptation](https://arxiv.org/abs/2610.13826)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-12
+- **一句话贡献**：本文提出OpenPA：一个基于Whisper-medium的统一词级/句级双粒度发音评估框架，通过在每个词后插入<score>token并利用cross-attention直接检索声学证据，彻底摆脱强制对齐；再借混合转录适配与自适应替换加权，使单一模型同时鲁棒于真值转录与含ASR错误的转录。仅用speechocean762训练，域内模拟开放作答下取得最高词级M+S PCC 0.544与句均PCC 
+- **关键技术点**：传统自动发音评估面向有参考答案的朗读封闭作答，依赖"强制对齐+异构特征提取器+独立打分组件"的多级级联；开放作答场景没有人工转录、只能用ASR假设，对齐误差会沿级联传播，阻碍端到端联合优化与跨场景部署，且细粒度标注数据极度稀缺。
+- **主要指标**：- 域内（Qwen3-ASR-0.6B转录）：词M+S PCC 0.544，句均PCC 0.787，总体平均PCC为所有对比系统最高 - 替换词鲁棒性：GT-only训练S条件PCC仅0.076–0.152，混合适配+自适应权重提升至0.333（medium.en 0.118→0.295） - Mu
+- **代码**：https://github.com/fuann/open-apa | **Demo**：https://fuann.github.io/open-apa/audios/（定性音频样例）
+
+---
+## [Input Representation, Not Model Size or Pretraining Scale, Shapes Speaker Verification Robustness to Temporal Degradation](https://arxiv.org/abs/2610.12539)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-12
+- **一句话贡献**：语音在重度过渡性退化（如无限峰值削波）下人耳仍可听懂，但说话人身份能否存续此前几乎未被研究。本文构造PER、PER+ENV、PER+TFS三种时域分解退化条件，在卷积/Transformer/Conformer三架构族中配对6个音频大模型ASV系统（波形输入对mel滤波器组输入），训练仅用时域完整语音。结果显示鲁棒性跟输入表征走而非模型规模或预训练量：9/9家族×条件对比中filterbank输入
+- **关键技术点**：心理声学研究证明听者可在缺失慢调制或精细结构的语音中保持理解力与部分说话人识别能力，但ASV系统能否在同类重度退化条件下守住说话人身份未知；且既有鲁棒性研究中模型规模、预训练量与输入表征三个因素相互纠缠，无法归因。
+- **主要指标**：- EER：受控卷积对PER条件 ResNet34 1.06%→17.09% vs ResNet1D 2.90%→29.74% - ΔEER（PER）：w2v-BERT 2.0仅8.28（归一化17.0）vs Wav2Vec2-Conformer 34.90（归一化76.5），同为581M/618M
 - **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 72 篇
+共 74 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -648,5 +648,23 @@
 - **关键技术点**：Voicebox、E2 TTS、F5-TTS等掩码重建范式训练时从同语言上下文复原被掩码区域，跨语言推理却须依赖外语声学上下文，模型倾向从参考音频复制语言相关属性（尤其中口音）。同说话人平行跨语言语料稀缺昂贵，语言ID、对抗口音抑制等显式解耦方案条件复杂。
 - **主要指标**：
 - **代码**：暂无 | **Demo**：https://doubleblindauthor.github.io/region-aware-masking-TTS-demo
+
+---
+## [Emo-BPO: Emotion Bidirectional Preference Optimization for Diffusion-based Emotional TTS](https://arxiv.org/abs/2610.12958)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-12
+- **一句话贡献**：针对扩散情感TTS的偏好对齐只强化目标情绪、忽略竞争情绪建模，且在分类器自由引导（CFG）下形成非对称优化的缺陷，提出 Emo-BPO：把同一文本、不同情绪的音频样本重排序构造为偏好对，并行训练情绪对齐（EA）与情绪对比（EC）两个得分分支，推理时以 (1+ω)ε_EA − ω ε_EC 的对比引导配合后期步调度 ω(t)=1−t/T 联合控制。在 ESD 与 EmoVoiceDB 上，情绪相似度
+- **关键技术点**：现有情感TTS偏好方法（Emo-DPO、EMORL-TTS、EASPO）只将条件轨迹推向"偏好"方向，未显式建模与非偏好情绪模式的分离；而扩散生成本质依赖 CFG 的对数似然比对比机制，这一对比通道被闲置，导致多情绪轨迹共存时情绪间判别力弱化、细粒度可控性受限。
+- **主要指标**：- 情绪相似度 Emo SIM：99.23（最强基线 EmoVoice 98.59，提升 0.64） - 韵律相似度 Prosody SIM：3.85（CosyVoice2 3.78，提升 0.07） - 可懂度 WER：3.84（CosyVoice2 3.77，劣化 0.07，仍具竞争力） - 自
+- **代码**：暂无 | **Demo**：https://jiachengqaq.github.io/emo-bpo/
+
+---
+## [E3-System: Expressive EmoData, Explicitly Controllable, Easy-to-Use TTS](https://arxiv.org/abs/2610.12993)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-12
+- **一句话贡献**：现有零样本 TTS 中，文本描述缺乏声学锚定、语音风格提示词又把音色与风格耦合，导致语义意图到声学表现之间的鸿沟，无法兼顾表现力与可控性。论文提出 E3-System：用 EmoData（1012 小时、5681 说话人、6 语言 6 情感）、Style-RAG 检索、Dual-TTS 解耦合成形成完整控制环，双参考输入实现任意音色×风格迁移。零样本单参考下 WER 低至 2.33、SIM 74.
+- **关键技术点**：零样本 TTS 复刻单参考时音色与韵律天然绑定，缺乏"任意音色×风格"的显式控制能力；GRL 类解耦方法存在音色/风格/内容泄漏，可控性与音质互相妥协。文本指令无声学锚定、语音提示需人工选样本，易用性与质量难两全。
+- **主要指标**：- WER：双参考 Ours 2.51（无 RAG）／2.93（带 RAG），单参考 2.33 - SIM-Spk：70.15，超 Vevo-TTS 65.16、IndexTTS2 69.85、DisCo 63.68 - SIM-Style：89.22，优于 DisCo 87.25、IndexTTS
+- **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 52 篇
+共 53 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -216,6 +216,15 @@
 - **关键技术点**：现有助听器普遍将语音增强与听力损失补偿分两级串联，增强阶段的残留干扰、失真与电平偏差会被放大级继续继承；纯音频增强在面对竞争说话人时，因目标语与干扰语声学特征高度相似而难以有效分离。
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [From 2.1M Hours of Raw Broadcast Audio to Finnish Speech SSL: Confidence Filtering and Architectural Analysis at Scale](https://arxiv.org/abs/2610.13102)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-12
+- **一句话贡献**：针对广播档案用于低资源语言语音自监督预训练时含大量噪声、非语音与多语内容、"存在语音"不等于"高质量"的问题，本文提出以ASR的CTC置信度作为数据质量代理：从芬兰RTVA 210万小时广播出发，经pyannote VAD得120万小时、ASR转写去重得89万小时，再以置信度阈值τ=-0.1筛出47.1万小时（99%芬兰语）。在wav2vec 2.0框架下对Transformer、Macaron-
+- **关键技术点**：广播档案规模大、多样但质量混杂，既有工作仅用VAD或LID保证"提取到语音"，从未按质量系统性筛选无标注预训练数据；同时先前SSL架构对比同时变动结构与参数量（如618M Conformer vs 317M Transformer），无法区分收益来自架构还是容量。
+- **主要指标**：
+- **代码**：https://github.com/aalto-speech/large-scale-monolingual-speech-foundation-models （模型开源，语料因广播版权不可再分发） | **Demo**：暂无
 
 ---
 ## [Explicit and Stable Pseudospectral Time-Domain Method for Föppl-von Kármán Equations](https://arxiv.org/abs/2608.06139)
