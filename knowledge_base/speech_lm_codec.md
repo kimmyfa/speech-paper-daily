@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 22 篇
+共 24 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -198,5 +198,23 @@
 - **关键技术点**：
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [SemiCodec: Bridging Speech Tokenization and High-fidelity Reconstruction with Semi-discrete Representations](https://arxiv.org/abs/2610.14834)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：语音表征需同时支持离散建模接口与高保真波形重建，但离散token丢失细粒度声学信息、连续latent又依赖专用生成目标。本文提出SemiCodec半离散神经语音codec，同步输出SSL引导的离散token与64维连续latent并相加融合重建；针对联合训练中连续通路"重建捷径"问题，设计Preserve-then-Ground两阶段训练范式。在LibriSpeech test-other上PES
+- **关键技术点**：语音兼具离散语言内容与连续声学信息，DAC/Mimi/SAC等离散codec便于next-token预测但低帧率下丢失声学细节；Semantic-VAE、dots.tts等连续表征保真度高却需回归/流匹配/扩散等特殊目标。直接联合优化双通路时，信息量大的连续路径会抢走重建梯度，导致离散token欠训练、码本利用不足。
+- **主要指标**：- PESQ-NB/WB：4.15 / 4.03（GT为4.55/4.64） - STOI / ViSQOL / SIM / WER：0.975 / 3.77 / 0.96 / 5.02% - MUSHRA：86.95±1.35 - 关键对比：25FPS下超越最强离散基线SAC（62.5FPS，PE
+- **代码**：暂无 | **Demo**：https://pennyw1-se.github.io/SemiCodec-Demo-Page/
+
+---
+## [LiveAnon: Improving Privacy and Utility in Streaming Speaker Anonymization with Codec Language Models](https://arxiv.org/abs/2610.15379)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：流式说话人匿名化需在有限延迟内隐藏说话人身份，同时保留语言内容与情感；现有流式系统依赖离散内容瓶颈，常丢失情感且需情感专用监督。本文提出 LiveAnon，一个基于语音转换的流式匿名化系统：将冻结的流式 Zipformer ASR 编码器隐层特征直接作为自回归 codec 语言模型的内容条件，并以 VALL-E 式参考 codec prompt 续写指定目标音色，无需分离说话人编码器。同时提出封顶
+- **关键技术点**：语音中身份与情感/内容联合编码，匿名化存在隐私—效用权衡；离散量化瓶颈虽抑制speaker信息，但同时丢弃情感线索，流式场景又受限于未来上下文与延迟，现有方法需额外的韵律或情感蒸馏组件。
+- **主要指标**：- WER：4.31%（原始 1.83） - 情感 UAR：44.09%（原始 70.07） - EER-S / EER-L：32.28% / 48.75% - 关键对比：优于 SVA vctk-1fix（WER 4.54、UAR 39.71、EER-S 15.92），EER-S 提升 +16.36
+- **代码**：暂无 | **Demo**：https://jin1025.github.io/LiveAnon/
 
 ---

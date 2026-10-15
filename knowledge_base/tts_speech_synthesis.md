@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 74 篇
+共 77 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -665,6 +665,33 @@
 - **一句话贡献**：现有零样本 TTS 中，文本描述缺乏声学锚定、语音风格提示词又把音色与风格耦合，导致语义意图到声学表现之间的鸿沟，无法兼顾表现力与可控性。论文提出 E3-System：用 EmoData（1012 小时、5681 说话人、6 语言 6 情感）、Style-RAG 检索、Dual-TTS 解耦合成形成完整控制环，双参考输入实现任意音色×风格迁移。零样本单参考下 WER 低至 2.33、SIM 74.
 - **关键技术点**：零样本 TTS 复刻单参考时音色与韵律天然绑定，缺乏"任意音色×风格"的显式控制能力；GRL 类解耦方法存在音色/风格/内容泄漏，可控性与音质互相妥协。文本指令无声学锚定、语音提示需人工选样本，易用性与质量难两全。
 - **主要指标**：- WER：双参考 Ours 2.51（无 RAG）／2.93（带 RAG），单参考 2.33 - SIM-Spk：70.15，超 Vevo-TTS 65.16、IndexTTS2 69.85、DisCo 63.68 - SIM-Style：89.22，优于 DisCo 87.25、IndexTTS
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Training a Compact, Strong, and Realistic Text-to-Speech Model（Audio8-TTS）](https://arxiv.org/abs/2610.14776)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：现有TTS以WER与说话人相似度(SIM)为优化目标，均无法刻画韵律自然度，导致"低WER高SIM仍像合成音"的真实感鸿沟。本文提出0.6B双自回归零声音克隆模型Audio8-TTS，并构造三阶段训练：多语SFT→WER/SIM奖励GRPO→以"参考锚定真实感评估器"为奖励的GRPO。评估器由6个开源TTS的盲听Elo质量阶梯加Praat停顿压缩退化链训练，并引入身份擦除与时长约束。最终CV3九语
+- **关键技术点**：WER只管词是否被识别、SIM只约束说话人身份，节奏/停顿/演绎风格游离于优化目标之外；纯堆数据与大模型、或用WER/SIM做RL都无法直接优化感知自然度，且RL易被"长时长保停顿"捷径带偏。
+- **主要指标**：- CV3九语错误率：5.41%(SFT)→5.01%(WER/SIM)→4.86%(真实感)；SIM 0.639→0.643→0.661 - 13个低资源语：错误率22.36→20.77，SIM 0.638→0.679（真实感阶段全部语言提升） - Seed-TTS en/zh：错误率1.25%，
+- **代码**：https://github.com/Edge0-AI/Audio8_TTS | **Demo**：暂无
+
+---
+## [VoTSpeech: Decoupling Voice Design from Speech Generation in Instruction-Following TTS](https://arxiv.org/abs/2610.14694)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：指令式TTS常把语音描述当作文本上下文喂进模型，"造什么样的声音"与"说什么"耦合，缺乏显式目标音色表示。论文提出VoTSpeech，沿用dots.tts共享Causal LLM主干，引入Voice DiT（流匹配）先"想"出连续语音latent，再经双路条件注入LLM与Acoustic DiT；目标latent由CAM++说话人嵌入与时间池化音频VAE特征拼合。1543.52小时中文数据上，它在
+- **关键技术点**：现有指令TTS把语音指令直接拼进文本，语音设计隐式混在话语生成里，无法显式控制"先定音色、再发声"；参考音频式说话人表示虽可靠，却不适用于纯文本驱动场景，且既有文本驱动latent多偏静态身份，缺少动态声学层次。
+- **主要指标**：- DSD：78.5%（Qwen3-TTS-1.7B-VD 76.0，dots.tts-soar FT 75.0，+3.5pp） - RP：66.9%（次优dots.tts-soar 64.3，+2.6pp） - APS：84.8%（Qwen3-TTS 87.1为最高） - CER：2.58%（与最
+- **代码**：https://github.com/ywbn/VoTSpeech | **Demo**：同代码仓库（含音频样例）
+
+---
+## [Beyond Fixed Targets: On-Policy One-Shot Speaker Personalization for Autoregressive Text-To-Speech Models](https://arxiv.org/abs/2610.17838)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：AR-TTS 用单条参考语音做 one-shot 个性化时，SFT 反复拟合固定目标会导致推理时紧跟参考序列输出 EOS、生成空白语音，WER 飙升。本文定位"固定离策略监督"为根因，提出两种在线策略方法：GRPO 直接以解码语音与参考语音的说话人嵌入余弦相似度为奖励做组相对优化；OPSD 让无参考上下文的学生在自己采样的轨迹上向"带参考特权上下文"的冻结教师做 token 级 KL 软蒸馏，含 
+- **关键技术点**：单参考对 SFT 对 AR TTS 严重失效（全参 SFT WER 18.2%、LoRA 反而 35.0%），根因是 teacher-forcing 下反复最大化 r→EOS 似然；已有数据多样化手段能否解决、on-policy 是否才是关键，此前不明。
+- **主要指标**：- SIM：GRPO 0.647 / OPSD-TA 0.609 / OPSD-RO 0.608（零样本 0.574） - WER：GRPO 3.0% / OPSD-TA 3.7%（零样本 3.7%，SFT 18.2%） - NMOS（93 人 120 评）：GRPO 3.87±0.15、OPSD-
 - **代码**：暂无 | **Demo**：暂无
 
 ---

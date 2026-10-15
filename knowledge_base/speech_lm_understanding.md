@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 161 篇
+共 167 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -776,6 +776,33 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [D2: High-Capability Full-Duplex Spoken Language Models from Half-Duplex Backbones](https://arxiv.org/abs/2610.17124)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-14
+- **一句话贡献**：全双工语音大模型（FD-SLM）能边听边说，但综合能力普遍弱于半双工模型（HD-SLM）；已有转换工作受限于秒级音频块与高更新率下生成不稳。本文提出 Dialogue-to-Duplex（D2），通过"无解码器"流式编码器蒸馏 + 全双工 SFT 两阶段，把 Qwen3-Omni（30B-A3B MoE）与 LLaMA-Omni 2（7B）转为 80–100ms 细粒度块交互的 FD-SLM。Qw
+- **关键技术点**：FD-SLM（Moshi、MiniCPM-o 4.5）交互自然但知识/推理/指令跟随落后于 HD-SLM；BayLing-Duplex 等转换方案依赖 4s 输入块与 800ms 大块，延迟达秒级，且缩小块长会显著退化，编码器非流式是核心瓶颈。
+- **主要指标**：- 轮次接管率/延迟：99.2% / 521ms；打断接管率/延迟：99.5% / 403ms（Qwen3-Omni-D2, 80ms chunk） - VoiceBench 总分：70.1（1040ms 时 73.0，HD 底座 86.8） - 关键对比：超最强 FD 基线 MiniCPM-o 4
+- **代码**：暂无 | **Demo**：https://d2-duplex-demo.github.io/
+
+---
+## [RUBATO: Decoupled Clocks Allow Full-Duplex Models to Think as Fast as They Can](https://arxiv.org/abs/2610.14299)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-14
+- **一句话贡献**：全双工语音模型的内部思考流本质上异步，而现有方法强制单一固定解码速率以适配特定硬件，导致推理无法随算力加速、跨GPU部署即失效。本文提出Rubato多流RoPE位置编码，为实时音频流与思考流分配独立时钟，使双流时间轴结构解耦，模型仅用两个极端思考预算（B=1与B=∞）训练即可零样本插值任意中间解码速度。在Spoken GSM8K上基线在插值速率下崩溃至1.7%，Rubato-Full稳持48.7%
+- **关键技术点**：流式全双工模型需在同一序列中编排严格实时的音频流与触发不规则的思考流；先验方法用单一共享位置计数器加固定帧率同步，推理预算偏离训练值时，中间思考token数量任意扭曲相邻实时token的位置距离，产生严重位置分布偏移。
+- **主要指标**：- Spoken GSM8K精度（全预算扫描）：Rubato-Full 48.7%–51.1% vs 单时钟基线插值下崩塌至1.7% - 最大精度回落（端点→插值点）：Single-Clock 45.0 / Split 10.6 / Gated 1.1 / Full 0.6 pt - Overlap
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [What Do Deepfake Audio Detectors Hear? From Self-Supervised Models to Audio LLMs](https://arxiv.org/abs/2610.17617)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-14
+- **一句话贡献**：真实录音是语音与环境声的混合，现有深伪检测器究竟听到哪一路、证据落在哪个频段并不清楚。本文在语音与事件各自可真可假的 CompSpoof V2 混合库上，对比 XLS-R、Whisper 编码器接分类头的主流方案与 Qwen2-Audio 音频大模型两种读出方式，用逐组件打分与逐子带静音探针回答两个研究问题。结果显示所有系统对假事件的 EER（8.29%–13.38%）远低于假语音（21.21%–
+- **关键技术点**：深伪检测器假定只监听语音，但真实场景混有背景事件；非语音成分多被视为干扰，而合成事件本身也带伪影。现有方法不清楚检测器跟随哪个组件、伪影集中在频谱何处。
+- **主要指标**：- 假事件 EER：Whisper 最低 8.29%（XLS-R 9.50/ALLM disc 13.38/gen 12.91） - 假语音 EER：XLS-R 最低 21.21%，ALLM disc 最高 23.74% - SoulX 来源假语音 EER：达 36.70%–49.52%（vs 已见
+- **代码**：https://github.com/nii-yamagishilab/AntiDeepfake-AudioLLM | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1448,6 +1475,33 @@
 - **一句话贡献**：语音在重度过渡性退化（如无限峰值削波）下人耳仍可听懂，但说话人身份能否存续此前几乎未被研究。本文构造PER、PER+ENV、PER+TFS三种时域分解退化条件，在卷积/Transformer/Conformer三架构族中配对6个音频大模型ASV系统（波形输入对mel滤波器组输入），训练仅用时域完整语音。结果显示鲁棒性跟输入表征走而非模型规模或预训练量：9/9家族×条件对比中filterbank输入
 - **关键技术点**：心理声学研究证明听者可在缺失慢调制或精细结构的语音中保持理解力与部分说话人识别能力，但ASV系统能否在同类重度退化条件下守住说话人身份未知；且既有鲁棒性研究中模型规模、预训练量与输入表征三个因素相互纠缠，无法归因。
 - **主要指标**：- EER：受控卷积对PER条件 ResNet34 1.06%→17.09% vs ResNet1D 2.90%→29.74% - ΔEER（PER）：w2v-BERT 2.0仅8.28（归一化17.0）vs Wav2Vec2-Conformer 34.90（归一化76.5），同为581M/618M
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [What Matters in Preference Post-Training of Continuous Autoregressive Speech Language Models](https://arxiv.org/abs/2610.16276)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：针对连续自回归语音大模型（AR backbone + flow/diffusion head）偏好后训练中"如何构对、选哪个flow time、更新哪个模块"的三联决策，本文在统一flow-matching偏好目标下控制变量研究候选扰动构造、时间采样与可训练模块。受控重放与单patch干预表明：采样噪声改动会经自回归反馈传导至后续backbone状态，而表征变化幅度并不必然反映音质。在Ming与d
+- **关键技术点**：DiTAR/dots.tts/Ming等连续AR SLM用flow-matching head生成声学patch且patch回喂AR历史，局部采样变化会级联影响后续生成；但DPO依赖序列对数似然难以应用于flow head，且目标本身不告诉你该比较哪些候选、更新backbone还是head，既有工作（ARDM-DPO等）亦缺乏对这三者交互的受控研究。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [PhonoVoxtLM: Exploring Single-Codebook Phonological Tokens for Speech Understanding and Generation](https://arxiv.org/abs/2610.18469)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：针对统一语音语言模型中输入/输出共享表示往往偏向理解或生成一侧的问题，作者提出 PhonoVoxtLM：在 VoxtLM 框架内，将经 ASR+重合成双目标、可微 k-means 训练的音系 token（冻结 WavLM-large 第21层、2000 单元单码本）同时作为语音输入与生成目标，不添加任何 token 预测模块。四任务全面优于 HuBERT 基线（ASR WER 7.1/17.8→4
+- **关键技术点**：语音与文本需在共享自回归框架中建模，同一离散表示要同时满足理解与生成的信息需求：声学 codec 利于合成、语义单元利于识别；DualSpeechLM、SpiRit-LM 等靠附加声学预测分支或多码本 token 流折中，结构复杂，故单码本能否兼顾两能力成为核心疑问。
+- **主要指标**：- ASR WER（D_Bal）：4.2/8.6（clean/other），对比 HuBERT-1K 7.1/17.8、HuBERT-2K 7.4/17.5 - 语音判别 sWUGGY/sBLIMP：66.98/57.31，超 HuBERT-1K 的 61.43/54.35 - TTS：CER 1.
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Collapse, Repair, and Drift: Dissecting Fine Tuning Dynamics in Speech Language Models](https://arxiv.org/abs/2610.18192)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：语音大模型SFT通常仅以loss曲线监控，掩盖了识别功能的瞬态劣化。作者将Qwen3-ASR-1.7B、MiMo-Audio-7B、FireRedASR2-LLM在387小时五方言语料上于1e-5至1e-3学习率微调，把SFT动力学拆解为可分离的坍缩、修复、漂移三过程：坍缩期CER飙至200%而loss变化平缓。经双向层patching与梯度谱定位功能不相容，并用AdamW更新迁移干预证明绕开早期
+- **关键技术点**：loss只度量被优化目标，不反映推理功能在同一轨迹上的演化；已有遗忘研究多比终点、缺过程机制。作者在方言适配中观察到loss平稳但CER剧烈先崩后复的现象，故提出loss之外的动力学细粒度解剖。
+- **主要指标**：- 瞬态坍缩CER峰值：177.78%–200%（Qwen3-ASR, 1e-4, step3） - 持续失败（1e-3）：最终eval loss>收敛run 2倍，CER长期未回基线 - 梯度谱D_eff：收敛run稳定于近5；失败run接近1或剧烈波动 - 更新迁移学生：早期双域CER峰被消除，
 - **代码**：暂无 | **Demo**：暂无
 
 ---
