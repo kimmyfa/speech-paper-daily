@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 77 篇
+共 78 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -396,6 +396,15 @@
 - **关键技术点**：F5-TTS依赖提示音转写承担双重角色：文本条件与时长估计参考。Cross-Lingual F5-TTS用MMS强制对齐分割训练对并训练音节级语速预测器（SRP）来消除该依赖，但对齐对边界错误敏感、随语言扩展成本上升，且提示音带头尾静音时SRP会低估语速、高估时长导致语音被拉伸。
 - **主要指标**：- LIBRISPEECH-PC WER：2.014%（三个系统中最低） - SIM-o：0.687（LibriSpeech-PC）、0.683（test-en）、0.768（test-zh），均最高 - UTMOS：3.704（LibriSpeech-PC）、3.544（test-en）、2.76
 - **代码**：暂无 | **Demo**：https://qingyuliu0521.github.io/Cross-Lingual_F5-TTS_2_demo/
+
+---
+## [CoSTA: Compressed Speech Token Adaptation for Efficient Spoken Dialogue Models](https://arxiv.org/abs/2610.21143)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-15
+- **一句话贡献**：口语对话模型（SDM）生成与合成共享语音 token 空间，导致自回归序列过长、推理代价高；直接换低码率 tokenizer 会引入压缩-质量权衡且需重训解码器。本文发现语音 token 序列可被 BPE 无损压缩且遵循近似 log-linear 缩放规律（8 种 tokenizer 配置上 R²≥0.98），据此提出 CoSTA：通过后验词表扩展、发音适配与对话适配三步，让原有 SDM 生成压缩
+- **关键技术点**：现有 SDM（Step-Audio 2、GLM-4-Voice 等）自回归生成与语音解码耦合在同一 token 空间，25 Hz 序列长、耗生成预算；换低码率 codec 需重训 tokenizer-解码器-SDM 整套链路，且根本未解耦两者。
+- **主要指标**：- 模型侧效率：CoSTA-ZH 生成压缩率 ρg=66.81%，相对扩展 token 生成速度 1.736×；CoSTA-EN 70.17%、1.659×（Vanilla-FT 均 ρg=100%、速度约 1.0×） - 系统效率：单卡 A100 + vLLM，并发 1/4/8 下全响应延迟降 3
+- **代码**：https://github.com/yingzhuodeng/CoSTA | **Demo**：暂无
 
 ---
 ## [FNH-TTS: Mixture-of-Experts Duration Modeling for Robust Neural Speech Synthesis](https://arxiv.org/abs/2508.12001)

@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 167 篇
+共 168 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1503,5 +1503,14 @@
 - **关键技术点**：loss只度量被优化目标，不反映推理功能在同一轨迹上的演化；已有遗忘研究多比终点、缺过程机制。作者在方言适配中观察到loss平稳但CER剧烈先崩后复的现象，故提出loss之外的动力学细粒度解剖。
 - **主要指标**：- 瞬态坍缩CER峰值：177.78%–200%（Qwen3-ASR, 1e-4, step3） - 持续失败（1e-3）：最终eval loss>收敛run 2倍，CER长期未回基线 - 梯度谱D_eff：收敛run稳定于近5；失败run接近1或剧烈波动 - 更新迁移学生：早期双域CER峰被消除，
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Hear, Localize, and Reason: Spatially Aware Scene Understanding for Audio-Visual LLMs](https://arxiv.org/abs/2610.21588)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：现有视听大模型把音频当单声道语义内容处理，难以定位声源并与视觉场景关联推理，且已有空间基准各自只覆盖零散子任务。本文提出 HLR-AVSceneQA 基准（12 任务、175k 训练/21.8k 测试 QA，按"听-定位-推理"三层级组织）与 HLR-LLM 模型：在 Qwen2.5-Omni 上增加双耳空间音频分支，并用三阶段课程训练加末端 CoT 监督。HLR-LLM 自我中心方向定位达 78
+- **关键技术点**：AV-LLM 普遍以单声道音频输入，只关注"听到什么"而非"从哪听到"，面对离屏、遮挡、跨房间声源无法定位与推理；同时现有空间视听基准（BAT、SAVVY-Bench、SpatialSceneQA、Hear You Are）评估维度碎片化，且训练多用直接答案监督，缺乏对多步空间推理的结构化支持。
+- **主要指标**：- 自我中心方向/距离定位：78.21% / 55.56%，较双通道 Qwen2.5-Omni（64.27/46.59）提升 13.94 / 8.97 个百分点；他心方向/距离 52.03% / 45.08% - 空间关系推理全最优：可见性 80.51、对应 76.19、隐藏源 67.23、响度变化
+- **代码**：https://hlrllm.github.io/ | **Demo**：https://hlrllm.github.io/
 
 ---

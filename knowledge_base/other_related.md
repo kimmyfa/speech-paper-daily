@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 53 篇
+共 55 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -477,5 +477,23 @@
 - **关键技术点**：
 - **主要指标**：
 - **代码**：https://github.com/xs125-stack/voice_anon_simple | **Demo**：暂无
+
+---
+## [PEDBench: Can Speech Models Detect Phonetic Errors?](https://arxiv.org/abs/2610.20830)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-14
+- **一句话贡献**：语音错误检测（PED）是识字教育与临床言语病理评估的关键，但因高质量评测数据缺乏、标注不一致，SOTA语音模型能否可靠检测音素级错误一直不明。本文提出首个PED基准PEDBench，数据跨自然到受控连续谱：真实儿童朗读错误（N=334）、演员脚本化错误（N=1,188）、音素可控TTS合成的含错语音（N=1,083），全部由两名语音学训练标注者核验，并提出要求"检测对且诊断对"的诊断加权P/R/F
+- **关键技术点**：现有PED/MDD研究碎片化：公开数据集人工音素标注不一致（作者标注员复标100句，与原标注F1仅42.25/66.22）；SOTA音素识别模型与语音-语言模型（SLM）从未被系统评测PED；常用PER/PFER与MDD的P/R/F1无法刻画检测+诊断的真实能力。
+- **主要指标**：- L2-ARCTIC F1最高基线仅W2V2P-XLSR53的31.85；CMU-Kids最高ZIPA-CTC-NS 54.55（其PFER虽低至7.86但F1差，PFER不反映PED） - 新型集最佳基线：儿童59.51（BabAR）、acted 76.17（GPT-Audio-1.5）、syn
+- **代码**：暂无（承诺录用后开源代码与acted/synthetic数据集） | **Demo**：暂无
+
+---
+## [High-Order Sinusoidal Modeling for Precise Parameter Refinement](https://arxiv.org/abs/2610.21643)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：针对正弦建模中初始频率失配导致准谐波模型（QHM/aQHM/eaQHM）幅度、频率、相位估计精度受限的问题，本文揭示QHM复斜率幅度模型仅是失配项e^{i2πηt}的一阶泰勒逼近，阶数不足是其误差根源。据此提出高阶正弦模型（High-Order SM），将失配项展开为N阶泰勒级数并以两个复系数(a_k,b_k)强制保持指数结构，用Levenberg–Marquardt算法做非线性最小二乘估计。仿真
+- **关键技术点**：信号参数提取精度受限于频率估计误差，谱图类方法受不确定性原理约束；QHM家族虽可在帧内用复幅度斜率修正频率失配，但其线性模型结构只能捕捉一阶失配，初始频率误差大时估计振荡甚至放大误差，且迭代式修正计算量大、对加性噪声敏感。
+- **主要指标**：- 仿真Case1（μ=50Hz）：4th-SM幅度RMSE 0.5–10.5（对比QHM 11.6–26.7），频率RMSE 0.2–3.9×10⁻³（对比QHM最高99.3×10⁻³），重建SRER 38.8dB为最高；噪声场景SNR15dB下4th-SM SRER 24.5dB，eaQHM因噪
+- **代码**：暂无 | **Demo**：暂无
 
 ---

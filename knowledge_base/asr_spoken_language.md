@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 60 篇
+共 61 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -315,6 +315,15 @@
 - **关键技术点**：自回归 Transformer/Conformer ASR 顺序生成 token 形成解码瓶颈；模型压缩与非AR解码会牺牲精度；已有 ASR 推测解码要么需与目标同族的外部草稿模型（跨架构时接受率骤降），要么如 Whisper-Medusa 独立多头预测忽略时序依赖且需微调目标层导致 WER 退化，无法同时做到高质量草稿、通用性与无损。
 - **主要指标**：- Whisper-large-v3 加速比：1.91×（clean）/1.79×（other），τ=3.79/3.55，ΔWER=0.00 - Conformer AED 加速比：2.43×/2.30×，τ=4.98/4.50，ΔWER=0.00 - 多语种 ASR 平均加速 2.09×（τ≈4.
 - **代码**：https://github.com/ssss-sen/eagle-asr | **Demo**：暂无
+
+---
+## [Reference-Guided Turn-Taking Style Transfer for Full-Duplex Spoken Language Models](https://arxiv.org/abs/2610.20763)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-10-14
+- **一句话贡献**：全双工语音模型的轮换风格（话轮主动性）被冻结在权重里，现有外部控制方法或需重训、或指令遵循不可靠。本文发现并提取"initiative vector"：从模型自身对话中、无需训练与标注，用类别均值差得到 L30 残差流单一方向；该方向可读（提前 800 ms 预测话语起始，AUC 0.82–0.90，超双说话人计时基线 +0.115~0.185）亦可写（沿方向按剂量叠加，语占比从 21–30% 单
+- **关键技术点**：全双工模型逐帧决定是否接管话轮，形成"会话人格"，但一套权重只编码一种风格；训练类方法把单一风格写死且易奖励劫持，指令控制遵循率仅 64.4%，已有激活转向只设二值听/说状态、单一剂量，无法按人校准。
+- **主要指标**：- 读取 AUC（800 ms 起始）：0.818/0.830/0.898，超计时基线 +0.115/+0.185/+0.172，500 对话中 449/497/462 领先；无近文本时仍达 0.806/0.823/0.893 - 转向效应：语占比 −2a 时 6–12%、+2a 时 42–61%（
+- **代码**：暂无 | **Demo**：https://elpsykongloo.github.io/initiative-vector/
 
 ---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)
