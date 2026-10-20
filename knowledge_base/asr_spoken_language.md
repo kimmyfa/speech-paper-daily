@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 61 篇
+共 63 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -9,6 +9,24 @@
 - **关键技术点**：现有端点检测路线（VAD+静音超时、下游分类器、或与识别器联合训练）都只间接获取"语义完整度"这一本应收音机副产品，且各开源/商用系统均未披露训练方法与标注规程。核心发现在于：用离线语料训练流式决策会系统性违反因果性——离线 clip 被强制对齐切成"说话即结束"，标签依赖决策点之后的音频（未来信息），作者称之为 clairvoyant 标签，会造成训练振荡和虚假的"召回-精度 Pareto 前沿"。
 - **主要指标**：- 端点（25 段 dev）：0.969 边界召回、P50 0.39 秒、P95 0.70 秒、0.3 次 false fire/分钟；fresh 50 段 0.924/0.42 秒/0.2 次 - 统一模型（100 段 held-out）：0.982 边界召回、1.30 次 false fire/
 - **代码**：https://github.com/19PINE-AI/turn-aware-asr | **Demo**：https://01.me/research/turn-aware-asr
+
+---
+## [VAD to the Bone: Ultra-Tiny Speech Activity Detection for Edge Deployment](https://arxiv.org/abs/2607.25870)
+
+- **方向**：VAD | **子方向**：ASR | **评分**：9/10 | **日期**：2026-07-28
+- **一句话贡献**：kiloVAD是一个面向边缘部署的超小型VAD模型，仅2.1k参数。使用标准Mel特征和CNN架构，无GRU或可学习滤波器。通过per-layer结构化剪枝与自蒸馏、Angle-based QAT训练，在200ms上下文下达到0.850 AUC，是首个满足所有部署要求的模型。
+- **关键技术点**：
+- **主要指标**：2.1k参数pruned模型：AVA-Speech AUC 0.850，F1 0.783。INT8量化后保持0.851 AUC（无损失）。200ms输入延迟。已被INTERSPEECH 2026接收。
+- **代码**：https://huggingface.co/spaces/kiloVAD-demo/kiloVAD | **Demo**：https://huggingface.co/spaces/kiloVAD-demo/kiloVAD
+
+---
+## [Voice Memory for Agentic Speech Recognition](https://arxiv.org/abs/2607.26410)
+
+- **方向**：语音识别 | **子方向**：ASR | **评分**：9/10 | **日期**：2026-07-29
+- **一句话贡献**：Voice Memory提出一种推理时仅需语音识别的智能语音识别方案：冻结的corrector读取每个领域的memory.md文件，每帧决定是修改假设还是保持1-best。异步地，score-gated优化器通过有限编辑修订memory。核心发现是约束发现"克制"是关键技能：无约束生成误差校正（GER）过度修正（金融新闻上64%的编辑破坏了正确token），Voice Memory将此降至35%。
+- **关键技术点**：
+- **主要指标**：- HyPoradise加权WER：8.36%→7.52%（使用memory），7.47%（加3个in-context样本） - 航空指令：8.40%→3.40% - CHiME-4远场：12.69%→10.46% - 无领域回归任何数据集到1-best基线以下 - memory可跨correcto
+- **代码**：https://huggingface.co/huckiyang/voice-memory | **Demo**：https://huckiyang.github.io/voice-memory/
 
 ---
 ## [Cocktail-Talker: Multi-Speaker Dialog Modeling in Noisy Social Environments with Turn Action GRPO](https://arxiv.org/abs/2607.27756)

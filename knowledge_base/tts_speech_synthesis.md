@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 78 篇
+共 81 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -125,6 +125,24 @@
 - **一句话贡献**：端到端 TTS 丢弃 G2P 词表环节后，生僻词与日语声调重音只能由模型猜测。本文提出自蒸馏方案：冻结基座对"含常见词且拼写正确的载体句"输出自身波形作为教师，学生输入把该词替换为带标记的带重音片假名，仅用 rank-16 LoRA 训练此配对即装好"读音+重音"信道，全程零录音、零标注。Sarashina2.2-TTS 上重音实现率 0.89（Fleiss κ=0.85），明文假名仅 0.57；
 - **关键技术点**：串联式 TTS 在合成前由 G2P 前端查词表，端到端 TTS 取消该环节后生僻汉字、专有名词、领域术语只能靠模型猜测；日语重音为词库性指定，读错会伤害可懂度。现有补救均付出录音代价：UtterTune 需 15,097 条人工修正对齐对，Sarashina2.2-TTS 需约 4,000 小时监督微调，CosyVoice 3 发音修补与 GLM-TTS 混合音素输入仅在基础训练时可用。核心问题：发布后的冻结模型如何以零录音成本安装读音与重音控制信道。
 - **主要指标**：- 读词准确率（319 生僻词×42 留出音色）：无编辑 vs 本文——Sarashina .511→.821、CosyVoice 2 .279→.749、Irodori .586→.837、T5Gemma .398→.752，四种骨架增益 +0.310/+0.470/+0.251/+0.354（均
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Extracting Voice Styles from Frozen TTS Models via Gradient-Based Inverse Optimization](https://arxiv.org/abs/2607.25351)
+
+- **方向**：TTS | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-28
+- **一句话贡献**：针对TTS系统只发布合成模型和预设风格向量但不发布参考编码器的问题，本文提出通过梯度下降直接优化风格向量，从冻结TTS模型中提取语音风格。使用WavLM统计量作为目标，无需转录和对齐。在154个说话人上，ECAPA相似度从0.132提升到0.403，验证器接受53%提取声音 vs 预设1%。
+- **关键技术点**：
+- **主要指标**：ECAPA相似度从0.132提升到0.413，ResNet从0.099提升到0.401。每个说话人都有提升。验证器在EER点接受53%的提取声音 vs 预设的1%。
+- **代码**：https://github.com/kdrkdrkdr/supertonic.embed | **Demo**：暂无
+
+---
+## [Zero-Shot Face-to-Speech Synthesis via Latent Space Adaptation of a Style-Diffusion TTS Model](https://arxiv.org/abs/2607.26742)
+
+- **方向**：TTS、语音合成 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-29
+- **一句话贡献**：Face-to-Speech (F2S)框架从静态面部图像预测语音。轻量级Face Adapter配合face encoder上层的soft-tuning，将face recognition特征对齐到冻结StyleTTS 2模型的style空间。在LRS3数据集上评估，未见身份语音自然度高（UTMOS 3.7-4.0），face-to-voice检索持续高于随机，零样本跨语言迁移到西班牙语也产生流
+- **关键技术点**：
+- **主要指标**：- Face→voice检索：Top-1 9.3%（2.2×随机），Top-5 35.1% - SECS（embedding级）：0.40-0.42 - UTMOS（英语）：3.7-4.0 vs 真实语音3.61 - 零样本西班牙语：UTMOS 2.7-2.9，face-to-style映射与语言无
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -405,6 +423,15 @@
 - **关键技术点**：现有 SDM（Step-Audio 2、GLM-4-Voice 等）自回归生成与语音解码耦合在同一 token 空间，25 Hz 序列长、耗生成预算；换低码率 codec 需重训 tokenizer-解码器-SDM 整套链路，且根本未解耦两者。
 - **主要指标**：- 模型侧效率：CoSTA-ZH 生成压缩率 ρg=66.81%，相对扩展 token 生成速度 1.736×；CoSTA-EN 70.17%、1.659×（Vanilla-FT 均 ρg=100%、速度约 1.0×） - 系统效率：单卡 A100 + vLLM，并发 1/4/8 下全响应延迟降 3
 - **代码**：https://github.com/yingzhuodeng/CoSTA | **Demo**：暂无
+
+---
+## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
+
+- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：
+- **一句话贡献**：
+- **关键技术点**：
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [FNH-TTS: Mixture-of-Experts Duration Modeling for Robust Neural Speech Synthesis](https://arxiv.org/abs/2508.12001)

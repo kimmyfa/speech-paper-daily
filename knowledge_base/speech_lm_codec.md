@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 24 篇
+共 25 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -53,6 +53,15 @@
 - **一句话贡献**：主流神经语音编解码器以压缩保真为目标训练，其离散 token 序列缺乏自回归建模所需的时序条件依赖，统计分布偏离自然语言的 Zipf 幂律，与 LLM 的下一个 token 预测范式严重错位，导致语音大模型续训效率低下。本文提出 ARDDS 编解码器训练框架：在 codec 训练中引入辅助自回归解码器，通过温度控制的软量化实现梯度回传，显式约束 token 序列的自回归可预测性；同时提出异构下采样
 - **关键技术点**：现有语音编解码器以多尺度梅尔谱重建损失、LSGAN 判别损失等联合优化，仅关注率失真与感知质量，对 token 序列的时序结构没有任何约束。作者统计发现各代表 codec 的 token 频率-排名关系明显偏离文本 Zipf 幂律分布，token 缺乏可预测的条件依赖；且第一层语义 token 速率（如 XCodec 50 Hz）远高于对应文本，增加语音大模型续训练负担。这是"压缩目标"与"生成目标"的结构性错位。
 - **主要指标**：- XCodec:ARDDS 下游：StoryCloze 70.1%（+6.4）、AISHELL-I CER 2.5%（-2.7）、SeedTTS WER 2.3%（-2.4） - 编解码器内在质量：重建 WER 4.13、SPKSIM 0.88、UTMOS 4.30、PESQ-nb 3.53，与基
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Dissecting Sensitivity to Training Language in Self-Supervised Speech Learning Using Neural Audio Codec Tokens](https://arxiv.org/abs/2607.26350)
+
+- **方向**：自监督学习、语音表示 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-07-28
+- **一句话贡献**：本文系统分析基于神经音频codec（NAC）token的自监督学习（SSL）中的语言敏感性。实验表明：下游性能对NAC训练语言不敏感，但强烈依赖于SSL预训练语言。这一发现表明单个NAC可以跨语言重用，而SSL预训练语言与目标语言对齐至关重要。
+- **关键技术点**：
+- **主要指标**：- RQ1：DAC训练语言对重建语音下游性能影响有限，CoV < 3.38% - RQ2：SSL预训练语言敏感性强，CoV达42.99% - RQ3：固定SSL预训练语言后，NAC训练语言影响有限，CoV < 3.90% - 结论：NAC可跨语言重用，SSL预训练语言需与目标语言对齐
 - **代码**：暂无 | **Demo**：暂无
 
 ---

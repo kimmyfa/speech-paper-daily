@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 55 篇
+共 58 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -45,6 +45,24 @@
 - **关键技术点**：语义端轮（EOT）检测是语用层面判断，单纯静默时长是表面近似；现有开源语义 EOT 检测器均以英语等大语种为主，南印度语言完全空白。作者以实验揭示规则标签与模型任务不等价：规则在正类命中 95.9% 但负类仅 44.4%（低于随机），因规则回答的是"是否存在长静默"而模型需回答"用户话语是否完成"。
 - **主要指标**：- 精度：70.30%（零样本）→83.71%（8.7MB）→86.13%（21MB） - ROC-AUC：0.751→0.921 - 延迟：<150ms 单线程笔记本 CPU
 - **代码**：开源（数据、权重、代码公开） | **Demo**：暂无
+
+---
+## [Multi-Phonation Graph Learning with Self-Supervised Speech Embeddings for ALS Detection and Progression Prediction](https://arxiv.org/abs/2607.25284)
+
+- **方向**：医学语音 | **子方向**：Other | **评分**：8/10 | **日期**：2026-07-28
+- **一句话贡献**：本文提出subject-level图框架，将多个ALS患者的发声录音聚合为k近邻图进行分类。系统比较4种SSL前端和5种GNN架构，最佳配置HuBERT+GIN在SAND数据集上达到0.73和0.69的mF1，显著超越基线（0.61和0.58）。
+- **关键技术点**：
+- **主要指标**：HuBERT+GIN：Task 1（5类严重程度）mF1=0.73，Task 2（4类ALSFRS-R进展预测）mF1=0.69。相比SAND验证基线（0.61和0.58）显著提升。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Qwen-Audio-3.0-Gen-Preview Technical Report](https://arxiv.org/abs/2607.27011)
+
+- **方向**：音频大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-07-29
+- **一句话贡献**：Qwen-Audio-3.0-Gen-Preview是一个统一非自回归框架，使用Diffusion Transformer (DiT)和共享变分自编码器（VAE）生成完整混合波形。提示增强将自由形式请求转换为结构化时序记录，两阶段数据课程和语义条件视图训练模型跨领域使用条件。在Seed-TTS-Eval上实现高说话人相似度，多speaker基准上跨轮一致性高于Seed-Audio-1.0。
+- **关键技术点**：
+- **主要指标**：- Seed-TTS-Eval说话人相似度：主要优势在三个子集上 - 多speaker基准：跨轮一致性高于Seed-Audio-1.0（中英） - AudioCaps：大型音频语言模型评估和AudioBox上优势明显 - 时间定位：比Seed-Audio-1.0更强 - SongBench：使用约1
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [MeloCodec: Harnessing Melodic Priors for High-Fidelity Singing Voice Representation](https://arxiv.org/abs/2608.03021)
@@ -225,6 +243,15 @@
 - **关键技术点**：广播档案规模大、多样但质量混杂，既有工作仅用VAD或LID保证"提取到语音"，从未按质量系统性筛选无标注预训练数据；同时先前SSL架构对比同时变动结构与参数量（如618M Conformer vs 317M Transformer），无法区分收益来自架构还是容量。
 - **主要指标**：
 - **代码**：https://github.com/aalto-speech/large-scale-monolingual-speech-foundation-models （模型开源，语料因广播版权不可再分发） | **Demo**：暂无
+
+---
+## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)
+
+- **方向**：说话人跟踪 | **子方向**：Other | **评分**：7/10 | **日期**：2026-07-29
+- **一句话贡献**：提出深度展开的递归EM（REM）网络用于在轻度混响环境中鲁棒跟踪单个移动说话人。与依赖固定步长衰减 schedules的传统REM算法不同，架构通过将迭代过程展开为可微分层来学习自适应更新策略。引入Step Size Network，利用Feature-wise Linear Modulation (FiLM)和Positional Encoding (PE)根据时序上下文和收敛状态动态调整递归权
+- **关键技术点**：
+- **主要指标**：- 无混响（T60=0）：RMSE 0.25m vs CREM基线0.28-1.44m - 混响（T60=0.3s）：RMSE 0.55m vs CREM基线0.74-0.86m - learned γ_t在无混响时收敛到~0.25，在混响时降低到0.02-0.1
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Explicit and Stable Pseudospectral Time-Domain Method for Föppl-von Kármán Equations](https://arxiv.org/abs/2608.06139)

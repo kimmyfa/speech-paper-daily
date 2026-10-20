@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-OUTPUT_DIR = BASE_DIR / ".skills" / "speech-paper-daily" / "output"
+OUTPUT_DIR = BASE_DIR / "papers"
 KB_DIR = Path(__file__).resolve().parent
 MIN_SCORE = 7.0
 
@@ -55,6 +55,8 @@ def parse_output_files(output_dir: Path):
     """解析所有速递 md，返回 {arxiv_id: entry}，已去重且优先高评分。"""
     papers = {}
     for f in sorted(output_dir.glob("*/*.md")):
+        if f.parent.name.startswith("_"):
+            continue
         content = f.read_text(encoding="utf-8", errors="ignore")
         for entry in re.split(r"\n## \[", content)[1:]:
             entry = "## [" + entry

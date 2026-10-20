@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 168 篇
+共 176 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -18,6 +18,15 @@
 - **关键技术点**：现有SLM在MMSU副语言感知任务上可达52.8%，说明模型已具备线索识别能力，但普通请求中几乎不据此调整回复。推理时前置副语言提示scaffold可显著激发潜在能力（SAR 14.6%→29.0%），但此类scaffold在多轮长上下文、指令竞争下易失效；SFT需人工标注且有偏移风险，RFT只保留单条被选轨迹存在暴露偏差，GRPO仅提供稀疏标量奖励。
 - **主要指标**：- VoxSafeBench SAR（无scaffold）：14.64%→40.33%（+25.69），超过scaffolded基线29.02% - EchoMind平均分：3.27→3.92（+0.65），C_SpeechRel +0.82 - 通用能力保持：MMAU-Pro 62.96(-0.2
 - **代码**：暂无（承诺随上游许可发布LoRA适配器） | **Demo**：暂无
+
+---
+## [ThinkOmni: A Reasoning-Driven Omni-Modal LLM Framework for Audio Forgery Detection and Localization](https://arxiv.org/abs/2607.26553)
+
+- **方向**：语音伪造检测与定位 | **子方向**：SpeechLM | **评分**：9/10 | **日期**：2026-07-29
+- **一句话贡献**：ThinkOmni是一个推理驱动的全模态大语言模型框架，可同时执行显式取证推理、伪造检测和时序篡改定位。为了支持显式推理监督，作者构建了FACoT（Forensic-Aware Chain-of-Thought）数据集，包含10万样本带有结构化取证证据和推理标注。实验表明ThinkOmni在检测和定位任务上都实现了强大的跨数据集泛化能力。
+- **关键技术点**：
+- **主要指标**：- 跨数据集检测：平均ACC 93.70%，F1 93.72% - 跨数据集定位：ADD 2023上F1 80.74%，Speech-Forensics上F1 85.15% - 显著优于SSL基线（W2V2-AASIST）和ALLM基线（ALLM4ADD）
+- **代码**：https://beyond0814.github.io/ThinkOmni/ | **Demo**：暂无
 
 ---
 ## [JoyAI-Talker: Full-Duplex Speech Interactive Large Model for Empathetic Voice Agents](https://arxiv.org/abs/2608.01119)
@@ -164,6 +173,24 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [Time-Frequency Consistency Learning for Robust Speech Deepfake Detection](https://arxiv.org/abs/2607.17761)
+
+- **方向**：语音深度伪造检测 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-20
+- **一句话贡献**：TFCL针对语音深度伪造检测在现实声学前端（AFE）处理下的鲁棒性问题。AFE引入的非线性和时频耦合失真显著降低检测性能。TFCL通过时域注意力软对齐和频域结构一致性约束学习AFE不变表示，在完整AFE pipeline下达到EER 9.78%，AUC 96.40%。
+- **关键技术点**：
+- **主要指标**：在完整AFE pipeline下：EER 9.78%，AUC 96.40%，显著优于所有基线方法。干净条件下：EER 0.55%，AUC 99.96%。在各种AFE条件下一致提升。
+- **代码**：https://github.com/JunXue-tech/TFCL | **Demo**：暂无
+
+---
+## [Unlocking Spatial Grounding in Large Audio-Visual Retrieval models](https://arxiv.org/abs/2607.24786)
+
+- **方向**：音频视觉定位 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-22
+- **一句话贡献**：LAIP框架证明大规模音频视觉检索模型可适配为有效的声源定位器。核心发现是中间层视觉token保留了结构化空间信息，通过音频信息空间池化（AiSP）模块可恢复定位能力。该方法在AVSBench和AVATAR上实现SOTA，性能几乎翻倍。
+- **关键技术点**：
+- **主要指标**：AVATAR：CIoU达到27.63%（single-sound）、27.35%（mixed-sound）、23.69%（multi-entity），相比TAVLO提升约10个百分点。AVSBench S4：F-score达到65.18%。
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Robust Speech Emotion Recognition under Tone-Word Conflict: A Benchmark and Framework](https://arxiv.org/abs/2609.04236)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-27
@@ -171,6 +198,33 @@
 - **关键技术点**：论文指出现有方法存在三类结构缺陷：一是语音-文本联合预训练模型（Whisper、CLAP）存在语义偏置，模型被字面含义"污染"；二是 SSL 编码器（HuBERT、wav2vec2、WavLM）产出声学与语义纠缠表征，冲突难以消解；三是大语音语言模型（Qwen2-Audio、Qwen2.5-Omni）的编码器优先语义而削弱韵律情感线索。同时社区缺乏控制变量式的高密度冲突评测基准。
 - **主要指标**：- TWIN-SER：DAS WA 59.38 / WF1 55.08，最强基线 Whisper 47.26 / 44.97，HuBERT 32.90、Qwen2.5-Omni 34.66 - 退化证据：HuBERT 在 ESD 上 80.1%、TWIN-SER 上跌至 32.9%；Qwen2.5-
 - **代码**：https://github.com/24DavidHuang/FAS | **Demo**：暂无
+
+---
+## [From Semantics to Readout: Mechanistic Understanding of Audio Tokens after Fine-Tuning for Temporal Audio Grounding](https://arxiv.org/abs/2607.25355)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-28
+- **一句话贡献**：本文首次系统分析大语言音频模型（LALM）中音频token的内部角色，使用时间音频定位作为诊断任务。研究发现基础模型已包含事件证据，微调主要改善解码器对现有证据的读取能力，而非创建新证据。跨检查点实验验证增益来自解码器适应而非token语义改变。
+- **关键技术点**：
+- **主要指标**：Qwen2.5-Omni微调后：mIoU从0.3707提升到0.6817，F1从0.4416提升到0.7626，R@0.7从0.2349提升到0.5817。Qwen2-Audio也呈现类似的解码器可读性和预测对齐改进。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Audio-Anchored Fusion of Multi-Ratio DiT Reconstruction Residuals for Cross-Domain Audio Deepfake Detection](https://arxiv.org/abs/2607.26472)
+
+- **方向**：语音deepfake检测 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-29
+- **一句话贡献**：本文提出跨域音频deepfake检测框架，使用仅在真实语音上训练的Diffusion Transformer (DiT)作为冻结重建探测仪。在0.5、0.75、0.9三种掩码比下进行重建，产生显式的多比残差图。提出音频锚定融合机制，将冻结WavLM听觉表示直接传入融合和，仅用残差作为标量门控加性校正。在ASVspoof 5和真实环境ITW数据集上验证了跨域泛化能力。
+- **关键技术点**：
+- **主要指标**：- ASVspoof 5 Eval：EER 6.54%，min-DCF 0.1846 - ITW Full：EER 13.84%，min-DCF 0.3692 - 三种子平均：Eval EER 6.89%，ITW EER 15.33% - 辅助监督损害动态竞争融合：ITW从18.40%恶化到25.3
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Prosody-driven Jailbreaks in Audio LLMs: A Controlled Study and Mechanistic Analysis](https://arxiv.org/abs/2607.26541)
+
+- **方向**：语音LLM安全 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-29
+- **一句话贡献**：本文研究韵律驱动的语音LLM越狱攻击，固定文本内容仅改变语音韵律来触发有害响应。提出PJ-Break黑盒评估协议和AdvAudio-Prosody基准（600样本），使用6种韵律预设（Panic/Anger/Commanding/Fast/Whisper/Neutral）。实验表明情感韵律音频（44/95）远高于情感文本（11/95），证明韵律是语音LLM安全评估的一等公民。
+- **关键技术点**：
+- **主要指标**：- Qwen2-Audio上：Panic 38/95，Anger 35/95，Fast 32/95，均远超Neutral 4/95 - 六条件池化：44/95（46.3%），超过StyleBreak（27/95） - 消融：情感音频 alone（44/95）远超情感文本 alone（11/95） -
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Cloned Voices, Real Consequences: Evaluating Bias in Political Deepfake Detection for Electoral Integrity in Brazil](https://arxiv.org/abs/2607.28770)
@@ -809,6 +863,24 @@
 - **一句话贡献**：基于语音的阿尔茨海默病（AD）检测日益依赖Pitt语料库的增强版本。本文系统重访预处理与数据整理对AD检测的副作用：增强数据集上域内性能提升但跨域稳健性下降；训练/测试匹配增强只能缓解无法消除退化。LALM同样敏感，增强数据诱发更强的类别不平衡与预测偏移。结论提示"更干净"的语音数据集对真实世界AD检测未必更可靠。
 - **关键技术点**：AD语音检测常把语音增强、样本筛选等当作有利预处理，但这些转换可能在域内制造虚高成绩。
 - **主要指标**：- 域内性能：增强数据集普遍提升 - 跨域/跨数据集：增强数据训练显著降低稳健性 - 匹配增强：可缓解但不能消除退化
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Text-Prompted CLAP: Learning Query-Conditioned Audio Representations via Contrastive Learning](https://arxiv.org/abs/2607.25085)
+
+- **方向**：音频理解 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-27
+- **一句话贡献**：TP-CLAP是一个参数高效的CLAP扩展，通过跨注意力融合模块将文本提示融入音频特征，学习查询条件音频表示。该方法使用音频多选题框架进行对比学习，在音频问答任务上与音频LLM具有竞争力，同时在检索和零样本分类上改进基础CLAP。
+- **关键技术点**：
+- **主要指标**：音频问答：TP-CLAP在MMAU上达到71.47%准确率（sound）和55.99%（music），优于CLAP+AudioMCQ的64.56%和52.99%。音乐检索任务也持续优于CLAP基线。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Towards Operational Conversational Intelligence: A Speech Intelligence Framework](https://arxiv.org/abs/2607.24958)
+
+- **方向**：ASR | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-27
+- **一句话贡献**：本文提出双路径对话智能框架处理执法记录仪（BWC）音频：diarization分支使用DeepFilterNet+NVIDIA MSDD+TitaNet，ASR分支使用loudness normalization+WhisperX。核心创新是发现"增强陷阱"现象（增强有益diarization但损害ASR），并提出概率引导VAD后处理和基于时间重叠的说话人归因。
+- **关键技术点**：
+- **主要指标**：报告了VAD、diarization、ASR和说话人归因的组件级评估结果，验证了任务特定声学条件和概率引导分割的有效性。
 - **代码**：暂无 | **Demo**：暂无
 
 ---

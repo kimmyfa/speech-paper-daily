@@ -1,3 +1,6 @@
 knowledge_base/.cache/
 knowledge_base/__pycache__/
-.pytest_cache/
+.pytest_cache/.DS_Store
+__pycache__/
+*.rar
+.skills/speech-paper-daily/output/

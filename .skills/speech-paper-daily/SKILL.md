@@ -1,13 +1,13 @@
 ---
 name: speech-paper-daily
-description: 语音领域每日论文速递。搜索最新一批（北京时间前一工作日）语音大模型（Speech LLM、TTS、ASR、codec、speech generation）和语音前端（speech enhancement、noise suppression、beamforming、source separation、dereverberation）arXiv预印本论文，以领域专家视角精读每篇论文，按统一模板输出技术方案、实验结果、简介摘要和10分制评分，保存到本地 output/ 与 papers/{批次日期}/，同步 GitHub，并发送飞书通知。触发场景：用户说"帮我找最新语音论文"、"搜语音预印本"、"语音论文速递"、"今天有什么语音论文"、"看看最新的 TTS/ASR/语音增强论文"等。
+description: 语音领域每日论文速递。搜索最新一批（北京时间前一工作日）语音大模型（Speech LLM、TTS、ASR、codec、speech generation）和语音前端（speech enhancement、noise suppression、beamforming、source separation、dereverberation）arXiv预印本论文，以领域专家视角精读每篇论文，按统一模板输出技术方案、实验结果、简介摘要和10分制评分，保存到 papers/{批次日期}/（唯一存储），同步 GitHub，并发送飞书通知。触发场景：用户说"帮我找最新语音论文"、"搜语音预印本"、"语音论文速递"、"今天有什么语音论文"、"看看最新的 TTS/ASR/语音增强论文"等。
 ---
 
 # 语音论文速递 Skill
 
 ## 目标
 
-搜索最新 arXiv 语音领域预印本，以领域专家视角精读，按统一模板输出，保存到 `.skills/speech-paper-daily/output/{批次日期}/` 与项目根目录 `papers/{批次日期}/`，推送 GitHub，并发送飞书通知。若论文数量超过15篇，只显示得分最高的15篇详细内容，其余论文只列出标题和链接。
+搜索最新 arXiv 语音领域预印本，以领域专家视角精读，按统一模板输出，保存到项目根目录 `papers/{批次日期}/`（唯一正式存储，历史批次全部在此），推送 GitHub，并发送飞书通知。`.skills/speech-paper-daily/output/` 已退役，不再写入。若论文数量超过15篇，只显示得分最高的15篇详细内容，其余论文只列出标题和链接。
 
 ---
 
@@ -21,7 +21,7 @@ description: 语音领域每日论文速递。搜索最新一批（北京时间�
   - **周二至周五**：目标日期 = 昨天的日期（前一工作日）
   - **周一**：目标日期 = 上周五的日期
 - **执行日为周六或周日**：arXiv 无新发布，直接输出"今天是周六/周日，arXiv 无新发布"并结束。
-- 目标日期必须在 `papers/` 与 `.skills/speech-paper-daily/output/` 下都存在同名目录，且文件命名 `speech_paper_{YYYYMMDD}.md`（目录 `YYYY-MM-DD`，文件名 `YYYYMMDD`）。
+- 目标日期必须在 `papers/` 下存在同名目录，文件命名 `speech_paper_{YYYYMMDD}.md`（目录 `YYYY-MM-DD`，文件名 `YYYYMMDD`）。**禁止**再写 `.skills/speech-paper-daily/output/`（该目录已退役，历史速递已全部收编进 `papers/`）。
 
 **为什么要用批次日期命名**：arXiv 于北京时间周一至周五 08:00 发布当天批次（美东时间周日 20:00 至周四 20:00 announcement）。白天 09:20 执行时 `/new` 展示的正是当天 08:00 的批次，该批次所属日期在 arXiv 标示为"前一工作日"（例：周二执行 → /new 显示 "Mon, 14 Sep 2026" 批次 → 日期为周一）。执行日与批次日期之间是错开的，**永远不要用执行当天日期命名**。
 
@@ -48,7 +48,7 @@ description: 语音领域每日论文速递。搜索最新一批（北京时间�
 
 **必须对论文进行去重，避免同一篇论文出现在多天的速递中：**
 
-1. 用 `grep -rhoE "\b[0-9]{4}\.[0-9]{4,5}\b" .skills/speech-paper-daily/output/` 扫描所有已有输出，提取全部已出现的 arXiv ID
+1. 用 `grep -rhoE "\b[0-9]{4}\.[0-9]{4,5}\b" papers/` 扫描所有已有速递（papers/ 为唯一权威档案），提取全部已出现的 arXiv ID
 2. 从当前论文列表中移除所有已出现过的 arXiv ID
 3. 如果去重后剩余论文数为 0，输出"YYYY-MM-DD 语音论文速递 - 无新论文（所有论文已在之前速递中收录）"，不创建文件、不推送、不发通知
 
@@ -127,15 +127,13 @@ description: 语音领域每日论文速递。搜索最新一批（北京时间�
 
 ### 保存规范
 
-- 同时保存到两个位置（内容完全一致）：
-  - 本地输出：`.skills/speech-paper-daily/output/YYYY-MM-DD/speech_paper_YYYYMMDD.md`
-  - GitHub同步：`papers/YYYY-MM-DD/speech_paper_YYYYMMDD.md`（项目根目录，用于同步到 GitHub，不要保存到 `.skills/speech-paper-daily/papers/`）
+- 只保存到唯一存储位：`papers/YYYY-MM-DD/speech_paper_YYYYMMDD.md`（项目根目录，直接同步 GitHub；不要写到 `.skills/speech-paper-daily/papers/`，也不要再写 output/）。
 
 ---
 
 ## 第四步：同步知识库与 GitHub
 
-1. **更新知识库**：在 `knowledge_base/` 目录执行 `python3 build_kb.py`（读取全量速递、过滤评分≥7分论文、重建各方向文件与 `_index.json`）
+1. **更新知识库**：在 `knowledge_base/` 目录执行 `python3 build_kb.py`（数据源为 `papers/` 全量速递，过滤评分≥7分论文、重建各方向文件与 `_index.json`）
 2. **同步 GitHub**：
    ```bash
    cd /Users/kimmy/Desktop/Vagent_app/SpeechAIResercher
@@ -190,7 +188,7 @@ bash /Users/kimmy/Desktop/Vagent_app/SpeechAIResercher/scripts/prune_sessions.sh
 - 周六、周日执行 → 直接结束，不生成文件
 
 ### 去重规则
-- 每次生成前必须扫描所有已有输出文件（`.skills/speech-paper-daily/output/` 全量），提取 arXiv ID 去重
+- 每次生成前必须扫描所有已有速递文件（`papers/` 全量，唯一权威档案），提取 arXiv ID 去重
 - 已在之前速递中出现过的论文不得再次收录
 - 去重后无新论文 → 输出"无新论文"并结束，不创建文件、不通知
 
