@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 17 篇
+共 19 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -63,6 +63,24 @@
 - **关键技术点**：EEND 模型混合不同语料训练时，ASR 语料的松标注会使模型学出松散边界。前人工作基于因果/反因果模型输出平均生成紧伪标签，但伪标签源于预测、协同训练中会被过度收紧导致漏检增加。论文量化：填充停顿平均 0.336s/0.267s，而起止边界偏移均 <0.1s，说明松度主要来自停顿填充而非边界 padding。
 - **主要指标**：- DER（%）C2 紧基线：AMI-MHM 14.03 / AMI-SDM 17.05 / AliMeeting 19.79 - DER（%）C4 原方法：AMI-MHM 18.28 / AMI-SDM 21.56 / AliMeeting 22.90（漏检 11.20） - DER（%）P3 完
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [12. SepGen: Multi-Stem Audio-Video Separation and Generation in a Single Model](https://arxiv.org/abs/2610.11361)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：现有联合音视频生成器只输出一条混合声轨，声源无法被单独编辑或在新视角下空间化重渲染。SepGen将预训练LTX-2.5 22B音视频生成器扩展为多stem模型，一次采样同时输出视频、混合轨与每个声源一条波形，同一套权重通过噪声水平切换生成/分离双模式。在Veo基准分离上Judge 4.36、J-swap 2.61、语音自台词WER 0.05（去除台词后仍0.50领先全部基线）；129个带参考ste
+- **关键技术点**：现有联合音视频生成器（LTX-2、Ovi、Veo 3.1 Lite）只输出整场景一条audio-mix，声源不可移动、删除或单独重渲染，4D场景换视角重渲染时没有任何可交给空间音频渲染器的逐源波形。语言查询分离器（AudioSep、FlowSep、SAM Audio）逐条caption独立处理，同一类别两个说话人时可能两次返回同一个人。
+- **主要指标**：- 语音分离（Veo）：SepGen自台词WER 0.05（含台词）/0.50（去台词）vs AudioSep 0.93/1.03、FlowSep 0.98/0.99；说话人余弦0.61/0.53 vs 基线0.89–0.96（越低越 distinct） - 音效分离（Veo）：Judge 4.36
+- **代码**：https://sepgen.github.io/ | **Demo**：https://sepgen.github.io/
+
+---
+## [PromptSep-Speaker: Generative Target Speaker Extraction via Multimodal Prompting and Semantic Alignment](https://arxiv.org/abs/2610.23066)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-10-19
+- **一句话贡献**：现有目标说话人抽取（TSE）普遍依赖单一线索与掩码预测模型，前者既不易得又不够可判别，后者易产生伪影、泛化差。本文提出PromptSep-Speaker，一个基于潜空间扩散的生成式TSE模型，统一说话人时序ID、转录文本、注册音频、自由描述caption四种可互换线索，并引入辅助对齐损失，用冻结WavLM表征监督线索-混合信号交叉注意，在零额外标注下迫使模型真正利用语音线索定位目标。在四个域外评测
+- **关键技术点**：多数TSE系统只用单模态内的一种线索：注册音频在音色相近或片段过短时易混淆，文本线索通常匹配"类"而非"具体人"；且以掩码预测模型为主，分离质量与跨声学条件泛化逊于生成式方法，评测还偏向全重叠混合，脱离对话中部分重叠交错的真实场景。
+- **主要指标**：- 转录线索SI-SDRi：8.73/11.41/12.47dB（CapSp./LTTS-R/Int），DAE-TSE仅2.13/2.41/1.21，域外提升6.6-11.3dB；Libri2Mix域内6.15对11.13dB败于DAE-TSE - 注册音频线索：SI-SDRi 11.79（LTTS
+- **代码**：暂无 | **Demo**：https://yutongwen.github.io/PromptSep-Speaker/
 
 ---
 ## [Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation](https://arxiv.org/abs/2608.09451)

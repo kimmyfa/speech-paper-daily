@@ -11,9 +11,9 @@
 
 ---
 
-## ELARSpeech: A 30K-Hour Dataset Across 675 Underrepresented Languages for Long-Tail Multilingual Speech Technologies
+## [1] ELARSpeech: A 30K-Hour Dataset Across 675 Underrepresented Languages for Long-Tail Multilingual Speech Technologies
 
-**arXiv ID**：arXiv:2610.19388 | **方向**：语音大模型
+**arXiv ID**：2610.19388 | **方向**：语音大模型
 
 **作者**：Sangmin Lee, Yejin Jeon, David Ifeoluwa Adelani
 
@@ -51,9 +51,9 @@
 
 ---
 
-## VoxTurn: Answering Several Turn-Taking Questions in One Pass with One Model
+## [2] VoxTurn: Answering Several Turn-Taking Questions in One Pass with One Model
 
-**arXiv ID**：arXiv:2610.21150 | **方向**：语音大模型
+**arXiv ID**：2610.21150 | **方向**：语音大模型
 
 **作者**：Austin Xiao（HTML 正文未列全作者名单，发布账号为 AustinXiao）
 
@@ -93,9 +93,9 @@
 
 ---
 
-## MultiPartyTurnBench: Benchmarking Floor Control in Multi-Party Spoken Dialogue
+## [3] MultiPartyTurnBench: Benchmarking Floor Control in Multi-Party Spoken Dialogue
 
-**arXiv ID**：arXiv:2610.20172 | **方向**：语音大模型
+**arXiv ID**：2610.20172 | **方向**：语音大模型
 
 **作者**：Puneet Mathur, Dinesh Manocha
 
@@ -133,9 +133,9 @@
 
 ---
 
-## Full-Duplex Interaction with Speech, Expressions and Gestures
+## [4] Full-Duplex Interaction with Speech, Expressions and Gestures
 
-**arXiv ID**：arXiv:2610.21452 | **方向**：语音大模型
+**arXiv ID**：2610.21452 | **方向**：语音大模型
 
 **作者**：Siyin Wang, Wenyi Yu, Terumi Chiba, Xianzhao Chen, Xiaohai Tian, Jun Zhang, Lu Lu, Chao Zhang
 
@@ -175,9 +175,9 @@
 
 ---
 
-## Speaking Longer Than Learned: Training-Free Long-Form Generation for Full-Stream Text-to-Speech
+## [5] Speaking Longer Than Learned: Training-Free Long-Form Generation for Full-Stream Text-to-Speech
 
-**arXiv ID**：arXiv:2610.19553 | **方向**：语音大模型
+**arXiv ID**：2610.19553 | **方向**：语音大模型
 
 **作者**：Jeseung Lim, Jiseong Woo, Heeseung Kim
 
@@ -214,9 +214,9 @@
 
 ---
 
-## Long-Prompt Zero-Shot TTS: Benchmarking Prosody Reproduction Beyond Voice Cloning
+## [6] Long-Prompt Zero-Shot TTS: Benchmarking Prosody Reproduction Beyond Voice Cloning
 
-**arXiv ID**：arXiv:2610.19774 | **方向**：语音大模型
+**arXiv ID**：2610.19774 | **方向**：语音大模型
 
 **作者**：Dekun Chen, Renjie Xu, Yingda Shen, Qinke Ni, Zhizheng Wu
 
@@ -253,9 +253,9 @@
 
 ---
 
-## ACR-Net: Mitigating Semantic Dominance via Contrastive Acoustic-Semantic Decoupling
+## [7] ACR-Net: Mitigating Semantic Dominance via Contrastive Acoustic-Semantic Decoupling
 
-**arXiv ID**：arXiv:2610.20114 | **方向**：语音大模型
+**arXiv ID**：2610.20114 | **方向**：语音大模型
 
 **作者**：Mengke Zhang, Yanda Shao, Tianhe Wu, Kai Feng
 
@@ -293,9 +293,9 @@
 
 ---
 
-## Noise-Aware Lombard Speech Synthesis via Flow-GRPO for Intelligibility Optimization
+## [8] Noise-Aware Lombard Speech Synthesis via Flow-GRPO for Intelligibility Optimization
 
-**arXiv ID**：arXiv:2610.20181 | **方向**：语音大模型
+**arXiv ID**：2610.20181 | **方向**：语音大模型
 
 **作者**：Zhaoyang Wang, Dingding Yao, Chengzhong Wang, Junfeng Li
 
@@ -334,9 +334,9 @@
 
 ---
 
-## Probing Neural Audio Codecs with Speaker Traits and Speech Characteristics
+## [9] Probing Neural Audio Codecs with Speaker Traits and Speech Characteristics
 
-**arXiv ID**：arXiv:2610.20955 | **方向**：语音大模型
+**arXiv ID**：2610.20955 | **方向**：语音大模型
 
 **作者**：Jihwan Lee, Tiantian Feng, Minu Kim, Junhyeok Lee, Sean Foley, Thanathai Lertpetchpun, Najim Dehak, Dani Byrd, Shrikanth Narayanan
 
@@ -374,9 +374,9 @@
 
 ---
 
-## What Does LALM Post-training Learn? Rethinking Audio Understanding and Reasoning Capabilities
+## [10] What Does LALM Post-training Learn? Rethinking Audio Understanding and Reasoning Capabilities
 
-**arXiv ID**：arXiv:2610.19476 | **方向**：语音大模型
+**arXiv ID**：2610.19476 | **方向**：语音大模型
 
 **作者**：Hua-Hsuan Chen, Xuanjun Chen, Wei-Chung Lu, Chih-Kai Yang, Yu-Xiang Lin, Sung-Feng Huang, Haibin Wu, Hung-yi Lee
 
@@ -414,9 +414,9 @@ LALM（Qwen2.5-Omni、Qwen2-Audio 等）的后训练在 MMAU/MMAR 等基准带�
 
 ---
 
-## TVPara: Paralinguistic Captioning of Expressive TV-Series Speech in Complex Acoustic Environments
+## [11] TVPara: Paralinguistic Captioning of Expressive TV-Series Speech in Complex Acoustic Environments
 
-**arXiv ID**：arXiv:2610.19678 | **方向**：语音大模型
+**arXiv ID**：2610.19678 | **方向**：语音大模型
 
 **作者**：Ziyang Zhang, Wenyi Yu, Wen Wu, Xuenan Xu, Chao Zhang
 
@@ -454,9 +454,9 @@ LALM（Qwen2.5-Omni、Qwen2-Audio 等）的后训练在 MMAU/MMAR 等基准带�
 
 ---
 
-## Zero-Shot Spoken Language Understanding with SLAM-ASR: What Do Monolingual ASR-Trained Linear Projectors Enable?
+## [12] Zero-Shot Spoken Language Understanding with SLAM-ASR: What Do Monolingual ASR-Trained Linear Projectors Enable?
 
-**arXiv ID**：arXiv:2610.20844 | **方向**：语音大模型
+**arXiv ID**：2610.20844 | **方向**：语音大模型
 
 **作者**：Edwin Arkel Rios, Sneh Sourabh, Jocelyn Zaruma, Girish Ewoorkar, Julian Mack, Bo-Cheng Lai
 
@@ -495,9 +495,9 @@ LALM（Qwen2.5-Omni、Qwen2-Audio 等）的后训练在 MMAU/MMAR 等基准带�
 
 ---
 
-## Revise-TTS: A Non-Masking Refinement Framework for Masked Diffusion Models in Text-to-Speech
+## [13] Revise-TTS: A Non-Masking Refinement Framework for Masked Diffusion Models in Text-to-Speech
 
-**arXiv ID**：arXiv:2610.19499 | **方向**：语音大模型
+**arXiv ID**：2610.19499 | **方向**：语音大模型
 
 **作者**：Wanli Sun, Dan Su, Anton Ragni
 
@@ -534,9 +534,9 @@ LALM（Qwen2.5-Omni、Qwen2-Audio 等）的后训练在 MMAU/MMAR 等基准带�
 
 ---
 
-## From Detection to Anticipation: Continuous Onset Forecasting for Stuttered Speech
+## [14] From Detection to Anticipation: Continuous Onset Forecasting for Stuttered Speech
 
-**arXiv ID**：arXiv:2610.19235 | **方向**：语音前端
+**arXiv ID**：2610.19235 | **方向**：语音前端
 
 **作者**：Tampu Ravi Kumar, Ayoub Daliri, Vivek Gupta
 
@@ -574,9 +574,9 @@ LALM（Qwen2.5-Omni、Qwen2-Audio 等）的后训练在 MMAU/MMAR 等基准带�
 
 ---
 
-## SEA-HELM Audio: Evaluating Multilingual ASR-LLM Pipeline Performance Across SEA-HELM Subsets
+## [15] SEA-HELM Audio: Evaluating Multilingual ASR-LLM Pipeline Performance Across SEA-HELM Subsets
 
-**arXiv ID**：arXiv:2610.19869 | **方向**：语音大模型
+**arXiv ID**：2610.19869 | **方向**：语音大模型
 
 **作者**：Yixian Tan, Aulia Adila, Jonathan Heng, Kunat Pipatanakul, Donghang Wu, Anocha Sutaveephamochanon
 
@@ -619,27 +619,27 @@ LALM（Qwen2.5-Omni、Qwen2-Audio 等）的后训练在 MMAU/MMAR 等基准带�
 > 以下 8 篇为当日语音相关论文，未进入精读队列，仅列出基础信息（标题 / arXiv ID / 方向 / 评分 / 链接），按预估评分从高到低排列。
 
 **Quantizer Redundancy and Exact Index Recoding in a Frozen Neural Audio Codec**
-- **arXiv ID**：arXiv:2610.20471 | **方向**：语音前端 | **评分**：7/10 | **链接**：https://arxiv.org/abs/2610.20471（未精读，按摘要评分）
+- **arXiv ID**：2610.20471 | **方向**：语音前端 | **评分**：7/10 | **链接**：https://arxiv.org/abs/2610.20471（未精读，按摘要评分）
 
 **SNOAR: Self-training with Noise filtering, Observation adding, and Remixing for Speech Denoising Without Clean References**
-- **arXiv ID**：arXiv:2610.20863 | **方向**：语音前端 | **评分**：7/10 | **链接**：https://arxiv.org/abs/2610.20863（未精读，按摘要评分）
+- **arXiv ID**：2610.20863 | **方向**：语音前端 | **评分**：7/10 | **链接**：https://arxiv.org/abs/2610.20863（未精读，按摘要评分）
 
 **Rethinking Batch Composition: Promoting Feature Diversity for Speech Enhancement**
-- **arXiv ID**：arXiv:2610.21803 | **方向**：语音前端 | **评分**：7/10 | **链接**：https://arxiv.org/abs/2610.21803（未精读，按摘要评分）
+- **arXiv ID**：2610.21803 | **方向**：语音前端 | **评分**：7/10 | **链接**：https://arxiv.org/abs/2610.21803（未精读，按摘要评分）
 
 **Frame-Wise Streaming for Efficient Learned Speech Compression**
-- **arXiv ID**：arXiv:2610.21998 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.21998（未精读，按摘要评分）
+- **arXiv ID**：2610.21998 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.21998（未精读，按摘要评分）
 
 **Bridging the Gap: Converting Read Text to Conversational Dialogue**
-- **arXiv ID**：arXiv:2605.18001 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2605.18001（未精读，按摘要评分）
+- **arXiv ID**：2605.18001 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2605.18001（未精读，按摘要评分）
 
 **An Initial Study of Physiological Markers for Deepfake Speech Detection**
-- **arXiv ID**：arXiv:2610.18934 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.18934（未精读，按摘要评分）
+- **arXiv ID**：2610.18934 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.18934（未精读，按摘要评分）
 
 **Soloist: A Generative Model for Blind Voice Separation in the Wild**
-- **arXiv ID**：arXiv:2610.19716 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.19716（未精读，按摘要评分）
+- **arXiv ID**：2610.19716 | **方向**：语音前端 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.19716（未精读，按摘要评分）
 
 **Few-Shot Adaptation for Anomalous Sound Detection at Low False-Positive Rate**
-- **arXiv ID**：arXiv:2610.19893 | **方向**：语音前端 | **评分**：5/10 | **链接**：https://arxiv.org/abs/2610.19893（未精读，按摘要评分）
+- **arXiv ID**：2610.19893 | **方向**：语音前端 | **评分**：5/10 | **链接**：https://arxiv.org/abs/2610.19893（未精读，按摘要评分）
 
 *Subagents used for reading: 15* | Generated on 2026-10-15 语音论文批次, by Kimmy's research agent | Powered by VAgent SpeechAI Researcher

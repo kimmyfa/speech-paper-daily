@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 176 篇
+共 195 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -821,6 +821,69 @@
 - **代码**：暂未链接，计划发布场景、角色提示与录制/评分协议 | **Demo**：无
 
 ---
+## [1. MiDashengLM-Spatial: Unifying General Audio Understanding and Spatial Awareness](https://arxiv.org/abs/2610.11156)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：主流LALM基于单声道训练、丢失声道间空间线索，专用空间音频大模型又牺牲通用理解能力。本文提出首个开源端到端统一音频大模型MiDashengLM-Spatial（7B），在MiDashengLM上以层级语义-空间条件（HSSC）单向双分支编码器接入Spatial-Dasheng，并构建约1.3万小时双耳合成数据管线。其STAR-Bench SR子集准确率70.3%（最强基线Gemini-3.6-F
+- **关键技术点**：主流LALM处理多通道音频时折叠声道维度（如跨通道平均），丢失空间感知所需线索；现有空间大模型（BAT/OWL等）需大量架构改造并在空间数据上微调，损害通用音频理解能力，且闭集标签限制了对复杂空间场景的开放描述。
+- **主要指标**：- STAR-Bench（SR）空间准确率：70.3%（最强基线Gemini-3.6-Flash 47.0%，+23.3个点） - MMAU-Pro空间子集准确率：55.4%（Gemini 48.3%，提升7.1；单声道开源大模型26.8%-43.1%） - STAR-Bench通道交换ACR：72
+- **代码**：https://github.com/xiaomi-research/midashenglm-spatial | **Demo**：暂无
+
+---
+## [4. Listen-to-Reason: Listen with Experts, Retrieve over a Graph, Reason with LLMs](https://arxiv.org/abs/2610.10749)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重训，且答案无法追溯到所听内容。本文提出Listen-to-Reason（L2R）：四级多模态知识树（39属性/363类/668叶）加冻结专家编码器上的小路由头，把音频块映射为可命名树节点，与ASR转写拼成文本上下文，由冻结纯文本LLM作答，任意图灵能替换reader，新域只需训练一个小头。7B reader在SAKURA达80.1%
+- **关键技术点**：LALM将音频编码器输出以连续嵌入接入LLM并多阶段训练，编码器与LLM深度耦合：换更强LLM或新编码器、适配新领域都要重新微调，且可能遗忘旧能力；其CoT是决策后由同一网络生成的事后叙述，不忠实于决策，答案无法追溯到模型实际听到的证据。
+- **主要指标**：- SAKURA：7B reader 80.1%，超全部LALM（Omni-7B 73.3%、Qwen3-Omni-30B 73.0%、AF3 68.2%） - MMAU：68.3%（Omni-7B 75.1%，差6.8分）；72B reader提至70.5%，Phi-4达71.7% - MMAR：
+- **代码**：https://poonehmousavi.github.io/listen-to-reason/ | **Demo**：https://poonehmousavi.github.io/listen-to-reason/
+
+---
+## [6. DuplexAgent-RSI: Recursive Harness Improvement for Full-Duplex Voice Agent Collaboration](https://arxiv.org/abs/2610.11299)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：全双工对话模型推理与工具执行能力弱，顺序编码代理缺乏直播对话的实时性；现有异步委托协作的任务更新、取消、替换与结果交付决策耦合在系统特定启发式里，难以从痕迹中定位与修复。本文提出DuplexAgent全双工协作系统，将协作流程显式化为六个可编辑harness模块，并给出Duplex-Harness-RSI闭环：委托池推理LLM任Exam Planner、编码代理任Harness Editor，依据
+- **关键技术点**：领域正收敛到"全双工模型守活频道、推理/编码代理异步承接任务"的协作范式，但用户修改请求时如何更新、取消或替换进行中的任务、结果何时开口交付并无定论。现有系统用手写耦合启发式实现交接、确认与交付控制，同一失败反复出现时痕迹无法明确指向委托、解释、执行还是交付环节，有界修复难以隔离、评估与迁移。
+- **主要指标**：- MMSU：80.5（VoiceChat）/82.7（Qwen-Realtime），对比独立交互模型36.1/64.8 - OBQA：80.6/92.1，对比独立54.2/86.3 - BFCL-v3均值：75.8/90.8，对比独立53.5/82.0（Qwen-Audio-Agent 24.9/
+- **代码**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/ | **Demo**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/
+
+---
+## [7. SAVU-BENCH: A Real-World Benchmark for Spatial Audio-Visual Understanding](https://arxiv.org/abs/2610.10624)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：现有空间音频-视觉基准多依赖仿真场景且孤立评估单项空间能力，缺乏对失败机制的诊断。作者提出SAVU-Bench：基于6个真实数据来源、覆盖"感知-对齐-推理"三级能力与7项任务（1066条问答，平均片段6.12秒）的实景空间音频-视觉理解基准，并设计场景链接诊断集SAVU-Diag（611条/81场景），将推理题分解为前置接地与对齐子任务。评测12个模型显示：视觉接地最高95.4%，音频接地仅55
+- **关键技术点**：当前AV-LLM能识别"有什么"，但难以定位视觉实体与声源并解析其跨模态空间关系。现有基准存在三局限：一、重度依赖仿真环境，无法反映真实录音复杂度；二、孤立评估单项空间技能，难以在同一场景系统考察感知、对齐、推理的协同；三、任务级准确率缺乏诊断性，无法区分推理错误源于定位失败还是关系组合失败。
+- **主要指标**：- 视觉vs音频接地：最高Visual Grounding 95.4%（DOTS-3）对最高Audio Grounding 55.6%（Spatial-Omni），差距约40个百分点 - 联合匹配：最佳A2V 35.6%、V2A 42.8%，相对33.3%随机基线仅提升约2-10个百分点 - 空间推
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [8. SmoothConv and DuplexConv: Complementary Mandarin Multi-Party Conversational Speech Corpora for Speech Interaction](https://arxiv.org/abs/2610.11150)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：语音交互系统需建模轮次交替、重叠语音等会话行为，但现有多方普通话语料缺乏参与者级同步音轨与细粒度交互标注。本文发布SmoothConv与DuplexConv两个互补语料库，共2100小时普通话多人群会话，覆盖辅导与社交聊天场景，每人提供同步音轨及轮次状态、副语言、说话人属性细粒度标注；SmoothConv（100小时）经人工多轮核验，DuplexConv（2000小时）由自动标注流水线构建。在Sm
+- **关键技术点**：LALM驱动的交互式语音系统需理解轮次交接、响应时机等会话行为，而Switchboard/Fisher仅限英文双人电话，CHiME-5/AMI/AliMeeting/AISHELL-4或缺乏同步参与者级音轨、或缺少交互行为细粒度标注，公开普通话多人群资源不足以支撑真实多人交互建模。
+- **主要指标**：- 语音分离（SPMamba）：DuplexConv对话混音训练在SmoothConv集SI-SDRi 17.26dB/CER 32.15%，显著优于纯模拟混音（13.55dB/81.24%）；混合配置OOD上AISHELL-4 CER 36.04%、AliMeeting CER 45.48% - 
+- **代码**：https://github.com/qualialabsAI/SmoothConv-DuplexConv | **Demo**：暂无
+
+---
+## [13. SEER: Source-Conditioned Emotion Enhancement via Retrieval for Cochlear-Implant Speech](https://arxiv.org/abs/2610.11131)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：CI语音丢失F0等情感线索，听者情感识别显著退化，而现有CI情感增强依赖正常/强情感平行录音与强度标签。本文提出SEER，一个源条件检索框架：以Maestro-EVC参考条件情感语音转换为基座，用CI-aware奖励学习效用评分器，为每个源语音挑选同情感参考使CI处理后仍可识别，并以LinUCB式不确定性探索避免穷举配对评估，无需平行录音与强度标签。RAVDESS/ESD上N8源macro-F1分
+- **关键技术点**：电听觉无法有效传递F0线索，CI-vocoder语音的情感识别准确率下降，CI用户易给出Neutral判断，SER模型在CI模拟下同样退化。以往JD-NMF增强需同一说话人、同一句子的正常/强情感平行录音及显式强度标注，难以迁移到通用类别情感语料，且穷举源—参考转换评估代价随语料规模快速增长。
+- **主要指标**：- 源macro-F1：RAVDESS N8 78.26→85.56（+7.30）、N16 80.33→95.82（+15.48，显著）、N4 80.35→80.13（不显著）；ESD N4/N8/N16为58.71→68.23、57.09→68.75（+11.66）、70.46→82.06，三条件
+- **代码**：https://github.com/HenryChou36/SEER | **Demo**：https://github.com/HenryChou36/SEER
+
+---
+## [14. Disentangling Linguistic and Paralinguistic Information with Routed Sparse Autoencoders](https://arxiv.org/abs/2610.10865)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：自监督语音编码器把音素内容、说话人身份、情感、韵律等语言与副语言因子混在同一纠缠表征空间，难以对单个因子做选择性解读与修改。本文在冻结编码器之上构建TopK稀疏自编码器，用互补可学习路由掩码把稀疏码划分为语言/副语言双路由，配合路由特定任务监督与跨因子对抗。在SPEAR XLarge与WavLM Large上，独立探针显示语言路由强保留音素（PER 8.94%）、副语言路由高保留说话人（SID 9
+- **关键技术点**：自监督语音编码器同一激活同时携带音素、说话人、韵律、情感等信息，选择性移除或修改单一因子困难；已有稀疏自编码器仅分析自动发现特征，并不保证单元对应预选因子，难以施加显式解纠缠目标。
+- **主要指标**：- 语言路由保留（LibriSpeech）：z_L PER 8.94%（SPEAR配额冻结）/9.40%（WavLM配额冻结），z_L SID仅0.6%/14.8% - 副语言路由保留：z_P SID 99.8%（两编码器），z_P PER升至80.26%（SPEAR）/80.84%（WavLM） 
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Phonology-Aware Speaker Extraction Frontend for Audio LLMs](https://arxiv.org/abs/2610.13500)
 
 - **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-12
@@ -855,6 +918,24 @@
 - **关键技术点**：深伪检测器假定只监听语音，但真实场景混有背景事件；非语音成分多被视为干扰，而合成事件本身也带伪影。现有方法不清楚检测器跟随哪个组件、伪影集中在频谱何处。
 - **主要指标**：- 假事件 EER：Whisper 最低 8.29%（XLS-R 9.50/ALLM disc 13.38/gen 12.91） - 假语音 EER：XLS-R 最低 21.21%，ALLM disc 最高 23.74% - SoulX 来源假语音 EER：达 36.70%–49.52%（vs 已见
 - **代码**：https://github.com/nii-yamagishilab/AntiDeepfake-AudioLLM | **Demo**：暂无
+
+---
+## [Full-Duplex Interaction with Speech, Expressions and Gestures](https://arxiv.org/abs/2610.21452)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-15
+- **一句话贡献**：本文提出 ELLSA 2，首个端到端全双工对话模型，联合优化语音交互与流式手势-表情生成，使模型在说与听两种状态下持续产出非语言行为。其分块合成器联合接收 LLM 的倾听隐状态与合成器的说话隐状态，并以调用头与模板引导解耦"是否调用语义手势"与"如何实现"。实验上 S2S 精度在三个 QA 基准达 78.0%/47.3%/63.6% 领先开源全双工模型，模板引导将人评语义分由 2.014 提至 2
+- **关键技术点**：全双工语音模型只输出语音，手势/表情生成器多为级联的说话驱动动画，依赖已生成语音、无法在静默倾听时反应，也缺少语义手势决策机制，二者未在统一对话过程中联合优化。
+- **主要指标**：- S2S 准确率：78.0%/47.3%/63.6%（LlamaQ/WebQ/TriviaQA），较 SALMONN-omni 提升 4.4/3.6/7.6 个百分点 - AlpacaEval GPTScore：3.97/3.20（S2T/S2S），与 SALMONN-omni 4.01/3.22
+- **代码**：https://github.com/bytedance/SALMONN/tree/ELLSA2 | **Demo**：暂无
+
+---
+## [VocalGrad: Evaluating Acoustic Perception in Audio Language Models](https://arxiv.org/abs/2610.23745)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-19
+- **一句话贡献**：针对现有评测无法解耦大音频语言模型（LALM）声学感知与高层推理的问题，本文提出VocalGrad基准：对语速、音高、音量、失真、粗糙度、噪声、回声、清晰度、振动9类声学因子施加单一因子的时变增强，将任务形式化为"增大还是减小"的方向二分类，使评测基本独立于语义理解与推理。在21,600条语料上，5个SOTA LALM平均准确率仅49.6%–51.8%（近随机水平），而人类标注达94.4%。进一步
+- **关键技术点**：MMSU、MMAU、WoW-Bench、SALMon等现有基准的任务含跨片段比较、重排序、时间戳对齐等额外推理步骤，模型答错时无法定位瓶颈在感知编码还是下游语义整合；LISTEN、StressTest等研究虽证实词义与声学线索冲突时LALM不可靠，但未澄清其在处理管线中的失效位置。
+- **主要指标**：- 人类标注平均准确率：94.4%（distortion、echo达100%） - 模型平均准确率：Kimi-Audio 51.8%、Gemini 3 Flash 50.2%、MiMo-Audio 50.3%、Step-Audio 2 mini 50.0%、Audio Flamingo 3 49.6
+- **代码**：https://github.com/ynklab/vocalgrad | **Demo**：暂无
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
@@ -1505,6 +1586,33 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [9. SteerablePlex: Can We Steer Full-Duplex Models?](https://arxiv.org/abs/2610.12201)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-09
+- **一句话贡献**：全双工语音模型作为用户模拟器时会随对话历史增长偏离预设场景，导致评估失真。本文提出SimIF-Bench基准，量化考官模型的主题遵循、自然度、目标完成与顺序约束，发现GPT-Realtime及开源模型在多阶段顺序完成上均不可靠。进而提出SteerablePlex：以特殊token分隔的在线指令注入接口加GDPO多奖励强化学习配方，使全双工模型在对话中实时遵循文本指令并保持轮替能力。配合异步后端LL
+- **关键技术点**：全双工模型边听边说、无明确干预边界，现有系统仅靠系统提示词控制，而提示词遵循度随对话历史增长发生漂移；严格时延预算又限制模型规模与长程规划能力，"能否在运行时控制全双工模型"成为开放问题。
+- **主要指标**：- SimIF-Bench 200场景：SteerablePlex(in-domain)在目标完成与精确顺序两项上均超过最强基线GPT-Realtime（论文正文未给出表中具体数值，见Figure 2），在20个留出场景上优势保持 - 轮替能力（Table 1，对比基座PersonaPlex）：停顿
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [10. Selective Listening: Mechanism-Guided Control of Audio Influence in Large Audio-Language Models](https://arxiv.org/abs/2610.11196)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-09
+- **一句话贡献**：针对LALM在纯文本推理任务中受任务无关音频干扰、且聚合准确率会因修复与损害相消掩盖单样本决策漂移的问题，论文提出配对漂移分析（Influence Rate/Answer Flip）与机制引导的指令条件音频通路门控ICAP-Gate：离线定位各模型干预敏感的晚期音频通路，推理时按指令是否显式需求音频将其输出乘以模型特定衰减系数λ（0.10-0.25）或保持原样，每查询仅一次生成。在4个LALM、A
+- **关键技术点**：LALM中模态可用不等于任务相关：环境声或无关语音可改变文本推理决策，而净准确率把正确→错误与错误→正确的转移相消，掩盖个体漂移；既有缓解（提示、多采样Self-Consistency）作用于输入层或输出层，无法定位并控制模型内部影响音频的因果通路。
+- **主要指标**：- IR（无门控→ICAP）：16个全量设置点估计全部下降，如Qwen2.5-Omni-7B MMLU-SIB 13.65%→11.19%（降2.46pp），Voxtral-Mini-3B MMLU-SIB 28.41%→25.88%（降2.53pp），Phi-4-MM MMLU-SIB无门控最高达
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [15. Cross-Lingual Speaker Verification with Self-Supervised Pre-Trained Models](https://arxiv.org/abs/2610.11099)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-09
+- **一句话贡献**：说话人验证在跨语言、语言失配场景下，因说话人身份与语言相关声学线索纠缠而性能显著退化。本文采用w2v-BERT 2.0自监督预训练模型（PTM）作为前端特征提取器，经逐层Adapter投影与多尺度特征聚合并经ASPPooling输出256维说话人嵌入，配套三阶段训练范式与QMF分数校准及多系统融合。团队T02在TidyVoice2026基准上取得tv26_eval-A EER 2.21%、tv26
+- **关键技术点**：当注册与验证发生在不同语言时，说话人身份被语言相关声学特性混淆，交叉语言SV精度明显下降。已有PTM基SV工作多在VoxCeleb等同域基准上验证PTM前端有效性，尚缺面向全跨语言、含未见语言评测场景下对PTM选型、特征聚合与训练策略的系统性研究。
+- **主要指标**：- tv26_eval-A（部分语言失配）：融合系统EER 2.21%，minDCF 0.1797 - tv26_eval-U（全未见语言）：融合系统EER 2.99%，minDCF 0.2045 - 单系统：w2v-BERT2.0+QMF 2.73%/2.84%；ReDimNet-B6+QMF 2
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [AudioTETRIS: Token Elimination via Transitional Importance Signals for Efficient Audio LLMs](https://arxiv.org/abs/2610.13600)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-12
@@ -1577,6 +1685,24 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [What Does LALM Post-training Learn? Rethinking Audio Understanding and Reasoning Capabilities](https://arxiv.org/abs/2610.19476)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：LALM（Qwen2.5-Omni、Qwen2-Audio 等）的后训练在 MMAU/MMAR 等基准带来大幅提升，但增益究竟来自听觉能力还是文本/题型捷径长期缺乏干净证据。本文用两项受控协议解耦二者：①把评测音频替换为等长静音，量化"静音下仍保留的增益"；②把多选题改为开放式作答，消除选项先验。结论是多数后训练增益在无音频时仍存在、换格式即消失——后训练主要教会模型利用文本线索与答题模式而非"听
+- **关键技术点**：LALM 基准分数提升普遍归因于音频理解与推理增强，但静音对照与题型消融此前从未在统一预算下做过；若不区分真实听觉贡献与格式适应，后训练方法（SFT/RL/VCRL）的比较实际上都在优化捷径。
+- **主要指标**：- MMAU：GRPO 提升 +14.8 分，其中 +11.2 在静音下保持；R1-AQA +23.4（静音 +17.2） - 类目：MMAU 推理/信息抽取类目静音增益普遍约 +7 分 - 开放式作答：后训练增益几乎全部消失（跨模型一致） - AudioMCQ：静音增益 +6.4 > 音频增益 +
+- **代码**：暂无（所用开源模型为既有checkpoint） | **Demo**：暂无
+
+---
+## [TVPara: Paralinguistic Captioning of Expressive TV-Series Speech in Complex Acoustic Environments](https://arxiv.org/abs/2610.19678)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：本文提出TVPara，一个基于19部英语电视剧构建的副语言描述数据集，针对大型音频语言模型（LALMs）在强烈情绪与复杂背景声共存语音上描述粗糙失准的问题。数据集定义单话语（约492小时）与多话语（约213小时）两个副语言描述任务，采用LALM预标注加人工精修的闭环流程标注。微调SALMONN与Qwen2.5-Omni后，模型在复杂声学环境下的副语言理解平均相对提升31.26%，且增益可泛化到未见
+- **关键技术点**：现有副语言语料多为录音室采集、干净语音库重新标注或TTS合成，极少同时具备强烈情绪与背景声；少数野外语料只有类别或维度标签而无自由文本描述，且逐条孤立标注，无法刻画情绪跨话语的动态变化。
+- **主要指标**：- SALMONN单话语音量分：2.31→3.58（zero-shot→SFT，0-4分制） - SALMONN多话语音量/情绪分：1.04→1.81 / 1.09→1.60 - Qwen2.5-Omni多话语情绪分：0.99→1.46 - 关键对比：SFT对zero-shot平均单元格相对提升31
+- **代码**：暂无（承诺后续开源标注与代码） | **Demo**：https://windowso.github.io/TVPara/
+
+---
 ## [Hear, Localize, and Reason: Spatially Aware Scene Understanding for Audio-Visual LLMs](https://arxiv.org/abs/2610.21588)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-15
@@ -1584,5 +1710,50 @@
 - **关键技术点**：AV-LLM 普遍以单声道音频输入，只关注"听到什么"而非"从哪听到"，面对离屏、遮挡、跨房间声源无法定位与推理；同时现有空间视听基准（BAT、SAVVY-Bench、SpatialSceneQA、Hear You Are）评估维度碎片化，且训练多用直接答案监督，缺乏对多步空间推理的结构化支持。
 - **主要指标**：- 自我中心方向/距离定位：78.21% / 55.56%，较双通道 Qwen2.5-Omni（64.27/46.59）提升 13.94 / 8.97 个百分点；他心方向/距离 52.03% / 45.08% - 空间关系推理全最优：可见性 80.51、对应 76.19、隐藏源 67.23、响度变化
 - **代码**：https://hlrllm.github.io/ | **Demo**：https://hlrllm.github.io/
+
+---
+## [MedSonor: Learning to Use Clinical Audio in Medical LLMs](https://arxiv.org/abs/2610.22405)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：针对现有医疗音频监督止步于分类/识别、通用音频大模型缺乏医学知识与开放式回复反馈的问题，提出MedSonor——基于Qwen2.5-Omni-7B的音频条件医疗对话模型。作者构建收集医疗音频、合成口语对话、音频集成对话三源共18,657条多模态SFT数据，再经两阶段rubric引导的强化学习，并推出MedVoice-Dial与MedVoice-AID两个评测集。模型在七个医疗基准上全面领先开源音频
+- **关键技术点**：临床音频携带文本无法保留的声学证据（罗音、心脏杂音、嗓音障碍等），但有效应答需将音频与当前请求和对话史结合。声源中心数据集缺乏"如何依据声音作答"的监督，纯文本合成的口语对话也教不会解读真实录音，且开放式医疗回复缺少任务级反馈信号。
+- **主要指标**：- MedVoice-AID：0.7900，较基座Qwen2.5-Omni-7B的0.3341提升0.4559，开源组第一 - MedVoice-Dial 0.5225、LiveMedBench 0.2843、MMedFD-Lite 5.780、ACI-Bench 0.2263、HealthDial
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Audio System One Model: Typed Probabilistic Perception of Emotion in Speech](https://arxiv.org/abs/2610.22401)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：语音应用常需对同一句话回答多个问题（听到什么情绪、唤醒度高不高、是否在沮丧），但分类器快且校准却锁死固定标签集，音频大模型（ALM）能接受任意文本提问却逐题生成、延迟高且概率不校准。本文提出 ASOM：一个"系统一"式语音模型，用冻结的 Whisper-large-v3 与 Qwen2.5-1.5B 双编码器加 6.2M 参数无类别参数的 reader，按听众投票分布训练，请求时书写 choice
+- **关键技术点**：部署中的情感系统往往提前固定问题或决策树。分类器新增情绪词、换标签集或加属性都要重训；ALM 虽接受自由提问，但每题需一次语言模型生成，隐式概率与听众投票严重失配——六个零样本 ALM 的 log loss 全部高于类先验。
+- **主要指标**：- 8 类 macro-F1：ASOM 0.383，超 Qwen2.5-Omni-7B（0.311）0.072、超 LoRA 全量微调 Omni-3B（0.357）0.026；加转写 0.402 - 校准 LL8：1.507，低于类先验 1.863；六个零样本 ALM 均≥2.097 - 时延：20
+- **代码**：暂无（承诺接收后开源，已投 ICASSP） | **Demo**：暂无
+
+---
+## [Interpreting SSL Representations for Spoof Detection: a WavLM Study](https://arxiv.org/abs/2610.23526)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：以WavLM为代表的自监督前端已是反欺骗检测主力，但哪一层携带欺骗线索、编码了何种声学属性长期不透明。本文基于ASVspoof 5数据库提出三合一逐层可解释性框架：逐层线性探针与按攻击的EER评估、PWCCA将层表征与17个手工声学特征对齐、8191种层子集穷举搜索。结果显示L11单层探针EER最低（dev 3.33%、eval 6.07%）；jitter/shimmer/HNR等音质特征与深层相
+- **关键技术点**：现代反欺骗系统普遍用SSL前端加复杂后端追求性能，但表征本身是黑箱：层选择随意、检测依赖何种声学线索不明，且已有研究指出CM会利用非语音时长等虚假线索，亟需把模型行为锚定到可解释声学属性上。
+- **主要指标**：- 单层线性探针EER：L11最低，dev 3.33%、eval 6.07%；L12回升至eval 7.3% - 最优5层子集L7–9–10–11–12：dev 2.06%、eval 6.1%，较全13层池化（dev 4.59%、eval 8.08%）绝对降低1.98个百分点 - PWCCA相关系数
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Too Emotional to Be Fake? Intra-Utterance Emotion Shifts Expose Failure Modes in Speech Deepfake Detectors](https://arxiv.org/abs/2610.22832)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：表达性TTS已能在一句话内切换情绪，但深度伪造检测器对段内情绪转换是否敏感无人系统评估：现有EmoFake、AffectDF等基准只把情绪当作话语级标签。本文提出EmoShift基准，含7,240条真实与9,720条四个表达性TTS生成的合成语音（共16,960条），以类别标签+VAD连续标注对比情绪稳定(AA)与情绪转换(AB)语音，并控制静态情绪身份及拼接、语言内容、时长等混淆。在七个检测器上
+- **关键技术点**：现有深度伪造基准只关注真伪标签，情绪类基准将情绪视为话语级静态属性，无法判断检测器是否对段内情绪变化本身敏感；且检测器对AB与AA的分数差异可能只是起点/终点情绪、拼接伪影或内容差异所致，需要受控对比设计。
+- **主要指标**：- 基线：池化EER在ESD为13.0–43.2%（Alethia最优13.0%），IEMOCAP/MSP多数检测器EER超50%（SLIM在IEMOCAP达84.4%） - OMG-Emotion合成AB语音logit位移：RawNet2 −3.25、XLS-R-SLS −2.64、XLS-R-M
+- **代码**：暂无 | **Demo**：https://emoshift.github.io/emoshift/
+
+---
+## [X-MDD: LLM-Based Mispronunciation Detection and Diagnosis for Unseen Languages with Canonical References](https://arxiv.org/abs/2610.23079)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：MDD 系统扩展到新语言通常需为每个目标语言采集并标注学习者语音，标注代价高、语言覆盖受限。本文提出多语言 LLM 框架 X-MDD，基于 Qwen3-ASR-1.7B，以 TTS 克隆合成的标准语音频与标准音素序列作参考，自回归预测学习者实际发音音素，并用带 in-context 示例的 SFT 加检测 F1 与 PER 联合奖励的 GRPO 优化。仅在中文、英文上训练，模型在阿拉伯语 Qura
+- **关键技术点**：现有 MDD 系统依赖目标语言标注学习者语音，跨语言扩展需重复采集标注；已有多语言工作仍要求目标语言在训练中出现。LLM 原生 MDD 中显式标准先验还会使预测偏向正确发音、压低召回，未解决 unseen 语言迁移问题。
+- **主要指标**：- 多语言 F1：中文 78.68、英文 58.78，均超 ATP-LLM（75.23）等单语基线；PER 中文 17.79、英文 12.87 - 相对单语训练 F1 提升：中文 +6.37、英文 +2.87 个百分点 - 阿拉伯语迁移：F1 38.07、PER 7.75、DER 40.33，与阿拉
+- **代码**：暂无 | **Demo**：暂无
 
 ---

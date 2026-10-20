@@ -7,7 +7,7 @@
 
 ---
 
-## 语音大模型
+## [1] 语音大模型
 
 ## [1] Conversation Is a Two-Body Problem: Dyadic Evaluation of Full-Duplex Dialogue Models
 
@@ -459,7 +459,7 @@ arXiv ID：2610.07626 | **方向**：语音大模型；**作者**：Tien-Hong Lo
 
 ---
 
-## 语音前端
+## [2] 语音前端
 
 ## [15] Audiovisual Joint Learning for End-to-End Hearing Aids
 arXiv ID：2610.08579 | **方向**：语音前端

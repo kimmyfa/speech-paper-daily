@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 81 篇
+共 90 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -416,6 +416,33 @@
 - **代码**：暂无 | **Demo**：https://qingyuliu0521.github.io/Cross-Lingual_F5-TTS_2_demo/
 
 ---
+## [2. DiffuPlex: Accelerating Full-Duplex Spoken Dialog Models via Rolling Masked Diffusion](https://arxiv.org/abs/2610.12214)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：全双工语音对话模型（Moshi、PersonaPlex等）每80ms交互帧都需调用一次时间骨干网络，逐帧自回归推理成为部署瓶颈。本文提出DiffuPlex滚动掩码扩散框架：每次骨干"wake"用流专属MASK token一次性预测多个未来用户/助手帧，仅消费高置信前缀，若用户实际输入偏离预测则只修订未播放的未来部分。基于personaplex-rl-seamless骨干，Listen与Speak两
+- **关键技术点**：现有全双工语音模型采用单流序列化或并行用户/助手双流，每80ms交互帧都要前向一次时间骨干（Moshi、PersonaPlex均如此）；细粒度利于响应打断与附和，但逐帧顺序计算使累计GPU开销极高。而双人对话中95.3%时间为单说话人，未来帧本可联合预测，但全双工场景验证助手草稿所需的用户语音尚未到达，使投机解码难以直接迁移。
+- **主要指标**：- 骨干调用效率：Listen/Speak每次wake推进1.91/2.23帧（AR为1.00） - 部署墙钟加速：1.455×/1.590×；端到端GPU加速1.458×/1.593× - Core LM累计耗时：656.8s降至408.4s/365.5s，加速1.608×/1.797× - 实时
+- **代码**：暂无（拟评审后开放） | **Demo**：https://diffuplex.github.io/
+
+---
+## [3. Edit Who Speaks, Control How They Speak: Global Timbre Editing and Local Instruction Control for TTS](https://arxiv.org/abs/2610.11437)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：本文针对TTS中"全局音色编辑+局部表达控制"的双重瓶颈：现有接口只能克隆参考声音或用文本描述新声音，无法直接编辑给定参考音色并用其合成；整句级指令也无法对应到不同文本片段。提出EDICT框架：第一阶段训练1.7B音色编辑器，按九维属性相对编辑指令在codec空间生成经编辑的参考音色；第二阶段在冻结TTS骨干的段落边界重建KV缓存实现局部指令控制并抑制控制泄漏。在自建TimbreEdit-Benc
+- **关键技术点**：现有声音指定接口分为声音克隆（声学参考）与声音设计（文本描述）两类，均无法直接修改给定参考音色并用编辑后的新声音合成新文本；多数指令式TTS对整句使用单一prompt，TED-TTS等仅用注意力掩码而不刷新声学历史，旧KV状态把前段条件带入后续片段造成控制泄漏，保留全部历史又会削弱新指令、丢弃又失去连续性所需的上下文。
+- **主要指标**：- 音色编辑SIM-T（TimbreEdit-Bench，描述式指令）：EDICT-Stage I 0.793（WavLM）/0.648（ERes2Net），指令条件系统中最优 - 编辑Δ（目标-源相似度差）：+0.195/+0.207，为唯一输出比源更靠近目标的指令条件系统（Qwen3-TTS-V
+- **代码**：暂无 | **Demo**：https://danny-nus.github.io/EDICT-demopage/
+
+---
+## [MultiPartyTurnBench: Benchmarking Floor Control in Multi-Party Spoken Dialogue](https://arxiv.org/abs/2610.20172)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-15
+- **一句话贡献**：全双工语音系统须在多方场景中对话语权做出进入、保持与让出决策，而现有评测只覆盖双方轮次切换或端到端代理行为。本文提出 MultiPartyTurnBench：240 条通道分离合成对话（6.89 小时），覆盖 2-5 说话人与 6 种交互类型，定义 EOT（话轮结束）与 INT（成功打断）两个事件级任务，用误报率约束下的召回与带符号延迟做因果评测。结果显示显著不对称：预算内 EOT 召回最高 92
+- **关键技术点**：双方基准只评事件、自然多方语料只评下一说话人预测、代理基准只评端到端行为，均缺受控多方下对真实话权交接与易混淆非事件的因果评测。
+- **主要指标**：- EOT 召回（预算内）：VAP 92.6%@FPR 7.5%、Kyutai SVAD 92.5%@4.3%、Mimi EP 90.5%@3.8%，最快 p50 143 ms - INT 召回：最高 Kyutai SVAD 仅 56.2%@6.6%，VAP 11.7%、Mimi EP 13.9%、
+- **代码**：暂无 | **Demo**：https://multiparty-turnbench.github.io/
+
+---
 ## [CoSTA: Compressed Speech Token Adaptation for Efficient Spoken Dialogue Models](https://arxiv.org/abs/2610.21143)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-15
@@ -686,6 +713,15 @@
 - **代码**：暂无 | **Demo**：https://doubleblindauthor.github.io/region-aware-masking-TTS-demo
 
 ---
+## [11. Beyond Speech Captions: Speech-Rewarded Style Planning for Conversational Text-to-Speech](https://arxiv.org/abs/2610.11461)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-09
+- **一句话贡献**：会话式TTS依赖自然语言风格描述衔接LLM推理与可控合成，但描述式伪标签监督与下游声学控制有效性脱节。本文提出SRSP框架，以冻结CosyVoice3 TTS对目标语音token的teacher-forced似然作为奖励，用GRPO训练Qwen3.5-9B风格规划器，无需目标风格caption。在ISCSLP 2026 CoT-TTS英文子集上，SRSP五项下游声学指标全面优于Base LLM与目
+- **关键技术点**：现有工作（如Chain-Talker）以语音captioner（StyleCap/SECap/AlignCap）的描述文本作为伪标签训练风格规划器，但目标声学细节被压缩进文字而丢失；更关键的是预测目标描述与为特定合成器生成有效指令是两个不同目标，准确描述未必诱导最接近目标的声学实现。作者实证表明CLAPScore等语音-文本对齐分数与下游声学相似度近乎零相关，按T2S选指令与随机无异。
+- **主要指标**：- S2S(ParaCLAP-C)：SRSP 0.3632/0.3627，Base LLM 0.3166/0.3220，AF-Next 0.2874/0.2982（test_in/test_out） - S2S(CLSP)：SRSP 0.8329/0.8296，Base LLM 0.8150/0.8
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Emo-BPO: Emotion Bidirectional Preference Optimization for Diffusion-based Emotional TTS](https://arxiv.org/abs/2610.12958)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-12
@@ -729,5 +765,50 @@
 - **关键技术点**：单参考对 SFT 对 AR TTS 严重失效（全参 SFT WER 18.2%、LoRA 反而 35.0%），根因是 teacher-forcing 下反复最大化 r→EOS 似然；已有数据多样化手段能否解决、on-policy 是否才是关键，此前不明。
 - **主要指标**：- SIM：GRPO 0.647 / OPSD-TA 0.609 / OPSD-RO 0.608（零样本 0.574） - WER：GRPO 3.0% / OPSD-TA 3.7%（零样本 3.7%，SFT 18.2%） - NMOS（93 人 120 评）：GRPO 3.87±0.15、OPSD-
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Speaking Longer Than Learned: Training-Free Long-Form Generation for Full-Stream Text-to-Speech](https://arxiv.org/abs/2610.19553)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：针对预训练全流式TTS模型VoXtream2在超出训练长度后无法稳定生成的长度外推问题，本文系统分析其基于attention sink的周期性KV缓存重置策略，发现50秒训练边界附近WER从首个10秒窗口的2.74%陡增至11.23%，说话人相似度由0.760渐降至0.695。论文进一步诊断出WER骤升源于训练末段的分布外位置而非缓存重置本身，且相似度衰减源于声学提示注意力被持续稀释。据此提出两项
+- **关键技术点**：全流式TTS要求文本到达即低延迟合成，但长时配对语音语料稀缺，模型只能在有限长度（VoXtream2为50秒/625帧裁剪）上训练，推理超出后即退化。已有免训练长文本方案多不面向流式输入，流式长文本生成仍需额外训练；VoXtream2官方继承StreamingLLM的SinkAttention缓存重置并未被诊断其失效根因。
+- **主要指标**：- WER（整体）：3.58%，较VoXtream2原型的8.63%降低5.05个百分点；180-210秒分段3.96%，原模型为9.79% - SPK-SIM（ECAPA-TDNN余弦相似度，整体）：0.759，较原0.659提升0.100；180-210秒0.754，原0.595，而长文本训练的
+- **代码**：暂无 | **Demo**：https://voxtend.github.io
+
+---
+## [Long-Prompt Zero-Shot TTS: Benchmarking Prosody Reproduction Beyond Voice Cloning](https://arxiv.org/abs/2610.19774)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：零样本TTS通常以数秒短prompt为条件，只能传达音色，难以复现说话人语速、停顿、重音与语调等长期韵律习惯；逐说话人微调则有额外训练与管理成本。本文将推理时使用分钟级长prompt、不更新目标说话人参数以复现其特定韵律的任务形式化为Long-Prompt Zero-Shot TTS，构建中英双语LP-TTS-Bench（37位说话人、63.95小时prompt、2728条测试句）及九项客观指标加
+- **关键技术点**：短prompt只能捕捉音色，韵律随语境与习惯变化仅暴露局部实现；说话人适配需逐人训练，多utterance prompt实现如Mega-TTS 2/PerTTS未公开；现有评测以可懂度与相似度为主，缺少韵律复现的对齐指标。
+- **主要指标**：- 中文LPTTS：CER 1.03%（基线0.73%、SFT 1.78%），SRD 0.137、PD 0.067、PCC 0.410、IC 0.474、PRD 4.532半音、MPM-SIM 0.734、SIM-O 0.57 - 英文LPTTS：WER 1.64%、SRD 0.112、PD 0.0
+- **代码**：暂无（声明录用后释出） | **Demo**：暂无
+
+---
+## [Noise-Aware Lombard Speech Synthesis via Flow-GRPO for Intelligibility Optimization](https://arxiv.org/abs/2610.20181)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：语音交互智能体普遍声学不敏感，难以复现人类听觉-发声反馈的Lombard效应。本文提出NIL-TTS：在F5-TTS流匹配骨干中引入FiLM环境条件注入，采用"Lombard配对语料监督微调+Flow-GRPO以可懂度为直接目标的强化后训练"两阶段范式。−6 dB噪声下Seed-TTS test-zh平均WER由基线0.378降至0.224，ESTOI从0.246升至0.298，主观识别正确率由0
+- **关键技术点**：现有Lombard TTS依赖稀缺配对语料的监督微调、SNR反馈的响度启发式调节或静态风格嵌入，本质上优化与训练数据的L2声学相似度而非可懂度，且无法建模对环境噪声谱形与强度的依赖动态，泛化差、在恶劣噪声下可靠性退化。
+- **主要指标**：- WER（test-zh，−6 dB四噪声均值）：0.224，基线F5-TTS为0.378，绝对降低0.154（95% CI [0.219,0.228]） - ESTOI（test-zh，−6 dB）：0.298，基线0.246，提升0.052 - WER（test-en，−6 dB）：0.434
+- **代码**：暂无 | **Demo**：https://kalenon.github.io/NIL-TTS-demo/
+
+---
+## [DriftTTS: One-stage Single Step Text-to-Speech via Generative Drifting](https://arxiv.org/abs/2610.22960)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：基于score matching与flow matching的TTS需多步迭代调用解码器，合成慢，而现有少步方案要么从多步teacher蒸馏、要么在预训练模型上再叠加训练阶段。本文提出DriftTTS，首次将generative drifting引入语音生成：把迭代采样从推理移到训练，解码器单次调用即把先验分布推前到mel频谱分布，全程无需预训练TTS。针对语音变长问题提出segment drif
+- **关键技术点**：Grad-TTS、Matcha-TTS等以10次以上NFE换取自然度，推理慢；IntMeanFlow与RapFlow-TTS虽能少步生成，但都依赖预训练TTS提供底层轨迹，带来多阶段训练复杂度与算力开销，"无预训练模型训练单步TTS"的问题此前无人探索。
+- **主要指标**：- WER（whisper-large-v3-turbo转写）：1.80，对比GT 1.92、Matcha-TTS@10NFE 1.93、RapFlow-TTS@2NFE 1.82 - MOS（5分制，MTurk，153人290份响应）：4.43±0.08，为全部合成系统最高（Matcha-TTS 
+- **代码**：暂无 | **Demo**：https://drifttts.github.io/
+
+---
+## [Beyond the Benchmark: Conditioning, Domains and Failure Modes of Qwen3-TTS](https://arxiv.org/abs/2610.23678)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：Qwen3-TTS宣称零样本语音克隆SOTA，但其技术报告未说明两种克隆接口如何选型、在朗读语音之外的域如何表现、以及如何失效。本文以朗读（LibriSpeech）、会议（AMI）、情感（IEMOCAP）、ATC无线电（ATCO2）四域，联合18项客观指标、LLM评审、AASIST反欺骗与2AFC听测四类证据，系统剖析Qwen3-TTS（ICL与X-Vector接口）对比Chatterbox、XT
+- **关键技术点**：现有TTS评测依赖干净朗读语音上的WER、说话人相似度与预测MOS，在系统逼近人类质量后趋于饱和，且从未考察Qwen3-TTS的双接口、跨域行为与失效模式，单一证据族无法回答"哪个接口、哪个域、怎么坏"。
+- **主要指标**：- AMI真人骗人率：Qwen3 X-Vec 35.6%、ICL 27.0%，基线最高仅Chatterbox 9.0%、XTTS-v2 6.0%、F5-TTS 1.0% - 综合分S均值：X-Vec 34.3 对 ICL 33.4 对 Chatterbox 31.9 对 XTTS-v2 28.2 对
+- **代码**：https://beyond-the-benchmark.github.io | **Demo**：https://beyond-the-benchmark.github.io（项目页含生成音频）
 
 ---

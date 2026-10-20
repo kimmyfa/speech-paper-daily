@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 36 篇
+共 37 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -135,6 +135,15 @@
 - **关键技术点**：现有在线视听 TSE 模型多从零训练、只在合成双人混合上评估，监听音质与真实会议行为缺乏验证；而个性化语音增强模型音质好却在混合中频繁选错目标说话人。
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Bridge, Distill, Refine: High-Fidelity One-Step Generation for Multi-Bandwidth Speech Extension](https://arxiv.org/abs/2610.22910)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-10-19
+- **一句话贡献**：本文针对生成式带宽扩展（BWE）模型多为固定带宽训练且依赖迭代采样、灵活性与效率不足的问题，提出三阶段框架BDR-BWE：先在压缩复数STFT域学习截止频率感知的条件流桥，再用渐进一致性蒸馏将多步传输压缩为一步生成器，最后以对抗精炼改善高频细节与谐波相干性。模型仅1.80M参数，推理只需1-2次网络评估，在VCTK全部评测带宽上取得SOTA的LSD（较最强基线FlowHigh相对降低7.9%-14
+- **关键技术点**：现有神经BWE中，重建型模型（TFiLM、AP-BWE等）生成高频易过平滑，对抗模型需在单阶段权衡频谱保真与感知真实；扩散/流方法（NU-Wave2、FlowHigh）虽建模缺失频谱的不确定性但采样步数多，且多数系统绑定固定源-目标采样率对，难以应对实际中变化的输入截止频率。
+- **主要指标**：- LSD（VCTK输入8/12/16/24kHz，NFE=1）：0.755/0.690/0.632/0.524（NFE=2再降至0.748/0.685/0.627/0.519） - 关键对比：一步模型较FlowHigh的LSD相对降低7.9%/9.6%/11.6%/14.4%，FAD在3/4设置最
+- **代码**：暂无 | **Demo**：https://aizhiqi-work.github.io/bdr-bwe-demo/
 
 ---
 ## [Separate First, Then Associate: A Two-Stage Approach for Real-World Audio-Visual Speech Enhancement](https://arxiv.org/abs/2608.14812)

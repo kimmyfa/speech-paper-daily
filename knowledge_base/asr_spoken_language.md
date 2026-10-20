@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 63 篇
+共 64 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -342,6 +342,15 @@
 - **关键技术点**：全双工模型逐帧决定是否接管话轮，形成"会话人格"，但一套权重只编码一种风格；训练类方法把单一风格写死且易奖励劫持，指令控制遵循率仅 64.4%，已有激活转向只设二值听/说状态、单一剂量，无法按人校准。
 - **主要指标**：- 读取 AUC（800 ms 起始）：0.818/0.830/0.898，超计时基线 +0.115/+0.185/+0.172，500 对话中 449/497/462 领先；无近文本时仍达 0.806/0.823/0.893 - 转向效应：语占比 −2a 时 6–12%、+2a 时 42–61%（
 - **代码**：暂无 | **Demo**：https://elpsykongloo.github.io/initiative-vector/
+
+---
+## [VoxTurn: Answering Several Turn-Taking Questions in One Pass with One Model](https://arxiv.org/abs/2610.21150)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-10-15
+- **一句话贡献**：级联语音智能体须在用户每次静音中判断是否接话，开源检测器每多回答一个决策就要多一个模型或多次调用，且在 14 语言 eot-bench 上误切用户超四分之一。本文提出 VoxTurn：一个 0.8B 语音大模型，将轮次转换决策写成选择题、用线性头对选项隐状态打分，并以块隔离注意力掩码在一次前向传播中同时回答全部问题。模型在真实会话静音（决策时间随静音时长采样）上训练，英文 300ms 延迟预算下误
+- **关键技术点**：现有开源轮次检测器多在切分好的朗读语料上训练、仅在句尾打标，与部署时在真实静音内任意时刻被查询的设定失配，是其最大单一误差源；且每个额外决策需独立模型或调用，框架只在 VAD 报静音时查询一次、靠超时兜底，浪费了模型随静音增长而提升的置信度。
+- **主要指标**：- eot-bench 英文误切断率：11.5%@300ms 延迟预算（6.0%@600ms；5% 误切断时需 669ms） - 14 语言均值：19.9%，开源最低，较次佳开源 LiveKit v1-mini（28.4%）低 8.5 个百分点 - 关键对比：优于商用 Baton（12.3%）与 D
+- **代码**：https://huggingface.co/AustinXiao/voxturn | **Demo**：https://swagshaw.github.io/voxturn/
 
 ---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)

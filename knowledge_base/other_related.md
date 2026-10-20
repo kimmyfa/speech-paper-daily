@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 58 篇
+共 64 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -36,6 +36,15 @@
 - **关键技术点**：大多数语音化PD检测系统仅限单语种/单语料评估，而跨语种检测需区分可迁移的病理信号与语种特有变化。S3M同时编码强大的语种结构；当训练集只含源语种患者与目标语种HC时，分类器将目标语种与HC关联，导致目标语种患者被漏检（高特异、低敏感）。已有基线 Language Shift（LS）仅将各语种HC质心对齐为常向量，不改变组内协方差，无法去除质心之外的语种依赖结构。
 - **主要指标**：- 敏感度0.90工作点F1均值（5骨干×3任务×3目标语种×5折）：Raw 0.52 → LS 0.67 → LO 0.87（+0.35）；分任务：Vowel 0.53/0.65/0.89、DDK 0.59/0.68/0.90、Read 0.43/0.69/0.81 - 语种可解码性三语分类mac
 - **代码**：https://github.com/MINUKIMS/language-orthogonalization | **Demo**：暂无
+
+---
+## [Jarvis: Coordination Deserves a Brain of Its Own in Agentic Interactive Models](https://arxiv.org/abs/2610.23804)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：9/10 | **日期**：2026-10-19
+- **一句话贡献**：全双工语音模型把复杂推理外包给后台慢脑，任务运行时用户可随时细化、取消或替换请求，计划与结果随之过期，而前台只跟对话、后台只知自身任务，无人同时看到两边。论文提出协调框架Jarvis，遵循"模型判断、代码执行"：类型化决策模型JEV把每轮话语对照活动任务台账选操作，运行时校验版本后才生效。同前后端的受控对比下，τ-Voice任务解决数从29/278升至192/278；FDB-v3上以开源9B前端达
+- **关键技术点**：快慢脑分工带来协调时序问题：前台听得到每句话却看不到任务版本，后台了解任务却不跟随对话，导致过期送达、错误绑定、幽灵执行、虚假交付等六类失败，与识别和推理质量无关。
+- **主要指标**：- τ-Voice同前端同后端仅换harness：192/278 vs QAA 29/278，提升逾6倍 - FDB-v3 Pass@1：69.0%，高于GPT-Realtime（60.0%）与原生Venus-Audio（48.0%）；Tool F1 0.927、打断率7%全表最低 - τ-Voic
+- **代码**：暂无 | **Demo**：https://amphionteam.github.io/Jarvis-Demo/
 
 ---
 ## [TamilEOT: A Dataset and Model for Semantic End-of-Turn Detection in Tamil Telephone Speech](https://arxiv.org/abs/2609.05631)
@@ -236,6 +245,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [5. EgoVoice: Proactive Spoken Assistance from Egocentric Multimodal Streams](https://arxiv.org/abs/2610.12248)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-09
+- **一句话贡献**：可穿戴AR助手需从连续第一人称视听流中自主决定何时开口，但现有omni-modal模型均为被动对话，主动视频助手只能输出文本。本文提出EgoVoice：用源分离与语音重合成将HoloAssist真实教练指导录音转成91.7小时干净训练数据，微调MiniCPM-o 4.5学习"倾听或开口"的秒级决策，再以DPO精化干预时机。170个测试会话上，闭源API开场F1仅0.02-0.03，EgoVoice
+- **关键技术点**：真实物理任务中用户常忙碌或无法察觉何时需要帮助，而现有语音助手是反应式的，依赖显式提问或VAD触发；主动视频助手（如ProAssist）只产出文本。尚无工作将"何时说话+说什么"统一到单一模型中从连续第一人称视听流训练。
+- **主要指标**：- 开场时机F1：EgoVoice-SFT 0.274，EgoVoice-DPO 0.324（zero-shot MiniCPM-o 4.5仅0.113；Gemini Live 0.022、gpt-realtime 0.030、gpt-realtime-2 0.024） - 内容相关余弦相似度：SF
+- **代码**：暂无 | **Demo**：https://egocentricvoice.github.io/
+
+---
 ## [From 2.1M Hours of Raw Broadcast Audio to Finnish Speech SSL: Confidence Filtering and Architectural Analysis at Scale](https://arxiv.org/abs/2610.13102)
 
 - **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-12
@@ -243,6 +261,24 @@
 - **关键技术点**：广播档案规模大、多样但质量混杂，既有工作仅用VAD或LID保证"提取到语音"，从未按质量系统性筛选无标注预训练数据；同时先前SSL架构对比同时变动结构与参数量（如618M Conformer vs 317M Transformer），无法区分收益来自架构还是容量。
 - **主要指标**：
 - **代码**：https://github.com/aalto-speech/large-scale-monolingual-speech-foundation-models （模型开源，语料因广播版权不可再分发） | **Demo**：暂无
+
+---
+## [ELARSpeech: A 30K-Hour Dataset Across 675 Underrepresented Languages for Long-Tail Multilingual Speech Technologies](https://arxiv.org/abs/2610.19388)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-15
+- **一句话贡献**：现有语音资源在语言长尾上存在可及性、声学与域多样性、评测基准三重缺口。论文基于濒危语言档案（ELAR）田野录音构建ELARSpeech：共30,202小时、675种低资源语言，其中标注子集2,791小时（443语言）、无标注子集27,412小时（665语言），259种语言不被现有模型支持、53种无ISO 639-3编码。实验表明其可有效支撑ASR/TTS长尾适配，伪标签扩展带来最高6.1%相对CE
+- **关键技术点**：公开语料多仅覆盖数百语言，千语言级数据集因许可限制不可公开；MMS/XEUS等集中于圣经朗读域；ML-SUPERB等基准偏高资源语言，长尾有效性缺系统评测。
+- **主要指标**：- ASR单语宏平均CER：Whisper 22.48%（30 pivot语言最优） - 无ISO语言宏平均CER：OmniASR-CTC-300M 24.50%，优于Whisper 1.5B的24.63% - 伪标签扩展：最高6.1%相对CER下降；Dawoodi在ELAR测试集93.99→22.
+- **代码**：https://github.com/sanghyang00/elarspeech/ | **Demo**：暂无
+
+---
+## [ConvexLLM: Scaling Convex-Hull Speech Interfaces to General-Purpose Audio Intelligence](https://arxiv.org/abs/2610.23539)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-19
+- **一句话贡献**：通用语音音频大模型通常以MLP/Q-Former把声学特征无约束映射到解码器输入空间，迫使文本预训练解码器重新学习解释该表征并损失语言能力。ConvexLlm用C-Gate接口把每个音频位置表示为冻结文本嵌入的连续凸组合：路由词表top-16行并以非负归一权重加权求和，输出恒在文本嵌入凸包内。模型由Whisper-large-v3编码器与Qwen3.5-9B解码器组成，经三阶段多任务训练加文本教师
+- **关键技术点**：MLP/Q-Former投影器输出可落在文本嵌入表凸包之外的无约束向量，解码器适配语音时需重学解释新输入分布，常退化推理与指令遵循等文本能力；LegoSLM等词表接口虽更贴近文本空间，但此前仅在ASR、情感识别等受控任务验证，未支撑覆盖语音交互、推理、识别与非语音音频理解的通用模型。
+- **主要指标**：- VoiceBench Overall：75.36，高于MiniCPM-o 4.5的73.04、Kimi-Audio的70.26、MiMo-Audio的67.01 - 知识与推理：OBQA 90.33、MMSU 72.32、SpMMLU 73.42、BBH 80.40（BBH超次优MiMo-Aud
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)
@@ -515,6 +551,15 @@
 - **代码**：暂无（承诺录用后开源代码与acted/synthetic数据集） | **Demo**：暂无
 
 ---
+## [ACR-Net: Mitigating Semantic Dominance via Contrastive Acoustic-Semantic Decoupling](https://arxiv.org/abs/2610.20114)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-15
+- **一句话贡献**：针对语音情绪识别与语音LLM在语调与文本语义冲突时盲目信任文本的"语义主导"现象，本文用EmotiVoice对抗合成配对冲突语音构建ASPIRE基准，并提出SOP与LDD两指标量化文本过自信与潜层纠缠。ACR-Net以冻结Whisper双流加LoRA为骨干，经跨模态注意力定位冲突后，用对比解耦损失将矛盾表征投影至正交潜空间。结果显示现有模型在极性冲突下近乎失效（ACC低于45%、SOP高于0.5）
+- **关键技术点**：多模态SER与Audio LLM在音义一致语料反复训练后形成僵化语义先验，文本token的低方差语义捷径压制细微声学线索，标准情感集筛除不一致样本更甚。已有缓解手段仅做融合层重加权、移动决策边界，无法恢复已塌缩的声学表征。
+- **主要指标**：- ASPIRE总体ACC：76.5%，较MCR（48.5%）绝对提升28.0个百分点，高于Tensor Fusion（43.8%）与朴素拼接（41.2%） - SOP：0.128（MCR为0.628、朴素拼接0.824） - LDD：0.864（MCR为0.242），四类冲突下均超0.812 - 
+- **代码**：https://github.com/zmkshakespar/ACR-Net | **Demo**：暂无
+
+---
 ## [High-Order Sinusoidal Modeling for Precise Parameter Refinement](https://arxiv.org/abs/2610.21643)
 
 - **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-15
@@ -522,5 +567,14 @@
 - **关键技术点**：信号参数提取精度受限于频率估计误差，谱图类方法受不确定性原理约束；QHM家族虽可在帧内用复幅度斜率修正频率失配，但其线性模型结构只能捕捉一阶失配，初始频率误差大时估计振荡甚至放大误差，且迭代式修正计算量大、对加性噪声敏感。
 - **主要指标**：- 仿真Case1（μ=50Hz）：4th-SM幅度RMSE 0.5–10.5（对比QHM 11.6–26.7），频率RMSE 0.2–3.9×10⁻³（对比QHM最高99.3×10⁻³），重建SRER 38.8dB为最高；噪声场景SNR15dB下4th-SM SRER 24.5dB，eaQHM因噪
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Flash RNN-T: Memory-Efficient Joint Network and Transducer Loss Computation](https://arxiv.org/abs/2610.23409)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-19
+- **一句话贡献**：RNN-T仍是流式ASR的主流模型，但其非线性联合网络需在T(U+1)个对齐位置计算隐状态与全词表logits，这些中间张量随batch累积导致训练内存爆炸，长语音尤为突出。本文提出Flash RNN-T：专用GPU融合内核加可选分块检查点重计算，在保留全对齐空间与全词表（精确损失不变）的前提下，将联合中间内存从O(N(H+V))压至O(min(N,R)(H+V))。H100实测非分块版比最快基线
+- **关键技术点**：传统批式训练将整个batch的联合隐状态与logits全部保留供反传，内存随T×U×V×B增长。Li等的有效位打包与Braun等的逐句计算只消除填充位或缩短句间共存窗口，均未对单句内部的大中间张量设上界。
+- **主要指标**：
+- **代码**：https://github.com/MahmoudAshraf97/flash-rnnt-paper | **Demo**：暂无
 
 ---

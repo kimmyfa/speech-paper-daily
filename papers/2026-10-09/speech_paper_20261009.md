@@ -7,9 +7,9 @@
 
 ---
 
-## 语音大模型
+## [1] 语音大模型
 
-## 1. MiDashengLM-Spatial: Unifying General Audio Understanding and Spatial Awareness
+## [2] 1. MiDashengLM-Spatial: Unifying General Audio Understanding and Spatial Awareness
 
 **arXiv ID**：2610.11156 | **方向**：语音大模型
 
@@ -49,7 +49,7 @@
 ### ⭐ 评分：8/10
 评分理由：首个开源端到端统一"通用理解+空间感知"音频大模型，单向HSSC设计精巧、消融充分，1.3万小时合成数据管线可复现、实用价值高。空间基准大幅超越最强基线，通道交换实验严谨验证双耳线索依赖，SELD的sim-to-real泛化亦有实证。扣分项：细粒度空间能力偏弱（运动轨迹精确匹配低于20%、OV2空间计数39.5%），超参数披露不足。
 
-## 2. DiffuPlex: Accelerating Full-Duplex Spoken Dialog Models via Rolling Masked Diffusion
+## [3] 2. DiffuPlex: Accelerating Full-Duplex Spoken Dialog Models via Rolling Masked Diffusion
 
 **arXiv ID**：2610.12214 | **方向**：语音大模型
 
@@ -90,7 +90,7 @@
 ### ⭐ 评分：8/10
 评分理由：将滚动掩码扩散与置信修订机制迁移至全双工语音对话，思路新颖且机制自洽，系统性解决了逐帧骨干调用瓶颈。实验非常充分，覆盖全双工两个版本基准、通用能力、人评、运行时测量及大量消融与配对统计检验。加速幅度约1.6倍属务实改进，且Speak策略语音自然度下降、方法绑定特定骨干未跨架构验证，故未达突破性顶会水准，为高完成度的实质贡献。
 
-## 3. Edit Who Speaks, Control How They Speak: Global Timbre Editing and Local Instruction Control for TTS
+## [4] 3. Edit Who Speaks, Control How They Speak: Global Timbre Editing and Local Instruction Control for TTS
 
 **arXiv ID**：2610.11437 | **方向**：语音大模型
 
@@ -131,7 +131,7 @@
 ### ⭐ 评分：8/10
 评分理由：问题定义新颖，首次统一全局参考音色编辑与局部分段指令控制，KV缓存重建设计巧妙，免骨干训练且验证于两个骨干，消融确认初始/最近上下文互补作用；自建双基准加客观指标、Gemini评审与19名听感主观三重评测，实验充分。不足在于训练数据与基准均为合成语音，真实泛化仅在ESD上有限验证，内容保真有可见代价（英文WER 3.8→5.1），且代码未开源。整体是扎实实用的方法论贡献。
 
-## 4. Listen-to-Reason: Listen with Experts, Retrieve over a Graph, Reason with LLMs
+## [5] 4. Listen-to-Reason: Listen with Experts, Retrieve over a Graph, Reason with LLMs
 
 **arXiv ID**：2610.10749 | **方向**：语音大模型
 
@@ -171,7 +171,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：8/10
 评分理由：以可读知识树作文本瓶颈解耦感知与推理，思路原创且动机扎实；节点因果干预与判官评估为音频领域少见的定量可解释性证据，26个reader扩展与两个新域的few-shot实验充分可信。但MMAU/MMAR仍落后LALM 6–12分，暴露树词汇在细粒度声学推理上的信息损耗，且推理开销明显高于同规模稠密LALM，故给8分。
 
-## 5. EgoVoice: Proactive Spoken Assistance from Egocentric Multimodal Streams
+## [6] 5. EgoVoice: Proactive Spoken Assistance from Egocentric Multimodal Streams
 
 **arXiv ID**：2610.12248 | **方向**：语音大模型
 
@@ -211,7 +211,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：8/10
 评分理由：选题新颖重要，首次将第一人称"何时说+说什么"统一进单一omni-modal语音模型，数据处理管线与四维评估协议扎实、工程严谨。含闭源/API、开源文本与全双工基线、消融、显著性检验与真人评估，实验充分。召回率0.285与人类差距明显、数据局限于组装类任务，但贡献实质，属优秀工作。
 
-## 6. DuplexAgent-RSI: Recursive Harness Improvement for Full-Duplex Voice Agent Collaboration
+## [7] 6. DuplexAgent-RSI: Recursive Harness Improvement for Full-Duplex Voice Agent Collaboration
 
 **arXiv ID**：2610.11299 | **方向**：语音大模型
 
@@ -252,7 +252,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：8/10
 评分理由：将全双工协作显式化为六模块可编辑harness、并复用委托池做递归自改进，思路新颖且闭环完整可复现。实验充分：双交互模型×四组外部基准，加一次性/顺序/RSI消融与模块级修复证据，数据扎实。不足是改进止于harness层、触不到模型自身感知与时机，模拟器评测偏自建。对真实语音代理落地实用价值高。
 
-## 7. SAVU-BENCH: A Real-World Benchmark for Spatial Audio-Visual Understanding
+## [8] 7. SAVU-BENCH: A Real-World Benchmark for Spatial Audio-Visual Understanding
 
 **arXiv ID**：2610.10624 | **方向**：语音大模型
 
@@ -291,7 +291,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：8/10
 评分理由：真实场景三级七任务体系与SAVU-Diag场景链接诊断设计新颖，填补现有仿真/孤立基准空白；12模型评测、人评子集、oracle与捷径消融实验齐备，数据管线含专家三重校验，结论扎实。SAVU-EA干预有效量化感知瓶颈与组合差距。不足是诊断集规模偏小（81场景/611条），代码数据尚未开源，且QA生成依赖GPT草稿的人工质量控制难以完全排除偏差。
 
-## 8. SmoothConv and DuplexConv: Complementary Mandarin Multi-Party Conversational Speech Corpora for Speech Interaction
+## [9] 8. SmoothConv and DuplexConv: Complementary Mandarin Multi-Party Conversational Speech Corpora for Speech Interaction
 
 **arXiv ID**：2610.11150 | **方向**：语音大模型
 
@@ -329,7 +329,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：8/10
 评分理由：人工核验与自动扩缩容的双轨设计对语音交互资源极具创新性，2100小时四维细粒度标注填补公开普通话资源空白，LLM两阶段轮次标注91%一致率可信；实验覆盖分离、MSASR、轮次检测三任务，MSASR提升幅度实质；不足在于wait态依赖合成样本、远场跨域性能退化，且模型侧仅为LoRA适配未做全量训练验证。
 
-## 9. SteerablePlex: Can We Steer Full-Duplex Models?
+## [10] 9. SteerablePlex: Can We Steer Full-Duplex Models?
 
 **arXiv ID**：2610.12201 | **方向**：语音大模型
 
@@ -366,7 +366,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：7/10
 评分理由：首个系统性回答"全双工模型可否运行时受控"的工作，指令注入接口、Actor-Director协同与GDPO多奖励配方组合具备明确新颖性，对用户模拟器场景实用价值高。实验覆盖200场景、对比GPT-Realtime/KAME/Raon等多组基线并双基准验证；但SimIF-Bench主结果仅以图呈现、正文缺具体数值与消融，故定为实质贡献。
 
-## 10. Selective Listening: Mechanism-Guided Control of Audio Influence in Large Audio-Language Models
+## [11] 10. Selective Listening: Mechanism-Guided Control of Audio Influence in Large Audio-Language Models
 
 **arXiv ID**：2610.11196 | **方向**：语音大模型
 
@@ -405,7 +405,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：7/10
 评分理由：提出"模态可用≠模态影响"的机制引导任务条件控制范式，概念新颖且闭环完整；配对漂移度量直击聚合指标盲区，4模型×16全量设置加ASR保持、路由审计与配对bootstrap统计，证据充分、可复现性文档详尽。不足在于可控通路限于单一模块、部分模型（Phi-4-MM ARC）收益有限；SIB仅随机5秒片段，语义相似/多说话人等更真实干扰留待未来；漂移控制弱于多采样Self-Consistency；代码未公开。
 
-## 11. Beyond Speech Captions: Speech-Rewarded Style Planning for Conversational Text-to-Speech
+## [12] 11. Beyond Speech Captions: Speech-Rewarded Style Planning for Conversational Text-to-Speech
 
 **arXiv ID**：2610.11461 | **方向**：语音大模型
 
@@ -447,9 +447,9 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 
 ---
 
-## 语音前端
+## [13] 语音前端
 
-## 12. SepGen: Multi-Stem Audio-Video Separation and Generation in a Single Model
+## [14] 12. SepGen: Multi-Stem Audio-Video Separation and Generation in a Single Model
 
 **arXiv ID**：2610.11361 | **方向**：语音前端
 
@@ -490,7 +490,7 @@ LALM通过多阶段训练耦合音频编码器与LLM，更换领域或LLM需重�
 ### ⭐ 评分：8/10
 评分理由：首个把预训练联合音视频生成器改造为多stem生成/分离双模式框架，噪声水平切模式、保护通道与CSAG设计精巧且消融充分；四类基准加用户研究、显著性检验与波形级验证，全面胜过级联与专用语音分离器并完全开源。局限是固定2个stem且未端到端验证4D空间渲染，故给8分。
 
-## 13. SEER: Source-Conditioned Emotion Enhancement via Retrieval for Cochlear-Implant Speech
+## [15] 13. SEER: Source-Conditioned Emotion Enhancement via Retrieval for Cochlear-Implant Speech
 
 **arXiv ID**：2610.11131 | **方向**：语音前端
 
@@ -528,7 +528,7 @@ CI语音丢失F0等情感线索，听者情感识别显著退化，而现有CI�
 ### ⭐ 评分：8/10
 评分理由：问题定位清晰，把参考选择形式化为源条件检索加分臂决策新颖，CI-aware奖励与LinUCB探索结合方法学扎实；客观+16人听测+三级激励条件与显著性检验齐备且开源。扣分在于仅三情感两数据集、客观评估依赖Emotion2Vec+而非真实CI听者，且RAVDESS N4客观增益不显著，泛化性待进一步验证。
 
-## 14. Disentangling Linguistic and Paralinguistic Information with Routed Sparse Autoencoders
+## [16] 14. Disentangling Linguistic and Paralinguistic Information with Routed Sparse Autoencoders
 
 **arXiv ID**：2610.10865 | **方向**：语音前端
 
@@ -568,7 +568,7 @@ CI语音丢失F0等情感线索，听者情感识别显著退化，而现有CI�
 ### ⭐ 评分：8/10
 评分理由：路由掩码+路由监督+跨因子对抗组合优雅，独立探针与路由交换干预的评估设计严谨；因子选择性分离在两编码器、两语料、两路由变体上一致，说服力强。不足：监督任务限于PR/SID/情感/韵律，重构MSE明显上升（0.066→0.179），且缺下游端到端任务验证。
 
-## 15. Cross-Lingual Speaker Verification with Self-Supervised Pre-Trained Models
+## [17] 15. Cross-Lingual Speaker Verification with Self-Supervised Pre-Trained Models
 
 **arXiv ID**：2610.11099 | **方向**：语音前端
 
@@ -609,7 +609,7 @@ CI语音丢失F0等情感线索，听者情感识别显著退化，而现有CI�
 
 ---
 
-## 其他论文（未进入前 15，仅列标题）
+## [18] 其他论文（未进入前 15，仅列标题）
 
 16. **Conversational Voice Aesthetic Model with Reinforcement Learning from Human Listeners** | 语音大模型 | arXiv: 2610.10868 | 评分：7/10 | https://arxiv.org/abs/2610.10868
 

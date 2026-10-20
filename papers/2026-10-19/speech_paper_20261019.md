@@ -11,9 +11,9 @@
 
 ---
 
-## Jarvis: Coordination Deserves a Brain of Its Own in Agentic Interactive Models
+## [1] Jarvis: Coordination Deserves a Brain of Its Own in Agentic Interactive Models
 
-**arXiv ID**：arXiv:2610.23804 | **方向**：语音大模型
+**arXiv ID**：2610.23804 | **方向**：语音大模型
 
 **作者**：Yuxiang Wang, Shengbo Cai, Zhixian Zhao, Yingda Shen, Zhizheng Wu 等（共10人）
 
@@ -51,9 +51,9 @@
 
 ---
 
-## ConvexLLM: Scaling Convex-Hull Speech Interfaces to General-Purpose Audio Intelligence
+## [2] ConvexLLM: Scaling Convex-Hull Speech Interfaces to General-Purpose Audio Intelligence
 
-**arXiv ID**：arXiv:2610.23539 | **方向**：语音大模型
+**arXiv ID**：2610.23539 | **方向**：语音大模型
 
 **作者**：Ming-Hao Hsu, Shujie Liu, Yuxuan Hu, Yuxiang Wang, Yingda Shen, Jinyu Li, Zhizheng Wu
 
@@ -92,9 +92,9 @@
 
 ---
 
-## Bridge, Distill, Refine: High-Fidelity One-Step Generation for Multi-Bandwidth Speech Extension
+## [3] Bridge, Distill, Refine: High-Fidelity One-Step Generation for Multi-Bandwidth Speech Extension
 
-**arXiv ID**：arXiv:2610.22910 | **方向**：语音前端
+**arXiv ID**：2610.22910 | **方向**：语音前端
 
 **作者**：Zhiqi Ai, Xu Shen, Mou Wang, Yongjin Zhou, Shugong Xu
 
@@ -132,7 +132,7 @@
 
 ---
 
-## VocalGrad: Evaluating Acoustic Perception in Audio Language Models
+## [4] VocalGrad: Evaluating Acoustic Perception in Audio Language Models
 
 **arXiv ID**：2610.23745 | **方向**：语音大模型
 
@@ -172,9 +172,9 @@
 
 ---
 
-## PromptSep-Speaker: Generative Target Speaker Extraction via Multimodal Prompting and Semantic Alignment
+## [5] PromptSep-Speaker: Generative Target Speaker Extraction via Multimodal Prompting and Semantic Alignment
 
-**arXiv ID**：arXiv:2610.23066 | **方向**：语音前端
+**arXiv ID**：2610.23066 | **方向**：语音前端
 
 **作者**：Yutong Wen, Ke Chen, Prem Seetharaman, Haonan Chen, Oriol Nieto, Paris Smaragdis, Justin Salamon, Zeyu Jin
 
@@ -212,9 +212,9 @@
 
 ---
 
-## MedSonor: Learning to Use Clinical Audio in Medical LLMs
+## [6] MedSonor: Learning to Use Clinical Audio in Medical LLMs
 
-**arXiv ID**：arXiv:2610.22405 | **方向**：语音大模型
+**arXiv ID**：2610.22405 | **方向**：语音大模型
 
 **作者**：Geyang Yu, Junying Chen, Benyou Wang
 
@@ -252,9 +252,9 @@
 
 ---
 
-## Audio System One Model: Typed Probabilistic Perception of Emotion in Speech
+## [7] Audio System One Model: Typed Probabilistic Perception of Emotion in Speech
 
-**arXiv ID**：arXiv:2610.22401 | **方向**：语音大模型
+**arXiv ID**：2610.22401 | **方向**：语音大模型
 
 **作者**：Jaime Bellver-Soler, Iván Martín-Fernández, Anmol Guragain, Luis Fernando D'Haro
 
@@ -292,9 +292,9 @@
 
 ---
 
-## DriftTTS: One-stage Single Step Text-to-Speech via Generative Drifting
+## [8] DriftTTS: One-stage Single Step Text-to-Speech via Generative Drifting
 
-**arXiv ID**：arXiv:2610.22960 | **方向**：语音大模型
+**arXiv ID**：2610.22960 | **方向**：语音大模型
 
 **作者**：Jaehyun Ahn, Dohyun Kim, Heeseung Kim
 
@@ -331,9 +331,9 @@
 
 ---
 
-## Flash RNN-T: Memory-Efficient Joint Network and Transducer Loss Computation
+## [9] Flash RNN-T: Memory-Efficient Joint Network and Transducer Loss Computation
 
-**arXiv ID**：arXiv:2610.23409 | **方向**：语音大模型
+**arXiv ID**：2610.23409 | **方向**：语音大模型
 
 **作者**：Mahmoud Ashraf
 
@@ -370,9 +370,9 @@ RNN-T仍是流式ASR的主流模型，但其非线性联合网络需在T(U+1)个
 
 ---
 
-## Interpreting SSL Representations for Spoof Detection: a WavLM Study
+## [10] Interpreting SSL Representations for Spoof Detection: a WavLM Study
 
-**arXiv ID**：arXiv:2610.23526 | **方向**：语音大模型
+**arXiv ID**：2610.23526 | **方向**：语音大模型
 
 **作者**：Mohamed Mallat, Michele Panariello, Massimiliano Todisco, Nicholas Evans, Anthony Larcher
 
@@ -409,9 +409,9 @@ RNN-T仍是流式ASR的主流模型，但其非线性联合网络需在T(U+1)个
 
 ---
 
-## Too Emotional to Be Fake? Intra-Utterance Emotion Shifts Expose Failure Modes in Speech Deepfake Detectors
+## [11] Too Emotional to Be Fake? Intra-Utterance Emotion Shifts Expose Failure Modes in Speech Deepfake Detectors
 
-**arXiv ID**：arXiv:2610.22832 | **方向**：语音前端
+**arXiv ID**：2610.22832 | **方向**：语音前端
 
 **作者**：Jingyi Chen, Surya Koppisetti
 
@@ -449,9 +449,9 @@ RNN-T仍是流式ASR的主流模型，但其非线性联合网络需在T(U+1)个
 
 ---
 
-## X-MDD: LLM-Based Mispronunciation Detection and Diagnosis for Unseen Languages with Canonical References
+## [12] X-MDD: LLM-Based Mispronunciation Detection and Diagnosis for Unseen Languages with Canonical References
 
-**arXiv ID**：arXiv:2610.23079 | **方向**：语音大模型
+**arXiv ID**：2610.23079 | **方向**：语音大模型
 
 **作者**：Xintong Wang, Junchuan Zhao, Ye Wang
 
@@ -489,9 +489,9 @@ MDD 系统扩展到新语言通常需为每个目标语言采集并标注学习�
 
 ---
 
-## Beyond the Benchmark: Conditioning, Domains and Failure Modes of Qwen3-TTS
+## [13] Beyond the Benchmark: Conditioning, Domains and Failure Modes of Qwen3-TTS
 
-**arXiv ID**：arXiv:2610.23678 | **方向**：语音大模型
+**arXiv ID**：2610.23678 | **方向**：语音大模型
 
 **作者**：Séverin Baroudi, Yanis Labrak, Petr Motlicek, Hervé Bredin, Ricard Marxer
 
@@ -529,9 +529,9 @@ Qwen3-TTS宣称零样本语音克隆SOTA，但其技术报告未说明两种克�
 
 ---
 
-## Not All Frames Are Equal: Difference-Aware Quantization for Ultra-Low-Bit ASR
+## [14] Not All Frames Are Equal: Difference-Aware Quantization for Ultra-Low-Bit ASR
 
-**arXiv ID**：arXiv:2610.22395 | **方向**：语音前端
+**arXiv ID**：2610.22395 | **方向**：语音前端
 
 **作者**：Woori Jeon, Jungmin So
 
@@ -568,7 +568,7 @@ Qwen3-TTS宣称零样本语音克隆SOTA，但其技术报告未说明两种克�
 
 ---
 
-## Advancing Sentence-Level Dysarthric Audio-Visual Speech Recognition via Test-Time Adaptation
+## [15] Advancing Sentence-Level Dysarthric Audio-Visual Speech Recognition via Test-Time Adaptation
 
 **arXiv ID**：2610.23117 | **方向**：语音大模型
 
@@ -611,9 +611,9 @@ Qwen3-TTS宣称零样本语音克隆SOTA，但其技术报告未说明两种克�
 > 以下 2 篇为当日语音相关论文，未进入精读队列，仅列出基础信息（标题 / arXiv ID / 方向 / 评分 / 链接），按预估评分从高到低排列。
 
 **JAVIS: Joint Audio-Visual Interaction and Streaming for Real-Time Conversational Agents**
-- **arXiv ID**：arXiv:2610.22499 | **方向**：语音大模型 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.22499（未精读，按摘要评分）
+- **arXiv ID**：2610.22499 | **方向**：语音大模型 | **评分**：6/10 | **链接**：https://arxiv.org/abs/2610.22499（未精读，按摘要评分）
 
 **Rethinking Magnitude Compression in Spectral Losses for DDSP Parameter Estimation**
-- **arXiv ID**：arXiv:2610.22962 | **方向**：语音前端 | **评分**：5/10 | **链接**：https://arxiv.org/abs/2610.22962（未精读，按摘要评分）
+- **arXiv ID**：2610.22962 | **方向**：语音前端 | **评分**：5/10 | **链接**：https://arxiv.org/abs/2610.22962（未精读，按摘要评分）
 
 *Subagents used for reading: 15* | Generated on 2026-10-19 语音论文批次, by Kimmy's research agent | Powered by VAgent SpeechAI Researcher
