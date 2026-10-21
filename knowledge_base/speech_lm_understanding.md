@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 195 篇
+共 203 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -938,6 +938,15 @@
 - **代码**：https://github.com/ynklab/vocalgrad | **Demo**：暂无
 
 ---
+## [Long Listening Thoughts: Eliciting Open Auditory Reasoning with Deliberative Perception and Cognitive Refinement](https://arxiv.org/abs/2610.24409)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-20
+- **一句话贡献**：大音频语言模型（LALM）在推理基准上的失败以感知错误为主，而现有后训练数据仅依赖模型自产字幕或粗粒度元事件标签。本文提出 LLT 四阶段数据构建管线：先合成语义/声学/时间多面稠密音频描述，再造更难的问题，再合成貌似合理的错误推理轨迹，最后用"思考接续"诱发验证与回溯等认知行为。据此合成 1.6M 推理轨迹，以 SFT+DPO 两阶段训练 Qwen2.5-Omni-7B，MMAU Test-mi
+- **关键技术点**：MMAU/MMAR/MMSU 等基准分析显示，LALM 的感知错误占失败主因、推理错误次之，尤其缺乏低层声学属性与精确时间结构的感知；现有 CoT 数据用 LALM 自检索（如 Qwen2-Audio）或 AudioSet 粗标签作音频监督，感知线索单一且无法超越模型原有感知上限。
+- **主要指标**：- MMAU Test-mini：78.2%（基线 71.5%，+6.7；再 GRPO 达 78.7） - MMAR：63.7%（基线 56.7%，+7.0；再 GRPO 达 64.9） - MMSU：66.0%（基线 60.6%） - 关键对比：超过同基座的 Ke-Omni-R（74.6/60.9
+- **代码**：https://jaeyeonkim99.github.io/llt（数据集/模型/构建管线全部开源） | **Demo**：https://jaeyeonkim99.github.io/llt
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1754,6 +1763,69 @@
 - **一句话贡献**：MDD 系统扩展到新语言通常需为每个目标语言采集并标注学习者语音，标注代价高、语言覆盖受限。本文提出多语言 LLM 框架 X-MDD，基于 Qwen3-ASR-1.7B，以 TTS 克隆合成的标准语音频与标准音素序列作参考，自回归预测学习者实际发音音素，并用带 in-context 示例的 SFT 加检测 F1 与 PER 联合奖励的 GRPO 优化。仅在中文、英文上训练，模型在阿拉伯语 Qura
 - **关键技术点**：现有 MDD 系统依赖目标语言标注学习者语音，跨语言扩展需重复采集标注；已有多语言工作仍要求目标语言在训练中出现。LLM 原生 MDD 中显式标准先验还会使预测偏向正确发音、压低召回，未解决 unseen 语言迁移问题。
 - **主要指标**：- 多语言 F1：中文 78.68、英文 58.78，均超 ATP-LLM（75.23）等单语基线；PER 中文 17.79、英文 12.87 - 相对单语训练 F1 提升：中文 +6.37、英文 +2.87 个百分点 - 阿拉伯语迁移：F1 38.07、PER 7.75、DER 40.33，与阿拉
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [From Spectrograms to Shallow Speech SSL: Audio-Frontend Design for Generator-Disjoint and Low-Latency Audio–Visual Deepfake Detection](https://arxiv.org/abs/2610.24138)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：针对音视频深度伪造检测中长期被忽视的音频前端选择问题，本文在固定的MRDF+MSCT检测器下系统比较log-mel频谱与冻结wav2vec2.0/WavLM表征及其执行深度与层级聚合方式，核心方案是浅层执行(仅前6层Transformer)且带声-视条件化学习加权聚合的W2V2-L6-weighted前端。在生成器不相交的MMDF基准上，该方案三运行平均测试宏AUROC达90.61%，较频谱基线8
+- **关键技术点**：现有AV伪造检测研究(MRDF、AVFF、MSCT)侧重跨模态融合与表示正则化，检测器的音频表征选择缺乏固定架构下的对照研究；实时系统还须兼顾未见生成器泛化与低时延。
+- **主要指标**：- 测试宏AUROC（3次运行均值±标准差）：L6-weighted 90.61±1.81% 对 频谱84.19±3.40%（+6.41点，CI [+4.86,+8.67]，3/3为正；L12 87.19%、L6-last 88.08%） - mEER：15.17±1.57%，频谱23.07；验证-
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Learning Speaker-Activity-Conditioned WavLM Speaker Embeddings with Real Conversational Data](https://arxiv.org/abs/2610.25183)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：EEND-VC 长会议说话人分离依赖说话人嵌入跨窗口链接局部说话人，传统做法只截取非重叠单人语音提取嵌入，丢弃重叠区目标说话人证据，且当说话人几乎只在重叠中出现时不可靠。本文提出 SAC-WavLM：从预训练 WavLM-MHFA 说话人验证模型出发，借鉴 DiCoW 思想将帧级 diarization 依赖变换（FDDT）块注入 WavLM 中间表示，用 Silence/Target/Non-t
+- **关键技术点**：EEND-VC 的嵌入抽取器按单人验证假设工作，需绕开重叠语音截取干净区域；真实会议中部分说话人几乎没有非重叠语音，导致嵌入质量下降并引发说话人混淆。已有 diarization 条件化嵌入（如 GSE）需从零训练专用模型并依赖 VoxCeleb 大规模模拟混合，能否用轻量方式适配预训练模型并用少量真实会话数据替代模拟训练尚不清楚。
+- **主要指标**：- SC（oracle 分割+SphereVBx）：宏平均 2.42%→SAC-WavLM(Real) 1.66%，相对降 31.5%；Sim+Real 最优 1.35%（相对 44.4%） - SC（DiariZen 分割）：宏平均 3.65%→3.08%，相对降 15.7%，真实微调变体最佳 -
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SENTRY: A Streaming Edge Network Trust Engine for Real-Time Audio Deepfake Detection](https://arxiv.org/abs/2610.24468)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：针对实时语音克隆/vishing 攻击，现有 AASIST、RawNet2、wav2vec2 等检测模型依赖浮点 GPU、需缓冲完整音频、对未见合成器泛化差。本文提出 SENTRY：面向网络边缘内联部署的整型深度伪造检测引擎，推理路径仅用加/移位/比较/xor/popcount，无 DSP 乘法器。其整型提升小波前端配合梯度提升树（Track A）+ 纯真音训练的整数 Mahalanobis OO
+- **关键技术点**：现有神经反欺骗系统假设密集浮点 MAC 硬件，难以低成本内联到网关；且针对固定合成器列表训练、遇新声码器性能骤降；离线取证只关注波形，忽视实时流判决需求。
+- **主要指标**：- WaveFake 融合：Acc 98.75%、EER 1.25%、AUC 0.9993、F1 98.75% - ASVspoof LA 融合：Acc 94.75%、EER 5.05%、AUC 0.9884、F1 97.00%，逐攻击 EER 1.60%–6.95%（A06 VC 最难） - 逐声
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AudioScorer: Learning Question-Aware Token Relevance for Large Audio Language Models](https://arxiv.org/abs/2610.26258)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：LALM的音频编码器随音频时长线性产出稠密token（Qwen系约25 token/秒，30秒即约750个），长音频解码代价高昂；现有剪枝依赖注意力、冗余或均匀采样等预设启发式，不显式学习问题相关的token相关性。本文提出AudioScorer：一个仅50.15M可训练参数的轻量打分器，训练时蒸馏冻结LALM对参考答案的梯度显著性排序并配合答案似然监督，推理时在第2个decoder层后做硬Top
+- **关键技术点**：LALM按秒稠密编码音频，而问题答案往往只依赖部分token；FastV、DART、Frame、SpeechPrune等方法均为注意力/相似度/采样类预设信号，可学习式打分器又与问题无关，问题条件化相关性与答案质量联合监督此前空缺。
+- **主要指标**：- AudioMarathon 10%保留：Speech Content均值43.65，超最强基线13.38分；ASR 31.25 对 HeadRouter 5.15（其余基线0）；ER 33.82→43.75 - MMAU-Pro加权分：10/40/70%保留为48.51/49.53/49.18，
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [DF-PALM: Dynamic Fusion Prompt Learning for Audio–Language Models](https://arxiv.org/abs/2610.24921)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：针对少样本音频分类中PALM类表示输入无关、打分时音频未经类条件精炼的缺陷，提出DF-PALM动态特征空间提示框架：实例级动态上下文生成器在文本编码后向类上下文注入音频条件化共享残差，非对称跨模态融合再以此为键值精炼音频表示，双预训练编码器全程冻结。PENGI骨干11基准16shot评测中，平均准确率80.69%、Macro-F1 80.32%，较PALM提升4.11/4.30个百分点且经Holm
+- **关键技术点**：同声学事件录音方差大，少样本下音频-语言对齐困难。CoOp/CoCoOp在输入空间优化提示，后者需梯度穿过文本编码器；PALM把提示移入特征空间但类表示仍输入无关，且按相似度打分时音频特征不接收任何类条件精炼。
+- **主要指标**：- 平均准确率：80.69%，Macro-F1：80.32%（16shot，7方法中最高） - 对PALM（76.58/76.02）：+4.11/+4.30个百分点，bootstrap 95%CI均不含零 - 对最强基线ProKeR（79.07/78.30）：+1.62/+2.02；对同容量Stat
+- **代码**：https://github.com/sunyulin0421/DF-PALM | **Demo**：暂无
+
+---
+## [Pronouncing Hard Words: Phoneme Adaptation of a Pretrained Conversational Text to Speech Model](https://arxiv.org/abs/2610.24164)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：语音医疗agent必须读准Mounjaro等罕见药名，但预训练会话式TTS缺乏显式发音控制。本文在FireRedTTS-2上以零预训练方式改造：token词表扩展131个ARPAbet特殊符号、音素增强继续SFT（~5万小时不含任何药名的语料）、推理阶段叠加免训练的"参考偏置"（前置换者录音发音轮）。在7500条clip、300种药名的域外临床评测上，Gemini严格正确率由无音素增强的54.6%
+- **关键技术点**：药名拼写不可恢复发音，读错会动摇信任并构成临床安全风险；会话TTS端到端把字音映射做黑箱，音素原生系统（VITS/FastSpeech2/YourTTS）又无对话条件与零样本克隆。核心问题是：能否在无力复现数百万小时预训练的团队条件下，不改预训练、不损原有能力地"后装"发音控制。
+- **主要指标**：- Drug-pron严格正确率：phon_60带偏置90.7%±0.6，对照phon_0为54.6%±0.3，FireRedTTS-2底座52.3%（继续SFT本身仅+2.3pp） - 消融：phon_60无偏置84.2%±3.4，偏置贡献+6.5pp、σ由3.4收至0.6；phon_100最高9
+- **代码**：暂无 | **Demo**：https://phoneme-adaptation.netlify.app/
+
+---
+## [Manifold-Constrained Residual Adaptation with Frame-Adaptive Layer Aggregation for Speaker Verification](https://arxiv.org/abs/2610.25892)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：基于自监督大型语音模型（WavLM）的说话人验证面临全量微调贵、冻结欠适配的两难，主流PEFT只改层输出或权重，不触碰残差传播路径与固定层加权聚合。本文将流形约束超连接（mHC）改造为冻结SSL上的参数高效微调：MCRA把每个残差状态分为N组、用Sinkhorn双随机矩阵组间交换，门控插值原始/混合路径；FALA以单个全局query逐帧计算层注意力权重，取代固定层权重。仅训WavLM-Large约
+- **关键技术点**：全量微调需更新316M参数而冻结骨干欠适配；现有PEFT不改残差路径，原mHC需维护N条全宽流、扩张隐藏维且仅适合端到端编码器；层加权聚合话语帧不变，无法动态选层。
+- **主要指标**：- VoxCeleb1-O：EER 0.85%→0.66%（相对-22.4%），minDCF 0.096→0.085（WavLM-Large） - VoxCeleb1-E/H：EER 0.84%/1.69%（相对-25.0%/-18.0%），H minDCF 0.197→0.168 - CN-Cel
 - **代码**：暂无 | **Demo**：暂无
 
 ---

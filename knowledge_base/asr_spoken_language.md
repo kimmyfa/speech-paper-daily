@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 64 篇
+共 66 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -576,5 +576,23 @@
 - **关键技术点**：全双工语音代理中端点误差是非对称的：过早Stop会打断用户，保守决策只增加延迟。声学VAD如Silero误判犹豫停顿，chunk级false-stop率高达22.5%；Whisper+TEN级联整体语句准确仅0.800且无法流式。端点判断本质是语义问题，且必须在因果partial音频下持续更新。
 - **主要指标**：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [MS-Bench: A Condition-Stratified Multi-Speaker ASR Benchmark](https://arxiv.org/abs/2610.25824)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：现有多说话人语音识别（MSASR）基准场景与条件覆盖有限，聚合指标掩盖了系统真实失效模式。本文提出 MS-Bench：一个总时长 32.72 小时的条件分层多说话人转写评测基准，聚合公开与内部语料，沿说话人数量、重叠率、说话人相似度、说话人转换间隔、声学质量五个维度刻画并分层筛选，覆盖 2-14 人、时长加权平均重叠率 21.87%、中英为主的多语言与多种录音设备。评测商用、开源与级联共七个系统显
+- **关键技术点**：现有评测集中于 AISHELL-4、AliMeeting 等单一语料，条件分布极窄；聚合 WER/DER 偏高时无法区分错误源于词汇识别、说话人归因还是时间预测，难以回答音频大模型在鸡尾酒会式条件下是否可靠。
+- **主要指标**：- 最优系统 MOSS-Transcribe-Diarize-Pro：DER 10.96%、cpWER 21.95%、tcpWER 22.81%、WER 22.49% - 最差 Doubao-ASR 2.0：cpWER 55.37%、DER 39.52%，与最优差距 33.42 pp（cpWER） 
+- **代码**：暂无 | **Demo**：https://aslp-lab.github.io/MS-Bench/
+
+---
+## [Probing and Mitigating Hallucinations in Speech-augmented Language Models for Automatic Speech Recognition via Small Language Models](https://arxiv.org/abs/2610.25351)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-10-20
+- **一句话贡献**：语音增强语言模型（SLM）做 ASR 时会"编造"音频中不存在的词，本文将其定义为插入错误的特殊子类并提出现代幻觉率 HER（幻觉词数/参考词数）。作者用因果中介分析定位根因：MHA 模块对幻觉贡献大于 MLP，且幻觉 token 的注意力过度偏向文本模态。据此提出基于 135M 小语言模型的轻量框架 AudioSLM，以 CTC 对齐特征门控与跨注意力层强化声学时序线索与跨模态交互。在 Libr
+- **关键技术点**：幻觉缓解研究在纯文本与视觉语言模型中已有后处理修正、专用解码、数据增强与偏好优化等路线，但 SLM-ASR 场景下缺乏对模型内部组件的系统因果定量归因，幻觉产生的机制不明，难以下手抑制。
+- **主要指标**：- HER（dev-clean）：AudioSLM 8.69% 对 Vanilla-SLM 52.01%，降低 43.32 个百分点；插入率 INS 由 3.69% 降至 0.74% - 消融：去 CA 后 HER 升至 11.96%，去 CTC-Gate 升至 14.67%，两模块互补（CTC-G
+- **代码**：https://github.com/bicheng1225/AudioSLM | **Demo**：暂无
 
 ---

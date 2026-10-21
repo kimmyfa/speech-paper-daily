@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 64 篇
+共 65 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -278,6 +278,15 @@
 - **一句话贡献**：通用语音音频大模型通常以MLP/Q-Former把声学特征无约束映射到解码器输入空间，迫使文本预训练解码器重新学习解释该表征并损失语言能力。ConvexLlm用C-Gate接口把每个音频位置表示为冻结文本嵌入的连续凸组合：路由词表top-16行并以非负归一权重加权求和，输出恒在文本嵌入凸包内。模型由Whisper-large-v3编码器与Qwen3.5-9B解码器组成，经三阶段多任务训练加文本教师
 - **关键技术点**：MLP/Q-Former投影器输出可落在文本嵌入表凸包之外的无约束向量，解码器适配语音时需重学解释新输入分布，常退化推理与指令遵循等文本能力；LegoSLM等词表接口虽更贴近文本空间，但此前仅在ASR、情感识别等受控任务验证，未支撑覆盖语音交互、推理、识别与非语音音频理解的通用模型。
 - **主要指标**：- VoiceBench Overall：75.36，高于MiniCPM-o 4.5的73.04、Kimi-Audio的70.26、MiMo-Audio的67.01 - 知识与推理：OBQA 90.33、MMSU 72.32、SpMMLU 73.42、BBH 80.40（BBH超次优MiMo-Aud
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SpikeAid: A Streaming Spiking Hearing Aid Framework for Joint Noise Reduction and Wide Dynamic Range Compression](https://arxiv.org/abs/2610.24696)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-20
+- **一句话贡献**：助听器需同时完成降噪（NR）与宽动态范围压缩（WDRC）。传统级联流程两阶段分离设计，NR误抑制的弱语音无法被后续压缩恢复、残余噪声还可能被放大；已有端到端神经联合方法依赖密集ANN计算，难以满足助听器实时低功耗常开约束。本文提出首个因果端到端脉冲神经网络框架SpikeAid：NR-Net估计互补语/噪掩码，WDRC-Net估计分支增益，融合后的有效增益作用于带噪复谱经iSTFT重建；底层神经元D
+- **关键技术点**：NR输出直接决定WDRC的增益与包络行为，级联设计无法联合最优；SNR感知压缩等策略部分考虑交互但仍保留独立模块与预定义策略。Neural-WDRC等神经联合方法逐帧MAC密集计算，与助听器的质量—延迟—功耗三角约束冲突；现有SNN去噪器只重建干净语音，不产生受处方WDRC剖面支配的助听输出。
+- **主要指标**：- 助听器任务（PESQ/STOI/HASPI v2/HASQI v2）：2.214 / 0.8412 / 0.4365 / 0.1812，前三项最优 - 关键对比：PESQ较最强SNN基线Spiking-FullSubNet 2.159提升0.055，HASPI较Binary S4D 0.4290
 - **代码**：暂无 | **Demo**：暂无
 
 ---
