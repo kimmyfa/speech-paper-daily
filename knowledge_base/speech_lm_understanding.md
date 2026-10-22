@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 203 篇
+共 212 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -947,6 +947,51 @@
 - **代码**：https://jaeyeonkim99.github.io/llt（数据集/模型/构建管线全部开源） | **Demo**：https://jaeyeonkim99.github.io/llt
 
 ---
+## [Uncovering Audio-Text Alignment in Large Audio-Language Models through Cross-Modal Concept Neurons](https://arxiv.org/abs/2610.28189)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：LALM 的语言主干仅用文本预训练，却能识别情绪、性别、语种等声学属性，音文表示在何处对齐尚不清楚。作者提出在 FFN 神经元层面寻找同时承载音频与文本概念的“跨模态概念神经元”，并用文本导出的 steering 与神经元置零两种因果干预验证其作用。在 Qwen2.5-Omni、DeSTA2.5-Audio 与 Audio Flamingo 3 上，匹配标签的神经元 Jaccard 重叠达 0.0
+- **关键技术点**：已有工作多单独分析音频层间演化、注意力头或情绪神经元，或只研究语音内容而非副语言属性。最接近的 Semantic Hub 假说仅基于单模型、非语音声音和整向量余弦，而余弦会被与标签无关的高活跃维度淹没。
+- **主要指标**：- 匹配标签方差占比（神经元）：9.22%–91.69% - 匹配标签方差占比（余弦）：0.06%–9.69%，情绪/性别/语种均低于 2% - 平均每标签 Jaccard 重叠：0.094–0.264，存在性检验最大 p<1e-29 - steering 显著标签数：42/72（Qwen2.5-O
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Improved automatic speech-based cognitive assessment using neuropsychologically calibrated diagnostic labels](https://arxiv.org/abs/2610.28288)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：真实世界远程筛查中，参与者常由社区或社交媒体自招募，标签未经临床核实，直接训练会把噪声固化进模型。作者用注意力、执行功能与记忆三域测评分数，经外部临床阈值、高斯中点与规范 z 分数重建标签，再训练语音文本分类器。基于 720 人、138 小时语音，内部 150 人临床确诊集二分类 macro-F1 由 0.72 升至 0.83，三分类由 0.54 升至 0.66，Pitt、ADReSS、PROCE
+- **关键技术点**：现有语音痴呆检测多在样本有限、标签经临床确认的队列上训练，难以扩展；大规模远程采集又普遍存在自报、历史标签未更新、自知力不足等问题。已有工作或沿用继承标签，或只做通用噪声标签学习，未把神经心理学测量作为重建依据，也缺少外部验证。
+- **主要指标**：- 内部二分类 macro-F1：0.72 → 0.83（+13%） - 内部三分类 macro-F1：0.54 → 0.66（+12%） - 单题最佳 Q1：0.81 → 0.87；Q5 与全题：0.70/0.72 → 0.83 - Pitt：0.82 → 0.86（+0.04） - ADReSS
+- **代码**：https://github.com/Madhurananda/CognoCalib | **Demo**：暂无
+
+---
+## [RealComm: Benchmarking and Adapting Audio Deepfake Detection over Real Communication Channels](https://arxiv.org/abs/2610.27459)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：真实通话的采集、设备处理与传输编码会改变语音，使数字域表现优异的检测器失效。作者构建 RealComm 配对数据集：同一句话既有数字源文件，也有真实通话录回版本，覆盖声学/有线注入、手持/免提与通话端降噪。零样本下所有检测器跨域 EER 上升超过 30 个百分点，Teffic-Audio 由 0.00% 升至 37.95%；再以分级波形增强 RealComm-Aug 结合真实通话数据微调，降至 2
+- **关键技术点**：现有基准多在数字音频或受控加噪、编解码条件下评测，缺少同一话语的真实通话配对样本，无法回答检测器在实际接听语音上的可靠性。外放、降噪与编码会改变频谱和时长线索，数字域高分并不等于通话域可用。
+- **主要指标**：- 数字到通话 EER：WavLM-L 4.64%→40.00%，AASIST 7.50%→40.19%，DF Arena 7.86%→38.77%，Teffic-Audio 0.00%→37.95% - 注入路径 EER（Teffic-Audio）：LtM 16.46%，OtA 手持 41.10%
+- **代码**：https://github.com/AmphionTeam/RealComm | **Demo**：同项目仓库
+
+---
+## [SMART: Semantic Segment Mapping and Assessment of Recognition Transcripts with Contextual Rubrics](https://arxiv.org/abs/2610.27820)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：WER 对替换、删除、插入等权计费，无法分辨哪个错误真正改变原意；句级语义分数只给整体判断，难以定位具体错误片段。SMART 把 ASR 语义评测形式化为上下文感知的片段级后果判定：用字符级对齐与语言感知边界把参考-假设差异切成连贯片段，再用结构化 rubric 在篇章语境下给每段打上 Consequential 或 Inconsequential 标签并聚合成 SIER，另设无参考纠错分支。与五
+- **关键技术点**：下游任务评测只覆盖任务所需信息，无关语义扭曲会漏检；BERTScore、SeMaScore 等句级相似度把多处差异压成一个总分，无法区分改变原意与无害错误；混合或严重度指标虽加权惩罚局部差异，却未判定是否真造成后果。
+- **主要指标**：- 后果分类 F1：0.843（准确率 0.925，精确率 0.857，召回率 0.830） - 直接 LLM 判定 F1：0.745（准确率 0.900，精确率 0.764，召回率 0.731） - 去上下文消融 F1：0.822，说明 rubric 本身有效 - 相似度基线 F1：BERTSco
+- **代码**：https://github.com/NytePlus/SMART | **Demo**：暂无
+
+---
+## [The Impact of Side Information on Voice Privacy](https://arxiv.org/abs/2610.26884)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：现有语音匿名化评测只在信号层面衡量再识别风险，而真实数据常附带地理侧信息，会低估风险。作者用受分布约束的方法构建半合成数据，把 Common Voice v11.0 英文部分（22,024 人）与 2021 年英国普查地理分布对齐，在 Predicate Singling Out 框架下引入"条件参考概率"，分离候选池缩小与声学匹配的贡献。Rutland 案例中 OA+单人家庭孤立概率达 0.71
+- **关键技术点**：GDPR 要求按"合理可能使用的所有手段"评估可识别性，语音与侧信息组合会提升风险。但公开语料并非为此设计：VoxCeleb 等需外部重建属性，集中个人信息本身即侵犯隐私；Common Voice 等假名化语料无可关联身份。
+- **主要指标**：- 半知情·纯信号：P_obs 0.380，P_ref 0.368，Δ_iso 0.012 - 半知情·MSOA：0.419，Δ_iso 0.052（块 2,582.7） - 半知情·LSOA：0.493，Δ_iso 0.125（块 540.3） - 半知情·OA：0.585，Δ_iso 0.215
+- **代码**：https://github.com/Koguili/The-Impact-of-Side-Information-on-Voice-Privacy | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -954,6 +999,15 @@
 - **关键技术点**：AD语音检测常把语音增强、样本筛选等当作有利预处理，但这些转换可能在域内制造虚高成绩。
 - **主要指标**：- 域内性能：增强数据集普遍提升 - 跨域/跨数据集：增强数据训练显著降低稳健性 - 匹配增强：可缓解但不能消除退化
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Beyond Two Tracks: Speaker-Anchored Full-Duplex Dialogue Recovery](https://arxiv.org/abs/2610.27109)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：全双工对话数据需要"说话人身份持久"的双轨录音，但从普通混合录音做生成式恢复时，分离器会在分块之间交换说话人槽位，导致音轨归属漂移。本文提出"扩散前说话人锚定路由"：用一个仅 1.84 M 参数的共享路由器，把 DialogueSidon 分离器的粗粒度流匹配到固定注册身份并在冻结生成器之前完成排序。在 25 分钟远程对话上，错轨时间从 43.9% 降至 4.1%，固定轨活动 F1 从 0.46 
+- **关键技术点**：现有全双工数据依赖 CANDOR、Seamless Interaction 等自然双人录音或 DuplexDrama 等合成数据，规模受限；DialogueSidon 可从海量在野录音中联合恢复与分离，但两路输出并不等于两个持久参与者。排列不变训练与重叠拼接只能保证局部连续性，无法确定整段对话中每条轨属于谁。
+- **主要指标**：- CANDOR 错轨时间 WT：43.86% → 4.08%（相对降低 90.7%） - 对比注册波形重识别 WT：6.20%，本方法相对再降 34.2% - 最差会话 WT：17.14%，波形重识别为 42.72% - 长上下文（120 s/10 s）WT：1.89%，波形重识别 4.72%（相
+- **代码**：暂无 | **Demo**：https://elpsykongloo.github.io/beyond-two-tracks/
 
 ---
 ## [Text-Prompted CLAP: Learning Query-Conditioned Audio Representations via Contrastive Learning](https://arxiv.org/abs/2607.25085)
@@ -1826,6 +1880,33 @@
 - **一句话贡献**：基于自监督大型语音模型（WavLM）的说话人验证面临全量微调贵、冻结欠适配的两难，主流PEFT只改层输出或权重，不触碰残差传播路径与固定层加权聚合。本文将流形约束超连接（mHC）改造为冻结SSL上的参数高效微调：MCRA把每个残差状态分为N组、用Sinkhorn双随机矩阵组间交换，门控插值原始/混合路径；FALA以单个全局query逐帧计算层注意力权重，取代固定层权重。仅训WavLM-Large约
 - **关键技术点**：全量微调需更新316M参数而冻结骨干欠适配；现有PEFT不改残差路径，原mHC需维护N条全宽流、扩张隐藏维且仅适合端到端编码器；层加权聚合话语帧不变，无法动态选层。
 - **主要指标**：- VoxCeleb1-O：EER 0.85%→0.66%（相对-22.4%），minDCF 0.096→0.085（WavLM-Large） - VoxCeleb1-E/H：EER 0.84%/1.69%（相对-25.0%/-18.0%），H minDCF 0.197→0.168 - CN-Cel
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [TRACE: Trustworthy Reasoning from Acoustic Cues and Evidence](https://arxiv.org/abs/2610.26894)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-21
+- **一句话贡献**：现有音频语言模型基准只看答案是否正确，无法判断答案来自声学证据还是语言先验，也无法解释模型为何在时序、计数任务上失败。作者提出 TRACE 诊断基准，用可控合成的多事件声景、程序化问答与事件级时间标注，把"答对"拆成任务性能、证据对齐、鲁棒性三个维度。评测五个主流模型，总体准确率 55.0%–78.4%，但 66.6%–72.5% 的错误答案其实已定位到目标事件，说明瓶颈在证据解读而非事件检测。
+- **关键技术点**：LALM 在事件顺序、计数、重叠等时序推理上表现很差，且把音频换成随机噪声后性能几乎不变，说明模型可能并未真正"听"。已有 AudioBench、MMAU、AHa-Bench 只统计答案正确率，把三类失败混为一谈。
+- **主要指标**：- 总体准确率：Qwen3 78.4%、Kimi 69.3%、Qwen2.5 67.8%、AF3 63.0%、AF-Next 55.0%，五模型均值 66.8% - 计数任务：Qwen3 92.9%，次优 Kimi 67.9%，AF-Next 仅 42.0% - 顺序任务：Kimi 70.9%、Qw
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SLM-SS: Token-Based Speech Separation with Speech Language Models](https://arxiv.org/abs/2610.27785)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-21
+- **一句话贡献**：多说话人分离长期以 SI-SDR 等信号级目标优化，波形指标好看但下游 ASR 可懂度受损；扩散或流匹配分离虽属生成式，却需迭代采样且易产生幻觉。本文把分离改写为离散 token 序列生成：用 Encodec 量化干净语音，以 SOT 串接多说话人，AR 模型预测零阶码本确定说话人顺序与粗粒度内容，NAR 逐阶细化高阶码本。Libri2Mix 上 per-talker NAR 版 WER 6.92
+- **关键技术点**：判别式掩码或映射方法在固定说话人数下信号指标强，但伪影与过抑制会破坏语言结构，导致 ASR、SID 性能下降。生成式扩散方法推理慢且可能生成不存在的内容；已有 SLM 工作多聚焦单流增强或有条件提取，缺少显式多说话人序列建模。
+- **主要指标**：- WER：6.92%（per-talker NAR，Encodec） - WER：7.24%（基础 SLM-SS） - WER：8.97%（WavTokenizer 单码本） - Spk Sim：92.3%（per-talker NAR） - PESQ：2.30（per-talker NAR） -
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Preference-Aware Pareto Steering for Multi-Task Speech LLMs](https://arxiv.org/abs/2610.27200)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-21
+- **一句话贡献**：多任务语音大模型（ASR、时间戳预测 TS、语音翻译 ST）联合训练存在固有权衡，固定损失权重却无法把权衡点落在部署方指定的偏好上。本文提出 EA-SURF：为每任务训练专家锚点模型，把偏好映射为当前模型到各锚点欧氏距离的目标份额，再用指数化梯度在线自适应标量化权重，在单条热启动轨迹上闭环逼近目标。六个三目标任务请求上平均时间戳误差由 46.6 ms 降至 39.2 ms，偏好校准误差降 62.2
+- **关键技术点**：现有语音系统靠分阶段适配、混合任务监督或经验配方获得多能力，无法校准最终权衡点。偏好引导 MOO 中 a priori（EPO、FERERO）与 a posteriori（Pareto 超网络、SURF）取向不同，而 SURF 仅针对 M=2 的覆盖几何；且直接把偏好 p 当损失权重通常无法实现对应权衡。
+- **主要指标**：- 平均 AAS：46.6 → 39.2 ms（各请求均降 2.2–12.5 ms） - 平均 ASR WER：+0.16 点（LS 7.14–7.38% → EA-SURF 7.21–7.62%） - 平均 BLEU：+0.45 - PCE：0.240 → 0.091（降 62.2%，总体标准差 
 - **代码**：暂无 | **Demo**：暂无
 
 ---

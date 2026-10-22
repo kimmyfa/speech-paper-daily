@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 90 篇
+共 92 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -452,6 +452,15 @@
 - **代码**：https://github.com/yingzhuodeng/CoSTA | **Demo**：暂无
 
 ---
+## [Steering intonational tunes in text-to-speech synthesis](https://arxiv.org/abs/2610.27403)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：本文研究分阶段层级 TTS 中英语核语调（如陈述降调与疑问升调）由哪个模块计算、能否被控制。作者用交换干预在 CSM 与 S2 中定位到：backbone 隐状态经 depth model 把 tune 写入波形，level-0 token 几乎不携带 tune。随后以人类模仿语音（转写无标点）的 backbone 状态拟合均值差向量并在生成循环内注入，使 56%–72% 录音翻转到另一条件，UT
+- **关键技术点**：基于残差向量量化的 TTS 常拆分 token 堆栈：自回归 backbone 只产生 level 0，较小的 depth model 补全其余层。该拆分出于效率，但对韵律控制的影响未被测量；风格标签、示例提示与语义前导均难稳定诱发不同 tune，仅句末问号可靠。
+- **主要指标**：- 全层 token 交换归一化位移：CSM 0.99 [0.97,1.01]，S2 0.91 [0.82,0.99] - 仅替换 backbone 状态 h_t：0.98 [0.94,1.02] / 0.91 [0.82,0.98] - 仅替换 level-0 token：0.00 [0.00,0
+- **代码**：https://github.com/jpvigneaux/steering-intonation-tts | **Demo**：暂无
+
+---
 ## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
 
 - **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：
@@ -810,5 +819,14 @@
 - **关键技术点**：现有TTS评测依赖干净朗读语音上的WER、说话人相似度与预测MOS，在系统逼近人类质量后趋于饱和，且从未考察Qwen3-TTS的双接口、跨域行为与失效模式，单一证据族无法回答"哪个接口、哪个域、怎么坏"。
 - **主要指标**：- AMI真人骗人率：Qwen3 X-Vec 35.6%、ICL 27.0%，基线最高仅Chatterbox 9.0%、XTTS-v2 6.0%、F5-TTS 1.0% - 综合分S均值：X-Vec 34.3 对 ICL 33.4 对 Chatterbox 31.9 对 XTTS-v2 28.2 对
 - **代码**：https://beyond-the-benchmark.github.io | **Demo**：https://beyond-the-benchmark.github.io（项目页含生成音频）
+
+---
+## [LoCA: Local Credit Assignment for Reinforcement Learning of Autoregressive Flow-Matching TTS](https://arxiv.org/abs/2610.28035)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-21
+- **一句话贡献**：自回归流匹配 TTS 的后训练多用句级奖励，无法指出错读、漏读、重复发生在哪一段，且带符号回归在负优势时会被推着扩大误差。LoCA 用 ASR 转写加强制对齐把内容错误定位到具体声学帧，再把句级优势在帧维度重分配，同时用参考相对的双侧阈值约束"继续拟合"与"继续排斥"。在 2B VoxCPM2 上，CV3 多语子集内容错误从 5.986% 降至 4.758%（相对 GROW 再降 14.3%），说
+- **关键技术点**：现有基于生成语音反馈的后训练（Seed-TTS 多奖励、GLM-TTS 的 GRPO、DiffRO、TKTO）多在离散 token 或整句层面做策略更新；连续声学回归路线 GROW 直接把组相对句级优势乘到流匹配速度误差上。一个错词就让整句各帧共享同一系数，句内无区分度；负优势项本身无下界，参考锚点只能阻止漂移，不能分别规定"拟合到哪停""排斥到哪停"。
+- **主要指标**：- CV3 全子集内容错误：4.758%（基线 5.986%，GROW 5.553%，相对基线降 20.5%） - CV3 全子集严重失败数：51（基线 61，GROW 60） - CV3 全子集 SIM：69.137（基线 67.168，GROW 67.562） - CV3 普通子集错误：4.67
+- **代码**：暂无 | **Demo**：暂无
 
 ---

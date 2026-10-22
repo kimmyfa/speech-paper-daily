@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 65 篇
+共 68 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -287,6 +287,15 @@
 - **一句话贡献**：助听器需同时完成降噪（NR）与宽动态范围压缩（WDRC）。传统级联流程两阶段分离设计，NR误抑制的弱语音无法被后续压缩恢复、残余噪声还可能被放大；已有端到端神经联合方法依赖密集ANN计算，难以满足助听器实时低功耗常开约束。本文提出首个因果端到端脉冲神经网络框架SpikeAid：NR-Net估计互补语/噪掩码，WDRC-Net估计分支增益，融合后的有效增益作用于带噪复谱经iSTFT重建；底层神经元D
 - **关键技术点**：NR输出直接决定WDRC的增益与包络行为，级联设计无法联合最优；SNR感知压缩等策略部分考虑交互但仍保留独立模块与预定义策略。Neural-WDRC等神经联合方法逐帧MAC密集计算，与助听器的质量—延迟—功耗三角约束冲突；现有SNN去噪器只重建干净语音，不产生受处方WDRC剖面支配的助听输出。
 - **主要指标**：- 助听器任务（PESQ/STOI/HASPI v2/HASQI v2）：2.214 / 0.8412 / 0.4365 / 0.1812，前三项最优 - 关键对比：PESQ较最强SNN基线Spiking-FullSubNet 2.159提升0.055，HASPI较Binary S4D 0.4290
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [You Are the Trigger: Speaker-Activated Backdoors](https://arxiv.org/abs/2610.27210)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：现有音频后门都要求攻击者在推理时向受害者输入注入或诱导触发器（噪声、超声、语音转换片段），防御方因此可针对"异常输入"检测剥离。本文提出 Speaker-Activated Backdoor（SAB）威胁模型：攻击者只在微调阶段污染模型，部署后不接触推理输入，目标说话人自然、未修改的语音本身就是触发器。方法用两阶段微调先增强说话人身份可及性、再将目标身份绑定到恶意 payload，仅需 2 分钟真
+- **关键技术点**：既有音频后门（Koffas 超声、Shi 环境声、Bartolini 污染 Whisper 等）都假定攻击者能控制推理时音频，触发器是"外来附加物"，因而可被输入过滤、VAD 或异常检测削弱。Cai/Ye/Schoof 等虽改用音色、情绪等自然属性，但只在小分类模型验证，推理时仍需语音转换。SAB 的差异是触发器零成本、零接触：目标一开口即触发。
+- **主要指标**：- Whisper-medium 后门成功率（BSR）：90.2% - Parakeet 后门成功率（BSR）：97.0% - Whisper-medium / Parakeet 误触发率（FPR）：1.7% / 0% - 指令注入率（C1）：96.9% - 下游 Agent 有害执行率：87.5%
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -585,5 +594,23 @@
 - **关键技术点**：传统批式训练将整个batch的联合隐状态与logits全部保留供反传，内存随T×U×V×B增长。Li等的有效位打包与Braun等的逐句计算只消除填充位或缩短句间共存窗口，均未对单句内部的大中间张量设上界。
 - **主要指标**：
 - **代码**：https://github.com/MahmoudAshraf97/flash-rnnt-paper | **Demo**：暂无
+
+---
+## [PhonoBridge: Error-Aware Phoneme-Mediated EMG-to-Text Reconstruction](https://arxiv.org/abs/2610.27678)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-21
+- **一句话贡献**：针对表面肌电（EMG）静默语音转文本中配对 EMG–文本数据稀缺、解码器难以纠正前端识别错误的痛点，作者提出 PhonoBridge 两阶段框架：先用通道感知前端把 8 通道 EMG 解码为音素序列，再用 Qwen3-8B 后端把音素还原为文本。为保证后端见过真实前端噪声，作者提出错误画像引导增广（EPGA），从留出集的前端预测中统计替换/删除/插入模式并注入 LibriSpeech 转写音素序列
+- **关键技术点**：现有 EMG-to-text 多采用 CTC 前端加外挂语言模型/WFST 的模块化结构（Gaddy & Klein、Gowda & Miller），重建阶段的语言能力受限于 n-gram 或小模型。直接端到端 EMG-to-text 或直接用 LLM 处理 EMG 特征（EMG-LLM）则受制于配对数据规模与跨模态对齐难度，泛化到开放词表时 WER 甚至超过 100%。
+- **主要指标**：- 端到端 WER：24.77% - 端到端 CER：14.58% - 前端 PER：13.65%（cWER 35.53%） - 相对最强基线：较 Gaddy & Klein 的 28.27% 下降 3.50 个百分点（约 12.4% 相对降低），较 EMG2Vec 的 29.45% 下降 4.68
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ShlokaDhara: A Multi-Speaker Sanskrit Speech Corpus for Learning Meter-Aware Prosody in Text-to-Recitation](https://arxiv.org/abs/2610.26929)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-21
+- **一句话贡献**：梵语诗歌朗诵受 Chandas（诗律）约束，音节按 Laghu（轻）与 Guru（重）构成严格时长模板，但现有语料多面向 ASR 或对话合成，缺乏格律保真度。作者构建 ShlokaDhara：43.24 小时、19 位说话人、覆盖 20 余种 Chandas 的多说话人朗诵语料，并提出 Text-to-Recite 任务与音节级评测。微调 7 类 TTS 后，XTTS-v2 取得最高 UTMOS 
+- **关键技术点**：现有梵语语料如 Vāksañcayaḥ、IndicVoices 以识别或对话为目标，韵律被当作随机声学特征；面向格律的 Vāgdhenu 仅 5.3 小时单说话人，难支撑零样本多音色朗诵。相同 Chanda 可由不同旋律演唱，亟需解耦“不变格律结构”与“可变旋律实现”的数据。
+- **主要指标**：- XTTS-v2 seen UTMOS：4.01（次优 EnGenTTS 3.87） - XTTS-v2 unseen UTMOS：3.24（次优 Voxtral 3.12） - XTTS-v2 seen CMOS：-0.0386；unseen CMOS：-0.0502 - 16 位专家 5 级评
+- **代码**：暂无（作者称将公开数据集与源码） | **Demo**：https://shlokadhara.vercel.app/
 
 ---

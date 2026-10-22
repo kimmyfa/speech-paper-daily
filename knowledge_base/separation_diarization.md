@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 19 篇
+共 20 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -81,6 +81,15 @@
 - **关键技术点**：多数TSE系统只用单模态内的一种线索：注册音频在音色相近或片段过短时易混淆，文本线索通常匹配"类"而非"具体人"；且以掩码预测模型为主，分离质量与跨声学条件泛化逊于生成式方法，评测还偏向全重叠混合，脱离对话中部分重叠交错的真实场景。
 - **主要指标**：- 转录线索SI-SDRi：8.73/11.41/12.47dB（CapSp./LTTS-R/Int），DAE-TSE仅2.13/2.41/1.21，域外提升6.6-11.3dB；Libri2Mix域内6.15对11.13dB败于DAE-TSE - 注册音频线索：SI-SDRi 11.79（LTTS
 - **代码**：暂无 | **Demo**：https://yutongwen.github.io/PromptSep-Speaker/
+
+---
+## [Slots Are Not Speakers: Training-Free Speaker Linking for Frozen Streaming Diarizers](https://arxiv.org/abs/2610.28053)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-10-21
+- **一句话贡献**：流式端到端日志模型输出固定槽位，槽位被复用后身份即丢失，人数超上限时 DER 急剧恶化。本文提出因果免训练的外挂链接器：只读冻结主机的槽位后验与音频，挑选单槽独活帧，在切换处切分轨迹，用现成编码器嵌入并与说话人库匹配重标注。在 8 语料 1418 会话上，4 槽主机超上限 DER 从 36.81% 降至 22.64%，上限内几乎不变；法庭 cpWER 从 82.7% 降至 24.4%。只重标注，漏
+- **关键技术点**：端到端日志模型的输出通道数训练时固定，Streaming Sortformer v2.1 仅 4 槽，官方称其跟踪"四个最主要说话人"。槽位实为并发通道：占用者静音即释放、交给下一位，到达序缓存无法充当持久身份库。既有方案或重训加宽槽位、或联合训练链接器，均需训练且改动主机。
+- **主要指标**：- 超上限 DER：36.81% → 22.64%（−14.17 点，全为混淆） - 上限内 DER：15.32% → 15.24%（−0.08，CI [−0.41,+0.24]） - 超上限说话人混淆：25.29% → 11.13% - 法庭 cpWER：82.7% → 24.4%（恢复 20/2
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation](https://arxiv.org/abs/2608.09451)
