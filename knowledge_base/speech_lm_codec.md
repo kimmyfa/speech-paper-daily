@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 26 篇
+共 27 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -162,6 +162,15 @@
 - **关键技术点**：神经音频编解码器帧率高导致序列过长，增大 Transformer 计算开销，且语音 token 与文本长度失配损害语音语言模型性能。动态帧率codec（CodecSlime 的 DP 法、FlexiCodec 的余弦相似度法、VARSTok 的密度峰值聚类法）通过压缩生成可变长分段降低有效帧率。但 RVQ 具有层次性：浅层捕捉主结构、深层编码细节，深层残差变化更快。现有方法强制所有量化层共享同一分段边界，对多码本codec 是次优的。
 - **主要指标**：- 重构 DAC+DP+LACE（22.5Hz，约 8.6kbps）：WER 2.22%、UTMOS 3.81、PESQ 3.08、STOI 0.95、SpkSim 0.98（单次压缩为 4.92%/2.49/1.61/0.86/0.94） - 重构 EnCodec+DP+LACE：WER 2.18
 - **代码**：https://github.com/espnet/espnet | **Demo**：暂无
+
+---
+## [RubatoCodec: Budgeted Adaptive Speech Tokenization with Streaming Decoding](https://arxiv.org/abs/2610.29434)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-10-22
+- **一句话贡献**：可变帧率语音编码器的阈值分配让token数量由内容决定，生成模型需产出的序列长度无法由音频时长确定。本文提出RubatoCodec，基于X-Codec-2骨架，用Adaptive Firing在"精确话语级事件预算"下把50 Hz潜变量切分为变长事件（默认12.5事件/秒），每个事件携带离散码与显式时长，因果解码器支持流式合成。受控实验表明低事件率下自适应分配优于固定帧率；375k小时多语言模型在
+- **关键技术点**：低帧率缩短token序列但要求每位置携带更多语言与声学信息；阈值式可变帧率编码的事件数由内容决定，同一设置在五个数据集上实测46.1–81.5事件/秒波动，序列长度与下游建模成本无法仅由音频时长确定，且在数据分布漂移下阈值校准失效。
+- **主要指标**：- 12.5 Hz受控深度16：自适应vs固定帧率PESQ-WB 2.556 vs 2.442（+0.114）、dWER 0.62% vs 0.72% - LibriSpeech 2.43 kbit/s深度16：dWER 0.50%全对比最低（Qwen3-TTS-Tokenizer-12Hz为0.5
+- **代码**：https://github.com/third-intelligence/RubatoCodec | **Demo**：暂无
 
 ---
 ## [KVAE: Family of Tokenizers for Multimodal Generative Models](https://arxiv.org/abs/2608.05798)

@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 212 篇
+共 213 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1908,5 +1908,14 @@
 - **关键技术点**：现有语音系统靠分阶段适配、混合任务监督或经验配方获得多能力，无法校准最终权衡点。偏好引导 MOO 中 a priori（EPO、FERERO）与 a posteriori（Pareto 超网络、SURF）取向不同，而 SURF 仅针对 M=2 的覆盖几何；且直接把偏好 p 当损失权重通常无法实现对应权衡。
 - **主要指标**：- 平均 AAS：46.6 → 39.2 ms（各请求均降 2.2–12.5 ms） - 平均 ASR WER：+0.16 点（LS 7.14–7.38% → EA-SURF 7.21–7.62%） - 平均 BLEU：+0.45 - PCE：0.240 → 0.091（降 62.2%，总体标准差 
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [MERP: A Latent-Bottleneck Framework for Robust Multi-Modal Multi-Label Emotion Recognition](https://arxiv.org/abs/2610.29430)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：针对多模态多标签 emotion recognition 在部署时模态缺失导致性能骤降的问题，提出 MERP：将文本/视觉/声学联合序列压缩进 Perceiver 式固定规模 latent bank 做深度推理，在低/高两个层级用类特定 readout 提取情绪证据并以跨层重构对齐，再结合正负类原型、谱噪声门控增强（SNGA）与置信度感知类级融合。20% 随机模态 drop 下 micro-F1 
+- **关键技术点**：完整模态训练的 MMER 模型部署时缺一两路即骤降，现有方法靠想象生成、对齐去噪或逐模态可靠性权重处理缺失，多面向单标签任务且计算仍随原始序列长度增长。论文用六层 dense fusion 探针诊断：单模态 drop 下 CKA 随深度从 0.921 降至 0.794、缺失 token 注意力比从 1.049 升至 1.240，扰动能量 65.5% 集中于头部 10% 类通道，证明局部输入失效会被逐层放大且类间不均。
+- **主要指标**：- 20% 随机模态 drop micro-F1：CMU-MOSEI 0.563、M3ED 0.780，均为最优 - 对比最强基线 LDDU（0.559/0.758）：+0.004/+0.005 - 音频单模态（text+visual 置零）：0.473 vs LDDU 0.022（差 0.451）
+- **代码**：https://github.com/Creative-zcx/MERP | **Demo**：暂无
 
 ---

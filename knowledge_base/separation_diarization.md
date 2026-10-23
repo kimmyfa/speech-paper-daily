@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 20 篇
+共 22 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -179,6 +179,24 @@
 - **一句话贡献**：面向面对面实时对话场景，系统需在自然停顿、轮换与 backchannel 中持续追踪目标说话人，同时抑制对话伙伴与无关第三方插话。本文构建了首个基于完整双人类对话并叠加独立第三方干扰的在线流式音视频目标说话人提取（AV-TSE）基准，保留真实轮换结构而非模拟拼接。并提出基于语音大模型的目标说话人语音活动预测模块 TS-VAP，从重叠混合的语义、声学与面部线索中预测目标与对话伙伴的未来活动，作为预测
 - **关键技术点**：现有 AV-TSE 多在完全重叠或人工模拟稀疏重叠混合上评测，缺乏真实对话的轮换结构；流式模型不可见未来帧，目标在轮次边界沉默处歧义最大。传统语音活动投影（VAP）仅在干净单通道训练，靠停顿与韵律预测，未利用决定轮换的语言知识（提问预示回答、句满即交接）。
 - **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Geometry-Conditioned Target Speaker Extraction based on spatial features incorporating acoustic propagation principles](https://arxiv.org/abs/2610.29778)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：针对几何条件化空间选择非线性滤波（GCSSF）目标说话人提取中位置编码（MPE）只给抽象正弦嵌入、不含声学传播物理的问题，提出用两类显式空间特征做阵列几何条件化：捕获麦克风间相位差的波束转向矢量（TSV），以及表征各时频bin目标存在性的GCC-PHAT空间掩码，经Conv1d编码器与FiLM层注入GCSSF分支。在随机阵列训练、随机与圆阵评测下，GCSSF-TSV取得SI-SDR 9.43 dB
+- **关键技术点**：基于空间线索的目标说话人提取依赖训练时固定的阵列几何；GCSSF用MPE将目标DOA与麦克风坐标映射为抽象高维正弦嵌入，未显式编码声学传播关系，网络需隐式学习相位差、DOA与几何间的物理联系，限制了跨几何提取性能。
+- **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [NeuroCodec: EEG-Guided Latent-Domain Generative Model for High-Fidelity Target Speaker Extraction](https://arxiv.org/abs/2610.29815)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：助听设备场景需用EEG解码听觉注意力以引导目标说话人提取（TSE），但现有方法均为时频掩码判别式模型，重叠区保真度低且带宽止步8-14.7kHz。本文提出NeuroCodec：首个冻结DAC神经音频编解码器潜空间内预测目标语音潜变量的生成式EEG引导TSE框架，以图卷积建模EEG空间依赖、注意力与Mamba实现跨模态融合。SI设置下在Cocktail Party与KUL均超SOTA（KUL STO
+- **关键技术点**：现有BISS/NeuroHeed/M3ANet等神经引导TSE依赖混合域判别式掩码，掩码失准残留干扰致说话人泄漏，8/14.7kHz窄带输出音色发闷；生成式增强需大量数据与算力，与配对数据稀缺、助听低延迟需求冲突。
+- **主要指标**：- Cocktail Party（SI、8kHz统一评）：STOI 0.8273、PESQ 2.31，较最强基线M3ANet分别+0.0153、+0.08，ESTOI 0.721略低于其0.725 - KUL（SI）：STOI 0.868/ESTOI 0.754/PESQ 2.562，较NeuroS
 - **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 66 篇
+共 69 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -353,6 +353,15 @@
 - **代码**：https://huggingface.co/AustinXiao/voxturn | **Demo**：https://swagshaw.github.io/voxturn/
 
 ---
+## [Qwen-Audio-3.1-ASR Technical Report](https://arxiv.org/abs/2610.28711)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-10-22
+- **一句话贡献**：Qwen-Audio-3.1-ASR是针对"转录无法表达谁在何时说话及非词语声学信息"问题的语音基音频-语言模型家族。它在音频编码器+适配器+MoE LLM解码器框架上，经预训练、冷却、SFT、GRPO强化学习与多教师on-policy蒸馏等多阶段训练，将输出扩展为说话人分离转录（[SPK|start-end]text）与通用音频理解，保留30语种16方言及上下文/热词/润色控制。GigaSpee
+- **关键技术点**：纯文本转录只回答"说了什么"：多人会议需说话人归属与时间戳，声学事件无法由转录承载；生产上还需兼顾精度、输出结构与流式/离线部署，分离级联难以统一解决。
+- **主要指标**：- 中英文：LibriSpeech other/clean WER 2.19%/1.23%、AISHELL-1 CER 1.08%，7集中4项最低 - 多语种：GigaSpeechBench宏平均15.09%（上代22.50%）、CV15 3.74%、FLEURS 3.85% - 方言：公开宏CER
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)
 
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-01
@@ -594,5 +603,23 @@
 - **关键技术点**：幻觉缓解研究在纯文本与视觉语言模型中已有后处理修正、专用解码、数据增强与偏好优化等路线，但 SLM-ASR 场景下缺乏对模型内部组件的系统因果定量归因，幻觉产生的机制不明，难以下手抑制。
 - **主要指标**：- HER（dev-clean）：AudioSLM 8.69% 对 Vanilla-SLM 52.01%，降低 43.32 个百分点；插入率 INS 由 3.69% 降至 0.74% - 消融：去 CA 后 HER 升至 11.96%，去 CTC-Gate 升至 14.67%，两模块互补（CTC-G
 - **代码**：https://github.com/bicheng1225/AudioSLM | **Demo**：暂无
+
+---
+## [How Far Can the Gemma 4 Speech Encoder Go Without Changing Its Weights? Saudi and Gulf Arabic Speech Recognition with a Frozen and an Adapter-Augmented Encoder](https://arxiv.org/abs/2610.28673)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：针对沙特/海湾方言电话语音识别难（开放系统SADA WER超40%）且域适应需全量微调代价高的问题，本文研究Gemma 4与EmbeddingGemma 2共享的305M音频编码器在权重完全不变前提下的可迁移性，提出冻结系统（仅训练22.6M的CTC reader）与适配系统（再加3.1M LoRA、41.5M混合CTC/注意力reader与联合解码）。结果显示：冻结系统在5/6人工标注条件上CE
+- **关键技术点**：沙特/海湾方言呼叫中心语音混有语码转换、口播数字串并经8 kHz窄带传输，公开最强系统WER仍达40–50%；常规做法需全量微调大模型或海量标注。作者验证该编码器在两个发布权重中除最终投影外751/752张量逐位相同，但其能否直接复用于阿拉伯语识别尚无研究。
+- **主要指标**：- SADA干净 WER/CER（%）：冻结48.55/24.16，适配40.38/21.31（全系统最低WER），Nemotron-0.6B微调46.50/21.21，Cohere-2B 46.85/27.59 - 客服呼叫（联合解码）：WER 19.20 vs Cohere 19.27（Δ-0.
+- **代码**：https://github.com/AmrKhalil9/frozen-embeddinggemma2-arabic-asr | **Demo**：暂无
+
+---
+## [Bio-Inspired Auditory Processing: Coupling Parallel Resonate-and-Fire Dynamics with Ternary Recurrent Networks for Speech Recognition](https://arxiv.org/abs/2610.29720)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：脉冲神经网络（SNN）在连续上下文相关的ASR任务上长期受限：LIF神经元膜衰减在停顿与音素边界处抹除信息，且现有系统需配稠密ANN解码器而丧失能效优势。本文提出stGRU：三值权重MLGRU负责时序滤波，下游并行共振放电（PRF）神经元生成驱动下一模块的二值脉冲流，把激活离散化移入训练阶段而非部署时量化，学习投影全程无稠密矩阵MAC。Small/Medium/Large在LibriSpeech 
+- **关键技术点**：现有事件驱动ASR多为混合架构（如GSU、IML-Spikeformer配6层ANN解码器），连续解码器重新引入浮点瓶颈与串行执行；纯三值MLGRU虽去掉权重矩阵乘法但保留连续激活，部署仍需独立激活量化环节；而LIF硬重置迫使串行BPTT，训练代价高。
+- **主要指标**：- LibriSpeech test-clean WER：8.09% / 7.04% / 6.14%（Small/Medium/Large，seed 3407，无LM；Large六种子均值6.44%） - test-other WER：20.79% / 18.74% / 17.28% - Aishe
+- **代码**：暂无 | **Demo**：暂无
 
 ---

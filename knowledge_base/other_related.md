@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 68 篇
+共 72 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -297,6 +297,15 @@
 - **关键技术点**：既有音频后门（Koffas 超声、Shi 环境声、Bartolini 污染 Whisper 等）都假定攻击者能控制推理时音频，触发器是"外来附加物"，因而可被输入过滤、VAD 或异常检测削弱。Cai/Ye/Schoof 等虽改用音色、情绪等自然属性，但只在小分类模型验证，推理时仍需语音转换。SAB 的差异是触发器零成本、零接触：目标一开口即触发。
 - **主要指标**：- Whisper-medium 后门成功率（BSR）：90.2% - Parakeet 后门成功率（BSR）：97.0% - Whisper-medium / Parakeet 误触发率（FPR）：1.7% / 0% - 指令注入率（C1）：96.9% - 下游 Agent 有害执行率：87.5%
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [StyleStream 2.0: Fast and Controllable Streaming Voice Style Conversion](https://arxiv.org/abs/2610.28940)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-22
+- **一句话贡献**：StyleStream 1.0 首次实现零样本整体语音风格转换（音色/口音/情感）流式生成，但 16 步像素流匹配使消费级 GPU 端到端延迟约 1s，且风格只能由参考语音指定。本文提出 StyleStream 2.0：将 Stylizer 重训为 few-step 像素 MeanFlow 并施加 Self-Forcing 式逐块自回归微调，端到端延迟降至 520.7ms（约 2× 提速）；同时取
+- **关键技术点**：StyleStream 1.0 确立"去风格内容+风格嵌入重建 mel"两阶段流式 VSC 范式，但存在两项实用瓶颈：像素 mel 上的多步流匹配推理慢、难以交互；风格条件依赖参考语音与 mel 上下文信息分散，无法以自然语言精确设计目标音色或仅修改单一属性。
+- **主要指标**：- 离线 VSC：S-SIM 0.879、A-SIM 0.705、E-SIM 0.806、S-SMOS 4.32、WER 7.00%，全面优于 1.0（0.869/4.23/7.47）及 Vevo、CosyVoice 3.0；仅用 4 NFE - 流式：端到端 520.7ms（300ms 分块+80
+- **代码**：暂无 | **Demo**：https://berkeley-speech-group.github.io/StyleStream2.0
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)
@@ -612,5 +621,32 @@
 - **关键技术点**：现有梵语语料如 Vāksañcayaḥ、IndicVoices 以识别或对话为目标，韵律被当作随机声学特征；面向格律的 Vāgdhenu 仅 5.3 小时单说话人，难支撑零样本多音色朗诵。相同 Chanda 可由不同旋律演唱，亟需解耦“不变格律结构”与“可变旋律实现”的数据。
 - **主要指标**：- XTTS-v2 seen UTMOS：4.01（次优 EnGenTTS 3.87） - XTTS-v2 unseen UTMOS：3.24（次优 Voxtral 3.12） - XTTS-v2 seen CMOS：-0.0386；unseen CMOS：-0.0502 - 16 位专家 5 级评
 - **代码**：暂无（作者称将公开数据集与源码） | **Demo**：https://shlokadhara.vercel.app/
+
+---
+## [MuseFlow-TSE: Music-Aware Target Speech Extraction via Cross-Source Band-Splitting and Data-to-Data Flow Matching](https://arxiv.org/abs/2610.29119)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：现有目标语音抽取（TSE）几乎只在无音乐混合上验证，面对宽带、强谐波、与语音高度重叠的背景音乐时判别式方法受掩码上限约束、生成式方法又易幻觉身份漂移且步数多。本文提出 MuseFlow-TSE，按"判别式删除+生成式插入"分两阶段：Stage-1 音乐感知的跨源分频抽取器联合估计目标/干扰人/音乐/噪声，Stage-2 以判别估计为锚点、对干扰轨做负条件、按难度自适应跑 1–4 步数据到数据流匹配
+- **关键技术点**：真实场景含背景音乐、歌唱、噪声与混响，而 TSE 研究几乎全在无音乐混合上评测，zero-shot 含音乐评测明显退化；纯判别只能删干扰无法补目标细节，纯生成从噪声采样慢且易把被删的伴奏或歌唱幻听回来造成身份漂移。
+- **主要指标**：- Config-D SI-SDRi 13.2→13.0 dB / PESQ 2.71 / SIM 0.89 / WER 12.0% / MusicLeak 2.9% - Config-DG SI-SDRi 13.2 dB / PESQ 2.88 / SIM 0.90 / NFE 1.6 - 关键对
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Where Does Timbre Hide? Localizing Speaker Information in Speech Signals](https://arxiv.org/abs/2610.29150)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：音色相似性是 VC、克隆 TTS 与零样本语音模型的核心评测目标，但生成语音"不像目标说话人"往往源于说话人信息分离不彻底。本文以说话人身份为可测代理，在中英日三路/歌唱数据上系统探测频带、相位/幅度、WORLD 源/滤波、清浊音、SSL 层与 EnCodec/HuBERT token，并配 45 人听音测试。结果：感知音色集中于 1–8 kHz 幅度谱与声道包络（Same <8kHz 评分 4.
+- **关键技术点**：音色难以直接规模化测量；经典子频带研究早于高采样率语料、神经 codec 与 SSL 探针，机器可分辨性与人类感知相似度长期混为一谈，导致 VC/TTS 不清楚该在何处注入说话人条件。
+- **主要指标**：- 听音（45 人，1–5 分）：Same <8 kHz 4.45±0.35 vs 仅 >8 kHz 1.24±0.29，低/中频配对差 +2.57（p=1.7e-38） - mel-MLP 说话人分类：VCTK 1–4 kHz 92.1%、4–8 kHz 89.3%、20–24 kHz 50.1%
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [XingChen-UniFE: A Unified Generative Speech Front-End via Complementary Acoustic-Semantic Modeling](https://arxiv.org/abs/2610.29164)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-22
+- **一句话贡献**：针对噪声、混响、削波、丢包、带限与干扰说话人等复杂退化下GSR与TSE各用独立模型、架构割裂且部署成本高的问题，本文提出统一LALM模型XingChen-UniFE，将两类任务建模为条件式离散token生成：冻结WavLM语义分支与复谱可学习声学分支经双向交叉注意力显式融合，连同任务token与注册语音条件化从零训练的自回归主干，生成交错延迟排列的codec token。Libri2Mix去噪PE
+- **关键技术点**：判别式GSR依赖任务专属架构、难统一异构恢复任务，严重退化需同时建模声学、语言与说话人特征；LALM所用SSL特征未针对波形重建优化，PASE/L3-SE等声学表征仍源自SSL、缺频相建模，融合仅加法/拼接。
+- **主要指标**：- Denoise：PESQ 2.137、STOI 90.56、SBS .916、LPS .930，全指标最佳（超次优UniTok 2.100） - TSE：PESQ 2.093、SBS .888；TSE&Denoise：PESQ 1.703、SBS .852、LPS .714 - GSR平均LPS
+- **代码**：暂无 | **Demo**：暂无
 
 ---
