@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 95 篇
+共 97 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -461,6 +461,15 @@
 - **代码**：https://github.com/jpvigneaux/steering-intonation-tts | **Demo**：暂无
 
 ---
+## [HeyGen Voice: Scene-Aware Voice Cloning for Talking Videos](https://arxiv.org/abs/2610.30470)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-23
+- **一句话贡献**：现有零样本音色克隆只以参考录音定义说话人，会把手机录音的麦克风、房间与语气一并搬进任何画面，导致“人出现在录音棚却仍像在打电话”。HeyGen Voice 提出场景感知克隆：从日常录音保留“谁在说”，由目标图像与说话人/背景描述决定“怎么说、在哪说”。模型为多模态自回归 Transformer 预测离散声学码，再由 flow-matching 解码为 44.1 kHz 波形，并经五阶段课程训练。在
+- **关键技术点**：描述引导 TTS 无图像输入，人脸/图像条件 TTS 只“编造”音色或只添加场景声学，音视频联合模型则无法保留指定说话人；同时常规 TTS 数据中参考与目标同源，模型可走“同录音捷径”而忽略图像，真实跨场景同人配对又稀缺；图像加两段描述仍欠定，长文本分块合成会漂移音色与混响。
+- **主要指标**：- 跨场景音色相似度：voice-clone 对目标 0.590、full-clone 对参考 0.757，均列第一 - 场景对齐：音-音 0.637、音-图 0.282，高于 Cartesia 0.599/0.261、ElevenLabs 0.607/0.269 - 关键对比：目标相似度较 Car
+- **代码**：暂无 | **Demo**：https://heygen.com/heygen-voice
+
+---
 ## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
 
 - **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：
@@ -855,5 +864,14 @@
 - **关键技术点**：跨语言克隆的参考音频同时承载音色与发音习惯，口音泄漏难以在不重训的前提下抑制。现有方案依赖多语/多口音数据训练时解耦，或用TTS→VC级联逐句转换导致延迟高、重复/插入错误多（3.2%）；Activation Steering与标准CFG只作用于离线方向或速度场混合，无法处理自回归生成中双参考分支的历史不同步问题。
 - **主要指标**：- 法语LID残留质量：0.093→0.025（-0.068，95% CI [-0.119,-0.027]，降73%） - WER：0.009（各组最低，较级联0.047降约81%）| GOP：4.750（最高，较级联+0.372） - ECAPA相似度：较直接克隆-0.042，较锚点克隆+0.15
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Measuring the Verifier's Floor: How Much Apparent Rare-Word Text-to-Speech Error Is ASR Error?](https://arxiv.org/abs/2610.31470)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-23
+- **一句话贡献**：TTS 评测普遍采用 ASR 往返（round-trip）打分，但 WER 同时计入了识别器自身的错误，这一"验证器地板"此前未被量化。作者在与测试句一一对应的人工录音上运行同一批识别器，得到诊断基线，并比较三种 TTS 错误估计：标准往返、单识别器掩码、三识别器仲裁。结果显示 OWSM v3.1 在人工语音上漏掉 32.9% 的极稀有 LibriSpeech 词（FLEURS 66.7%），三识
+- **关键技术点**：ASR 往返是检验 TTS 是否"说对词"的事实标准，best-of-N 系统更直接把识别器当裁判。但识别器本身在稀有词、人名、外来词上错误率高，而这恰是 TTS 错误集中的区域；已有工作报告稀有词是"真实上限"，却未在真值音频上测量假阳性地板。单识别器掩码（丢弃识别器在人工语音中漏掉的词）看似合理，但其偏差未经验证。
+- **主要指标**：- 人工语音上 C 的漏检率：常见词 1.5%、极稀有词 32.9%（LibriSpeech）；FLEURS 为 3.2% 与 66.7% - 三识别器全漏：极稀有词 21.6%（LibriSpeech）、41.7%（FLEURS），这部分词完全不可判定 - 仲裁后极稀有词错误：F5-TTS 3.4
+- **代码**：暂无（作者承诺公开代码、句表与全部转写） | **Demo**：暂无
 
 ---

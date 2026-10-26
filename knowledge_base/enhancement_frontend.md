@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 37 篇
+共 39 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -332,6 +332,24 @@
 - **一句话贡献**：真实语音的混响、噪声、削波难以精确模拟，配对数据几乎不可得，监督式增强在跨域环境性能受限。本文提出 SE-MSB，首个完全非配对、端到端在原始波形上运行的语音增强框架：以扩散薛定谔桥（DSB）学习干净与退化语音分布间的随机输运过程，仅用两独立分布样本训练；搭配自研高效 Mamba 扩散网络，借线性序列复杂度与少步采样能力，同等计算预算下超越非配对基线，推理快约两个数量级，并在混合退化任务上逼近监督
 - **关键技术点**：
 - **主要指标**：
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [HC-AINet: An Auditory-Inspired Network with Harmonic Compensation for Low-Complexity Speech Enhancement](https://arxiv.org/abs/2610.30818)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-10-23
+- **一句话贡献**：针对资源受限设备上的语音增强，听觉子带方法虽然计算量低，但平滑的子带增益难以区分同一 ERB 带内的谐波峰与谐波间噪声。论文提出 HC-AINet：用三角 ERB 滤波器组压缩特征，由倒残差编码器、时序 Conformer 与并行频率门控卷积构成的轻量网络同时预测全局增益、谐波增益及其融合权重；再由含噪谱导出的谐波位置图在原线性频点上做选择性补偿，并以补偿幅度、含噪相位和最小相位线索驱动紧凑相位估
+- **关键技术点**：幅度域、复数域与时域方法均受中间特征维度制约；RNNoise、PercepNet 等听觉子带方法在低分辨率上预测增益，重建时保留原始线性频谱。作者用 32 带 oracle 增益实验说明该路径的局限：同一子带内谐波与噪声共享增益，重建后窄带谱结构仍有残留差异（oracle ERB 仅 3.58 PESQ，Clean 为 4.50）。已有 HGCN、HC-APNet、DeepFilterNet 提示应为紧凑增益无法分辨的细节额外分配处理能力，但前者非低复杂度框架，后者需多帧复数滤波。
+- **主要指标**：- VoiceBank-DEMAND（64 带）：PESQ 3.20、CSIG 4.27、CBAK 3.65、COVL 3.74、STOI 0.95，参数 0.27M - VoiceBank-DEMAND（32 带）：PESQ 3.18、CSIG 4.15、CBAK 3.62、COVL 3.68、S
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [When Do Self-Supervised Representations Help Speech Restoration?](https://arxiv.org/abs/2610.30869)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-10-23
+- **一句话贡献**：本文质疑"SSL 特征净化"（先把退化语音的 SSL 特征回归为干净特征，再以其为条件驱动修复）是否总是有效。作者在 4 种 SSL 编码器与 3 种神经质量代理及 LSD 上发现"感知相关性坍缩"：轻度退化时 SSL 特征距离与感知质量强相关，严重退化时相关性崩溃。为此提出 Early Restoration Injection（ERI），把修复骨干 SEMamba++ 第 2 层已部分修复的中
+- **关键技术点**：现有 SSL 修复方案包括知识蒸馏、直接以退化 SSL 特征作条件，以及先净化特征（GenSE/SenSE 用语言模型，Miipher/SIDON/PASE 微调 SSL）。第三类隐含"特征距离越小修复越好"的假设却未经检验；若用预修复模型为 SSL 提供干净输入，又需额外开销。
+- **主要指标**：- PESQ：2.82（SEMamba++ 2.76，TF-GridNet 2.47） - ESTOI：0.71（SEMamba++ 0.70，TF-GridNet 0.68） - LPS：0.92（SEMamba++ 0.87，SIDON 0.88） - UTMOS：3.86，仅次于 SIDON 
 - **代码**：暂无 | **Demo**：暂无
 
 ---
