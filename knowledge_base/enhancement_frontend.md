@@ -338,18 +338,18 @@
 ## [HC-AINet: An Auditory-Inspired Network with Harmonic Compensation for Low-Complexity Speech Enhancement](https://arxiv.org/abs/2610.30818)
 
 - **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-10-23
-- **一句话贡献**：针对资源受限设备上的语音增强，听觉子带方法虽然计算量低，但平滑的子带增益难以区分同一 ERB 带内的谐波峰与谐波间噪声。论文提出 HC-AINet：用三角 ERB 滤波器组压缩特征，由倒残差编码器、时序 Conformer 与并行频率门控卷积构成的轻量网络同时预测全局增益、谐波增益及其融合权重；再由含噪谱导出的谐波位置图在原线性频点上做选择性补偿，并以补偿幅度、含噪相位和最小相位线索驱动紧凑相位估
-- **关键技术点**：幅度域、复数域与时域方法均受中间特征维度制约；RNNoise、PercepNet 等听觉子带方法在低分辨率上预测增益，重建时保留原始线性频谱。作者用 32 带 oracle 增益实验说明该路径的局限：同一子带内谐波与噪声共享增益，重建后窄带谱结构仍有残留差异（oracle ERB 仅 3.58 PESQ，Clean 为 4.50）。已有 HGCN、HC-APNet、DeepFilterNet 提示应为紧凑增益无法分辨的细节额外分配处理能力，但前者非低复杂度框架，后者需多帧复数滤波。
-- **主要指标**：- VoiceBank-DEMAND（64 带）：PESQ 3.20、CSIG 4.27、CBAK 3.65、COVL 3.74、STOI 0.95，参数 0.27M - VoiceBank-DEMAND（32 带）：PESQ 3.18、CSIG 4.15、CBAK 3.62、COVL 3.68、S
+- **一句话贡献**：针对低算力听觉子带方法增益过于平滑、难以区分谐波峰与带间噪声的问题，提出HC-AINet：三角ERB滤波器组将特征压缩至32/64带，轻量网络预测全局增益、谐波增益与融合权重；由带噪谱导出的谐波位置图把谐波贡献限制在原始频率栅格的选定频点上补偿，再以最小相位线索条件化紧凑相位估计器重建波形。64带模型仅约0.27M参数、1.08 G MAC/s，在VoiceBank-DEMAND取得PESQ 3.
+- **关键技术点**：资源受限设备上增强质量与模型规模难兼顾；RNNoise/PercepNet等听觉子带方法以非均匀分辨率省算力，但增益频率分辨率随之受限——一个ERB带内谐波与带间噪声共存，共享增益无法独立调节窄带结构，oracle 32带ERB增益重建仍留残差，且直接复用带噪相位使相位误差无从解决。
+- **主要指标**：- VoiceBank-DEMAND（64带）：PESQ 3.20、CSIG 4.27、CBAK 3.65、COVL 3.74、STOI 0.95，0.27M参数 - 对比自家HC-APNet-64 PESQ 2.86→3.20（+0.34，参数0.22→0.27M）；PESQ为表中最高，高于GTC
 - **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [When Do Self-Supervised Representations Help Speech Restoration?](https://arxiv.org/abs/2610.30869)
 
 - **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-10-23
-- **一句话贡献**：本文质疑"SSL 特征净化"（先把退化语音的 SSL 特征回归为干净特征，再以其为条件驱动修复）是否总是有效。作者在 4 种 SSL 编码器与 3 种神经质量代理及 LSD 上发现"感知相关性坍缩"：轻度退化时 SSL 特征距离与感知质量强相关，严重退化时相关性崩溃。为此提出 Early Restoration Injection（ERI），把修复骨干 SEMamba++ 第 2 层已部分修复的中
-- **关键技术点**：现有 SSL 修复方案包括知识蒸馏、直接以退化 SSL 特征作条件，以及先净化特征（GenSE/SenSE 用语言模型，Miipher/SIDON/PASE 微调 SSL）。第三类隐含"特征距离越小修复越好"的假设却未经检验；若用预修复模型为 SSL 提供干净输入，又需额外开销。
-- **主要指标**：- PESQ：2.82（SEMamba++ 2.76，TF-GridNet 2.47） - ESTOI：0.71（SEMamba++ 0.70，TF-GridNet 0.68） - LPS：0.92（SEMamba++ 0.87，SIDON 0.88） - UTMOS：3.86，仅次于 SIDON 
+- **一句话贡献**：本文追问"SSL特征清洗是否总利于语音恢复"，通过t-SNE与Spearman相关分析发现感知相关性坍缩现象：轻度退化为SSL特征距离与感知质量强相关，一旦超过临界退化严重度，相关性崩溃，最小化SSL损失不再带来质量提升。据此提出Early Restoration Injection（ERI），将恢复主干中间层的部分恢复特征经轻量条件网络注入SSL，缓解坍缩。在VoiceFixer测试集上ERI取
+- **关键技术点**：主流SSL特征清洗方法默认"clean-degraded的SSL特征距离越小、恢复质量越好"，该假设从未被检验；在强噪声、窄带、削波、丢包等严重退化下，清洗目标与感知恢复目标实际失配，SSL损失梯度失效。
+- **主要指标**：- PESQ：2.82（全场最优，较SEMamba++的2.76提升0.06，较最强回归基线TF-GridNet的2.47提升0.35） - ESTOI：0.71（最优，vs 0.68）；LPS：0.92（最优） - OVRL：3.10；UTMOS：3.86（仅次于SIDON的3.97）；RTF从0
 - **代码**：暂无 | **Demo**：暂无
 
 ---

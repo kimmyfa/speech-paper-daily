@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 74 篇
+共 73 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -311,19 +311,10 @@
 ## [Spark-Audio 1.0 Technical Report](https://arxiv.org/abs/2610.31292)
 
 - **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-23
-- **一句话贡献**：论文针对现有语音系统“听得清但理解不足”、且顶尖模型依赖国外算力栈的问题，提出端到端国产算力训练的语音基础模型 Spark-Audio 1.0。模型以 0.65B 稠密音频编码器对接 30B-A3B MoE 语言模型，输入文本或语音、输出文本，覆盖 99 种语言与 202 种方言的识别、翻译、音频理解及语音/文本对话。编码器采用表征增强 BEST-RQ 预训练加三阶段多任务监督，音频-LLM 采用
-- **关键技术点**：传统 ASR 只优化逐字转写，丢弃情感、说话人属性、韵律与环境声等信息；现有多模态语音模型虽统一识别、翻译与理解，但多依赖国外算力与超大规模数据，国产硬件上端到端训练可行性未验证。
-- **主要指标**：- FLEURS 中文 CER：1.88%，Qwen3.5-Omni-Flash 2.90%，相对降低 35.2% - FLEURS 英文 WER：2.25%，对比系统最佳 2.70%，相对降低 16.7% - 内部 202 方言 CER：14.29%，最佳基线 19.79%，绝对降 5.50 个百
+- **一句话贡献**：传统ASR只优化逐字转写，丢弃了情感、性别年龄、韵律与环境声等副语言信息，且语音基础模型长期依赖受限的海外算力栈。科大讯飞发布Spark-Audio 1.0：由0.65B稠密音频编码器与30B-A3B MoE LLM耦合的语音基础模型，基于1300万小时音频与大规模文本训练，支持99语言/202方言语音识别、语音翻译、音频感知理解及语音/文本对话，全程在华为昇腾910B与海光BW1000国产芯片上
+- **关键技术点**：现有ASR面向单一转写目标，难以统一声学感知与语言推理；同时竞争性语音基础模型被认为需要不断堆叠数据与参数，且训练依赖海外软硬件生态，国产算力上端到端训练可行、少量数据能否支撑实用场景均属未验证问题。
+- **主要指标**：- FLEURS-zh CER 1.88%、FLEURS-en WER 2.25%，较最优对照错误率相对降低35.2%/16.7%（Flash为2.90/3.70） - FLEURS 14/20/64语言平均WER/CER 2.81/6.30/31.89%，前两组最优，64语组逊于Gemini 3.
 - **代码**：暂无 | **Demo**：https://iflytekresearch.iflytek.com/experience/spark-audio
-
----
-## [Hear Every Sound Object: Rescuing Overlooked Sources in Auditory Scene Analysis](https://arxiv.org/abs/2610.30874)
-
-- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-23
-- **一句话贡献**：面向对象式听觉场景分析（ASA）普遍采用“末层拆分”策略，仅在网络最后一层把混合场景特征拆成各声源的对象特征，导致同一混合内强声源与弱声源性能差距巨大。作者用逐层 CKA 分析发现，声源支配度排序与其 CKA 值高度相关，且声源间 CKA 差距在中间层最小、到末层显著扩大，因而提出在中间层提前拆分对象特征的即插即用细化结构 PARASITE，配合对象级门控融合（OGF）与窗口化跨对象注意力（WCO
-- **关键技术点**：现有 SED/SELD/分离模型通常只学习一个混合场景表征，任务解码器直接从该表征读取结果，从不显式形成单源表征；DeepASA 虽引入对象特征，但只在最后一层拆分。此时末层场景特征已被强声源主导，弱声源信息被压制，造成 rank 1 与 rank 5 之间 10.60 dB SI-SDR、21.32° 定位误差和 27.4 个百分点的分类精度差距。
-- **主要指标**：- ASA2 分离：SI-SDRi 14.24 dB，direct SI-SDRi 14.64 dB，优于 DeepASA-Loco 的 13.88/13.78 dB 与 CoI 变体的 13.64/14.06 dB - ASA2 SELD：0.147，ER 19.2%，F1 83.3%，LE 12
-- **代码**：https://sites.google.com/view/deepasapp/ | **Demo**：https://sites.google.com/view/deepasapp/
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)

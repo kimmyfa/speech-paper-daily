@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 70 篇
+共 69 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -620,15 +620,6 @@
 - **一句话贡献**：脉冲神经网络（SNN）在连续上下文相关的ASR任务上长期受限：LIF神经元膜衰减在停顿与音素边界处抹除信息，且现有系统需配稠密ANN解码器而丧失能效优势。本文提出stGRU：三值权重MLGRU负责时序滤波，下游并行共振放电（PRF）神经元生成驱动下一模块的二值脉冲流，把激活离散化移入训练阶段而非部署时量化，学习投影全程无稠密矩阵MAC。Small/Medium/Large在LibriSpeech 
 - **关键技术点**：现有事件驱动ASR多为混合架构（如GSU、IML-Spikeformer配6层ANN解码器），连续解码器重新引入浮点瓶颈与串行执行；纯三值MLGRU虽去掉权重矩阵乘法但保留连续激活，部署仍需独立激活量化环节；而LIF硬重置迫使串行BPTT，训练代价高。
 - **主要指标**：- LibriSpeech test-clean WER：8.09% / 7.04% / 6.14%（Small/Medium/Large，seed 3407，无LM；Large六种子均值6.44%） - test-other WER：20.79% / 18.74% / 17.28% - Aishe
-- **代码**：暂无 | **Demo**：暂无
-
----
-## [Text-Only LLM Correctors Break Correct Transcripts: A Repair-Damage Analysis of Audio Grounding in ASR Error Correction](https://arxiv.org/abs/2610.30385)
-
-- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-10-23
-- **一句话贡献**：论文指出，以整体 WER 评价 ASR 后处理 LLM 会掩盖其“修复”与“破坏”两种相反作用。作者提出词级精确分解，将 WER 变化拆为 repaired、damaged 与 insertion 三项，并设计音频/纯文本及自纠/跨系统两因子的五单元实验，在三个语料上比较 Gemini 2.5 Flash 等模型。结果显示，纯文本自纠会把 13–32% 本已正确的转写改坏，加入音频后降至 1–3%
-- **关键技术点**：零样本提示式 ASR 纠错常反而抬高错误率，已有工作发现 LLM 会“纠正”无错句。将音频输入纠错器虽在整体指标上有效，但整体 WER 混合了修复与破坏两种相反流量，无法说明音频究竟改变了什么。
-- **主要指标**：- 自纠破坏率：纯文本 31.9%/16.3%/12.8%，加音频后 2.6%/1.0%/2.3% - 自纠分量变化：damage 下降 0.88–2.83 pt，repair 同时下降 0.15–0.74 pt - 跨系统分量变化：damage 下降 1.31/0.18/0.71 pt，repai
 - **代码**：暂无 | **Demo**：暂无
 
 ---
