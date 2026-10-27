@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 97 篇
+共 99 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -470,6 +470,15 @@
 - **代码**：暂无 | **Demo**：https://heygen.com/heygen-voice
 
 ---
+## [DRAMA-Eval: A Benchmark for Context-Aware, Multi-Turn, Multi-Speaker Speech Generation](https://arxiv.org/abs/2610.31796)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：现有语音生成评测将指令遵循、多轮对话与多说话人一致性割裂评估，缺少面向"结构化剧本驱动整场景生成"的统一基准。作者提出 DRAMA-Eval：以真实影视/播客音频构建 1,038 例、12.50 小时中英双语测试集，采用含场景上下文、角色档案与逐句指令的三层剧本表征，并设计客观（A1 字错率、A2 说话人一致性）、局部（B1 指令遵循、B2 韵律流畅、B3 表现力）、全局（C1 交互自然度、C2 
+- **关键技术点**：有声书与广播剧需求推动语音生成走向剧本驱动，但指令可控 TTS 只针对孤立话语、多轮对话模型仅以纯文本与说话人 ID 为条件、音视频生成模型的音频分支评测仍停留在音质与可懂度。现有基准（InstructTTSEval、SwanBench-Speech、MSBench 等）各自只覆盖指令、一致性或场景中的一项，无法回答"系统能否在同一长场景中同时保持音色、落实表现力指令并维持交互连贯"。
+- **主要指标**：- 客观：SeedAudio 中文 CER 最低 2.58；FireRedTTS3 英文 WER 最低 3.97；MOSS-TTSD 说话人一致性最高（中 0.78、英 0.77） - 局部：SeedAudio B1 62.2/56.5、B3 64.2/57.0（中/英）为双语最优；StepAudi
+- **代码**：https://github.com/ASLP-lab/DRAMA-Eval | **Demo**：https://ASLP-lab.github.io/DRAMA-Eval-Demo
+
+---
 ## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
 
 - **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：
@@ -873,5 +882,14 @@
 - **关键技术点**：现有表达性TTS依赖手工情绪标签或目标情绪参考音频，交互式场景难以满足；此前face-to-speech研究多把人脸当作音色代理，普遍不建模细粒度情绪强度，同属happy的轻度与狂喜被映射到同样声学实现，表现力与视觉线索失配。
 - **主要指标**：- 客观强度准确率：64.4%（L1 76.4/L2 42.8/L3 74.1），主观75.2%（82.2/69.5/73.9） - 可懂度与自然度：WER 6.9%、UTMOS 3.14、MOS 3.25±0.26（95% CI）、说话人忠实度4.13 - 关键对比：较真值条件EmoSpeech客
 - **代码**：https://github.com/luelhagos/Emofi | **Demo**：暂无
+
+---
+## [X-Dubbing: Speech-to-Speech Translation under Temporal and Visual Constraints](https://arxiv.org/abs/2610.32042)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-26
+- **一句话贡献**：论文研究固定视频跨语言配音：源视频不动，生成与源语音时长、停顿结构和口型同步的目标语语音。作者指出，只做时长感知翻译（TTS 看不到画面）或只做视频感知 TTS（脚本长度不受控）都会导致局部错位或语速失真，端到端 S2ST 又缺少成对配音数据。为此提出 X-Dubbing，把任务拆成共享"语言无关时间预算"的 Dubbing Translator（Qwen2.5-Omni-3B，输出带 `<pau
+- **关键技术点**：配音要求译文既忠实又能在源时长内自然说出，但语言间音节速率、韵律差异大。现有时长感知 MT 只用文本长度代理等时性，无法知道下游 TTS 实际如何实现；视频感知 TTS 在脚本固定时靠拉伸语速硬对齐，会损害自然度；成对配音数据稀缺使端到端 S2ST 难以监督。
+- **主要指标**：- 翻译质量：ASR-BLEU 42.34、ASR-chrF++ 64.06，最强基线 SeamlessExpressive 为 38.44/60.27 - 说话人相似度：SpkSim 0.497（WavLM-ECAPA-TDNN 余弦），Hibiki 仅 0.358 - 时间对齐：SyllRate
+- **代码**：暂无 | **Demo**：暂无
 
 ---

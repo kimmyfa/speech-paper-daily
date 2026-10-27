@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 69 篇
+共 70 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -359,6 +359,15 @@
 - **一句话贡献**：Qwen-Audio-3.1-ASR是针对"转录无法表达谁在何时说话及非词语声学信息"问题的语音基音频-语言模型家族。它在音频编码器+适配器+MoE LLM解码器框架上，经预训练、冷却、SFT、GRPO强化学习与多教师on-policy蒸馏等多阶段训练，将输出扩展为说话人分离转录（[SPK|start-end]text）与通用音频理解，保留30语种16方言及上下文/热词/润色控制。GigaSpee
 - **关键技术点**：纯文本转录只回答"说了什么"：多人会议需说话人归属与时间戳，声学事件无法由转录承载；生产上还需兼顾精度、输出结构与流式/离线部署，分离级联难以统一解决。
 - **主要指标**：- 中英文：LibriSpeech other/clean WER 2.19%/1.23%、AISHELL-1 CER 1.08%，7集中4项最低 - 多语种：GigaSpeechBench宏平均15.09%（上代22.50%）、CV15 3.74%、FLEURS 3.85% - 方言：公开宏CER
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Pseudo-Labels as Rewards, Not Targets: Group-Relative Policy Optimization for Semi-Supervised ASR](https://arxiv.org/abs/2610.32572)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：论文针对无标注目标域语音自适应中"伪标签经 SFT 被学生模型逐 token 模仿、从而继承教师错误"的问题，提出把同一批伪标签从监督目标改为 GRPO 的奖励参考，用 1−WER 构造组内相对优势。方法在银行、医疗、保险三个领域及四种低资源语言上验证，银行域相对 SFT 取得 29.3% 至 56.2% 的 WER 相对提升；Whisper Tiny 伪标签下 GRPO 达 14.06% WER
+- **关键技术点**：领域自适应通常由 Whisper 等强教师生成伪标签，再用交叉熵 SFT 训练学生，但每个伪标签 token 无论对错都被当作目标，学生会记忆并放大教师错误。已有迭代伪标签、数据筛选、多模型融合等方法仍以"复现教师输出"为目标，未改变损失函数本身。
+- **主要指标**：- 银行域 WER：Whisper Large-V3 伪标签下 GRPO 12.17%、SFT 17.21%；Tiny 伪标签下 GRPO 14.06%、SFT 32.11%，绝对差 18.05 点 - 教师鲁棒性：标签 WER 每恶化 1 点，SFT 学生 WER 平均升 1.31 点，GRPO 
 - **代码**：暂无 | **Demo**：暂无
 
 ---

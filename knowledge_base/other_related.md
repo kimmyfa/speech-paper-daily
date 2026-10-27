@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 73 篇
+共 75 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -315,6 +315,15 @@
 - **关键技术点**：现有ASR面向单一转写目标，难以统一声学感知与语言推理；同时竞争性语音基础模型被认为需要不断堆叠数据与参数，且训练依赖海外软硬件生态，国产算力上端到端训练可行、少量数据能否支撑实用场景均属未验证问题。
 - **主要指标**：- FLEURS-zh CER 1.88%、FLEURS-en WER 2.25%，较最优对照错误率相对降低35.2%/16.7%（Flash为2.90/3.70） - FLEURS 14/20/64语言平均WER/CER 2.81/6.30/31.89%，前两组最优，64语组逊于Gemini 3.
 - **代码**：暂无 | **Demo**：https://iflytekresearch.iflytek.com/experience/spark-audio
+
+---
+## [CoupleFlow: Null-Calibrated Auditory Attention Decoding With Time-Locked Brain-Speech Coupling and Flow-Matching Likelihood Ratios](https://arxiv.org/abs/2610.32950)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：现有基于脑电（EEG）的听觉注意力解码（AAD）常报告 1 秒内 95% 以上准确率，但主要依赖试次泄漏、眼动和响度等捷径，换到未听过的语音时跌回随机水平。本文提出 CoupleFlow，只用神经嵌入与各候选语音嵌入之间的时间协方差进行打分，使无信息脑电必然给出随机判决；同时用条件流匹配头实现基于点互信息的似然比判决规则。作者在 9 个 EEG/MEG 数据集（286 名听者、约 293 小时、4
+- **关键技术点**：AAD 通过比较脑响应与竞争语音流来判定被注意的说话人。刺激重建类方法稳健但需数十秒信号，深度重建提升有限；直接分类器报告的 95–97%@1 s 多来自同试次窗口重叠与注视方向，跨试次即接近随机。各研究预处理互不相同，且多数只报告一两个窗长，无法比较或预测所需时长。
+- **主要指标**：- 5 s 竞争说话人准确率：KU Leuven 72.7%、DTU 76.2%、Fuglsang'20 79.6%、ESAA 77.9%、KUL-255ch 69.4%、Broderick 63.6% - 单说话人匹配–不匹配：SparrKULee 92.2%（1 s 时 73.5%）、MEG-M
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)
@@ -657,5 +666,14 @@
 - **关键技术点**：判别式GSR依赖任务专属架构、难统一异构恢复任务，严重退化需同时建模声学、语言与说话人特征；LALM所用SSL特征未针对波形重建优化，PASE/L3-SE等声学表征仍源自SSL、缺频相建模，融合仅加法/拼接。
 - **主要指标**：- Denoise：PESQ 2.137、STOI 90.56、SBS .916、LPS .930，全指标最佳（超次优UniTok 2.100） - TSE：PESQ 2.093、SBS .888；TSE&Denoise：PESQ 1.703、SBS .852、LPS .714 - GSR平均LPS
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [SURE-Tagger: Structured Speech Representations for Compositional Evaluation and Targeted Data Selection](https://arxiv.org/abs/2610.32198)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-26
+- **一句话贡献**：自由形式语音描述存在属性覆盖不一致、遗漏语义模糊的问题，难以支撑跨数据集的组合式评测。作者提出 SURE-Tagger，以五层半结构化表示联合显式属性值、开放式描述与证据不足时的 null 弃权，并由专用感知模型提供证据、LLM 统一裁决。构建 Tag-Bench（500 条合成场景 + 650 条真实录音），在 29 个维度上取得真实语音 25 项、合成语音 24 项最优，综合得分 77.28%
+- **关键技术点**：现有语音描述模型虽能覆盖语言、说话人、副语言与环境信息，但自由文本的属性覆盖和措辞不稳定；某属性未出现既可能是缺失，也可能是未观察或不确定，不能视为确认不存在。数据集级平均分还会掩盖共现语音条件下的模型差异，因而需要可联合查询、可区分弃权的样本级表示。
+- **主要指标**：- 综合标注得分：77.28%，对比 Qwen3-Omni-Flash 60.93%、Qwen3-Omni-Captioner 58.20% - 结构化 19 轴：83.19%，基线为 61.55% 与 60.41%；描述 10 轴：66.04%，基线为 59.74% 与 53.98% - 弃权控制
+- **代码**：https://github.com/PigeonDan1/sure-tagger | **Demo**：暂无
 
 ---

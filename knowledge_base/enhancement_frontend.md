@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 39 篇
+共 40 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -350,6 +350,15 @@
 - **一句话贡献**：本文追问"SSL特征清洗是否总利于语音恢复"，通过t-SNE与Spearman相关分析发现感知相关性坍缩现象：轻度退化为SSL特征距离与感知质量强相关，一旦超过临界退化严重度，相关性崩溃，最小化SSL损失不再带来质量提升。据此提出Early Restoration Injection（ERI），将恢复主干中间层的部分恢复特征经轻量条件网络注入SSL，缓解坍缩。在VoiceFixer测试集上ERI取
 - **关键技术点**：主流SSL特征清洗方法默认"clean-degraded的SSL特征距离越小、恢复质量越好"，该假设从未被检验；在强噪声、窄带、削波、丢包等严重退化下，清洗目标与感知恢复目标实际失配，SSL损失梯度失效。
 - **主要指标**：- PESQ：2.82（全场最优，较SEMamba++的2.76提升0.06，较最强回归基线TF-GridNet的2.47提升0.35） - ESTOI：0.71（最优，vs 0.68）；LPS：0.92（最优） - OVRL：3.10；UTMOS：3.86（仅次于SIDON的3.97）；RTF从0
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Noisy Target Training Meets Drifting for Weakly-Supervised Speech Enhancement](https://arxiv.org/abs/2610.32870)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-10-26
+- **一句话贡献**：带噪目标训练（NyTT）用真实含噪录音作训练目标，以规避人工加噪训练集造成的域失配，但目标本身含噪，模型倾向残留噪声。作者把 Sinkhorn drifting 生成式损失引入 NyTT：用非配对干净语音在语音质量评估模型 UrgentMOS 的 768 维句级隐空间构造吸引—排斥漂移场，使增强语音分布逼近干净语音分布。在 VoiceBank-DEMAND 上，NyTT+ 加非配对漂移后 PESQ
+- **关键技术点**：主流干净目标训练依赖人工加噪的合成配对数据，与真实声学条件存在域失配，真实录音上性能下降。NyTT 改用同域含噪观测作目标，只需再叠加额外噪声构造更噪输入，但理论分析表明其最优解会保留部分观测噪声与附加噪声，感知质量受限；基于均值教师的 NyTT+ 虽提供更干净的伪目标，却仍未显式约束增强语音分布与干净语音分布一致。
+- **主要指标**：- VBDM（95% 置信区间）：NyTT+ 为 SI-SDR 18.58±0.21 dB、PESQ 2.63±0.04、DNSMOS 3.53±0.02、UTMOS 3.81±0.02；加非配对漂移后为 18.58±0.21、2.69±0.04、3.59±0.02、3.93±0.02 - 关键对比
 - **代码**：暂无 | **Demo**：暂无
 
 ---

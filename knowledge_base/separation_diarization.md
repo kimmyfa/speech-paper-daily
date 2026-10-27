@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 22 篇
+共 25 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -90,6 +90,15 @@
 - **关键技术点**：端到端日志模型的输出通道数训练时固定，Streaming Sortformer v2.1 仅 4 槽，官方称其跟踪"四个最主要说话人"。槽位实为并发通道：占用者静音即释放、交给下一位，到达序缓存无法充当持久身份库。既有方案或重训加宽槽位、或联合训练链接器，均需训练且改动主机。
 - **主要指标**：- 超上限 DER：36.81% → 22.64%（−14.17 点，全为混淆） - 上限内 DER：15.32% → 15.24%（−0.08，CI [−0.41,+0.24]） - 超上限说话人混淆：25.29% → 11.13% - 法庭 cpWER：82.7% → 24.4%（恢复 20/2
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [NECTAR: Automatic Negative Clue Estimation via Centroid-Space Mapping for Target Speaker Extraction](https://arxiv.org/abs/2610.32133)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：目标说话人提取（TSE）通常只依赖目标注册语音作为正线索，无法显式获知需要抑制的干扰说话人信息，而额外采集干扰者注册语音在实际中不可行。作者发现说话人嵌入在质心空间中近似满足"混合质心位于两说话人质心中点"的关系，据此提出 NECTAR：用质心空间映射器（CSM）从单条混合语音与单条注册语音估计质心表示，再由 2ĉ_mix−ĉ_s1 自动推出干扰者质心作为负线索，与目标嵌入拼接后送入 BSRNN 
+- **关键技术点**：现有嵌入式 TSE 几乎只对目标说话人条件化，难以主动抑制特定干扰者；已有工作表明把干扰者注册语音作为负线索有效，但推理阶段无法获得该注册语音。混合语音嵌入本身虽含干扰信息，却缺少把"干扰者"从"混合体"中分离出来的显式几何算子。
+- **主要指标**：- Libri2Mix mix_clean：SI-SDRi 16.18 dB、Acc. 97.1%、PESQ 2.89、ESTOI 0.88（仅目标嵌入基线为 14.81 dB / 95.4% / 2.79 / 0.86） - 关键对比：超 Multi-Level BSRNN（15.91 dB / 
+- **代码**：https://github.com/Hyungjun-Yoo811/NECTAR | **Demo**：暂无
 
 ---
 ## [Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation](https://arxiv.org/abs/2608.09451)
@@ -198,5 +207,23 @@
 - **关键技术点**：现有BISS/NeuroHeed/M3ANet等神经引导TSE依赖混合域判别式掩码，掩码失准残留干扰致说话人泄漏，8/14.7kHz窄带输出音色发闷；生成式增强需大量数据与算力，与配对数据稀缺、助听低延迟需求冲突。
 - **主要指标**：- Cocktail Party（SI、8kHz统一评）：STOI 0.8273、PESQ 2.31，较最强基线M3ANet分别+0.0153、+0.08，ESTOI 0.721略低于其0.725 - KUL（SI）：STOI 0.868/ESTOI 0.754/PESQ 2.562，较NeuroS
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [MG-REPA: Multi-Granularity Representation Alignment for Generative Target Speaker Extraction](https://arxiv.org/abs/2610.32161)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-26
+- **一句话贡献**：生成式目标说话人提取（TSE）虽能单步高质量推理，但训练收敛极慢，MeanFlow-TSE 需 2000 轮。现有 REPA 类方法仅做单一粒度对齐：帧级忽略全局说话人特性，句级忽略时变内容。本文提出 MG-REPA，在 DiT 中间层同时接两条对齐支路——帧级用 WavLM Large 第 24 层并对目标做时间归一化，句级用 CAM++ 说话人嵌入。Libri2Mix 上以 750 轮达到基线
+- **关键技术点**：扩散/流匹配 TSE 以多步或单步采样换取感知质量，但训练需 2000 轮。REPA 通过将生成器隐状态与冻结 SSL 教师特征对齐来加速 DiT 训练；然而语音领域已有工作即使在多教师设定下也只在单一粒度对齐。TSE 同时依赖帧级时变音素内容与句级时不变说话人特性，单一粒度监督不完备。
+- **主要指标**：
+- **代码**：https://github.com/rlaehghks5/MG-REPA | **Demo**：暂无
+
+---
+## [Efficient Streaming Audio-Visual Target Speaker Extraction for Real-World Acoustic Scenes](https://arxiv.org/abs/2610.32749)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-26
+- **一句话贡献**：本文针对流式音视频目标说话人提取（AVTSE）在真实场景下的两个缺口：现有基准通常固定 2 个说话人、缺乏近场与远场干扰、混响和突发噪声；高性能因果模型参数量大、耗时高，难以部署到边缘设备。作者发布 RealSSA 基准（RealSSA-Sim 仿真集与 RealSSA-Real 实录评测集），并提出 Falcon 因果 AVTSE 方法：在单次编码器－解码器前向中完成多尺度时频分离，并利用编码器
+- **关键技术点**：现有 AVTSE 基准几乎都将说话人数固定为 2，且不联合控制混响、近远场几何与突发噪声，也没有独立的真实录音评测集。模型侧，因果 AV-TFGridNet、AV-Mossformer2 虽有较好分离质量，但参数与每帧 FLOPs 过高；SwiftNet 一类轻量方案通过反复迭代调用小分离器补偿容量，迭代次数增加会成倍放大每帧计算。此外 SI-SNR 只约束估计逼近干净目标，不显式推开近场干扰。
+- **主要指标**：- RealSSA-Sim：SI-SNRi 7.7 dB、SDRi 8.2 dB、WER 25.47%、说话人相似度 43.05（干净参考为 11.83%/64.69）；AV-TF-GridNet 为 7.6 dB - 公开集：LRS2-2Mix 14.1/14.7 dB、LRS3-2Mix 16.
+- **代码**：https://cslikai.cn/Falcon/ | **Demo**：https://cslikai.cn/Falcon/
 
 ---

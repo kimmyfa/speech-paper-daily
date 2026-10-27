@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 213 篇
+共 215 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -992,6 +992,15 @@
 - **代码**：https://github.com/Koguili/The-Impact-of-Side-Information-on-Voice-Privacy | **Demo**：暂无
 
 ---
+## [Why Full-Duplex Speech Models Collapse in Long Conversations](https://arxiv.org/abs/2610.32349)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：全双工语音模型逐帧生成，即使聆听时也持续写入上下文，几分钟内即填满窗口；现有基准只测单轮或数轮，无法暴露长时退化。作者提出 FD-LHB，用 40 条最长 60 分钟的回放和 40 场最长 20 分钟的 LLM 自适应对话评测 5 个模型，并将崩溃归因于初始化锚点被驱逐与近期输出自我强化。据此提出免训练 IAP 与 DRP：Moshi 重复率 65%→0%、静音 100%→7.5%、乱语 100%
+- **关键技术点**：全双工模型在聆听时也逐帧产生 token，上下文被静音与附和词迅速占满；增长上下文模型会耗尽窗口，滑动窗口模型虽可无限运行，却在数十分钟内出现重复、静音与乱语。已有基准仅覆盖单轮或少量对话轮次，既未定义失效起点，也未解释失效机制。
+- **主要指标**：- 基线失效率（重复/静音/乱语）：Moshi 65%/100%/100%，PersonaPlex 90%/85%/100%；BayLing-Duplex 55%/100%/90%（17.5 分钟）；Lychee-FD 37.5%/—/30%（10.9 分钟） - IAP+DRP：Moshi 0%/
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -1917,5 +1926,14 @@
 - **关键技术点**：完整模态训练的 MMER 模型部署时缺一两路即骤降，现有方法靠想象生成、对齐去噪或逐模态可靠性权重处理缺失，多面向单标签任务且计算仍随原始序列长度增长。论文用六层 dense fusion 探针诊断：单模态 drop 下 CKA 随深度从 0.921 降至 0.794、缺失 token 注意力比从 1.049 升至 1.240，扰动能量 65.5% 集中于头部 10% 类通道，证明局部输入失效会被逐层放大且类间不均。
 - **主要指标**：- 20% 随机模态 drop micro-F1：CMU-MOSEI 0.563、M3ED 0.780，均为最优 - 对比最强基线 LDDU（0.559/0.758）：+0.004/+0.005 - 音频单模态（text+visual 置零）：0.473 vs LDDU 0.022（差 0.451）
 - **代码**：https://github.com/Creative-zcx/MERP | **Demo**：暂无
+
+---
+## [Concentrated Causal Influence, Distributed Diagnostic Information: Cognitive Impairment Decisions in Large Audio-Language Models](https://arxiv.org/abs/2610.32061)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-26
+- **一句话贡献**：大音频语言模型（LALM）已能根据 Cookie Theft 图片描述判断认知障碍（CI），但其答案既不揭示哪些内部组件控制决策，也不说明表征中可利用多少诊断信息。本文在 8 个开源 LALM 的 decoder MLP 中，按类对比激活频率选出 CI 对比神经元（CICN），取全局前 0.5%，在 Pitt 与 PROCESS-2 上对同层同规模随机 mask 及活动匹配集做消融。24 个 Pi
+- **关键技术点**：LALM 的 CI 判断准确率无法说明模型依赖哪些内部计算；现有 CI 可解释性多停留在输入级归因（特征重要性、注意力、SHAP），缺少对语音与文本联合决策的因果定位，也未区分"模型中存在的信息"与"真正控制输出的计算"。
+- **主要指标**：- 零样本基线：Pitt UAR 0.49–0.75；Qwen3-Omni-30B AT 最高 0.746，Qwen2.5-Omni-7B AT 0.736 - 因果消融：24 个 Pitt mask 中 7 个通过（q<0.05）；4 个主 mask 的 |Δℓ|=1.6–2.6，匹配随机 ≤0.
+- **代码**：暂无 | **Demo**：暂无
 
 ---
