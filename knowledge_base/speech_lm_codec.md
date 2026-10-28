@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 27 篇
+共 28 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -243,5 +243,14 @@
 - **关键技术点**：语音大模型社区普遍假设RVQ堆栈从粗到细、首码本承载说话人身份，蒸馏类编解码器又把语音内容压入首码本，但性别、口音、情感等具体特质在第几层被编码并可恢复仍不明；现有评测局限于可懂度、说话人相似度或单一特质，缺少跨深度跨特质的系统定位。
 - **主要指标**：- 17编解码器均值下性别trait depth最浅、语流次之，嗓音质量与年龄组最深，情感/口音/非语言声居中 - 语流六类均在相对深度约30-40%处达90% κ，类间差异最小 - 非语言声中笑仅需约20%相对深度，喷嚏、咳嗽需50-60% - 帧率与蒸馏：同设计下25Hz DualCodec、5
 - **代码**：暂无 | **Demo**：https://jihwanlee15.github.io/codec-trait-depth/
+
+---
+## [SEMAC: Spherical Energy Matching Ambisonics Codec for Efficient Higher-Order Ambisonics Compression](https://arxiv.org/abs/2610.32981)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-10-26
+- **一句话贡献**：高阶Ambisonics（HOA）声道数C=(N+1)²随球谐阶数二次增长，Opus CMF2/3须编码全部声道导致低码率传输不可行。SEMAC提出"方向能量匹配"：编码端用球面滤波器组（36波束×21频带、50帧/s）提取全阶方向能量包络作边信息，用CELT仅编码4–16个降维传输声道；解码端扩回全阶并按波束逐带重缩放，强制匹配编码端观测的输入能量分布。五阶MUSHRA听测（512/768 kb
+- **关键技术点**：Opus CMF2/3虽优化声道编码组织，但均码全部C路波形，总码率随阶数二次增长；现有参数化HOA编码器（DAC、COMPASS、IVAS等）质量依赖声源方位/数量等场景参数估计，信号自适应变换（PCA/SVD）又须传输基矩阵边信息，均有各自的鲁棒性或开销短板。
+- **主要指标**：- MUSHRA评分（11名有效听者）：SEMAC 16/36传输声道在两个码率下均达"Excellent"区间，中位数高于36声道全阶CMF3且评分散布更紧 - 等传输声道对比：SEMAC-BEAM9（C_tp=9）显著高于同为9传输声道的CMF3-SH2阶数截断基线 - 码率敏感性：C_tp=4
+- **代码**：暂无 | **Demo**：暂无
 
 ---

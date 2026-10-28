@@ -95,10 +95,19 @@
 ## [NECTAR: Automatic Negative Clue Estimation via Centroid-Space Mapping for Target Speaker Extraction](https://arxiv.org/abs/2610.32133)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-10-26
-- **一句话贡献**：目标说话人提取（TSE）通常只依赖目标注册语音作为正线索，无法显式获知需要抑制的干扰说话人信息，而额外采集干扰者注册语音在实际中不可行。作者发现说话人嵌入在质心空间中近似满足"混合质心位于两说话人质心中点"的关系，据此提出 NECTAR：用质心空间映射器（CSM）从单条混合语音与单条注册语音估计质心表示，再由 2ĉ_mix−ĉ_s1 自动推出干扰者质心作为负线索，与目标嵌入拼接后送入 BSRNN 
-- **关键技术点**：现有嵌入式 TSE 几乎只对目标说话人条件化，难以主动抑制特定干扰者；已有工作表明把干扰者注册语音作为负线索有效，但推理阶段无法获得该注册语音。混合语音嵌入本身虽含干扰信息，却缺少把"干扰者"从"混合体"中分离出来的显式几何算子。
-- **主要指标**：- Libri2Mix mix_clean：SI-SDRi 16.18 dB、Acc. 97.1%、PESQ 2.89、ESTOI 0.88（仅目标嵌入基线为 14.81 dB / 95.4% / 2.79 / 0.86） - 关键对比：超 Multi-Level BSRNN（15.91 dB / 
+- **一句话贡献**：目标说话人提取（TSE）通常仅以目标注册语音作正线索条件化提取器；已知干扰者注册语音可作负线索抑制干扰，但推理时无法获得该语音。本文发现说话人嵌入在质心空间中满足"混合质心近似位于两组说话人质心中点"（c_mix≈½(c_s1+c_s2)），据此提出NECTAR：用质心空间映射器（CSM）仅凭一条混合与一条注册语音还原质心表示，由2ĉ_mix−ĉ_s1自动推出干扰者质心作负线索，与目标嵌入拼接送入
+- **关键技术点**：现有嵌入式TSE几乎只对目标说话人条件化，缺少"抑制谁"的显式负向信号；干扰者注册作负线索虽有效但推理时不可得。中点关系也不成立于单句嵌入（2e_mix−e_s1崩溃至2.36 dB），仅在质心级成立。
+- **主要指标**：- Libri2Mix mix_clean：SI-SDRi 16.18 dB、Acc. 97.1%、PESQ 2.89、ESTOI 0.88 - 关键对比：较最强基线Multi-Level BSRNN（15.91 dB）高0.27 dB，较仅目标嵌入基线（14.81 dB）高1.37 dB，优于混合
 - **代码**：https://github.com/Hyungjun-Yoo811/NECTAR | **Demo**：暂无
+
+---
+## [Efficient Streaming Audio-Visual Target Speaker Extraction for Real-World Acoustic Scenes](https://arxiv.org/abs/2610.32749)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：针对因果流式视听目标说话人提取（AVTSE）"基准失真+模型过重"的双重困境，论文发布RealSSA基准（RealSSA-Sim模拟套件+RealSSA-Real实拍评测集，支持1–5近场、10–15远场动态干扰，混响/环境/突发噪声联合变化），并提出轻量因果模型Falcon：单次编码-解码前向完成多尺度时频分离，配合编码器空间说话人对比损失抑制近场泄漏。Falcon在四个模拟基准上取得SOTA（
+- **关键技术点**：现有AVTSE基准把说话人数固定在2、按控制SNR混合，忽略真实场景的近/远场几何、混响与突发噪声，且缺独立实拍评测集；因果高性能架构的参数量与每帧计算量超边缘实时预算，轻量方法则靠反复调用小分离器补容量；SI-SNR损失不显式把估计推离近场干扰者，泄漏随近场说话人数增加而恶化。
+- **主要指标**：- RealSSA-Sim：SI-SNRi 7.7 dB / SDRi 8.2 dB，较AV-TFGridNet（7.6）高0.1 dB、较Swift-Net-12（7.3）高0.4 dB - LRS3-2Mix：SI-SNRi 16.4 / SDRi 16.7 dB（超AV-Mossformer2
+- **代码**：https://cslikai.cn/Falcon/ | **Demo**：https://cslikai.cn/Falcon/
 
 ---
 ## [Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation](https://arxiv.org/abs/2608.09451)
@@ -212,18 +221,9 @@
 ## [MG-REPA: Multi-Granularity Representation Alignment for Generative Target Speaker Extraction](https://arxiv.org/abs/2610.32161)
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-26
-- **一句话贡献**：生成式目标说话人提取（TSE）虽能单步高质量推理，但训练收敛极慢，MeanFlow-TSE 需 2000 轮。现有 REPA 类方法仅做单一粒度对齐：帧级忽略全局说话人特性，句级忽略时变内容。本文提出 MG-REPA，在 DiT 中间层同时接两条对齐支路——帧级用 WavLM Large 第 24 层并对目标做时间归一化，句级用 CAM++ 说话人嵌入。Libri2Mix 上以 750 轮达到基线
-- **关键技术点**：扩散/流匹配 TSE 以多步或单步采样换取感知质量，但训练需 2000 轮。REPA 通过将生成器隐状态与冻结 SSL 教师特征对齐来加速 DiT 训练；然而语音领域已有工作即使在多教师设定下也只在单一粒度对齐。TSE 同时依赖帧级时变音素内容与句级时不变说话人特性，单一粒度监督不完备。
-- **主要指标**：
+- **一句话贡献**：生成式目标说话人提取（TSE）感知质量高，但MeanFlow-TSE等一步模型仍需约2000 epochs才收敛；现有语音域REPA仅在帧级或话语级单一粒度对齐。本文提出MG-REPA：在DiT中间层并联双分支，帧级用时间归一化（TN）后的WavLM特征对齐、话语级用CAM++说话人嵌入对齐。Libri2Mix上用3.0×/2.1×更少的epoch达到基线OVRL/PESQ水平，750 epoch
+- **关键技术点**：判别式TSE保真但易生伪影、泛化差；扩散/流式TSE将推理压至一步却训练收敛极慢。已有语音REPA（A-DMA、ImmersiveTTS、AG-REPA）即便多教师仍仅单一粒度对齐，另一粒度无监督。
+- **主要指标**：- Clean 750e：PESQ 3.29、SI-SDR 18.88 dB、ESTOI 0.93，均超2000e的MeanFlow-TSE（3.26/18.80/0.93） - Noisy 750e：PESQ 2.22、OVRL 3.20、DNSMOS 3.60，OVRL/DNSMOS较基线+0.
 - **代码**：https://github.com/rlaehghks5/MG-REPA | **Demo**：暂无
-
----
-## [Efficient Streaming Audio-Visual Target Speaker Extraction for Real-World Acoustic Scenes](https://arxiv.org/abs/2610.32749)
-
-- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-26
-- **一句话贡献**：本文针对流式音视频目标说话人提取（AVTSE）在真实场景下的两个缺口：现有基准通常固定 2 个说话人、缺乏近场与远场干扰、混响和突发噪声；高性能因果模型参数量大、耗时高，难以部署到边缘设备。作者发布 RealSSA 基准（RealSSA-Sim 仿真集与 RealSSA-Real 实录评测集），并提出 Falcon 因果 AVTSE 方法：在单次编码器－解码器前向中完成多尺度时频分离，并利用编码器
-- **关键技术点**：现有 AVTSE 基准几乎都将说话人数固定为 2，且不联合控制混响、近远场几何与突发噪声，也没有独立的真实录音评测集。模型侧，因果 AV-TFGridNet、AV-Mossformer2 虽有较好分离质量，但参数与每帧 FLOPs 过高；SwiftNet 一类轻量方案通过反复迭代调用小分离器补偿容量，迭代次数增加会成倍放大每帧计算。此外 SI-SNR 只约束估计逼近干净目标，不显式推开近场干扰。
-- **主要指标**：- RealSSA-Sim：SI-SNRi 7.7 dB、SDRi 8.2 dB、WER 25.47%、说话人相似度 43.05（干净参考为 11.83%/64.69）；AV-TF-GridNet 为 7.6 dB - 公开集：LRS2-2Mix 14.1/14.7 dB、LRS3-2Mix 16.
-- **代码**：https://cslikai.cn/Falcon/ | **Demo**：https://cslikai.cn/Falcon/
 
 ---

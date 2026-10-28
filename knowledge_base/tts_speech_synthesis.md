@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 99 篇
+共 100 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -473,10 +473,19 @@
 ## [DRAMA-Eval: A Benchmark for Context-Aware, Multi-Turn, Multi-Speaker Speech Generation](https://arxiv.org/abs/2610.31796)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-26
-- **一句话贡献**：现有语音生成评测将指令遵循、多轮对话与多说话人一致性割裂评估，缺少面向"结构化剧本驱动整场景生成"的统一基准。作者提出 DRAMA-Eval：以真实影视/播客音频构建 1,038 例、12.50 小时中英双语测试集，采用含场景上下文、角色档案与逐句指令的三层剧本表征，并设计客观（A1 字错率、A2 说话人一致性）、局部（B1 指令遵循、B2 韵律流畅、B3 表现力）、全局（C1 交互自然度、C2 
-- **关键技术点**：有声书与广播剧需求推动语音生成走向剧本驱动，但指令可控 TTS 只针对孤立话语、多轮对话模型仅以纯文本与说话人 ID 为条件、音视频生成模型的音频分支评测仍停留在音质与可懂度。现有基准（InstructTTSEval、SwanBench-Speech、MSBench 等）各自只覆盖指令、一致性或场景中的一项，无法回答"系统能否在同一长场景中同时保持音色、落实表现力指令并维持交互连贯"。
-- **主要指标**：- 客观：SeedAudio 中文 CER 最低 2.58；FireRedTTS3 英文 WER 最低 3.97；MOSS-TTSD 说话人一致性最高（中 0.78、英 0.77） - 局部：SeedAudio B1 62.2/56.5、B3 64.2/57.0（中/英）为双语最优；StepAudi
+- **一句话贡献**：语音生成正转向上下文感知、多轮、多说话人合成，但现有基准将指令跟随、对话生成与音视频模型音频分支的评估彼此割裂，无法联合度量场景级能力。本文提出DRAMA-Eval：以结构化脚本（场景上下文+角色设定+轮级指令）为条件，提供客观、局部、全局三层统一评测，并用LALM裁判对照真实音频做AB偏好判分，以平局调整胜率计分。发布1038例、12.5小时中英双语人工质检测试集。评测12个开源/商业系统显示：
+- **关键技术点**：指令可控模型面向孤立句，多轮对话模型仅以裸转录+说话人ID为条件，音视频模型音频分支评估停留在音质、可懂度等表面属性；上下文建模、指令执行与多说话人长程一致性从未被联合考察。
+- **主要指标**：- 客观：SeedAudio中文CER 2.58%、FireRedTTS3英文WER 3.97%最优；MOSS-TTSD一致性0.78但中文B3仅35.9，音色保持≠表现力 - 局部：SeedAudio中英B1 62.2/56.5、B3 64.2/57.0最高，StepAudio 3 Gen中文B2
 - **代码**：https://github.com/ASLP-lab/DRAMA-Eval | **Demo**：https://ASLP-lab.github.io/DRAMA-Eval-Demo
+
+---
+## [X-Dubbing: Speech-to-Speech Translation under Temporal and Visual Constraints](https://arxiv.org/abs/2610.32042)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：X-Dubbing针对配音译文难以自然贴合源视频时间与口型约束的问题，将其建模为时间感知S2TT与视频感知TTS的协同任务：Dubbing Translator（Qwen2.5-Omni-3B）基于VAD时序预算生成含<pause>标记的字幕，Voice Actor（X-Voice流匹配DiT）在暂停与视觉条件下合成同步语音，并以合成语音作端到端反馈对翻译器做DPO，无需配对配音数据。mTEDx法
+- **关键技术点**：视觉盲的定时翻译器局部对齐差、语速失配，视频感知TTS用无约束译文硬凑时长则扭曲语速；端到端S2ST不建模视觉约束，且配对配音语料稀缺无法微调适配。
+- **主要指标**：- ASR-BLEU 42.34、chrF++ 64.06，较最强基线SeamlessExpressive高3.90/3.79 - SpkSim 0.497（较Hibiki 0.358提升0.139）；UTMOS 3.748接近最优Hibiki 3.864 - 时序对齐：SyllRate ρ=0.6
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
@@ -884,12 +893,12 @@
 - **代码**：https://github.com/luelhagos/Emofi | **Demo**：暂无
 
 ---
-## [X-Dubbing: Speech-to-Speech Translation under Temporal and Visual Constraints](https://arxiv.org/abs/2610.32042)
+## [Uni-Stream: A Unified Streaming Speech Language Model for Speech Synthesis and Recognition](https://arxiv.org/abs/2610.32187)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-26
-- **一句话贡献**：论文研究固定视频跨语言配音：源视频不动，生成与源语音时长、停顿结构和口型同步的目标语语音。作者指出，只做时长感知翻译（TTS 看不到画面）或只做视频感知 TTS（脚本长度不受控）都会导致局部错位或语速失真，端到端 S2ST 又缺少成对配音数据。为此提出 X-Dubbing，把任务拆成共享"语言无关时间预算"的 Dubbing Translator（Qwen2.5-Omni-3B，输出带 `<pau
-- **关键技术点**：配音要求译文既忠实又能在源时长内自然说出，但语言间音节速率、韵律差异大。现有时长感知 MT 只用文本长度代理等时性，无法知道下游 TTS 实际如何实现；视频感知 TTS 在脚本固定时靠拉伸语速硬对齐，会损害自然度；成对配音数据稀缺使端到端 S2ST 难以监督。
-- **主要指标**：- 翻译质量：ASR-BLEU 42.34、ASR-chrF++ 64.06，最强基线 SeamlessExpressive 为 38.44/60.27 - 说话人相似度：SpkSim 0.497（WavLM-ECAPA-TDNN 余弦），Hibiki 仅 0.358 - 时间对齐：SyllRate
+- **一句话贡献**：本文提出Uni-Stream，首个在单一共享权重decoder-only主干上同时支持流式语音识别与流式语音合成的语音大模型。方法基于VibeVoice-1.5B家族，采用词级时间对齐的语音-文本交错序列与两阶段训练（任务专属流式适应+合成锚定/识别蒸馏联合训练），并构建约4万小时带词级时间戳的Emilia-EN标注管线。最终ASR WER为3.63%/10.74%（LibriSpeech cle
+- **关键技术点**：已有统一语音模型多为离线，流式系统则按任务分开训练；仅Speech-T以transducer做到双向流式但局限于单说话人。此前无单一decoder-only主干能同时流式运行ASR与TTS且不牺牲任务性能。
+- **主要指标**：- ASR：WER 3.63%（clean）/10.74%（other），词发射延迟0.66s、RTF 0.17（较原VibeVoice-ASR-Streaming延迟1.68s大幅下降） - TTS：WER 3.20%、SIM 0.714、UTMOS 3.994，首包延迟129ms、RTF 0.6
 - **代码**：暂无 | **Demo**：暂无
 
 ---

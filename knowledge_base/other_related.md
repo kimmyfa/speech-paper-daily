@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 75 篇
+共 76 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -45,6 +45,15 @@
 - **关键技术点**：快慢脑分工带来协调时序问题：前台听得到每句话却看不到任务版本，后台了解任务却不跟随对话，导致过期送达、错误绑定、幽灵执行、虚假交付等六类失败，与识别和推理质量无关。
 - **主要指标**：- τ-Voice同前端同后端仅换harness：192/278 vs QAA 29/278，提升逾6倍 - FDB-v3 Pass@1：69.0%，高于GPT-Realtime（60.0%）与原生Venus-Audio（48.0%）；Tool F1 0.927、打断率7%全表最低 - τ-Voic
 - **代码**：暂无 | **Demo**：https://amphionteam.github.io/Jarvis-Demo/
+
+---
+## [CoupleFlow: Null-Calibrated Auditory Attention Decoding With Time-Locked Brain-Speech Coupling and Flow-Matching Likelihood Ratios](https://arxiv.org/abs/2610.32950)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：9/10 | **日期**：2026-10-26
+- **一句话贡献**：听觉注意解码（AAD）要从秒级 EEG 判断听者聚焦哪一路语音，近期直接分类器报 1 s 近完美精度。本文证明其源于试次泄漏、眼动与响度捷径，跨内容即崩至随机。提出 CoupleFlow：决策仅经神经与声学嵌入的时间耦合，脑信号无时间信息时落于随机（null 校准），并以条件流匹配头构造 PMI 似然比判决、证明其贝叶斯最优。9 个 EEG/MEG 数据集内容不相交折下 5 s 于 7/8 集最优
+- **关键技术点**：重建法需数十秒才可靠；直接分类器借试次内划分虚高至 95%+，跨试次跌回随机；各家预处理不一，NJU 集甚至未与音频时间锁定。
+- **主要指标**：- 5 s 内容不相交折：KU Leuven 72.7%(+6.8)、DTU 76.2、Fuglsang'20 79.6、ESAA 77.9、KUL-255ch 69.4、SparrKULee 92.2(+8.9)、MEG-MASC 99.0%，7/8 最优；Broderick 63.6 持平线性 
+- **代码**：https://github.com/saliAlavi/coupleflow | **Demo**：https://salialavi.github.io/coupleflow/
 
 ---
 ## [TamilEOT: A Dataset and Model for Semantic End-of-Turn Detection in Tamil Telephone Speech](https://arxiv.org/abs/2609.05631)
@@ -317,13 +326,13 @@
 - **代码**：暂无 | **Demo**：https://iflytekresearch.iflytek.com/experience/spark-audio
 
 ---
-## [CoupleFlow: Null-Calibrated Auditory Attention Decoding With Time-Locked Brain-Speech Coupling and Flow-Matching Likelihood Ratios](https://arxiv.org/abs/2610.32950)
+## [SURE-Tagger: Structured Speech Representations for Compositional Evaluation and Targeted Data Selection](https://arxiv.org/abs/2610.32198)
 
-- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-26
-- **一句话贡献**：现有基于脑电（EEG）的听觉注意力解码（AAD）常报告 1 秒内 95% 以上准确率，但主要依赖试次泄漏、眼动和响度等捷径，换到未听过的语音时跌回随机水平。本文提出 CoupleFlow，只用神经嵌入与各候选语音嵌入之间的时间协方差进行打分，使无信息脑电必然给出随机判决；同时用条件流匹配头实现基于点互信息的似然比判决规则。作者在 9 个 EEG/MEG 数据集（286 名听者、约 293 小时、4
-- **关键技术点**：AAD 通过比较脑响应与竞争语音流来判定被注意的说话人。刺激重建类方法稳健但需数十秒信号，深度重建提升有限；直接分类器报告的 95–97%@1 s 多来自同试次窗口重叠与注视方向，跨试次即接近随机。各研究预处理互不相同，且多数只报告一两个窗长，无法比较或预测所需时长。
-- **主要指标**：- 5 s 竞争说话人准确率：KU Leuven 72.7%、DTU 76.2%、Fuglsang'20 79.6%、ESAA 77.9%、KUL-255ch 69.4%、Broderick 63.6% - 单说话人匹配–不匹配：SparrKULee 92.2%（1 s 时 73.5%）、MEG-M
-- **代码**：暂无 | **Demo**：暂无
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-26
+- **一句话贡献**：针对自由文本语音标注属性覆盖不一致、"遗漏"无法区分缺失/忽视/不确定的问题，提出SURE-Tagger：按L1词内容、L2说话人、L3时间结构、L4副语言、L5声景五层，为每条录音构造"显式属性值+证据不足null+补充描述"的半结构化表示，由LLM整合专家感知模型观测生成。配套Tag-Bench（650条真实+500条智能体合成场景，29轴评测）。SURE-Tagger在25/29（真实）、2
+- **关键技术点**：自由caption在录音间属性覆盖与措辞不一，省略属性不可解释为确认缺失，难以用作一致的样本级属性记录；数据集级聚合分数亦会掩盖多条件并发下的模型短板，跨数据集联合条件评估与定向改进缺乏共同表示。
+- **主要指标**：- Tag-Bench综合：真实76.28%（Omni-Flash 62.79、Captioner 51.23）、合成78.88%、综合77.28%；结构化19轴综合83.19% - 弃权拆解：SURE显式null率仅5.6%，Captioner达78.3%；null计零时Captioner崩至12
+- **代码**：暂无（承诺录用后开源） | **Demo**：暂无
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)
@@ -668,12 +677,12 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [SURE-Tagger: Structured Speech Representations for Compositional Evaluation and Targeted Data Selection](https://arxiv.org/abs/2610.32198)
+## [DIAL-S2ST: Learning Latency Control for Simultaneous Speech-to-Speech Translation](https://arxiv.org/abs/2610.32214)
 
 - **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-26
-- **一句话贡献**：自由形式语音描述存在属性覆盖不一致、遗漏语义模糊的问题，难以支撑跨数据集的组合式评测。作者提出 SURE-Tagger，以五层半结构化表示联合显式属性值、开放式描述与证据不足时的 null 弃权，并由专用感知模型提供证据、LLM 统一裁决。构建 Tag-Bench（500 条合成场景 + 650 条真实录音），在 29 个维度上取得真实语音 25 项、合成语音 24 项最优，综合得分 77.28%
-- **关键技术点**：现有语音描述模型虽能覆盖语言、说话人、副语言与环境信息，但自由文本的属性覆盖和措辞不稳定；某属性未出现既可能是缺失，也可能是未观察或不确定，不能视为确认不存在。数据集级平均分还会掩盖共现语音条件下的模型差异，因而需要可联合查询、可区分弃权的样本级表示。
-- **主要指标**：- 综合标注得分：77.28%，对比 Qwen3-Omni-Flash 60.93%、Qwen3-Omni-Captioner 58.20% - 结构化 19 轴：83.19%，基线为 61.55% 与 60.41%；描述 10 轴：66.04%，基线为 59.74% 与 53.98% - 弃权控制
-- **代码**：https://github.com/PigeonDan1/sure-tagger | **Demo**：暂无
+- **一句话贡献**：Hibiki等多流式同传语音到语音翻译（SimulS2ST）模型把"何时说"与"说什么"耦合进并行token流，推理时无可独立调节的读写策略，直接偏置logits会显著损伤质量。本文提出DIAL-S2ST后训练方法：以冻结预训练模型加源音频超前（lookahead）作教师，对LoRA学生做在线自蒸馏学得更早释出，并将LoRA缩放系数与lookahead绑定，实现单适配器推理时连续延迟控制。仅用约1
+- **关键技术点**：SimulS2ST需持续权衡"多听源语音"与"早出译文"，质量-延迟平衡应在推理时可调。StreamSpeech的chunk大小与Seamless的发射阈值是显式控制机制，但Hibiki等多流模型把发射时机由训练期学到的token流行为决定，训练后无独立读写策略；仅偏置PAD/BOS logits会致质量骤降。
+- **主要指标**：- ASR-BLEU：34.4（α=0.5操作点），LAAL 2.16s、End Offset 1.73s - 音色/自然度：Speaker Sim 0.391、UTMOS 3.41 - 关键对比（LAAL 1.8/2.3/2.8s对齐延迟的ASR-BLEU）：Ours 32.5/34.8/35.6
+- **代码**：暂无 | **Demo**：暂无
 
 ---
