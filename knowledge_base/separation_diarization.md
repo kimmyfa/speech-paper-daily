@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 25 篇
+共 26 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -225,5 +225,14 @@
 - **关键技术点**：判别式TSE保真但易生伪影、泛化差；扩散/流式TSE将推理压至一步却训练收敛极慢。已有语音REPA（A-DMA、ImmersiveTTS、AG-REPA）即便多教师仍仅单一粒度对齐，另一粒度无监督。
 - **主要指标**：- Clean 750e：PESQ 3.29、SI-SDR 18.88 dB、ESTOI 0.93，均超2000e的MeanFlow-TSE（3.26/18.80/0.93） - Noisy 750e：PESQ 2.22、OVRL 3.20、DNSMOS 3.60，OVRL/DNSMOS较基线+0.
 - **代码**：https://github.com/rlaehghks5/MG-REPA | **Demo**：暂无
+
+---
+## [S2SND-v2: Unified Online and Offline Speaker Diarization with Speaker-Adapted w2v-BERT 2.0](https://arxiv.org/abs/2610.34707)
+
+- **方向**：语音大模型 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-27
+- **一句话贡献**：现有说话人日志系统多只面向离线或在线单一场景，S2SND 虽用检测解码器与表示解码器统一两种模式，但 ResNet 前端声学表征偏弱，且表示解码器的活动查询仍混入重叠帧，未知说话人训练也与在线滑窗条件不匹配。本文提出 S2SND-v2：引入经说话人验证任务适配的 w2v-BERT 2.0 前端，保留层适配器与多尺度特征聚合而去除句级池化，以维持帧级时间分辨率，并系统比较全量、剪枝前、剪枝后三条前端
+- **关键技术点**：级联式与端到端日志系统长期割裂在线/离线设计，S2SND 以嵌入作查询、活动作引导实现互促，但其性能受限于前端表征质量与重叠、未知说话人条件下的嵌入提取。原方法仅在嵌入筛选阶段考虑非重叠时长，抽取阶段仍受重叠污染；随机掩码训练也无法模拟滑窗中说话人晚到的情况。
+- **主要指标**：- 全量 w2v-BERT 前端：在线 14.74%、离线 12.15% - 剪枝前路线：在线 15.26%、离线 12.70%；剪枝后路线：15.30%、12.61% - 加重叠掩码：在线 14.75%、离线 12.23%；再加晚到说话人训练：在线 14.52%、离线 12.03% - 重训 S2
+- **代码**：暂无 | **Demo**：暂无
 
 ---

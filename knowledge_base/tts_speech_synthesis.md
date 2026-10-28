@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 100 篇
+共 103 篇
 
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
@@ -488,6 +488,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [ImageTTS: Repurposing Pretrained Image Diffusion Transformers for Speech Synthesis](https://arxiv.org/abs/2610.34807)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-10-27
+- **一句话贡献**：论文系统研究预训练文生图模型能否在表示与生成先验两个层面迁移到语音合成，提出 ImageTTS：把对数梅尔谱转成伪 RGB 图像，用冻结的 FLUX.2 图像 VAE 编码，仅微调 3.9B 的 DiT，并以条件隐空间流匹配训练。冻结 VAE 重建可达 0.99 STOI 与 0.95 说话人相似度；图像预训练初始化在 100k 步把 WER 由 4.2% 降到 2.7%。扩展到 100K 小时数
+- **关键技术点**：图像扩散模型已被广泛复用于视觉下游任务，但鲜有工作验证其隐表示与去噪先验能否跨模态服务语音合成。语音合成同时要求语言内容准确与短参考下的音色保持，比一般生成任务更严苛；已有 Riffusion 仅提供微调 Stable Diffusion 的初步证据，缺乏对表示迁移与初始化迁移的系统拆分。
+- **主要指标**：- 冻结 VAE 重建（LibriTTS，F=512）：STOI 0.99，SIM 0.95，PESQ 3.86，DNSMOS 3.72 - 初始化对比（100k 步）：WER 2.7% vs 随机初始化 4.2%；随机初始化训到 150k 步仍为 3.8% - Seed-TTS test-en：W
+- **代码**：暂无（作者称接收后开源） | **Demo**：https://paperdemos.github.io/ImageTTS-demos/
+
+---
 ## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
 
 - **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：
@@ -899,6 +908,24 @@
 - **一句话贡献**：本文提出Uni-Stream，首个在单一共享权重decoder-only主干上同时支持流式语音识别与流式语音合成的语音大模型。方法基于VibeVoice-1.5B家族，采用词级时间对齐的语音-文本交错序列与两阶段训练（任务专属流式适应+合成锚定/识别蒸馏联合训练），并构建约4万小时带词级时间戳的Emilia-EN标注管线。最终ASR WER为3.63%/10.74%（LibriSpeech cle
 - **关键技术点**：已有统一语音模型多为离线，流式系统则按任务分开训练；仅Speech-T以transducer做到双向流式但局限于单说话人。此前无单一decoder-only主干能同时流式运行ASR与TTS且不牺牲任务性能。
 - **主要指标**：- ASR：WER 3.63%（clean）/10.74%（other），词发射延迟0.66s、RTF 0.17（较原VibeVoice-ASR-Streaming延迟1.68s大幅下降） - TTS：WER 3.20%、SIM 0.714、UTMOS 3.994，首包延迟129ms、RTF 0.6
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [LeanTTS: Efficient Full-Stack Bilingual TTS for Zero-Shot Cloning and Voice Customization](https://arxiv.org/abs/2610.34408)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-27
+- **一句话贡献**：现有零样本 TTS 音质与灵活度高，但参数动辄数亿至十亿级，难以部署在车机与嵌入式设备；轻量 TTS 又多为单语固定音色，且通常只压缩声学模型而忽略前端与声码器。作者提出 LeanTTS，将普通话多音字前端、流匹配声学模型与波形解码器作为整体协同压缩，得到 18.9M 可学习参数的双语全栈系统，同时支持参考音频零样本克隆与说话人 token 定制音色。在 Seed-TTS-Eval 上，四步推理零
+- **关键技术点**：零样本 TTS 追求音质与灵活度，参数膨胀到十亿级，端侧内存与延迟不可接受；轻量系统则多为单语、固定或多说话人，且往往只压缩声学模型，忽视发音前端与声码器，导致真实部署成本被低估。
+- **主要指标**：- 零样本中文：2.02 CER / 62.3 SIM / 2.41 UTMOS（4 NFE） - 零样本英文：2.32 WER / 48.3 SIM / 3.12 UTMOS - 定制音色中文：1.57 CER / 77.2 SIM；英文 1.93 WER / 76.6 SIM - 参数量：18.
+- **代码**：https://github.com/notlu/leantts | **Demo**：https://github.com/notlu/leantts
+
+---
+## [Heard Enough to Act: Early Tool Calling in Spoken Dialogue Systems](https://arxiv.org/abs/2610.34653)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-27
+- **一句话贡献**：现有语音智能体必须等用户说完才决定调用哪个工具，即使请求在中途已可执行，延迟仍层层累积。论文把"提前工具调用"定义为逐音频块的决策问题，首次给出"最早可执行点"的监督定义与配套语料。作者构建 48 领域、26,694 段对话、786 小时的合成语音流水线，并用 LoRA 微调 Qwen3-Omni-30B-A3B，在 0.6 秒块粒度上输出 wait/unsure/ready/hold 状态。域内
+- **关键技术点**：级联与端到端语音智能体都把"解析意图、确定工具与参数、发起调用"串在轮末执行，延迟叠加而非重叠。已有流式检索与双工 SLA 方法用代理标签或 LLM 判定偏移学习时机，但均未定义调用最早可判定的时刻，也未按时刻打分。
+- **主要指标**：- 工具状态宏 F1：域内 0.484，外部基准 0.474 - 事件 F1：域内 0.414，外部 0.480 - 部分转写 WER：域内 0.11-0.12，外部升至 0.478-0.551 - 轮级触发 F1：0.482，逼近轮末级联金标文本 0.500 - 正确调用平均提前量：域内 1.83
 - **代码**：暂无 | **Demo**：暂无
 
 ---

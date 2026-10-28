@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 70 篇
+共 72 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -630,5 +630,23 @@
 - **关键技术点**：现有事件驱动ASR多为混合架构（如GSU、IML-Spikeformer配6层ANN解码器），连续解码器重新引入浮点瓶颈与串行执行；纯三值MLGRU虽去掉权重矩阵乘法但保留连续激活，部署仍需独立激活量化环节；而LIF硬重置迫使串行BPTT，训练代价高。
 - **主要指标**：- LibriSpeech test-clean WER：8.09% / 7.04% / 6.14%（Small/Medium/Large，seed 3407，无LM；Large六种子均值6.44%） - test-other WER：20.79% / 18.74% / 17.28% - Aishe
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [RoleHear: Pseudo-Labeling for Semi-Supervised Role-Attributed Streaming Speech Recognition](https://arxiv.org/abs/2610.33765)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-10-27
+- **一句话贡献**：流式 ASR 延迟低但只输出无归属的词流，而客服实时分析需要每个词绑定说话人角色；角色标注训练数据稀缺。RoleHear 用词表内轻量角色 token 让单个 cache-aware 流式 transducer 在线输出角色：先发快速轮次边界标记，再延后若干词发出具体角色 token。离线 transducer 教师被微调为角色识别器后对无标注语音单遍重标注，多模态大模型为纯转写语料生成银标角色。
+- **关键技术点**：角色归属传统上是独立阶段，依赖离线或流式说话人日志模型与词对齐，或用文本 LLM 做事后处理，难以与 cache-aware 流式推理统一。面向重叠语音的说话人属性识别方法需说话人清单、串行化解码或独立日志器，工程复杂度高；而角色标注成本远高于可获得的同域无标注音频。
+- **主要指标**：- Earnings-21 角色词错误率：27.55，微调学生 31.78（降 4.2 个百分点） - Earnings-21 角色 F1：72.95，微调学生 64.06（+8.9） - Earnings-22 角色词错误率：35.80，微调学生 42.29（降 6.5） - Earnings-2
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ASR-Protected Fusion and Reference-Anchored Policy Optimization for Joint ASR and Word-Level Speech Anti-Spoofing](https://arxiv.org/abs/2610.34156)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-10-27
+- **一句话贡献**：现有反欺骗系统通常只输出整句真伪分数或帧级篡改区间，前者无法定位被替换的词，后者需与转写文本做时间对齐，对齐误差会污染词级标签。论文将部分伪造检测建模为"带标签 ASR"：模型在转写的同时用起止标记标出伪造词，使真伪信息直接附着于输出词。方法上用 ASR 保护子空间门控融合注入伪造线索而不破坏识别表征，再用参考锚定策略优化以冻结 SFT 模型的奖励为锚进行序列级微调。五数据集上平均 WER 降至 
+- **关键技术点**：部分伪造语音只替换少量关键词即可改变语义，整句检测器只能报警而不能指出不可信词；帧级定位又依赖词时间戳与转写结果做后对齐，转写或边界估计错误会直接产生错误词级标签。已有带标签 ASR 联合生成方法虽避免后对齐，但存在识别性能下降和对数据集特定编辑模式敏感的问题。
+- **主要指标**：- 平均 WER：0.054 - 平均词级 F1：0.901（四集平均） - 句级欺骗范围准确率：0.952（五集平均） - 域外测试：WER 0.086、词级 F1 0.759、句级准确率 0.805 - 关键对比：平均 WER 较基线 0.373 与 0.099 显著下降，词级 F1 由 0.7
+- **代码**：https://anonymous.4open.science/r/asr_word_antispoofing_anon-38C6/ | **Demo**：暂无
 
 ---

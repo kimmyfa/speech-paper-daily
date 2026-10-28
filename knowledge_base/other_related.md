@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 76 篇
+共 79 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -333,6 +333,24 @@
 - **关键技术点**：自由caption在录音间属性覆盖与措辞不一，省略属性不可解释为确认缺失，难以用作一致的样本级属性记录；数据集级聚合分数亦会掩盖多条件并发下的模型短板，跨数据集联合条件评估与定向改进缺乏共同表示。
 - **主要指标**：- Tag-Bench综合：真实76.28%（Omni-Flash 62.79、Captioner 51.23）、合成78.88%、综合77.28%；结构化19轴综合83.19% - 弃权拆解：SURE显式null率仅5.6%，Captioner达78.3%；null计零时Captioner崩至12
 - **代码**：暂无（承诺录用后开源） | **Demo**：暂无
+
+---
+## [ADReasoner: Acoustic-Linguistic Cue-Aware Reinforcement Learning for Explainable Alzheimer's Disease Detection from Speech](https://arxiv.org/abs/2610.34220)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-27
+- **一句话贡献**：现有语音 AD 检测多被简化为二分类黑箱，近期 SpeechLLM 虽能输出解释，但仅靠 SFT 学到的是表层描述，未把细粒度声学-语言学线索与临床意义关联。作者提出 ADReasoner，首次以强化学习将 AD 检测重构为可解释推理任务：合成并标注 ADCoT-7K 推理数据集，用线索中心的两阶段 SFT 增强线索感知，再以四项奖励的 GRPO 优化推理与标签一致性。在 Pitt 测试集取得 8
+- **关键技术点**：AD 语音数据受隐私与采集成本限制规模极小，且现有数据集只有离散标签，缺少细粒度线索标注与思维链监督。当前 SpeechLLM 对异常停顿、语义不连贯等关键线索感知弱，而标准 GRPO 仅用格式与标签规则奖励，无法约束开放式推理，易出现推理与预测标签不一致。
+- **主要指标**：- Pitt macro-F1：80.72% - Pitt 准确率：81.10% - 格式解析率 FPR：100.00% - 推理分 / 一致性分：85.24% / 90.86% - LLM-R 四维均值：3.70，较最强基线 GPT-audio-1.5 的 3.27 相对提升 13.15% - 跨
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [The Voice on the Line](https://arxiv.org/abs/2610.35272)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-27
+- **一句话贡献**：论文面向单麦克风转写时同时收进旁人语音的真实通话，训练 20 ms 帧、无前视的因果目标说话人隔离器，从通话本身取已听到的最响 3 s 在线注册主叫，并以 WER 及漏词、插词、泄漏词分解评价。作者指出短窗评测掩盖长通话遗忘主叫与主叫独处被误伤两个失效，用 24 s 长通话训练、因果化 WavLM-Large 和从更长通话切窗训练解决。发布版在 60 s AMI 窗口将 WER 从 23.66% 
+- **关键技术点**：噪声抑制保留所有人声，无法直接转写；目标说话人提取依赖注册片段，真实通话却没有干净音频。既有评测只用不超过 4 s 的背景语音，看不到他人独白后主叫回归的遗忘与主叫独处的过抑制。
+- **主要指标**：- 开发集平均 WER：发布版 10.49%，无 WavLM 的 M 模型 11.44%，开源最强隔离器 11.91% - AMI 60 s 窗口 WER：16.13%，基线 23.66% - 基线自有 AMI 窗口：10.19% 对 11.71% - Krisp WER：5.74%，基线 5.63
+- **代码**：https://huggingface.co/collections/Scicom-intl/voice-isolator | **Demo**：暂无
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)
@@ -683,6 +701,15 @@
 - **一句话贡献**：Hibiki等多流式同传语音到语音翻译（SimulS2ST）模型把"何时说"与"说什么"耦合进并行token流，推理时无可独立调节的读写策略，直接偏置logits会显著损伤质量。本文提出DIAL-S2ST后训练方法：以冻结预训练模型加源音频超前（lookahead）作教师，对LoRA学生做在线自蒸馏学得更早释出，并将LoRA缩放系数与lookahead绑定，实现单适配器推理时连续延迟控制。仅用约1
 - **关键技术点**：SimulS2ST需持续权衡"多听源语音"与"早出译文"，质量-延迟平衡应在推理时可调。StreamSpeech的chunk大小与Seamless的发射阈值是显式控制机制，但Hibiki等多流模型把发射时机由训练期学到的token流行为决定，训练后无独立读写策略；仅偏置PAD/BOS logits会致质量骤降。
 - **主要指标**：- ASR-BLEU：34.4（α=0.5操作点），LAAL 2.16s、End Offset 1.73s - 音色/自然度：Speaker Sim 0.391、UTMOS 3.41 - 关键对比（LAAL 1.8/2.3/2.8s对齐延迟的ASR-BLEU）：Ours 32.5/34.8/35.6
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [A Robust, Explainable, and Efficient Deep Metric for Speech and General Audio Quality](https://arxiv.org/abs/2610.35810)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-27
+- **一句话贡献**：针对现有客观音频质量指标的两难困境：传统 PEAQ 类模型可解释但泛化差，基于音频基础模型的深度指标泛化好却是黑箱且算力昂贵。本文提出 SAQM，将 ITU-R BS.1387 PEAQ 的 1199 维感知前驱特征与 ConvNeXt 一维卷积网络结合，用对比回归学习质量流形。为绕开人工标注稀缺，设计两条伪标签预训练路线，共约 5000 小时数据训练。模型仅 0.039 GMACs、20M 参数
+- **关键技术点**：PEAQ/PESQ 等规则型指标依赖手工感知特征，对加性噪声、混响、带宽扩展等现代失真可靠性下降；SCOREQ、DeePAQ 等深度指标虽在特定数据集领先，但依赖昂贵的音频基础模型，在语音或音乐单一域外泛化受限，且无法说明哪里坏了、坏在何种失真。
+- **主要指标**：- NISQA-VAL 皮尔逊/斯皮尔曼：0.84 / 0.81（强基线 0.92 仍领先） - SiSEC08：0.90 / 0.84，SASSEC 0.87 / 0.80，SAOC 0.88 / 0.73 - ODAQ：0.77 / 0.82；IGORC96：0.89 / 0.78；USAC3：
 - **代码**：暂无 | **Demo**：暂无
 
 ---

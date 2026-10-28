@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 40 篇
+共 41 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -360,5 +360,14 @@
 - **关键技术点**：标准监督训练（CTT）依赖人工加噪合成配对数据，与真实录音存在声学域不匹配；NyTT 用观测含噪信号本身作目标从而可用真实数据，但其最优解理论上必然残留噪声，mean-teacher 等变体（NyTT+）也仍未显式促使增强语音分布匹配干净语音分布。
 - **主要指标**：- VBDM：NyTT+ w/ UP-Drift SI-SDR 18.58 dB、PESQ 2.69、DNSMOS 3.59、UTMOS 3.93 - 对比 NyTT+ 基线：PESQ +0.06、DNSMOS +0.06、UTMOS +0.12，SI-SDR 持平 - 对比无配对 DriftSE：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [TIMUSE: Text-Initialized Masked Semantic Token Modeling for Universal Speech Enhancement](https://arxiv.org/abs/2610.34814)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-10-27
+- **一句话贡献**：该文针对离散 token 通用语音增强中"感知质量-保真度"取舍问题：生成式模型易产出听感自然但篡改语言内容或说话人音色的语音。作者提出两阶段框架 TIMUSE，先用 LoRA 微调预训练文本扩散语言模型，以掩码生成建模从退化语音中恢复干净的语义 token，再用条件流匹配重建 24 kHz 波形并保留原始退化语音作为声学参考。在 URGENT 2026 系统级评测中 6 项指标 5 项取得离散系
+- **关键技术点**：通用语音增强需同时去除噪声、混响、带宽受限、削波及复合失真。连续域方法直接估计波形或声学特征，感知质量受限；离散 token 方法将增强转化为序列生成，感知质量强但存在质量-保真权衡。已有工作先生成声学 token 负担重，或用流匹配但语义恢复阶段建模能力不足，缺乏双向语言先验。
+- **主要指标**：- URGENT 2026 DNSMOS OVRL：3.225，全部系统最高 - BAK：4.093；NISQA：4.042（连续域最佳仅 3.952） - 内容准确率：80.61%，说话人相似度 0.640（较离散基线 0.592 提升 0.048） - 同配方控制实验：AATC 内容准确率 79
+- **代码**：暂无 | **Demo**：https://cantabile-kwok.github.io/timuse/
 
 ---
