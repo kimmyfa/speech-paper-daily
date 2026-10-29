@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 83 篇
+共 85 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -353,13 +353,22 @@
 - **代码**：https://huggingface.co/collections/Scicom-intl/voice-isolator | **Demo**：暂无
 
 ---
-## [AudioRSI: Recursively Self-Improving Audio Reasoners](https://arxiv.org/abs/2610.36578)
+## [S3-S2ST: Semantically Supervised Streaming Speech-to-Speech Translation](https://arxiv.org/abs/2610.36777)
 
 - **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-28
-- **一句话贡献**：音频大模型的强化学习奖励长期依赖答案校验、人工设计的过程分或冻结的外部评委，监督者不变而学生一直在变。AudioRSI 让同一个 Audio LLM 兼任 actor 与 critic：自我成对比较生成过程级奖励，并每隔 T 步用当前策略替换 critic，形成递归自提升闭环；由于 critic 能听到原始音频，可拒绝引用不存在声学证据的推理。基于 Qwen2.5-Omni-7B 在 AVQA 上
-- **关键技术点**：现有音频 GRPO 多用结果奖励，正确但蒙对的路径与严谨推导同分；手工过程奖励需调多项权重，外部 LLM 评委则在策略进步时标准冻结。核心问题是：模型能否自己给出过程监督，且该监督能否随模型一起变强。
-- **主要指标**：- MMAU test-mini 总分：76.10%（Sound 82.58、Music 69.16、Speech 76.58） - MMSU 总分：62.52%（Perception 45.62、Reasoning 80.54） - MMAU-Pro 均分：55.9%，Multi-Audio 分项
+- **一句话贡献**：针对流式语音到语音翻译（S2ST）"何时该commit译文"的决策难题，本文提出S3-S2ST：将句级平行语音对改造为"语义单元+640ms栅格"的增量监督数据，在Thinker–Talker架构上同时学习翻译内容与发射时机；READ/WRITE门控阈值可在推理时调节质量–延迟权衡，配合播放缓冲自适应阈值无需重训。4B稠密模型离线FLEURS达COMET 0.904与Qwen3-Omni（30B/
+- **关键技术点**：流式S2ST必须决定等待多少源语音再翻译：过早会误译，而已播出的语音无法像文本那样被静默修正；句级平行语料只给最终译文，缺失"哪个源前缀支持哪个目标片段"的监督。SimulS2ST-Omni等靠改变输入chunk时长获得延迟档位，把决策频率与输入粒度耦合在一起。
+- **主要指标**：- 流式FLEURS（τ=0.5）：COMET 0.828、BLEU 29.83、ASR-COMET 0.769、SIM 0.606、UTMOS 3.75 - 流式9-pair：COMET 0.965、BLEU 60.51、ASR-COMET 0.933、WER 1.54 - 离线FLEURS：BL
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [EmbeddingGemma 2: Unified and Efficient Multimodal Representations](https://arxiv.org/abs/2610.37364)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-10-28
+- **一句话贡献**：Google发布744M参数开源多模态嵌入模型EmbeddingGemma 2，解决文本嵌入模型处理音视频需ASR/描述器等外挂、而MLLM系多模态嵌入模型动辄数十亿参数难以端侧部署的问题。模型以271M双向Transformer为骨干，配167M ViT视觉编码器与305M Conformer音频编码器，将文本、图像、音频、视频及任意交错混合输入统一映射到768维空间，经"蒸馏→对比"渐进课程训
+- **关键技术点**：CLIP/SigLIP类双塔模型无法原生处理混合模态输入；由MLLM改造的嵌入模型规模偏大，不适合低时延、高吞吐与端侧隐私场景；ASR级联文本嵌入的管线丢失非语言声与环境声等副语言信号。
+- **主要指标**：- MTEB(Code) 78.68，超全部sub-4B模型；MTEB(多语) 61.36、较EG1 +0.21 - MMEB-v2 59.01（仅用439M参数），比986M的jina-embed-v5-omni-nano高15.4；MIEB(lite) 60.17，较sub-1B最强+7.9 -
+- **代码**：https://ai.google.dev/gemma/docs/embeddinggemma | **Demo**：暂无
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)
@@ -722,30 +731,39 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [S3-S2ST: Semantically Supervised Streaming Speech-to-Speech Translation](https://arxiv.org/abs/2610.36777)
+## [AudioRSI: Recursively Self-Improving Audio Reasoners](https://arxiv.org/abs/2610.36578)
 
 - **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-28
-- **一句话贡献**：流式语音到语音翻译的核心难点是判断"部分输入何时足以支撑翻译"，且已说出的语音无法像文本那样静默改写。作者提出 S3-S2ST：用大模型把句级双语语音对切成语义单元，量化到 640 ms 网格，转换成"先 READ、到边界再 WRITE"的增量轨迹，训练一个 MLP 门控决定提交时机，并以可调阈值在单一 checkpoint 上滑动质量与延迟曲线。系统在 FLEURS 流式设定取得 BLEU 29
-- **关键技术点**：现有级联系统需在识别、翻译、合成接口间协调部分假设与提交点，直接流式模型多用单调注意力或辅助对齐任务。句级语料只给出最终译文，不指明哪段部分输入支撑哪段目标，因此"何时说"的监督信号缺失；而 SimulS2ST-Omni 类方法靠改变输入 chunk 长度换延迟档位，chunk 越大决策越稀疏。
-- **主要指标**：- FLEURS 流式 BLEU（固定 τ=0.5）：29.83 - FLEURS 流式 COMET：0.828，ASR-COMET 0.769 - FLEURS 流式 SIM：0.606，UTMOS 3.75 - 9-pair 流式 BLEU：60.51，COMET 0.965 - 离线 FLEU
-- **代码**：暂无（作者称计划开源模型与训练/推理/数据构建代码） | **Demo**：暂无
+- **一句话贡献**：现有音频大模型RL的奖励全部来自模型外部：只看最终答案的结果校验、需人工调权的过程分、或训练全程冻结的LLM裁判，导致"学生进步、监督者不变"。本文提出AudioRSI：单一模型同时充当Actor（以`<think>…<answer>…`格式生成推理路径）与Critic（对组内候选路径两两比较输出胜/平/负，折算过程级奖励），并每200步将Critic同步替换为当前Actor，形成递归自我改进；C
+- **关键技术点**：结果导向奖励让"蒙对"与"严谨声学分析"得分相同，二元信号无法区分到达答案的路径；人工过程奖励需多项调权；外部LLM裁判标准固定，OOD精度在训练后半程停滞。核心问题是：监督者能否也学习，且随策略一起变强。
+- **主要指标**：- MMAU test-mini：76.10%（Sound 82.58/Music 69.16/Speech 76.58），较同协议Ke-Omni-R 74.60%高1.5pp，超Audio Flamingo 3（73.30）与Gemini 2.5 Pro（71.60） - MMSU：Overall
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [The Content Leash: Mitigating Degenerate Solutions in Invertible Speaker Anonymization](https://arxiv.org/abs/2610.36768)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-28
+- **一句话贡献**：针对基于条件可逆网络（cINN）的可恢复说话人匿名化方法Rano做论文指导式复现，发现退化解：发表目标不约束匿名化输出内容，优化器可借严重语音降质降低triplet损失、制造"高EER+完全不可懂"（41.6% EER但WER 117.6%）的假隐私。作者提出三项修改：anchor与range损失约束输出谱、ECAPA蒸馏mel域验证器泛化到未见验证模型、含测量底限与seeds的评测协议。最终在3
+- **关键技术点**：在Rano类cINN匿名化中，consistency损失只作用于以真实说话人嵌入为条件的另一前向，triplet损失只看匿名化谱Xa的说话人嵌入，没有任何项惩罚Xa内容改变，目标可被语音降质"作弊"；且对轻量验证器训练的匿名化器骗不过独立强验证模型。
+- **主要指标**：- ECAPA-TDNN EER 26.31±0.25%（干净底限2.83%）；held-out ResNet 27.86%（底限2.08%） - WER 11.75%（底限2.48%，Whisper large-v3），McAdams基线8.44% EER/WER 3.61% - 匹配消融：加两损
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Beyond Answer Changes: Matched Same-Class Controls for Local Audio Evidence](https://arxiv.org/abs/2610.37605)
 
 - **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-28
-- **一句话贡献**：音频语言模型在局部声音事件被替换后改变答案，可能源于对事件类别的响应，也可能只是对波形被改写本身敏感，二者此前无法区分。作者提出匹配同类别对照协议：类别改变替换与类别保持替换共享同一时间区间、响度估计、供体拟合与交叉淡化流程，仅类别不同。在 600 个合成声景、33 个查询类别、三款模型上，改变类别比同类别改写多引发 49.7 至 60.9 个百分点的答案变化，同类别准确率仅下降 5.2 点以内，
-- **关键技术点**：现有干预评测（噪声掩蔽、区域掩蔽、反事实语音接地）只能说明答案随扰动变化，但局部替换本身是复合处理：既改类别又改波形，因此无法归因。文本域反事实提示研究已指出，需要语义保持基线才能解释定向编辑效应。
-- **主要指标**：- 答案变化率（不同类对同类）：Qwen2.5-Omni-7B 73.17% 对 12.25%，配对差 60.92 - 答案变化率（不同类对同类）：Qwen2.5-Omni-3B 70.25% 对 12.50%，差 57.75 - 答案变化率（不同类对同类）：Fun-Audio-Chat-8B 65
+- **一句话贡献**：音频-语言模型（ALM）在被查询声事件发生局部编辑后改变答案，可能源于对事件类别的响应、对波形被改写的敏感，或两者混合，现有干预评测无法区分。本文提出匹配的同类别替换控制协议：异类替换与同类替换共享同一时间区间、电平估计、供体拟合与交叉淡入淡出，仅前者改变查询类别而后者保持正确答案不变。在600个合成声景、3个模型（Qwen2.5-Omni-7B/3B、Fun-Audio-Chat-8B）上，异类
+- **关键技术点**：ALM答案是否真正由局部声学证据支撑是可信度评测核心。现有噪声/区域掩蔽、注意力引导掩蔽、反事实声音植入等方法把"改变目标类别"与"局部重写波形"混为同一复合处理，答案变化无法归因。
+- **主要指标**：- 异类替换答案变化率：73.17%/70.25%/65.33%（Qwen2.5-Omni-7B/3B、Fun-Audio-Chat-8B） - 同类重写答案变化率：12.25%/12.50%/15.67%；配对差距Δ=60.92[57.25,64.58]/57.75/49.67[45.33,53.
 - **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Partially Edited Audio: Generation, Defense, and Open Problems](https://arxiv.org/abs/2610.37640)
 
 - **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-10-28
-- **一句话贡献**：本文是 ICASSP 2027 特邀专场"Partially Edited Media: Perspectives from Synthesis and Defense"的 5 页综述，聚焦"部分编辑音频"这一新范式：真实录音中仅局部片段或属性被生成模型改写，未编辑与已编辑内容共存。作者先给出二维定义与三大特性（共存性、局部性、双重意图），并主张"何为伪造或有害"是依赖应用场景的判断而非编辑的固有
-- **关键技术点**：生成式音频模型已支持对录音做替换、插入、删除式的局部改写，其痕迹比全生成音频更微弱、更难检测，且危害可能更大。但生成与安全两个社区各自为战，缺乏把编辑效用与取证问责打通的统一框架。
-- **主要指标**：- 代表性生成系统：VoiceCraft（自回归 codec 填充）、Voicebox（流匹配填充，因滥用风险未公开发布）、EditSpeech（部分推理加双向融合）、AUDIT（指令驱动隐扩散）、AuK（开源语音生成编辑基座）、SeamlessEdit（背景噪声感知零样本编辑）、EmoCorrec
+- **一句话贡献**：本文为ICASSP 2027特殊session撰写的部分编辑音频（partially edited audio）综述，首次从生成与防御双视角统一梳理该范式。文章沿"部分/完整"与"编辑/生成"两维下定义，归纳共存性、局部性、双重意图三特征，论证"fake/有害"是取决于披露、同意与信任假设的应用性判断而非编辑操作固有属性。综述按编辑目标-方法-评估组织生成侧，按检测-定位-deepfake分离-可
+- **关键技术点**：生成式音频模型已从整段合成走向对真实录音的局部选择性编辑（词/短语替换、插入、删除，及情绪、韵律、背景音修改），但生成与安全社区研究彼此割裂：无统一框架连接编辑效用与取证责任，且"何为fake"的判定标准长期含糊。
+- **主要指标**：- 转录正确性：WER（口径不足——转写达标仍可能引入说话人/韵律/声学不一致） - 自然度：UTMOS等自动MOS预测 - 说话人一致性：WavLM等SV嵌入相似度，比较编辑区与未编辑区 - 关键对比（定性）：检测器主要依赖拼接边界伪影，context-aware神经编辑消除边界后此类性能显著退化
 - **代码**：暂无 | **Demo**：暂无
 
 ---

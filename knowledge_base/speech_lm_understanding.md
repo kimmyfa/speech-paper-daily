@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 221 篇
+共 222 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1022,9 +1022,9 @@
 ## [TAC2: Timestamped Audio Captioning as composable functions](https://arxiv.org/abs/2610.36568)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-28
-- **一句话贡献**：针对现有大型音频语言模型（LALM）倾向于自由对话生成、描述缺少精确时间与说话人归因的问题，本文将带时间戳的音频描述（TAC）重构为可组合函数：把结构化字幕拆解为「指令-输入-输出」（IIO）补全任务，输出为场景概述加带边界的事件、说话人轮次与副语言属性时间线。为避免人工标注，作者用时间 IoU 匹配融合声音事件检测、说话人日志与字幕三个弱教师，构建约 200 万条 30 秒片段；再用少于 1 万
-- **关键技术点**：真实音频应用（语义检索、剪辑、归档）需要可查询、以物理时间为坐标的表示；但 LALM 输出的是无结构的自由文本，存在时间幻觉与语言先验依赖。已有 TAC 只做事件级时间定位，无法表达说话人轮次、重叠事件与副语言属性。
-- **主要指标**：- MMSU 总体：81.9（感知 77.8，推理 86.4；教师级联 TAC2-E 为 82.9） - MMAR / MMAU 总体：68.0 / 75.6 - MSU-Bench 总体：82.2（Tier 1 79.2，Tier 2 86.6） - 多轮对单轮解码：81.3 到 81.9，音高比
+- **一句话贡献**：针对大型音频语言模型自由文本输出缺乏时间grounding与可查询性的问题，提出TAC2：以时间注册IoU匹配融合captioner、说话人分离、声音事件检测三个弱监督teacher，在200万条in-the-wild音频上构建带说话人归属的时间戳声学时间线，用Instruction-Input-Output（IIO）可组合函数格式训练，再由小样本LoRA专家引出重音、情绪等副语言属性并蒸馏为TA
+- **关键技术点**：声学表征需锚定物理时间且可查询；LALM自由描述易时间幻觉，前作TAC一次性事件级描述难表达说话人轮次/重叠事件，无法融入转写等先验。
+- **主要指标**：- MMSU 81.9（感知77.8/推理86.4），感知超TAC +14.0、超Gemini-3.7 Flash +9.1，近TAC2-E 82.9 - MSU-Bench 82.2（T1 79.2/T2 86.6）超Gemini-3.7 Flash +5.8；MMAR 68.0/MMAU 75.
 - **代码**：暂无 | **Demo**：https://swapb94.github.io/tac2-audio-describer/
 
 ---
@@ -1982,12 +1982,21 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [Understanding Everyday Communication Patterns, Stress, and Productivity in Hybrid Work through Egocentric Wearable Audio Sensing](https://arxiv.org/abs/2610.37270)
+## [From Voiceprints to User Entities: Online Speaker-Memory Construction for Multi-User Spoken Agents](https://arxiv.org/abs/2610.36713)
 
-- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-28
-- **一句话贡献**：混合办公下家庭与办公室环境如何塑造日常沟通行为与情绪状态，长期缺乏定量证据。作者构建第一视角可穿戴音频感知系统：在低成本 Android 徽章上实时提取 MFCC 1 至 12、F0 与响度等低层特征，再离线做前景与背景说话人日志化以导出说话负载与说话活跃度。为克服低维特征的限制，提出教师学生知识蒸馏，把 WavLM 与 Whisper 基础模型的能力迁移到紧凑 ResNet，三个公开第一视角数据
-- **关键技术点**：后疫情混合办公改变了沟通的时空分布，但缺少在真实环境中的连续、客观测量手段。可穿戴音频感知受限于隐私、功耗与算力，只能在端侧保留极少声学特征，导致说话人日志化精度受限。
-- **主要指标**：- 教师 Whisper-Large DER：MMCSG 7.3、ICSI 8.4、EasyCom 22.6 - 基线 ResNet DER：16.0、24.6、31.8 - 蒸馏后 DER：14.1、23.5、29.0，相对基线分别降低 1.9、1.1、2.8 个百分点 - 噪声鲁棒性：加入室内噪
-- **代码**：暂无 | **Demo**：暂无
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-10-28
+- **一句话贡献**：多用户语音智能体须在访问用户记忆前先辨认说话人，而现有记忆基准均默认历史已正确归属。本文提出"声纹只是身份的观察而非身份本身"，形式化在线说话人-记忆构建问题，给出免训练的EvoSpeakerMem语音支持层：按时间序create/link路由、选择性更新声学状态、按身份分区读写文本记忆，并构建LoCoMo-ID语音记忆基准。SMIIP-TV上固定模板真探针拒识率约一年从29.8%升至55.6%；
+- **关键技术点**：同一说话人录音随环境、设备与状态漂移，固定注册声纹无法长期充当身份键；归属错误进入记忆写路径后果持久——错误新建碎片化一人历史，错误链接污染用户画像，且现有Audio LLM缺少持久说话人状态。
+- **主要指标**：- B3F1（ECAPA-only、偏移条件）：Fixed 74.18→Gated 92.73、KNN 96.62（%） - SMIIP-TV固定模板真探针拒识：29.8%→55.6%（0–1天→约1年），EER 9.7→14.0% - 身份门控QA（4113条敏感查询）：干净71.41→75.27
+- **代码**：https://anonymous.4open.science/r/EvoSpeakerMem-4AF1 | **Demo**：https://anonymous-user428.github.io/evo-speaker-mem-demo
+
+---
+## [Developing a Speech Language Model for Basque](https://arxiv.org/abs/2610.36911)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-28
+- **一句话贡献**：为解决少数民族语言缺失端到端语音大模型、级联ASR+LLM+TTS管线带来语义损失、误差累积与高延迟的问题，本文提出首个开放的巴斯克语语音大模型：基于LLaMA-Omni模块化架构，以巴斯克语指令版Latxa-3.1-8B-Instruct为骨干；针对语音指令数据稀缺，用Latxa-3.1-70B翻译VoiceAssistant-400K并经VITS多音色TTS合成音频，构建约45万组口语指令对。
+- **关键技术点**：开源SLM（LLaMA-Omni、Spirit LM等）几乎只覆盖英中双语，语音模态使少数民族语言劣势加剧；巴斯克语不存在（音频输入、文本输出、离散单元输出）三元组指令数据，无法负担大规模多模态预训练，级联管线又无法满足低延迟对话需求。
+- **主要指标**：- 内容质量 LLM-as-a-Judge（Latxa-70B评分）：3.86/5，接近英文LLaMA-Omni的3.99，超Qwen2-Audio 3.47与SALMONN 3.44 - 输出语音可懂度：WER 9.94%、CER 1.62%（HiTZ Conformer ASR口径），优于LLa
+- **代码**：暂无（声明将开放GitHub与HuggingFace） | **Demo**：暂无
 
 ---
