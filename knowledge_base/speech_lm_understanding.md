@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 222 篇
+共 224 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1998,5 +1998,23 @@
 - **关键技术点**：开源SLM（LLaMA-Omni、Spirit LM等）几乎只覆盖英中双语，语音模态使少数民族语言劣势加剧；巴斯克语不存在（音频输入、文本输出、离散单元输出）三元组指令数据，无法负担大规模多模态预训练，级联管线又无法满足低延迟对话需求。
 - **主要指标**：- 内容质量 LLM-as-a-Judge（Latxa-70B评分）：3.86/5，接近英文LLaMA-Omni的3.99，超Qwen2-Audio 3.47与SALMONN 3.44 - 输出语音可懂度：WER 9.94%、CER 1.62%（HiTZ Conformer ASR口径），优于LLa
 - **代码**：暂无（声明将开放GitHub与HuggingFace） | **Demo**：暂无
+
+---
+## [Do Audio LLMs HEAR Pain? Tracing Acoustic Evidence from Speech to Language Reasoning](https://arxiv.org/abs/2610.38570)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-30
+- **一句话贡献**：大型音频语言模型能否利用语音中非词义的声学信息尚不清楚。本文以疼痛为受控探针，基于TAME-Pain数据集（冷水升压诱导疼痛，同一说话人在疼痛下朗读词义中性的Harvard句子、并口头报告疼痛等级），提出HEAR四阶段诊断框架，从行为、编码、感知、使用四个环节追踪疼痛证据。在七个LALMs上，当疼痛只能从声音推断时所有模型接近随机（二分类平衡准确率约48-51%），疼痛被言明时则近上限（87.5-
+- **关键技术点**：已有工作表明LALMs在副语言任务上高度依赖词汇内容，但失败原因不明：声学信息是缺失于模型、在内部丢失，还是存在却不参与推理？现有评测混淆两类证据，难以归因。
+- **主要指标**：- 中性Harvard句（仅音频）：7模型近随机，二分类平衡准确率48.1-50.5%、三类32.8-34.0%（随机基线50%/33.3%） - 口报疼痛（仅音频）：二分类87.5-99.7%、三类81.0-99.5%，近上限 - 探测（Qwen2.5-Omni-7B）：CRNN编码器Block1
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Who Called? V33DA: A Physically Verified Multimodal Benchmark for Vocal Attribution in Zebra Finch Groups](https://arxiv.org/abs/2610.38109)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-30
+- **一句话贡献**：群体场景中判断"哪只鸟在发声"是社交通信研究的入口，但现有资源要么只定位声源不给呼叫者身份，要么只识别孤立叫声的个体、不依赖3D候选几何，且均缺乏物理验证的真值。本文提出V33DA：基于BirdPark录制系统构建的多模态声学归属基准，含33,625个经体表加速度计振动信号物理验证的事件，同步提供5通道音频、三视角视频、标定3D位姿与逐鸟无线电遥测，并设计session-distinct、held
+- **关键技术点**：声源归属的证据跨模态分布：声音到多个麦克风、候选动物在共享3D空间移动，而训练测试同鸟时高准确率可能只是"熟悉嗓音识别"而非可泛化的归属能力。现有基准标签或来自感知标注、或来自定位反推，存在循环监督风险。
+- **主要指标**：- Top-1归属（LOO）：EINV2 55.2%、ACCDOA 55.4%、SpatialScorer 49.5%、SRP物理基线53.5%，随机27.0% - 槽位崩塌：SELDnet++ session 86.5% vs LOO 0.0%（AudioANN直接归属0.0%、经定位归属53.0
+- **代码**：https://github.com/marisbasha/v33da | **Demo**：暂无
 
 ---

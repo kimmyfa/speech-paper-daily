@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 72 篇
+共 73 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -369,6 +369,15 @@
 - **关键技术点**：跨域ASR严重退化而目标域音频常无转录，自训练伪标签的交叉熵对每个token无条件最大化似然，教师错误变成监督目标并被深度网络记忆放大；已有工作（迭代伪标签、slimIPL、Kaizen、数据筛选）均只改标签不改目标函数，学生仍被迫复现教师输出。
 - **主要指标**：- 银行域WER：Large-V3标签下GRPO 12.17% vs SFT 17.21%；Tiny标签下14.06% vs 32.11% - Tiny标签GRPO比Large-V3标签SFT优3.15点，换目标收益大于换教师 - 敏感度：伪标签WER每升1点，SFT学生WER平均升1.31点，GR
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Streaming Speech Recognition on a Microcontroller: a 65.7M-Parameter Transducer in 2 and 4 Bits on the ESP32-P4](https://arxiv.org/abs/2610.38739)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-10-30
+- **一句话贡献**：本文在无神经加速器的 ESP32-P4 微控制器（双 400MHz RISC-V 核、PIE SIMD、32MB PSRAM）上流式实时运行 65.7M 参数 Zipformer2 transducer（Kroko）。全程零训练：按逐矩阵敏感度将 290 个编码器矩阵存入 Hadamard 旋转分组的 2/4bit 格式，依次输出校正、GPTQ 舍入与组范数搜索，71MB int8 权重压至 26
+- **关键技术点**：现有 MCU 语音识别要么是 ESP-SR 式固定命令词表，要么超不过实时（Oído 13M Conformer-CTC 需 1.97 倍音频时长）；开放词汇流式转写所需数千万参数模型超出多数 MCU 内存与算力。
+- **主要指标**：- WER 4.34%/10.26%：LibriSpeech clean/other（beam 4，芯片管线；greedy 4.52%/10.89%） - 落后 int8 发布模型 +0.40/+1.09/+2.26/+1.09 点（clean/other/FLEURS/CV）；模拟器证差距全在权重
+- **代码**：https://github.com/BoumedineBillal/esp32-pie-asr | **Demo**：https://huggingface.co/BoumedineBillal/esp32-pie-asr-kroko-en
 
 ---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)
