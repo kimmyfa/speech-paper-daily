@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 224 篇
+共 228 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -2016,5 +2016,41 @@
 - **关键技术点**：声源归属的证据跨模态分布：声音到多个麦克风、候选动物在共享3D空间移动，而训练测试同鸟时高准确率可能只是"熟悉嗓音识别"而非可泛化的归属能力。现有基准标签或来自感知标注、或来自定位反推，存在循环监督风险。
 - **主要指标**：- Top-1归属（LOO）：EINV2 55.2%、ACCDOA 55.4%、SpatialScorer 49.5%、SRP物理基线53.5%，随机27.0% - 槽位崩塌：SELDnet++ session 86.5% vs LOO 0.0%（AudioANN直接归属0.0%、经定位归属53.0
 - **代码**：https://github.com/marisbasha/v33da | **Demo**：暂无
+
+---
+## [VoxLock: Target-Speaker Extraction for Voice Agents Without an Enrollment Step](https://arxiv.org/abs/2610.40727)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-02
+- **一句话贡献**：语音电话 agent 的 ASR 会把麦克风旁所有说话人转写进文本，降噪器天生保留语音而无济于事，Krisp/ai-coustics/Sanas 等商用"语音隔离"又闭源且按分钟/设备收费。本文在单张 NVIDIA L4 上微调公开因果 TSE 基线 REAL-TSE（27M 参数 BSRNN），改为直接使用通话自身截取的 3 秒语音作说话人线索，免注册，发布为 VoxLock。在 Krisp 2
+- **关键技术点**：传统 TSE 依赖预录 enrollment 音频，而通话 agent 只有通话流本身；且 TSE 论文多在仿真混合上报告信号级指标，agent 真正关心的是识别器在真实音频上写出什么。商用隔离滤波器性能不公开、许可昂贵，缺少"开源 TSE 与商用产品按下游识别指标在真实录音上对比"的工作。
+- **主要指标**：- WER：Krisp 集 4.95%（流式 live() 5.15%），未处理 23.21%，REAL-TSE 初始检查点 9.81% - Leak：0.11 词/分钟，85.3 分钟纯背景语音仅漏 9 个背景词（未处理 5674 词、Krisp Default 130 词） - 盲测 AMI：W
+- **代码**：https://github.com/arbazsiddiqui/voxlock | **Demo**：暂无（权重 https://huggingface.co/arbazsiddiqui/voxlock）
+
+---
+## [Apriel Voice 27B Preview: An Open Model for Speech, Reasoning, and Tool Use](https://arxiv.org/abs/2610.40738)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-02
+- **一句话贡献**：语音系统惯用 ASR-LLM-TTS 级联，把语音感知与推理、工具调用割裂，带来误差传播与高延迟。本文提出 Apriel Voice 27B Preview：在 Gemma 4 26B-A4B 骨干上串联冻结 Whisper large-v3-turbo 编码器与 47.7M 参数投影器，同一骨干统一语音理解、推理、对话与工具调用，保留文本/图像能力且 TTS 外部可替换。经两阶段适配、按源 CE
+- **关键技术点**：识别准确不代表能遵循约束、调用正确工具，文本侧强能力也不保证请求以音频到达时推理依旧可靠。三段式级联与委托式语音系统把理解、推理、合成、轮次控制拆给不同组件，跨接口误差与延迟累积。
+- **主要指标**：- 语音推理（thinking，0-100 分制）：BBA 98.90、BFCL 81.13、IFEval 86.47、MT-Bench 86.19，8 项均值 85.84 为开源两级最优 - ASR：LibriSpeech test-clean/other WER 2.23%/5.15%，8 个基
+- **代码**：暂无（声明开源、已上线 Apriel Live 演示） | **Demo**：暂无
+
+---
+## [Incongruence-Aware Evaluation of Multimodal Speech Emotion Recognition in Audio Large Language Models](https://arxiv.org/abs/2610.40883)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-02
+- **一句话贡献**：语音交互大模型同时处理"说了什么"与"怎么说的"，但两类情感通道并不总是一致，这种跨模态不一致是否降低语音情感识别（SER）性能此前难以度量。本文将文本（NRC-VAD 词库）与音频（MSP-Podcast 微调的 wav2vec2-large VAD 回归器）映到共享 valence-arousal-dominance 空间，用两分量 GMM 把两模态距离转换为连续、无阈值的 incongrue
+- **关键技术点**：多模态 SER 长期默认"加模态只会更好"，但心理语言学表明情绪声调与词义是可分离而自动交互的通道，冲突时人类观察者亦有系统性偏差。已有计算工作依赖人工构造的对抗性冲突或二值一致标签，缺少在共享情感空间中连续、经人类验证且被用作误差回归量的不一致度量；且常见做法用不同模型跑 text-only 与 multimodal 条件，悄悄混淆了模型与模态。
+- **主要指标**：- GPT-audio 在 eNTERFACE text+audio（T2）accuracy 最高 0.907；pooled 调整后 OR 1.25 [1.04,1.49]，q=0.022 - 三语料 text+audio 调整 OR：eNTERFACE 1.25、MELD 1.15、MOSEI 1
+- **代码**：https://github.com/Guylaban/incongruence-aware-ser | **Demo**：暂无
+
+---
+## [Hierarchical Dual-Graph Retrieval for Long-form Audio Reasoning](https://arxiv.org/abs/2610.41390)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-02
+- **一句话贡献**：大型音频语言模型（LALM）直接处理完整长录音时，难以捕捉分散在远距离片段中的查询相关内容，且开销巨大（35分钟录音约占52.5K token）。本文提出AudioHelix，首个面向LALM检索增强生成的层次化DualGraph框架：离线将长音频分块，在chunk、unit、语义概念三层构建声学-文本双模态节点与层次包含边；查询时从最相似的种子概念节点逐步传播相关性分数并经Personalize
+- **关键技术点**：LALM全量处理长音频超出有效上下文与计算预算；纯文本RAG基于ASR转录丢失情绪、语气、停顿等副语言线索，且音频转文本描述易幻觉；纯音频RAG则受静音与冗余干扰，朴素跨模态检索还受modality gap拖累。
+- **主要指标**：- Qwen3-Omni-30B+AudioHelix：TraceAV 71.6、MMAU-Pro 67.2、AM 66.1，对比全音频71.3/66.1/63.7 - Audio-Flamingo-3：59.4/52.3/58.5，对比56.9/50.7/57.3；Voxtral-3B：50.6/
+- **代码**：https://github.com/ewha-mmai/audiohelix | **Demo**：http://mmai.ewha.ac.kr/audiohelix/
 
 ---

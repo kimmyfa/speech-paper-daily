@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 73 篇
+共 74 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -657,5 +657,14 @@
 - **关键技术点**：部分伪造语音只替换少量关键词即可改变语义，整句检测器只能报警而不能指出不可信词；帧级定位又依赖词时间戳与转写结果做后对齐，转写或边界估计错误会直接产生错误词级标签。已有带标签 ASR 联合生成方法虽避免后对齐，但存在识别性能下降和对数据集特定编辑模式敏感的问题。
 - **主要指标**：- 平均 WER：0.054 - 平均词级 F1：0.901（四集平均） - 句级欺骗范围准确率：0.952（五集平均） - 域外测试：WER 0.086、词级 F1 0.759、句级准确率 0.805 - 关键对比：平均 WER 较基线 0.373 与 0.099 显著下降，词级 F1 由 0.7
 - **代码**：https://anonymous.4open.science/r/asr_word_antispoofing_anon-38C6/ | **Demo**：暂无
+
+---
+## [From Transcription to Reformulation: Defining and Benchmarking Grounded Generative Speech Recognition](https://arxiv.org/abs/2610.41292)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-02
+- **一句话贡献**：本文提出GSR（Grounded Generative Speech Recognition）范式，将语音识别从恢复唯一字面转写重新定义为生成受声学证据支撑、按指令组织的文本，形式化接地改写空间G(Y,S)≥γ并建立四级改写层阶（字面转写/规范改写/语义改写/语音接地结构化）。据此构建首个评测基准GSR-Bench，覆盖精细会议转写、跨方言翻译、上下文化听写、语音摘要及静音/噪声声学幻觉五类赛道，
+- **关键技术点**：传统ASR以WER/CER在单一参考转写下评估，但Speech-LLM已能做去冗余、标点恢复、ITN、结构化摘要等合法改写：精确匹配会错误惩罚这类 desirable 输出，也无法度量生成内容是否真正被语音接地。
+- **主要指标**：- GSR-Refine：UniGSR-Post以CER 54.44%代价换得最高LLM均分4.52，TeleASR仅CER 3.46%但均分4.16，直观呈现"指标悖论" - GSR-PACE：热词上下文使UniGSR CER从8.52%降至4.79%，而用户画像上下文反升至17.00% - GS
+- **代码**：暂无 | **Demo**：暂无
 
 ---
