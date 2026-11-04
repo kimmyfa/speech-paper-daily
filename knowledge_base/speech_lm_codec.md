@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 31 篇
+共 32 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -171,6 +171,15 @@
 - **关键技术点**：低帧率缩短token序列但要求每位置携带更多语言与声学信息；阈值式可变帧率编码的事件数由内容决定，同一设置在五个数据集上实测46.1–81.5事件/秒波动，序列长度与下游建模成本无法仅由音频时长确定，且在数据分布漂移下阈值校准失效。
 - **主要指标**：- 12.5 Hz受控深度16：自适应vs固定帧率PESQ-WB 2.556 vs 2.442（+0.114）、dWER 0.62% vs 0.72% - LibriSpeech 2.43 kbit/s深度16：dWER 0.50%全对比最低（Qwen3-TTS-Tokenizer-12Hz为0.5
 - **代码**：https://github.com/third-intelligence/RubatoCodec | **Demo**：暂无
+
+---
+## [One Waveform, Two Stories: Benchmarking Speech-Acoustic Conflict in Audio-Language Models](https://arxiv.org/abs/2611.00325)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-11-03
+- **一句话贡献**：论文提出SAC-Bench，首个系统性评测同一音频内"言语声明与环境声学证据相互矛盾"时音频大模型（ALM）听词还是听声的基准。基于FSD50K的188个声学事件类构建616,031条唯一音频（2,069.9小时）、204万QA，覆盖语义、时间、空间三类共七个任务，配对相容/冲突条件及audio-only对照。对五个开源ALM评测显示：高音频单模态准确率与冲突下大幅退化并存，Event Ident
+- **关键技术点**：ALM评测多在言语与环境声一致时进行，模型可靠语言捷径答对而无需真正感知声学事件，故相容条件下的成功无法区分忠实声学定位与文本偏置。已有冲突基准仅覆盖模态间冲突或词汇-韵律/场景级冲突，时间与空间定位基准又缺少矛盾言语声明，跨"何事/何时/何处"的音频内言语-声学冲突长期缺位。
+- **主要指标**：- Event Identity（五选一准确率，Qwen3-Omni）：audio-only 84.6%、冲突下39.8%；五模型相容-冲突gap 24.8-46.5pp - 语音跟随率SFR：Identity冲突47.0-80.8%（远超20%随机参考）；Temporal Order最高92.4%
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [KVAE: Family of Tokenizers for Multimodal Generative Models](https://arxiv.org/abs/2608.05798)

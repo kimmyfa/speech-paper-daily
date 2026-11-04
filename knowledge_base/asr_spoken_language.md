@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 74 篇
+共 76 篇
 
 ## [The Trade-off Was in the Labels: Causal Supervision for Turn-Aware Streaming ASR](https://arxiv.org/abs/2609.04225)
 
@@ -380,6 +380,15 @@
 - **代码**：https://github.com/BoumedineBillal/esp32-pie-asr | **Demo**：https://huggingface.co/BoumedineBillal/esp32-pie-asr-kroko-en
 
 ---
+## [How Much Prosody Does Your ASR Encoder Already Know](https://arxiv.org/abs/2611.02602)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-11-03
+- **一句话贡献**：传统轮次结束（EoT）检测长期假设手工韵律特征（音高、能量、语速、停顿）能补充神经ASR编码器的表征。本文直接追问：流经流式Zipformer编码器后，韵律还剩多少价值？作者在编码器输入的log-mel特征、第一/第三/最终stack共四个深度上运行三项测试：韵律增量、逐特征可重建性、结合时间移位对照的逐特征检验。三项结论一致：韵律在原始音频上增益很大，但仅过一个编码器stack即基本坍塌；残值多
+- **关键技术点**：对话系统需在数百毫秒内连续判定说话人是否说完；固定静音阈值会误触轮内停顿或响应迟缓，故二十年来检测器普遍将手工韵律与ASR编码器特征作为两路独立输入拼接。但编码器读的是韵律所计算的同一信号，可能早已内含这些信息，业界为此付出特征抽取、延迟与逐说话人调优的成本。
+- **主要指标**：- 编码器单用AUC（logistic/neural）：fbank 0.685/0.686 → zip-early 0.874/0.884 → zip-mid 0.908/0.912 → zip-final 0.893/0.901，韵律增量ΔCE过首个stack后即坍塌 - 90%召回工作点误报率：
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)
 
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-01
@@ -665,6 +674,15 @@
 - **一句话贡献**：本文提出GSR（Grounded Generative Speech Recognition）范式，将语音识别从恢复唯一字面转写重新定义为生成受声学证据支撑、按指令组织的文本，形式化接地改写空间G(Y,S)≥γ并建立四级改写层阶（字面转写/规范改写/语义改写/语音接地结构化）。据此构建首个评测基准GSR-Bench，覆盖精细会议转写、跨方言翻译、上下文化听写、语音摘要及静音/噪声声学幻觉五类赛道，
 - **关键技术点**：传统ASR以WER/CER在单一参考转写下评估，但Speech-LLM已能做去冗余、标点恢复、ITN、结构化摘要等合法改写：精确匹配会错误惩罚这类 desirable 输出，也无法度量生成内容是否真正被语音接地。
 - **主要指标**：- GSR-Refine：UniGSR-Post以CER 54.44%代价换得最高LLM均分4.52，TeleASR仅CER 3.46%但均分4.16，直观呈现"指标悖论" - GSR-PACE：热词上下文使UniGSR CER从8.52%降至4.79%，而用户画像上下文反升至17.00% - GS
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Multilingual TASU: Extending Text-Only Alignment to Multilingual Speech Recognition via Simulated CTC Posteriors](https://arxiv.org/abs/2611.00692)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-03
+- **一句话贡献**：多语言Speech LLM性能受限于成对语音-文本数据稀缺与语种分布失衡，已有TASU文本对齐只在英语验证。本文提出多语言TASU：以冻结OWSM-CTC的原生50,002路CTC后验空间作为八语种共享对齐接口接入Qwen2.5-1.5B-Instruct，在MLS八语种上系统比较真实音频后验、启发式CPS与学习式多语种模拟器三种监督源。结果显示：真实后验+LoRA将池化WER从10.08%降至8
+- **关键技术点**：主流Speech LLM对齐依赖连续特征投影与大规模成对语音，多语言数据严重不均衡，低资源语种难以训练专用对齐模块；TASU/TASU2虽证明文本对齐可行但仅限英语，跨语种音系干扰与稀疏性下的共享后验接口能否成立尚属未知。
+- **主要指标**：- TASU-Real-LoRA：池化WER 8.21%（vs 独立OWSM-CTC 10.08%，相对降18.6%） - Projector-only：真实后验9.93% / 学习模拟器11.50% / 启发式CPS 20.55% - 低配对语音：CPS init+1/9语音一epoch 9.19
 - **代码**：暂无 | **Demo**：暂无
 
 ---

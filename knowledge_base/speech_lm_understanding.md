@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 228 篇
+共 234 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1028,6 +1028,24 @@
 - **代码**：暂无 | **Demo**：https://swapb94.github.io/tac2-audio-describer/
 
 ---
+## [InteractionBench: Measuring Timing, Task Accuracy, Whisper and Volume, and Grounding in Real-Time Voice Systems](https://arxiv.org/abs/2611.02430)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-03
+- **一句话贡献**：现有实时语音基准通常只测单一维度。本文提出InteractionBench，用同一套录制用户音频与同一评测链路，在七个系统上同时度量对话时序、口头任务准确、耳语与音量、22轮以上长对话的groundedness四个维度，每系统13个场景221题、共1519次评分运行。关键发现：级联系统口头任务最高（38/50）但时序偏弱；没有任何系统在要求窗口内纠正用户语法错误；仅Gemini Live在多数请求
+- **关键技术点**：既有全双工基准各自聚焦轮换、指令跟随、副语言控制或记忆的一面，数据、协议与系统互不一致，同一系统的不同维度结果难以对比；托管API如GPT-Live的流式音频无时间戳且省略静音帧，任何时序测量都须先重建其时间线。
+- **主要指标**：- 口头任务：级联38/50（76%）最高，托管34–36/50，开源模型仅3–9/50；语法纠正实时打断全系统0/10 - 时序：GPT-Live客户端86%最高，按服务器时钟扣除约1.5s延迟后降为56%；Moshi最低41%；六个全双工系统时序与口头任务Spearman秩相关0.83 - 耳语
+- **代码**：https://github.com/avera-labs/InteractionBench | **Demo**：暂无
+
+---
+## [Voice-Native LLMs Hear Frustration but Do Not Listen to It](https://arxiv.org/abs/2611.02893)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-03
+- **一句话贡献**：用户的挫折既写在词里也藏在语气里，端到端音频大模型（ALLM）本可两者皆闻，但现有评测把"输出没变"直接读作鲁棒，无法区分"听见了才稳住"与"根本没听见"。本文按Brunswik镜头模型把挫折传递拆为表达、感知、利用三链路，在353个任务上交叉挫折措辞与挫折音色构成within-item 2×2设计，用55个音色合成1412条音频发布VoxAffect。8个模型中7个的准确率不受音色影响；7个能检
+- **关键技术点**：VoiceBench等评测将扰动下准确率不变等同于鲁棒，VoxParadox等仅在任务外测情绪识别，均未验证被评模型是否感知了刺激，导致鲁棒性与非感知被混淆；且很少有工作在任务音频中独立操纵措辞与音色两通道。
+- **主要指标**：- 音色对准确率：8模型效应-2.6至+7.7pp，7模型CI含零；仅MiMo-2.6-Flash显著+7.7pp - 音色感知：中性措辞下BV标注frustrated率0.0–3.1%；表演愤怒命中率7/8模型73–100%，假警报0/96 - 感知灵敏度差：声学0.5–3.4pp vs 词汇41
+- **代码**：https://github.com/Astarojth/hear-not-listen | **Demo**：暂无
+
+---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-01
@@ -2052,5 +2070,41 @@
 - **关键技术点**：LALM全量处理长音频超出有效上下文与计算预算；纯文本RAG基于ASR转录丢失情绪、语气、停顿等副语言线索，且音频转文本描述易幻觉；纯音频RAG则受静音与冗余干扰，朴素跨模态检索还受modality gap拖累。
 - **主要指标**：- Qwen3-Omni-30B+AudioHelix：TraceAV 71.6、MMAU-Pro 67.2、AM 66.1，对比全音频71.3/66.1/63.7 - Audio-Flamingo-3：59.4/52.3/58.5，对比56.9/50.7/57.3；Voxtral-3B：50.6/
 - **代码**：https://github.com/ewha-mmai/audiohelix | **Demo**：http://mmai.ewha.ac.kr/audiohelix/
+
+---
+## [C3: Speech-Guided KV Retrieval for Long-Context SpeechLLM Inference](https://arxiv.org/abs/2611.00333)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-03
+- **一句话贡献**：SpeechLLM以远高于文本的时间分辨率编码音频，KV缓存成为长上下文推理的显存与解码瓶颈；现有KV检索方法主要面向文本设计，论文证明检索误差会自回归复合成"生成漂移"。为此提出C3（Cluster–Compete–Compete）：按KV头组织的免训练检索框架，融合层级键空间聚类、同KV组查询头的共享预算竞争与查询自适应的split–merge分辨率再分配。在4个SpeechLLM的长语音识别
+- **关键技术点**：长音频使KV缓存随时长急剧膨胀，而Quest、UNIQUE、ClusterKV等检索方法使用固定时间页、逐查询头独立选择或静态聚类，不符合音频注意力结构。论文推导（式5上界）表明检索扰动正比于被忽略的注意力质量，并随生成自回归复合，可造成转录与音频失去对齐、提前输出EOS。
+- **主要指标**：- LS-Long WER：Qwen3-Omni 128-KV预算7.07%，ClusterKV为180.94%（全注意力2.02%）；Qwen2.5-Omni 128-KV为40.48%对133.13% - 语音翻译chrF：Qwen3-Omni 256-KV预算55.79对ClusterKV的2
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Local or Escalate? Post-Training Expert Routing for Real-Time Duplex Speech Models](https://arxiv.org/abs/2611.01639)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-03
+- **一句话贡献**：全双工语音模型须在接管话轮一刻决定"快答还是等待更强推理"，现有特殊token方案把路由与话轮切换绑定、依赖时间标注双工训练。本文冻结MiniCPM-o 4.5（9B，仅语音输入输出），在原生听→说转换点的L22隐状态上拟合logistic失败读出，超阈值即转给gpt-5.5专家并由本地talker转述答案。内部240query准确率从42.1%升至69.2%（+27.1分），较always-es
+- **关键技术点**：简单问题要快答、难题要深思，而决策必须发生在应答起点。现有特殊token路由在生成策略内学习，耦合话轮切换与打断、需时间标注双工训练，操作点调整依赖重训。
+- **主要指标**：- 内部准确率42.1%→69.2%（aggressive，50%升级），超matched random 8.3分，恢复always-expert差距72.2% - 外部四池宏平均59.4%→83.2%，超matched random 7.1分 - Mean TTFA 5.95s vs 升级全部8.
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ReplayFactor: Replay-Aware Dual-Attribute Learning for Practical Speech Deepfake Detection](https://arxiv.org/abs/2611.02628)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-03
+- **一句话贡献**：现有SSL深度伪造检测器对数字生成语音表现良好，但在物理回放攻击下性能显著退化，且回放感知的检测器设计与数据集多样性均不足。本文提出双属性框架ReplayFactor：将四类标签分解为源属性（人声vs合成）与回放属性（未回放vs重放），用CQCC声学先验经门控融合增强SSL回放证据，并以多任务学习和双空间监督对比学习促进跨条件一致性；同时构建约185k条中文多设备重放合成语音数据集ReplayFa
+- **关键技术点**：物理回放经播放设备、声学环境与录音通道引入失真，会改变甚至掩盖合成伪影，使检测器将重放合成语音误判为真实语音；现有工作主要依赖数据增强或回放仿真，ReplayDF合成方法覆盖有限、EchoFake仅含英语，中文与智能眼镜等设备重放数据缺位。
+- **主要指标**：- EchoFake open：EER 3.05%、macro-F1 76.44%（基线XLSR-Linear 11.86%/60.99%） - EchoFake closed：EER 0.53%、macro-F1 97.93%，与最强基线持平 - ReplayDF跨数据集：两类F1 38.31%/
+- **代码**：数据集即将发布（模型代码未提供） | **Demo**：暂无
+
+---
+## [GDBack: A Group-Delay Backdoor Attack on Speaker Identification via Analytic All-Pass Filtering](https://arxiv.org/abs/2611.01721)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-03
+- **一句话贡献**：针对说话人识别系统的数据投毒后门威胁，本文提出并验证：跨样本触发一致性可建立在共享变换层面而非共享绝对相位模板之上。GDBack是纯投毒式群延迟后门攻击，以N级级联二阶解析全通滤波器为触发器：同一变换理想保谱、叠加频变相位/群延迟贡献，输出相位仍依赖原始语音。在LibriSpeech与VoxCeleb1上以ECAPA-TDNN、x-vector、RawNet3为victims，单组参数（r=0.9
+- **关键技术点**：PhaseBack向预选时频bin注入预定义相位、StealthPhase用参考语音相位替换最高150个频点，均以共享绝对相位模板实现跨样本一致性，但ASR随数据集与架构剧烈波动（最低分别65.34%与59.42%）；能否不强制统一输出相位而靠共享变换建立一致性尚无答案。
+- **主要指标**：- ASR：单配置均值97.00%（最低94.66%），6/6设置高于StealthPhase（均值76.09%）、5/6高于PhaseBack（均值90.58%） - BA：与干净模型最大差1.54pp；UTMOS 4.0267、NISQA 4.0826居三种相位攻击之首 - Whisper WE
+- **代码**：暂无 | **Demo**：暂无
 
 ---

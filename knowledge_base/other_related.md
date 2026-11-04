@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 88 篇
+共 91 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -54,6 +54,15 @@
 - **关键技术点**：重建法需数十秒才可靠；直接分类器借试次内划分虚高至 95%+，跨试次跌回随机；各家预处理不一，NJU 集甚至未与音频时间锁定。
 - **主要指标**：- 5 s 内容不相交折：KU Leuven 72.7%(+6.8)、DTU 76.2、Fuglsang'20 79.6、ESAA 77.9、KUL-255ch 69.4、SparrKULee 92.2(+8.9)、MEG-MASC 99.0%，7/8 最优；Broderick 63.6 持平线性 
 - **代码**：https://github.com/saliAlavi/coupleflow | **Demo**：https://salialavi.github.io/coupleflow/
+
+---
+## [GSLM2: Multi-Stream Speech Representation Learning and Generative Spoken Language Modeling](https://arxiv.org/abs/2611.01143)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：9/10 | **日期**：2026-11-03
+- **一句话贡献**：GSLM2针对无文本口语语言模型（SLM）达到文本LM同等语言能力需多约四个数量级训练数据的瓶颈，指出两大根源：离散语音单元语言质量有限、单流单元难以兼顾音位细节与高层语义。方法上提出SpidR 2.0编码器，以师生自监督蒸馏加逐层可微分共享预测头在多个编码层学习稳定互补的单元空间；再以多流SLM联合建模六条层级单元流，含共享时序骨干、分流预测头与捕获流间依赖的生成式深度头。在6M小时、6.5B参
+- **关键技术点**：标准GSLM对SSL编码器单一层的表征做后验k-means量化，迫使一个序列同时承载细粒度音位区分与高层语义规律，构成表示瓶颈；而词级/音节级低采样单元又丢失细粒度区分，压缩本身无法决定该保留哪些信息。
+- **主要指标**：- sWuggy/sBLIMP/tSC（60Kh/1.2B）：79.3/71.8/84.5，较SpidR SLM（73.9/62.4/75.1）平均升约6分，Text LM为83.8/71.5/89.2 - 6.5B/6Mh会话域：80.7/72.9/90.5/63.2（sWuggy/sBLIMP/
+- **代码**：https://github.com/facebookresearch/gslm2 | **Demo**：暂无
 
 ---
 ## [TamilEOT: A Dataset and Model for Semantic End-of-Turn Detection in Tamil Telephone Speech](https://arxiv.org/abs/2609.05631)
@@ -369,6 +378,24 @@
 - **关键技术点**：CLIP/SigLIP类双塔模型无法原生处理混合模态输入；由MLLM改造的嵌入模型规模偏大，不适合低时延、高吞吐与端侧隐私场景；ASR级联文本嵌入的管线丢失非语言声与环境声等副语言信号。
 - **主要指标**：- MTEB(Code) 78.68，超全部sub-4B模型；MTEB(多语) 61.36、较EG1 +0.21 - MMEB-v2 59.01（仅用439M参数），比986M的jina-embed-v5-omni-nano高15.4；MIEB(lite) 60.17，较sub-1B最强+7.9 -
 - **代码**：https://ai.google.dev/gemma/docs/embeddinggemma | **Demo**：暂无
+
+---
+## [Learning Timeline-Preserving Speech-to-Speech Translation](https://arxiv.org/abs/2611.00690)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-03
+- **一句话贡献**：本文提出时间线保持（timeline-preserving）语音翻译任务：配音等场景仅对齐总时长不够，译文语音须在同一绝对时间轴上保留源话语终点与显著内部停顿。作者用源画布（source-canvas）管线构造642K条时长严格匹配的英中目标语音，训练自回归端到端模型TransDubber，采用四阶段课程学习加验证器引导强化学习。在4,353句测试集上，相对最强基线UniSS将时长误差2%内占比从
+- **关键技术点**：现有S2ST系统能保语义、说话人与风格，但不控制"何时说、何时停"；TransVIP等需在推理时显式注入帧级isochrony控制，级联或后处理拉伸只能对齐全局时长而无法恢复内部停顿位置；独立录制的平行语料天然不含源时间线监督。
+- **主要指标**：- Dur@2%/5%/10%：61.5%/92.2%/98.7%，UniSS为25.6%/56.1%/83.3% - 停顿对齐：F1@0.4为0.550（UniSS：0.118，其余基线≤0.080）、tIoU 0.322、SER 0.128、onMedAE 0.162s - 翻译质量：COMET
+- **代码**：暂无（承诺发表后释出） | **Demo**：暂无
+
+---
+## [SPATEX: Array-Flexible Multichannel-to-Multichannel Target Speech Extraction using Direction Clue](https://arxiv.org/abs/2611.03119)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-03
+- **一句话贡献**：现有MIMO目标语音提取（多通道输入多通道输出）系统均假设固定麦克风配置，无法跨阵型部署，而阵型灵活的单输出方法又丢弃逐麦克风空间信息。本文提出SPATEX，首个阵型灵活的MIMO TSE框架：以麦克风坐标与目标DOA为条件，通过几何感知通道交换（TAC）与共享时间联合注意力重建各麦克风的混响目标语音像，并保持排列等变性。在2–10麦克风、匹配/失配阵型下最高达15.98 dB SI-SNRi；固
+- **关键技术点**：M2M-TSE、SoundCompass等MIMO TSE方法采用阵型专用架构，仅适配固定麦克风数量与几何；TAC类与FlexIO等阵型灵活方法只重建参考通道信号，无法保留目标声场的通道间关系，难以满足VR/AR等沉浸式音频的空间渲染需求。
+- **主要指标**：- SI-SNRi：Matched 2–8麦14.23 dB；Unmatched 9–10麦15.98 dB（训练范围外外推） - PESQ/STOI：3.41/0.891（Matched）、3.65/0.923（Unmatched 9–10麦） - 空间保真（固定4麦）：IPD误差0.614 ra
+- **代码**：https://github.com/Wenanzhi/SPATEX | **Demo**：暂无
 
 ---
 ## [Unfolded Recursive Expectation-Maximization Neural Network for Speaker Tracking](https://arxiv.org/abs/2607.26575)

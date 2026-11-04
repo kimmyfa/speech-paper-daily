@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 27 篇
+共 29 篇
 
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
@@ -243,5 +243,23 @@
 - **关键技术点**：现有流式AV-TSE系统中音频与视觉信息在全链路深度耦合，且递归、自回归或说话人跟踪状态会累积目标相关记忆，切换目标后旧说话人信息残留、需等待状态衰减，无法实现即时切换；交互式目标切换此前几乎未被研究和评测。
 - **主要指标**：- SI-SNRi：9.68 dB，超AV-SkiM基线8.85 dB（+0.83 dB，参数量同为8.1 M） - SNRi / PESQi / STOIi：10.05 dB / 0.71 / 0.20，基线9.16 dB / 0.52 / 0.19 - 切换恢复：切至已知脸首个200 ms窗口即
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Sequence-to-Sequence Refinement for EEND-VC Diarization with a Shared Encoder](https://arxiv.org/abs/2611.02709)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-11-03
+- **一句话贡献**：EEND-VC（如DiariZen）将局部分割与全局说话人聚类分离优化，导致局部活动检测准确但录音级说话人身份混淆（SC）依然存在。本文提出共享编码器S2S精修：不引入独立声学编码器，而是直接复用DiariZen的SSL（WavLM/剪枝w2v-BERT 2.0）表征，配合说话人条件化解码器与先验约束推理，对身份和重叠人数进行保守修正。在8个数据集（1209条录音）上，冻结特征精修将宏平均DER从
+- **关键技术点**：EEND-VC中局部分割与全局说话人分配被分开优化，正确的局部活动和说话人数仍可能得到错误的录音级身份；已有后处理要么改动活动要么需另配独立声学编码器，造成重复编码开销。
+- **主要指标**：- 宏DER：WavLM 12.95%→12.40%；w2v-BERT 2.0 12.35%→12.08%；联合系统11.90%（最优） - SC分量：冻结精修相对下降17.4%与14.6%；联合系统内2.99→2.57（相对13.9%） - 高重叠NSF：18.50%→16.54%；四套会议数据全
+- **代码**：暂无（依赖NSD-MS2S开源库） | **Demo**：暂无
+
+---
+## [Spatially-Guided Speaker Extraction Based on Relative Position Cues](https://arxiv.org/abs/2611.01757)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-11-03
+- **一句话贡献**：针对多通道目标说话人提取（TSE）依赖注册语音或显式DOA先验、在混响与动态场景下不稳健的问题，本文提出RPC（相对位置线索）：用说话人之间的离散相对空间关系（左/右、近/远）编码目标身份，无需DOA/RTF估计与注册音频。该框架与骨干无关，分别集成进U-Net提取模型与SpatialNet。实验显示4麦SpatialNet-RPC达14.2dB SI-SDR（超过盲分离基线SpatialNet的
+- **关键技术点**：现有TSE的条件信号要么需要目标干净语音（可能缺失或与环境失配），要么依赖精确DOA/RTF估计（混响、噪声、动态下不可靠）；区域/扇区式线索仍以麦克风阵列为参照、需要绝对角度，且无法区分同处一个预定义区域的两个说话人。
+- **主要指标**：- 4麦两说话人SI-SDR：SpatialNet RPC 14.20 dB、U-Net RPC 11.02 dB（STOI最高0.911） - 3说话人4麦：SpatialNet RPC 6.70 dB，超oracle MVDR（5.70 dB） - 关键对比：SpatialNet提取版比其分离版
+- **代码**：暂无 | **Demo**：https://aviad3189.github.io/RPC-extraction/
 
 ---
