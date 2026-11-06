@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 130 篇
+共 132 篇
 
 ## [Memory Efficient Audio Synthesis with Decoupled Temporal Depth Diffusion Transformers](https://arxiv.org/abs/2607.23811)
 
@@ -639,6 +639,24 @@
 - **关键技术点**：图像扩散模型已被广泛复用于视觉下游任务，但鲜有工作验证其隐表示与去噪先验能否跨模态服务语音合成。语音合成同时要求语言内容准确与短参考下的音色保持，比一般生成任务更严苛；已有 Riffusion 仅提供微调 Stable Diffusion 的初步证据，缺乏对表示迁移与初始化迁移的系统拆分。
 - **主要指标**：- 冻结 VAE 重建（LibriTTS，F=512）：STOI 0.99，SIM 0.95，PESQ 3.86，DNSMOS 3.72 - 初始化对比（100k 步）：WER 2.7% vs 随机初始化 4.2%；随机初始化训到 150k 步仍为 3.8% - Seed-TTS test-en：W
 - **代码**：暂无（作者称接收后开源） | **Demo**：https://paperdemos.github.io/ImageTTS-demos/
+
+---
+## [VIPBench: A Human-Aligned Benchmark for Voice Identity Perception in the Age of Voice Cloning](https://arxiv.org/abs/2611.05638)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-05
+- **一句话贡献**：现有说话人识别基准（VoxCeleb等）以元数据说话人标签为目标，无法衡量"听者是否把两段声音感知为同一个人"，而语音克隆时代这一感知对齐关乎知识产权与声纹安全。本文提出VIPBench：1290名听者对100位公众人物9800对录音（真实、Cartesia Sonic 3克隆、连续morph）给出124876个同/异判断，并定义四项人机对齐任务。评测11个模型发现：同说话人克隆对被听者判为不同人
+- **关键技术点**：声纹验证系统几乎全部以"谁产生了录音"的元数据标签训练与评测，但说话人内变异与克隆引入的细微声学偏移都会改变听者感知到的身份，导致仅凭元数据训练的银行声纹验证会把"听上去不像本人"的克隆判为客户本人。此前语音域缺乏大规模感知标注：VoiceMorph仅21人，VCC系列最多约3万条相似度评分，且无同时覆盖真实/克隆/morph的感知基准。
+- **主要指标**：- Task1：resemblyzer r=0.656（R²=0.430，达噪声上限61%）；监督组r=0.597~0.646，SSL组0.458~0.510，Whisper 0.226 - Task2：AUC最优resemblyzer 0.872、最弱Whisper 0.651；Platt校准后E
+- **代码**：https://huggingface.co/datasets/sendfuze/vipbench | **Demo**：暂无
+
+---
+## [LiveFoley: Dynamic Real-Time Video-to-Audio Generation for Immersive Interactive Worlds](https://arxiv.org/abs/2611.05988)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-05
+- **一句话贡献**：流式视频生成音频（V2A）是AR/VR与游戏沉浸交互的关键，但对齐与音质远落后离线模型。本文提出LiveFoley：Trailing Sliding Window免重训练将非因果Synchformer转为流式前端，Unified Varhop单模型支持三档延迟，History/Future-Warmup LocDiT加宽去噪窗口。0.08s预读下DeSync 0.48追平离线MMAudio-L（0
+- **关键技术点**：前端存在预读-感受野两难，摧毁音画对齐（V-AURA 0.64s、SoundReactor的DeSync 1.03）；后端LocDiT逐patch孤立去噪，音质逊于离线双向扩散。实测感知阈值：动作音0.34s/语音0.49s/环境音0.85s，需按场景权衡延迟与算力。
+- **主要指标**：- DeSync：LiveFoley-48k 0.48，追平离线MMAudio-L（0.47），优于最强流式WorldSonus（0.67，差0.19） - FDPANNs/FDPaSST：16k为9.56/92.48流式最优；PQ 6.26全场最高 - 主观评测：MOS-Q 3.23、MOS-A 
+- **代码**：暂无 | **Demo**：https://dalision.github.io/livefoley-page/
 
 ---
 ## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)

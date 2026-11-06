@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 277 篇
+共 280 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -2492,6 +2492,33 @@
 - **一句话贡献**：针对说话人识别系统的数据投毒后门威胁，本文提出并验证：跨样本触发一致性可建立在共享变换层面而非共享绝对相位模板之上。GDBack是纯投毒式群延迟后门攻击，以N级级联二阶解析全通滤波器为触发器：同一变换理想保谱、叠加频变相位/群延迟贡献，输出相位仍依赖原始语音。在LibriSpeech与VoxCeleb1上以ECAPA-TDNN、x-vector、RawNet3为victims，单组参数（r=0.9
 - **关键技术点**：PhaseBack向预选时频bin注入预定义相位、StealthPhase用参考语音相位替换最高150个频点，均以共享绝对相位模板实现跨样本一致性，但ASR随数据集与架构剧烈波动（最低分别65.34%与59.42%）；能否不强制统一输出相位而靠共享变换建立一致性尚无答案。
 - **主要指标**：- ASR：单配置均值97.00%（最低94.66%），6/6设置高于StealthPhase（均值76.09%）、5/6高于PhaseBack（均值90.58%） - BA：与干净模型最大差1.54pp；UTMOS 4.0267、NISQA 4.0826居三种相位攻击之首 - Whisper WE
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Speaker-Consistent Grounding for Confusion-Resilient LLM-Based Target Speech Extraction](https://arxiv.org/abs/2611.06297)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-05
+- **一句话贡献**：LLM生成式目标语音提取（TSE）伴内容幻觉与身份漂移，用混淆证据做grounding会放大错误。本文提出免训练"先修复、后接地"框架：CDCS-5从冻结TSE路径构造5个互补候选，按ECAPA相似度选出说话人一致证据；CSG在token空间约束Qwen-TSE解码。CDCS将Libri2Mix错人提取率6.87%→0.75%（干净）、18.95%→10.46%（带噪）；CSG将带噪内容切换12.
+- **关键技术点**：确定性TSE保留观测内容但可能输出干扰者（target confusion），生成式TSE感知质量高却幻觉内容、漂移身份；code-space grounding以确定性估计约束生成时，若证据身份错误会固化干扰者，故须先修复再接地。
+- **主要指标**：- 干净TEST错人提取率6.87%→0.75%，content/acoustic切换7.00%/6.98%→0.88%/0.78%（CDCS-5） - 带噪TEST：BSRNN WER 39.85%→30.67%；fixed CSG使Qwen-TSE WER 46.70%→42.11%、conte
+- **代码**：暂无 | **Demo**：https://hanyu-meng.github.io/LLM-TSE-Grounding-Demo/
+
+---
+## [GraphSeal: Graph-Augmented Speech Deepfake Detection via Temporal-Spectral Artifact Propagation](https://arxiv.org/abs/2611.06171)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-05
+- **一句话贡献**：现有语音深伪检测器把话语当作扁平帧序列或采用固定拓扑图，难以捕捉跨非相邻区域的长程频谱不一致伪影。本文提出GraphSeal：在冻结SSL编码器（WavLM等）输出上，将语音切分为重叠片段构建数据依赖的时频动态图，用带边属性的GATv2逐层传播伪影线索，再经层级readout输出真伪判决。仅新增2.1M可训练参数、12ms后端延迟，在ASVspoof 2019/2021 LA、ASVspoof 5
+- **关键技术点**：深伪伪影（相位不连续、共振峰畸变、异常微韵律）常以相关异常形式出现在时域相距很远但频谱相似的区域。序列模型受局部感受野或二次方注意力开销限制，而AASIST/RawGAT-ST等图方法拓扑由特征提取管线固定，无法随输入自适应，二者均漏掉非相邻区域的跨帧一致性线索。
+- **主要指标**：- GraphSeal（WavLM-Large前端）：19 LA 0.52%、21 LA 2.41%、ASVspoof 5 8.17%、ItW 5.24%，四项全部最优 - 最强基线WavLM-AASIST：0.59/2.85/9.62/6.31，GraphSeal在ASV5降1.45、ItW降1.
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CLRM: Cross-Layer Relation Modeling for Audio Deepfake Detection](https://arxiv.org/abs/2611.05678)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-05
+- **一句话贡献**：音频深伪检测（ADD）中，SSL编码器（XLS-R）各层表征对真假语音的判别力差异显著，但现有层选择与聚合方法未将层间比较显式作为检测输入。本文提出CLRM：复用检测器冻结的SSL编码器，对选定层对构造显式跨层关系表征，轻量关系头输出辅助分数并与原分数逻辑回归融合，层对由说话人相对几何统计引导选择。在5个外部数据集上，CLRM使三种XLS-R检测器的平均EER相对下降7.8%–16.7%，其中XL
+- **关键技术点**：跨合成方法与录音条件的泛化仍是ADD核心难题；分析表明XLS-R的24层表征判别力不均，而层加权聚合、逐层决策融合等方法仅利用单层或聚合特征，未将层间差异与交互线索显式作为检测输入。
+- **主要指标**：- External-5平均EER：XLSR-SLS 7.158%→6.462%（相对降9.7%），XLSR-Conformer-TCM 6.849%→6.316%（降7.8%），XLSR-AASIST 7.170%→5.972%（降16.7%，五个数据集全部改善） - 受控对比（近等参数Conca
 - **代码**：暂无 | **Demo**：暂无
 
 ---

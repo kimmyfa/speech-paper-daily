@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 93 篇
+共 94 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -459,6 +459,15 @@
 - **关键技术点**：对话系统需在数百毫秒内连续判定说话人是否说完；固定静音阈值会误触轮内停顿或响应迟缓，故二十年来检测器普遍将手工韵律与ASR编码器特征作为两路独立输入拼接。但编码器读的是韵律所计算的同一信号，可能早已内含这些信息，业界为此付出特征抽取、延迟与逐说话人调优的成本。
 - **主要指标**：- 编码器单用AUC（logistic/neural）：fbank 0.685/0.686 → zip-early 0.874/0.884 → zip-mid 0.908/0.912 → zip-final 0.893/0.901，韵律增量ΔCE过首个stack后即坍塌 - 90%召回工作点误报率：
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Confucius4-R2T2: A Stable-Prefix Streaming ASR Model for Real Real-Time Transcription](https://arxiv.org/abs/2611.06043)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-11-05
+- **一句话贡献**：流式ASR的中间token常被后续音频修订（flicker），而下游翻译器、语音agent把每个已发出token当作动作处理，修订意味着重算甚至错误副作用。本文提出稳定前缀流式模型Confucius4-R2T2：引入"最长稳定前缀"（LSP）概念并证明其前缀单调性、与全音频输出一致性与最大可采纳性，用LSP标注加Wait token对Qwen3-ASR-1.7B做两阶段后训练（SFT+GRPO），
+- **关键技术点**：现有稳定性方案要么靠推理期提交规则（local agreement、hold-n、mask-k）——模型本身仍在学习修订，无硬保证；要么因果化编码器或加注意力掩码——破坏预训练双向表征且不保证输出不回退。核心难题是"上下文界定"：何时收到的音频足以确定下一个token。
+- **主要指标**：- 总宏平均错误率（13集合）：R2T2 160ms U=1为5.76%，U=0为6.40%；基座Qwen3-ASR-1.7B全上下文5.15%、160ms未适配21.01% - 关键对比：R2T2 5.76% vs 开源流式基线X-ASR 8.97%、Voxtral Realtime 8.27%、
+- **代码**：https://github.com/netease-youdao/Confucius4-R2T2 | **Demo**：暂无
 
 ---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)

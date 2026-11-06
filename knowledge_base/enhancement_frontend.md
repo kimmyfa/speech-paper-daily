@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 51 篇
+共 52 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -189,6 +189,15 @@
 - **关键技术点**：现有神经BWE中，重建型模型（TFiLM、AP-BWE等）生成高频易过平滑，对抗模型需在单阶段权衡频谱保真与感知真实；扩散/流方法（NU-Wave2、FlowHigh）虽建模缺失频谱的不确定性但采样步数多，且多数系统绑定固定源-目标采样率对，难以应对实际中变化的输入截止频率。
 - **主要指标**：- LSD（VCTK输入8/12/16/24kHz，NFE=1）：0.755/0.690/0.632/0.524（NFE=2再降至0.748/0.685/0.627/0.519） - 关键对比：一步模型较FlowHigh的LSD相对降低7.9%/9.6%/11.6%/14.4%，FAD在3/4设置最
 - **代码**：暂无 | **Demo**：https://aizhiqi-work.github.io/bdr-bwe-demo/
+
+---
+## [CRESiST: Self-Enhancing Explorative Policy Learning for Simultaneous Speech Translation](https://arxiv.org/abs/2611.06501)
+
+- **方向**：语音大模型 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-11-05
+- **一句话贡献**：LLM同传普遍采用前缀增量生成，导致KV缓存反复重算、必须依赖外部VAD切分，破坏跨句上下文且无法原生处理无限流。本文基于Qwen2.5-Omni-7B提出端到端交错读写的同传框架CRESiST，并以Actor-Critic自我增强管线学习流式策略：RNN-T Actor在(T×U)对齐格点上采样读写轨迹，LLM Critic用一致性奖励与延迟奖励评估轨迹并经反向蒸馏将最优策略回传Actor，全程
+- **关键技术点**：现有LLM-based SimulST的前缀增量生成使KV缓存每步失效，计算量二次爆炸，只能外挂VAD强制切分，损害指代消解与长程连贯；而已有交错读写架构依赖MFA等静态启发式对齐构造监督轨迹，无法刻画人类译员的动态预测性，RL类方法又仍需离线对齐数据且难以多语扩展。
+- **主要指标**：- 不切分流式（τ=0.5）：MuST-C en-zh 73.73 COMET/LongYAAL 1.14s，en-de 85.96/0.76s；ACL 60/60 en-zh 79.45/1.49s，en-de 85.59/1.08s - 关键对比：ACL en-de上比StreamATT（70.
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Separate First, Then Associate: A Two-Stage Approach for Real-World Audio-Visual Speech Enhancement](https://arxiv.org/abs/2608.14812)
