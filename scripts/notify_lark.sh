@@ -6,11 +6,18 @@
 set -euo pipefail
 
 DATE="${1:-}"
-[ -n "$DATE" ] || { echo "用法: notify_lark.sh YYYY-MM-DD"; exit 1; }
+[ -n "$DATE" ] || { echo "用法: notify_lark.sh YYYY-MM-DD [--force]"; exit 1; }
 
-LARK_CLI="$HOME/.config/vagent/runtime-home/lark-cli/darwin-arm64/lark-cli"
-LARK_CONFIG_DIR="$HOME/.lark-cli"
-CHAT_ID="oc_6167c48a3ad5662413abab93b359d183"
+PROJECT_DIR="${SPEECH_PAPER_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+REPORT="$PROJECT_DIR/papers/$DATE/speech_paper_$(echo "$DATE" | tr -d '-').md"
+if [ ! -s "$REPORT" ]; then
+  echo "[notify_lark] 错误: 产出不存在或为空 ${REPORT}，不发送通知" >&2
+  exit 1
+fi
+
+LARK_CLI="${LARK_CLI:-$HOME/.config/vagent/runtime-home/lark-cli/darwin-arm64/lark-cli}"
+LARK_CONFIG_DIR="${LARK_CONFIG_DIR:-$HOME/.lark-cli}"
+CHAT_ID="${LARK_CHAT_ID:-oc_6167c48a3ad5662413abab93b359d183}"
 SENTINEL="$HOME/.vagent-speech/log/.notified_$(echo "$DATE" | tr -d '-')"
 FORCE="${2:-}"
 FORCE_BOOL=0
