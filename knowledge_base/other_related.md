@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 126 篇
+共 128 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -504,6 +504,24 @@
 - **关键技术点**：M2M-TSE、SoundCompass等MIMO TSE方法采用阵型专用架构，仅适配固定麦克风数量与几何；TAC类与FlexIO等阵型灵活方法只重建参考通道信号，无法保留目标声场的通道间关系，难以满足VR/AR等沉浸式音频的空间渲染需求。
 - **主要指标**：- SI-SNRi：Matched 2–8麦14.23 dB；Unmatched 9–10麦15.98 dB（训练范围外外推） - PESQ/STOI：3.41/0.891（Matched）、3.65/0.923（Unmatched 9–10麦） - 空间保真（固定4麦）：IPD误差0.614 ra
 - **代码**：https://github.com/Wenanzhi/SPATEX | **Demo**：暂无
+
+---
+## [HyVox: Rethinking Low-Power Voice Intelligence towards Neuromorphic-von Neumann Edge Computing](https://arxiv.org/abs/2611.03735)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-04
+- **一句话贡献**：针对电池供电边缘设备上开放集说话人识别（enroll/identify/reject）能耗过高的问题，本文提出 HyVox：一种"类脑-冯诺依曼"混合架构，由 Xylo Audio 3 神经形态芯片以稀疏事件驱动方式生成 32 维脉冲计数说话人嵌入，STM32L476 单片机负责gallery存储、余弦打分与拒识。核心是逐神经元学习突触时间常数的分层时间抽象 SNN 骨干（832 个 LIF 神经
+- **关键技术点**：边缘说话人识别主流 TinyML 管线将嵌入提取与打分全部压在冯诺依曼 MCU 上，推理能耗主导决策成本；神经形态处理器虽可消除访存开销，但无通用算力承载gallery检索与注册，且芯片神经元/突触/int8/事件率硬约束会摧毁传统编码器的时间建模能力。
+- **主要指标**：- 家庭 top-1：99.6%（n=2，EER 5.5%）至 94.9%（n=20，EER 13.2%） - 系统成本：延迟 961.9ms、动态能耗 1.63mJ/决策、总能耗 3.8mJ/决策、空闲 2.3mW - 骨干对比 SynNet：top-1 39.6% vs 35.5%（同 29k 
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SciPhi-Chat: Training a Spatial Audio Agent for Question Answering, Dialogue, and Tool Use](https://arxiv.org/abs/2611.04114)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-04
+- **一句话贡献**：本文提出SciPhi-Chat，一个面向一阶 Ambisonic（FOA）录音、可回答空间问题、进行多轮对话并调用信号处理工具的空间音频智能体。现有音频语言模型多为单声道输入而缺乏方向信息，已有空间模型未同时支持推理、指代式对话与可执行工具调用。模型基于Phi-4-multimodal，用冻结的FOA-VAE空间编码器加LoRA微调，在550万条合成对话上训练，并发布含12,000样本、42类任务
+- **关键技术点**：空间音频问答需将声音身份与方位、距离绑定并推理源间关系，但主流ALM用单声道音频丢失方向线索；BAT、Spatial-Omni、Sci-Phi等空间模型或仅支持固定模板问答、或不建模后续指代对话与工具调用，且现有基准任务覆盖窄（ASA-Bench 18任务、SO-Bench 16子任务）。
+- **主要指标**：- MASU单轮总分44.9%，vs Sci-Phi+Qwen3.5-4B的37.5%与Spatial-Omni的30.3%，领先最强基线7.4个百分点；方向组60.1%（俯仰角67.1% vs 基线31.6%） - MASU对话轨36.7%，超最强基线Qwen2.5-Omni（28.2%）8.5个
+- **代码**：https://github.com/microsoft/sciphi-chat | **Demo**：暂无
 
 ---
 ## [Speech Entrainment in Multi-Party Conversations with a Digital Agent](https://arxiv.org/abs/2607.22939)

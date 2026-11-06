@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 280 篇
+共 284 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1242,6 +1242,15 @@
 - **关键技术点**：VoiceBench等评测将扰动下准确率不变等同于鲁棒，VoxParadox等仅在任务外测情绪识别，均未验证被评模型是否感知了刺激，导致鲁棒性与非感知被混淆；且很少有工作在任务音频中独立操纵措辞与音色两通道。
 - **主要指标**：- 音色对准确率：8模型效应-2.6至+7.7pp，7模型CI含零；仅MiMo-2.6-Flash显著+7.7pp - 音色感知：中性措辞下BV标注frustrated率0.0–3.1%；表演愤怒命中率7/8模型73–100%，假警报0/96 - 感知灵敏度差：声学0.5–3.4pp vs 词汇41
 - **代码**：https://github.com/Astarojth/hear-not-listen | **Demo**：暂无
+
+---
+## [VeriSpoof: Beyond Real or Fake with One Audio LLM](https://arxiv.org/abs/2611.04634)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-04
+- **一句话贡献**：现有检测模型只能回答"真或假"，而司法取证还需知道由哪个系统生成、两段音频是否同源、结论依据什么证据。本文提出VeriSpoof，一个2.85B参数（仅训练29.7M）的音频语言模型，用一套权重统一深伪检测、生成器/声学模型/声码器归属、录音条件分析、合成区间定位与来源验证五类任务，把每个取证问题写成候选答案句子并按似然差读为分数，同时以可逐条核验的结构化rationale给出证据。在Speech
+- **关键技术点**：一个分数只能回答一个问题，来源追溯与成对验证需另训孪生网络；已有音频LLM的解释是教师模型蒸馏的自由文本，既不校验其真实性也不检验决策是否依赖它；且学界未量化ALM瓶颈在编码器表征、特征用法还是LLM。
+- **主要指标**：- Speech-DF-Arena pooled/mean EER：Plus 2.14%/1.79%，比次优开源DF-Arena-1B（9.52%）降一半以上，总榜第三（仅次于两个闭源系统）；仅0.38M数据的Base即达4.43% - SpoofRadar pooled EER：Plus 4.04
+- **代码**：https://github.com/swagshaw/verispoof | **Demo**：https://huggingface.co/spaces/AustinXiao/VeriSpoof-demo
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
@@ -2493,6 +2502,33 @@
 - **关键技术点**：PhaseBack向预选时频bin注入预定义相位、StealthPhase用参考语音相位替换最高150个频点，均以共享绝对相位模板实现跨样本一致性，但ASR随数据集与架构剧烈波动（最低分别65.34%与59.42%）；能否不强制统一输出相位而靠共享变换建立一致性尚无答案。
 - **主要指标**：- ASR：单配置均值97.00%（最低94.66%），6/6设置高于StealthPhase（均值76.09%）、5/6高于PhaseBack（均值90.58%） - BA：与干净模型最大差1.54pp；UTMOS 4.0267、NISQA 4.0826居三种相位攻击之首 - Whisper WE
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [ReListen: Training-Free Evidence Localization in Hour-Long Audio with Frozen Audio Language Models](https://arxiv.org/abs/2611.04480)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-04
+- **一句话贡献**：小时级音频难以放入音频语言模型上下文，且答案常取决于其中几秒。现有方案要么先转写（丢弃声音、音色、时序信息），要么训练模型回听音频（需为每个新模型重复微调）。本文提出 ReListen：完全免训练，让一个冻结的音频语言模型既做"检索器"又做"回答器"。它用扫描对每个 20 秒窗口的是非对数几率打分，取最高分的 1 分钟作答。在 VoiceGiraffe 上选中片段对标注证据命中率 88.5%（转写
+- **关键技术点**：主流长音频方案在模型前放独立"前端"（ASR 转写后检索/阅读，或音频嵌入检索），让模型退化为文本阅读器，丢掉非语音声音与说话人特质；另一类"重听"系统（LAT-Audio、Echo）需专门训练回听行为，每换模型就得重训。目标是让冻结模型自己搜索音频、无需前端与训练。
+- **主要指标**：- 证据命中率（60s 预算）：ReListen 69.2%（LAS）/88.5%（VG），声音题 76.5%；转写检索 BM25 最高 47.8%/58.8% - 选择题准确率：53.5（LAS）、62.0（VG），比整段转写高 9.2、比均匀采样高 8.5/21.3 - LAT-Bench 定位
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Confidence-Aware Aggregation for Multimodal Audio Reasoning](https://arxiv.org/abs/2611.04580)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-04
+- **一句话贡献**：语音大模型（LALM）在复杂声学场景推理中单步预测极不稳定：同一音频-问题对因解码差异会给出不同答案。本文提出免训练的推理时"置信度感知聚合"框架：对每题采样 N 条候选推理链，用长度归一化的对数概率自确定性打分，再按 Best-of-N、多数投票、Borda、LSE/SoftLSE 五种规则聚合。在 MMAR 上对 Qwen3-Omni、Qwen2-Audio、Audio Flamingo 3 
+- **关键技术点**：LALM 将音频编码器与 LLM 主干耦合做生成式推理，但输出方差大、单步预测不可靠。文本 self-consistency 迁移到音频面临两个隐含假设失效：采样推理路径近似独立、token 级对数概率可校准地反映正确性——音频信号存在重叠声源与弱定位证据，感知错误会直接污染推理链本身。
+- **主要指标**：- 准确率缩放增益（N=3→16，跨模型均值）：Borda +3.50pp、LSE +3.35pp、SoftLSE +3.23pp、Majority Vote +2.77pp、Best-of-N +1.11pp；增益在 N>8 后饱和 - 校准增益（ΔECE）：LSE −8.77pp、Borda −
+- **代码**：https://github.com/michelolzam/lalm-self-consistency | **Demo**：暂无
+
+---
+## [Averaging Collusion Breaks Traceability in Personalized Neural Audio Watermarking](https://arxiv.org/abs/2611.04400)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-04
+- **一句话贡献**：个性化神经音频水印通过嵌入用户专属payload实现泄露溯源，但现有评测均默认攻击者只持有单一副本。本文发现对同一内容的多份合法副本做逐样本平均即可摧毁溯源性：仅平均2份副本，在五个主流系统上溯源失败率达87.7%–99.7%，且音质几乎无损。进一步提出payload感知的Target-Bit Margin加权攻击，可将解码结果定向嫁接到选定非联盟成员，在TimbreWM上目标成功率达92.3%；
+- **关键技术点**：神经音频水印的既有鲁棒性评测均假设攻击者逐份处理单个副本，而现实中攻击者可收集同一录音的多份带不同payload的合法副本；经典扩频水印的合谋码分析无法回答端到端问题：学习式解码器如何映射平均混合信号、输出payload是否仍指向联盟成员。
+- **主要指标**：- 均匀平均溯源失败率（K=2）：AudioSeal 99.0%、WavMark 96.7%、TimbreWM 87.7%、VoiceMark 93.7%、WMCodec 99.7%；PESQ 4.20–4.60、STOI 0.983–0.999，音质近乎无损 - 鲁棒性变体：K=5下±10/20/
+- **代码**：https://github.com/Silwan5z/neural-audio-watermark-collusion-attack | **Demo**：暂无
 
 ---
 ## [Speaker-Consistent Grounding for Confusion-Resilient LLM-Based Target Speech Extraction](https://arxiv.org/abs/2611.06297)

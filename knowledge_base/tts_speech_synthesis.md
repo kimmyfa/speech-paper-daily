@@ -1,7 +1,16 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 132 篇
+共 135 篇
 
+## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：90/10 | **日期**：2026-11-04
+- **一句话贡献**：尼泊尔语已有多套开源与商用 TTS，却无共享评测基准，各论文测试文本、听音人与协议互不可比。本文提出 NepTTS-Bench：205 句音系学驱动提示（含 77 组最小对立对）、180 名母语者产生的 6,962 条 MOS 评分、7 个 ASR 回环 CER 与 SCOREQ 自动基线，并训练语言匹配预测器 NepaliMOS。关键结果：自动指标与母语判断严重背离（ElevenLabs SCO
+- **关键技术点**：低资源语言 TTS 评测缺乏统一测试集、听音池与协议，MOS 高度协议依赖；现有自动指标（SCOREQ、DNSMOS、UTMOS、ASR 回环）主要在高资源语种验证，只奖励"信号干净、易转录"，对尼泊尔语送气/卷舌等音系错误不敏感。
+- **主要指标**：- 人评 MOS：自然语音 3.95、TingTing Asmita 3.55、Piper 3.50、ElevenLabs v3 3.47、Edge TTS Sagar 3.38、gTTS 2.60 - 与人类 MOS 相关性（n=9，BH 校正）：NepaliMOS ρ=0.90（p=0.001，
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Memory Efficient Audio Synthesis with Decoupled Temporal Depth Diffusion Transformers](https://arxiv.org/abs/2607.23811)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：9/10 | **日期**：—
@@ -641,6 +650,15 @@
 - **代码**：暂无（作者称接收后开源） | **Demo**：https://paperdemos.github.io/ImageTTS-demos/
 
 ---
+## [TTSonic: A Unified Framework for Composable and Controllable Speech Generation](https://arxiv.org/abs/2611.04282)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-04
+- **一句话贡献**：现有语音生成系统多针对单一能力独立训练，难以在统一模型中保持质量与可控性一致。TTSonic 提出 2B 参数的统一可组合框架，以语义-声学解耦 speech tokenizer 为表征基座，组合文本、自然语言指令、参考音频、文本描述音色四类条件，支持 zero-shot TTS、声音/韵律克隆、指令跟随、语音转换与噪声参考克隆。Seed-TTS-Eval 中文 CER 0.78%、test-ha
+- **关键技术点**：实际语音基础模型需同时具备稳定质量、精确可控与多能力组合，而现有方法按任务单独建模，扩展新能力需重训端到端模型；核心难点在于构造既保留语义/韵律又剥离说话人声学特征的离散表征，使同一框架可按任务重组条件路径。
+- **主要指标**：- Seed-TTS-Eval：test-zh CER 0.78%/SIM 0.784（全表最低，超 dots.tts 0.96、FireRedTTS3 1.01）；test-en WER 1.66%；test-hard CER 5.64% 优于 Auk 5.91 与 CosyVoice 3 5.8
+- **代码**：暂无 | **Demo**：https://bytedance.github.io/TTSonic/
+
+---
 ## [VIPBench: A Human-Aligned Benchmark for Voice Identity Perception in the Age of Voice Cloning](https://arxiv.org/abs/2611.05638)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-05
@@ -1188,5 +1206,14 @@
 - **关键技术点**：实践中prompt须由用户从长录音截取，选段直接决定克隆质量；常用做法是取非侵入式质量分最高的候选，但"听起来干净"不等于"模型说得清楚"，且同一预测器既选择又评判会高估规则收益，缺乏以真实合成结局度量的系统性研究。
 - **主要指标**：- ΔWER：1.36pp（相对随机prompt降32%，Qwen3-TTS 0.6B held-out 400条），比UTMOS规则多0.54pp、与probe selection（1.35pp、228次合成/录音）持平；失败率Δ0.87pp - ΔWER：F5-TTS相对降43%，超最强基线DN
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Detector-Guided Vocoder Training for Adversarial Text-to-Speech Synthesis](https://arxiv.org/abs/2611.04511)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-04
+- **一句话贡献**：针对语音deepfake检测器面临的反取证威胁，本文提出"检测器引导"的对抗TTS框架：冻结声学模型，将冻结的deepfake检测器损失直接并入BigVGAN声码器的微调目标（L_total = L_V + λL_D，λ=0.05），使合成波形天生具备对抗性、推理时无需任何后处理。单目标微调使RawNet2的EER从5.8%升至39.05%，多检测器联合微调推至43.87%（逼近随机猜测上限），未
+- **关键技术点**：音频域对抗攻击长期依赖"生成后"处理（加性噪声、LTI滤波、Hammerstein注入等），对抗环节与合成管线割裂，引入额外计算并可能残留可被更鲁棒取证方法利用的伪影；把规避能力内嵌进合成过程、零后处理产生对抗语音是现有空白。
+- **主要指标**：- 基线检测（对V）：RawNet2/TSSD/AASIST EER为5.8%/3.40%/0.85% - 单目标V^R：RawNet2 EER 39.05%（AUC 64.58%），TSSD 38.33%，AASIST 21.09% - 多目标V^RT：RawNet2 EER 43.87%、TSS
+- **代码**：https://github.com/polimi-ispl/adversarial-tts/ | **Demo**：https://github.com/polimi-ispl/adversarial-tts/（含生成音频样本）
 
 ---
