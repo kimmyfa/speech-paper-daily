@@ -1,7 +1,43 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 106 篇
+共 130 篇
 
+## [Memory Efficient Audio Synthesis with Decoupled Temporal Depth Diffusion Transformers](https://arxiv.org/abs/2607.23811)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：9/10 | **日期**：—
+- **一句话贡献**：Siri Expressive Voices基于Apple设备端AFM 3 Core Advanced基础模型实现实时设备端语音合成。本文介绍了该能力的内存高效音频合成架构：将基础模型生成的语义音频token转换为高保真音频的detokenizer，在Apple Matrix Coprocessor (AMX)的严格计算和内存预算下工作。通过三组件设计（流式编码器、时间解码器、深度解码器）系统化解
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Enhancing Flow Matching with A Unified Guidance Framework for Efficient and Robust Speech Synthesis](https://arxiv.org/abs/2607.00363)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：9/10 | **日期**：2026-07-01
+- **一句话贡献**：Flow Matching (FM) 作为语音生成的强大范式，但仍受高推理延迟和音色泄露问题困扰。针对这些瓶颈，本文提出统一引导框架，通过数据引导和模型引导两个互补策略提升生成效率和数据鲁棒性。数据引导通过异质增强解耦语言内容与声学残差，模型引导设计高效推理路径减少延迟。该框架在保持合成质量的同时显著提升效率。
+- **关键技术点**：基于Flow Matching的语音合成框架，通过统一引导框架增强生成效率。
+- **主要指标**：相比基线方法在保持质量的同时显著提升合成效率，有效解决音色泄露问题。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [WordVoice: Explicit and Decoupled Multi-Dimensional Word-Level Control for LLM-Based TTS](https://arxiv.org/abs/2607.06461)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：9/10 | **日期**：2026-07-07
+- **一句话贡献**：尽管近年基于LLM的TTS系统达到了显著的自然度，但它们主要依赖隐式端到端生成范式，导致粗粒度控制。在需要精确风格干预和严格时间对齐的场景(如有声书配音和视频配音)中，无法显式操控词级声学属性仍是关键瓶颈。这一限制主要由细粒度标注数据集的严重稀缺和多维控制信号融入离散自回归生成的架构挑战所加剧。提出WordVoice框架：首先构建WordVoice-5A，一个4.7k小时的双语数据集，具有五维词级
+- **关键技术点**：WordVoice基于LLM的TTS架构，包含两个核心创新：(1)bound-token机制：在LLM中引入边界token，实现显式声学规划；(2)细粒度声学调制模块：在token-to-waveform阶段桥接离散token与连续波形。
+- **主要指标**：多维声学属性的解耦控制精度，零样本合成稳定性保持。实验验证了WordVoice在word-level控制的优越性和解耦能力。 **代码开源** 代码和音频样本已公开：https://xxh333.github.io/wordvoice-demo/ ### ⭐ 评分：9/10 WordVoice解决了
+- **代码**：https://xxh333.github.io/wordvoice-demo/ | **Demo**：https://xxh333.github.io/wordvoice-demo/
+
+---
+## [VoxENES 2026: Benchmarking Generalization of Speech Spoofing Detectors Against LLM-Era TTS and Voice Conversion](https://arxiv.org/abs/2607.11706)
+
+- **方向**：语音前端（语音鉴伪） | **子方向**：TTS | **评分**：9/10 | **日期**：2026-07-13
+- **一句话贡献**：现代LLM驱动的TTS和语音转换系统产生的合成语音与现有欺骗检测基准中代表的技术存在差异，导致对探测器鲁棒性的过高估计。VoxENES 2026是一个双语音（英语和西班牙语）基准，包含53628个音频样本，使用10种当代语音合成方法生成，并在10种标准化后处理条件下评估。基准测试显示当前最佳模型整体EER为28.98%，多数模型在现代生成器和扰动下接近或低于随机水平。
+- **关键技术点**：VoxENES 2026基准测试框架，对8种预训练检测器进行zero-shot评估，探索现代语音合成方法带来的时间泛化差距。
+- **主要指标**：最佳模型整体EER为28.98%，多数模型在现代生成器和扰动下接近或低于随机水平。结果揭示了当前检测器对脆弱特征的依赖，VoxENES 2026可作为开发鲁棒欺骗对策的实用测试平台。
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Experience-Calibrated Contrastive Decoding for Mitigating Hallucinations in LM-TTS](https://arxiv.org/abs/2608.00722)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：9/10 | **日期**：2026-08-04
@@ -17,7 +53,7 @@
 - **一句话贡献**：流匹配TTS的强化学习因确定性ODE采样而复杂化：轨迹级策略梯度方法需将ODE转换为SDE并跟踪每步似然比，引入随机扰动和大量开销。本文提出GROW，一种组相对优势加权的on-policy RL方法，直接在标准流匹配目标上运作。对每个prompt采样一组on-policy utterances，在组内标准化可懂度和说话人相似度奖励，结合Wasserstein-2速度惩罚锚定到预训练参考模型。在Di
 - **关键技术点**：流匹配（Flow Matching）TTS模型（如DiTAR）使用确定性ODE从噪声到数据采样，不涉及随机性。传统RL方法（如策略梯度）需要估计策略的似然比，但确定性ODE的似然比计算需要轨迹级展开，将ODE转换为SDE引入随机扰动，计算开销大且不稳定。GRPO（Group Relative Policy Optimization）虽然不需要隐式奖励模型，但需要每个token的log概率，而流匹配模型在连续空间中的log概率难以直接获得。
 - **主要指标**：- 平均WER: 从2.016降至1.558（相对降低22.7%） - 说话人相似度: 从0.676提升至0.715 - UTMOS: 保持不变（未退化） - 训练效率: 10-NFE rollout + 32-NFE evaluation，比32-NFE DiTAR-GRPO快2.9倍 - 线性优
-- **代码**：暂无 | **Demo**：暂无
+- **代码**：https://github.com/yanghaha0908/GROW | **Demo**：暂无
 
 ---
 ## [SemBridge: Semantic Token Anchoring for Continuous-Latent Autoregressive Speech Generation](https://arxiv.org/abs/2608.07462)
@@ -83,6 +119,15 @@
 - **代码**：https://github.com/FunAudioLLM/CosyVoice | **Demo**：暂无
 
 ---
+## [Expose Your Disguise: Recovering Source Speaker Identity From Voice Conversion](https://arxiv.org/abs/2607.23650)
+
+- **方向**：语音前端 | **子方向**：TTS | **评分**：8/10 | **日期**：—
+- **一句话贡献**：语音转换(VC)允许攻击者模拟目标说话人，对生物识别安全构成重大威胁。在取证情境中，从转换后的音频中恢复源说话人身份对于缩小嫌疑人范围至关重要。本文提出TRIDENT，一个用于从转换音频样本中恢复源说话人原始身份的回溯框架。采用三叉戟架构：主提取器加两个辅助分支识别底层语音转换机制和提取目标说话人潜在表示。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [VoiceDesigner: Text-to-Voice Generation and Editing via Unified Diffusion Modeling and Data Augmentation](https://arxiv.org/abs/2608.13613)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-08-17
@@ -128,11 +173,110 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [xvector-emotion-arithmetic: Task-Vector Arithmetic for Emotional Expressivity Control in Language-Model-Based TTS](https://arxiv.org/abs/2606.05367)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-06-03
+- **一句话贡献**：本文对LM-TTS中情感表达的控制进行系统消除研究。发现x-vector是情感韵律的主导载体，而非模型权重、连续codec嵌入或离散codec token。提出基于x-vector空间质心算术的跨说话人情感控制方法τ_emo = E[x(s_i, emo)] - E[x(s_i, neutral)]，无需微调即可实现情感风格迁移。在英语跨说话人场景获得+0.29 EECS提升，在英到葡萄牙语跨语言
+- **关键技术点**：基于Qwen3-TTS-12Hz-1.7B-Base，ECAPA-TDNN作为说话人编码器(可学习，与主干共同训练)。x-vector直接注入codec嵌入序列。
+- **主要指标**：EN跨说话人：+0.29 EECS gain (avg4spk)，SECS_W ≥ 0.88；EN→PT-BR跨语言：+0.09 EECS gain。WER ≈ 0.006 (基本不变)。
+- **代码**：https://github.com/danielbrito91/xvector-emotion-arithmetic | **Demo**：暂无
+
+---
+## [UniVoice: A Unified Model for Speech and Singing Voice Generation](https://arxiv.org/abs/2606.05852)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-06-04
+- **一句话贡献**：本文提出UniVoice，一个基于条件流匹配(CFM)的统一语音和歌唱生成框架。核心创新是将条件分解为内容、旋律和音色三个独立因素，使用共享的Diffusion Transformer (DiT)主干网络。对于语音，旋律条件替换为学习的null melody token，让模型从语言和声学上下文推断韵律。训练数据包括30k小时语音和35k小时歌唱数据。UniVoice在语音PER达到5.26%，与
+- **关键技术点**：基于条件流匹配(CFM)和Diffusion Transformer (DiT)主干，24层Transformer，隐藏维度1024，16头注意力，约0.3B参数。使用FlashAttention-2和RoPE进行高效长上下文建模。在Song Bloom VAE潜在特征(25Hz，维度48)上操作。
+- **主要指标**：语音PER 5.26% (vs F5-TTS 5.21%, CosyVoice3 5.30%)，歌唱PER 16.22% (vs Vevo1.5 24.72%)，参数量0.3B。
+- **代码**：暂无 | **Demo**：https://nips-unvoice.netlify.app/
+
+---
+## [GLASS: GRPO-Trained LoRA for Acoustic Style Steering in Zero-Shot Text-to-Speech](https://arxiv.org/abs/2606.05889)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-06-04
+- **一句话贡献**：GLASS提出一种基于后生成奖励的声学风格控制框架，用于零样本TTS的风格控制。核心思想是将每个声学属性视为奖励定义的控制方向，使用GRPO(Group Relative Policy Optimization)训练轻量级LoRA适配器。奖励设计包括语音token长度(语速)、F0均值(音高)和WER( intelligibility anchor)。独立训练的适配器可通过LoRA算术进行交换、插
+- **关键技术点**：基于自回归TTS(AR TTS)，将语音token策略π(y|x)作为 speech-token policy。GLASS冻结TTS主干，为每个风格方向学习一个轻量级LoRA适配器。使用CosyVoice2-0.5B或Seed-TTS作为主干。
+- **主要指标**：语速控制：Fast LoRA实现5.59 SPS (vs 基线3.65)，Slow LoRA实现2.30 SPS；音高控制：High-pitch LoRA将F0提升至156.1Hz(男)/241.0Hz(女)，Low-pitch LoRA将F0降至108.9Hz(男)/164.6Hz(女)。Spea
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [A Geometric Perspective on Composable Emotion Steering in Text-to-Speech Models](https://arxiv.org/abs/2607.00946)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-01
+- **一句话贡献**：先前工作已探索混合TTS系统中的情感控制，但对这些模块的几何特性及其对可控性的影响尚缺乏理解。本文首次系统比较语音语言模型(SLM)和条件流匹配(CFM)模块作为激活steering位点用于混合情感语音合成的效果。使用线性探测和局部本征维度(LID)表征情感表示，评估单语和跨语言场景下的情感控制能力。
+- **关键技术点**：比较SLM和CFM模块作为激活steering sites用于混合情感语音合成。
+- **主要指标**：系统比较SLM和CFM模块的steerability，揭示几何属性对情绪控制的影响，为方法选择提供理论指导。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [BlueMagpie-TTS: A Token-Efficient Tokenizer, Language Model, and TTS for Taiwanese-Accent Code-Switching Speech](https://arxiv.org/abs/2607.06054)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-07
+- **一句话贡献**：本文针对台湾口音混语语音合成问题，提出从文本端进行优化的方案。现有TTS系统对台湾国语的适配不佳，口音默认偏向其他普通话变体，分词器对台湾文本过度分割，且在中英文切换边界发音退化。核心解决方案包括：PangolinTokenizer（字节级BPE分词器， token率0.485为最低）、Barbet（传统中文语言模型，14项评测第一）、BlueMagpie-TTS（结合Barbet和VoxCPM2
+- **关键技术点**：PangolinTokenizer为字节级BPE分词器，在台湾语境数据上训练，token率0.485为最低（9个分词器中最小）。Barbet是基于PangolinTokenizer的十亿参数传统中文语言模型，在14项评测中排名第一。BlueMagpie-TTS将Barbet通过学习桥接层连接到VoxCPM2预训练声学栈，保持声学栈固定。
+- **主要指标**：CER从11.45%降至4.81%（相对降低58.0%），WER从14.83%降至5.36%（相对降低63.9%）。盲听实验中10位听众500句句子，65.6%投票偏好BlueMagpie-TTS。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Flowley: Precise Video-to-Audio Generation with Cross-Modal Alignment in Latent Space](https://arxiv.org/abs/2607.06405)
+
+- **方向**：语音前端 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-07
+- **一句话贡献**：视频到音频(V2A)生成旨在为无声视频合成语义一致且时间同步的真实音频。尽管已有进展，许多方法仍依赖多阶段训练，导致高计算成本和长推理时间；或先将视觉输入转换为文本以利用预训练的文本到音频模型，这牺牲了细粒度时间线索。提出Flowley，一个端到端单阶段训练架构，通过结合视觉特征和文本提示生成配乐。核心创新是渐进式软掩码交叉注意力(Progressive Soft-masked Cross-Att
+- **关键技术点**：Flowley基于端到端单阶段架构，结合视觉特征和文本提示生成音频。核心是Progressive Soft-masked Cross-Attention机制。
+- **主要指标**：在VGGSound上实现SOTA，集成SoundCap后零样本设置下超越最强闭源方法的音频质量。 **对比基线** 优于现有V2A方法，无需预训练音视频对齐模块。 ### ⭐ 评分：8/10 Flowley通过创新的注意力机制解决了V2A的时序同步问题，单阶段训练提高效率。SoundCap弥补了数据
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Fréchet Distance Loss on Speech Representations for Text-to-Speech Synthesis](https://arxiv.org/abs/2607.06027)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-07
+- **一句话贡献**：本文提出Speech Representation Fréchet Distance loss (SR-FD)，一种用于少步扩散/流匹配TTS的训练时分布正则化器。核心思想是在微调时使用与部署相同的少步采样器合成语音，然后通过SR-FD将合成语音的Whisper和CTC特征均值和协方差与离线计算的三种互补内容目标的参考统计量匹配。该损失无需判别器，推理时无额外计算量。在Seed-TTS Engli
+- **关键技术点**：基于Tokenizer-free流匹配自回归TTS，使用few-step sampler进行推理。SR-FD在训练时对合成语音提取Whisper和CTC特征，计算与参考统计量的Fréchet距离。
+- **主要指标**：四步WER从2.2279%降至1.4147%（相对降低36.5%），超越原始十步基线1.7366%。说话人相似度和质量代理保持十步水平。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [FdAudio: MeanFlow-Anchored Fréchet-Distance Post-Training for One-Step Text-to-Audio Generation](https://arxiv.org/abs/2607.10421)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-11
+- **一句话贡献**：本文提出FdAudio，通过MeanFlow一致性目标锚定的Fréchet距离后训练实现高质量一步文本到音频生成。现有 Few-step 采样模型（如MeanAudio）严格的一步生成质量仍落后于多步方法。FdAudio通过多表征Fréchet距离损失直接优化一步分布，同时引入MeanFlow一致性目标防止多步退化问题。
+- **关键技术点**：基于MeanAudio框架的后训练方法，使用预训练embedding空间的分布优化。
+- **主要指标**：相比MeanAudio基线，FD分数降低11.4%，FAD分数提升28.8%，实现SOTA一步T2A生成质量。
+- **代码**：https://github.com/nobel861017/FdAudio | **Demo**：https://fdoneaudio.github.io/
+
+---
+## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-14
+- **一句话贡献**：零样本对话TTS受益于流匹配，但分钟级密集mel频谱图生成导致严重的内存瓶颈，通常迫使不自然的分块合成。本研究提出ZipL-Dialog，将条件流匹配转移到4倍时间压缩（25 Hz）的潜在空间。
+- **关键技术点**：潜在流匹配模型，使用确定性mel自编码器辅助mel域监督，优化ZipFormer分层下采样调度以在压缩下保持声学保真度。
+- **主要指标**：最大峰值GPU内存降低11.22倍，推理速度提升2.23倍，同时保持感知自然度。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Harness TTS: Towards Context-Aware Expressive Speech Synthesis with Harness Layer](https://arxiv.org/abs/2607.17900)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-21
+- **一句话贡献**：Harness TTS提出了一种轻量级的控制层来包装TTS引擎，实现上下文感知的 expressive 语音合成。该方法将风格控制重新表述为封闭集提示工具路由：离线构建风格化提示工具注册表，在线使用LLM planner根据优先级感知观察模式选择适当工具。
+- **关键技术点**：基于LLM的planner作为决策核心，使用Qwen3-4B作为路由决策器，配合CosyVoice3和VoxCPM2作为TTS executor。
+- **主要指标**：- 路由任务：Qwen3-4B+CoT在explicit子集达到74.3% T-Exact@1 - 合成任务：Harness在CosyVoice3上比Instruct提高23.1-35.6个百分点win rate - UTMOSv2提升0.11-0.38 - P95 First-ID延迟41.2ms
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Synthetic Speech, Real Signal: Paralinguistic Preservation and Cross-Lingual Augmentation via Voice Cloning](https://arxiv.org/abs/2607.22304)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-24
+- **一句话贡献**：语音合成数据增强在语言任务（如ASR）中已有广泛探索，但在副语言学任务（如临床情感识别）中却鲜有研究。语音克隆是一种有前景的数据增强方法，但通常只评估语音可懂度（WER）或说话人相似度（SS），而非下游任务性能。本文评估了8个开源语音克隆模型在5个副语言学任务上的表现，包括情感、情感、讽刺、口音和抑郁/焦虑检测，证明了大多数模型能保留信号且性能下降较小。
+- **关键技术点**：评估了8种开源语音克隆模型，覆盖自回归、Flow-matching和混合架构，包括XTTS v2（GPT-2自回归+Perceiver）、Zonos（Mamba2 SSM+Transformer解码器）、E2-TTS和F5-TTS（Flow-matching）、OpenAudio S1-mini（Qwen3 LLM+在线RLHF）、CosyVoice 2/3（自回归+Flow-matching）、MaskGCT（Masked生成式编解码Transformer）。
+- **主要指标**：在Repeat条件下，前5个模型保留了超过90%的信号（P≥0.90）。E2-TTS、OpenAudio、MaskGCT、CosyVoice3，F5-TTS的平均性能下降为-1.7pp到-4.9pp。在跨语言任务中，OpenAudio在抑郁检测上提升+3.3pp，CosyVoice3在焦虑检测上提升
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Extracting Voice Styles from Frozen TTS Models via Gradient-Based Inverse Optimization](https://arxiv.org/abs/2607.25351)
 
 - **方向**：TTS | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-28
 - **一句话贡献**：针对TTS系统只发布合成模型和预设风格向量但不发布参考编码器的问题，本文提出通过梯度下降直接优化风格向量，从冻结TTS模型中提取语音风格。使用WavLM统计量作为目标，无需转录和对齐。在154个说话人上，ECAPA相似度从0.132提升到0.403，验证器接受53%提取声音 vs 预设1%。
-- **关键技术点**：
+- **关键技术点**：基于SupertonicTTS 2，风格向量s∈R^(50×256)，共12800参数。
 - **主要指标**：ECAPA相似度从0.132提升到0.413，ResNet从0.099提升到0.401。每个说话人都有提升。验证器在EER点接受53%的提取声音 vs 预设的1%。
 - **代码**：https://github.com/kdrkdrkdr/supertonic.embed | **Demo**：暂无
 
@@ -141,7 +285,7 @@
 
 - **方向**：TTS、语音合成 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-29
 - **一句话贡献**：Face-to-Speech (F2S)框架从静态面部图像预测语音。轻量级Face Adapter配合face encoder上层的soft-tuning，将face recognition特征对齐到冻结StyleTTS 2模型的style空间。在LRS3数据集上评估，未见身份语音自然度高（UTMOS 3.7-4.0），face-to-voice检索持续高于随机，零样本跨语言迁移到西班牙语也产生流
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- Face→voice检索：Top-1 9.3%（2.2×随机），Top-5 35.1% - SECS（embedding级）：0.40-0.42 - UTMOS（英语）：3.7-4.0 vs 真实语音3.61 - 零样本西班牙语：UTMOS 2.7-2.9，face-to-style映射与语言无
 - **代码**：暂无 | **Demo**：暂无
 
@@ -170,7 +314,7 @@
 - **一句话贡献**：字节跳动提出SwanTale，一个统一的多说话人表达性语音和音频生成模型，同时支持零样本和指令（instruct）两种任务。SwanTale从数据和模型两端入手：数据方面提出SwanData-Caption流水线进行数据清洗、合成覆盖增强和多层级标注；模型方面提出SwanVAE支持高质量多音频模态生成，结合Flow-based Transformer、统一MoE、课程学习和GRPO后训练。在零样本
 - **关键技术点**：动画配音、音频剧、广告、游戏等场景需要同时支持多种语音生成任务：没有参考录音的语音设计（指令任务）、基于参考音频的语音克隆（零样本任务）、环境音效控制、说话人风格自然语言控制等。现有方法通常只支持其中一种任务，缺乏统一框架。
 - **主要指标**：- 零样本任务：说话人相似度、自然度、可懂度领先基线 - 指令任务：表达分数、指令遵循度最优 - SwanVAE重建质量：在多个音频模态上优于基线codec - 支持复杂指令：如"用低沉的声音在咖啡馆背景中朗读一段悲伤的新闻"
-- **代码**：暂无 | **Demo**：暂无
+- **代码**：暂无 | **Demo**：https://swanaigc.github.io/#swantale
 
 ---
 ## [Beyond Prompt Adherence: Auditing Attribute-Level Voice Control in Speech Generation](https://arxiv.org/abs/2608.00545)
@@ -277,7 +421,7 @@
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-08-17
 - **一句话贡献**：现有联合音视频生成模型依赖双向注意力与多步去噪，推理延迟高且仅能生成短视频，无法用于实时长时交互。本文提出Omni-LiveAvatar，首个支持分钟级实时流式联合音视频数字人生成的框架。核心贡献包括：(1) 渐进式自回归蒸馏，将19B参数的双向联合音视频扩散模型LTX-2转化为4步因果生成器，无需辅助稳定机制，在单卡H200上实现33倍加速（21.99 FPS）；(2) 同步音视频长短时记忆机制
 - **关键技术点**：现有联合音视频生成模型（如LTX-2、Ovi）依赖双向注意力与多步去噪，推理速度慢且仅能生成短片段。近期工作如OmniForcing和Hallo-Live尝试通过自回归蒸馏实现实时生成，但依赖音频sink token、额外未来音频上下文或外部奖励模型等模态特定补偿手段，而非从本质上解决蒸馏框架的不稳定性。此外，现有方法局限于短片段生成，分钟级流式数字人生成尚未被探索，主要面临三大挑战：大尺度多模态模型蒸馏困难，音频建模与跨模态耦合增加蒸馏难度；跨模态漂移，视觉与音频漂移随时间累积并相互放大；异构语义调度，需协调缓慢变化的视觉上下文与快速变化的语音内容。
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：https://github.com/Aoko955/Omni-LiveAvatar | **Demo**：暂无
 
 ---
@@ -497,12 +641,30 @@
 - **代码**：暂无（作者称接收后开源） | **Demo**：https://paperdemos.github.io/ImageTTS-demos/
 
 ---
-## [ZipL-Dialog: Memory-Efficient Long-Form Spoken Dialog Synthesis via Latent Flow Matching](https://arxiv.org/abs/2607.12496)
+## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：
-- **一句话贡献**：
-- **关键技术点**：
-- **主要指标**：
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-19
+- **一句话贡献**：本文提出一种实用的深度剪枝蒸馏配方，从大型flow-matching TTS teacher（IndicF5，337M参数）蒸馏出小型Hindi TTS模型。在严重数据预算（约17.6小时）约束下，通过逐阶段深度剪枝（22→16→12→8→6 blocks）实现。
+- **关键技术点**：Teacher为flow-matching DiT（dim=1024, depth=22, heads=16），学生保留宽度不变仅剪枝深度。使用Vocos声码器。
+- **主要指标**：- 190M参数学生在unseen句子达到WER 0.00 - FLEURS 50句benchmark：UTMOS 3.65 vs teacher 3.79（96%保留） - SI-SDR提升，RTF 3.13（MPS） - 102M参数出现明显capacity cliff
+- **代码**：暂无 | **Demo**：https://huggingface.co/spaces/5ivatej/hindi-tts-190M
+
+---
+## [CS-ETS: Chaos-Inspired Samba-Based EMG-To-Speech Synthesis with Nonlinear Chaotic Losses](https://arxiv.org/abs/2607.18629)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-21
+- **一句话贡献**：CS-ETS首次将混沌理论引入EMG-to-Speech合成，提出基于Samba的encoder结合两个混沌启发损失函数：Lyapunov Exponent Regularization（LER）和Multi-Scale Detrended Fluctuation Analysis（MSDFA）。
+- **关键技术点**：修改版Samba架构（Mamba-SWA-MLP），Convolutional Feature Extraction (CFE) block，4层encoder，HiFi-GAN vocoder。
+- **主要指标**：- 参数减少40.79%（32M vs 54.1M） - FLOPs减少13.33% - LSD: 1.07 vs 2.25 baseline（2.1x提升） - STOI: 0.61 vs 0.13（4.7x提升） - SI-SDR: -33.41 vs -41.96（1.25x提升） - MOS
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [UtterTune: LoRA-Based Target-Language Pronunciation Edit and Control in Multilingual Text-to-Speech](https://arxiv.org/abs/2508.09767)
+
+- **方向**：语音前端 | **子方向**：TTS | **评分**：7/10 | **日期**：2025-08-13
+- **一句话贡献**：本文提出UtterTune，一种基于大语言模型的轻量级多语言TTS系统目标语言发音控制方法。提高目标语言发音控制能力同时保持其他语言性能。LLM架构使TTS模型达到显著自然度，但准确建模字素到音素映射和韵律仍具挑战，尤其是当模型省略显式G2P模块直接处理最小编码文本时。UtterTune利用低秩适配在音素级别实现日语发音和音调重音控制，同时在零样本设置下保持自然度和说话人相似度。
+- **关键技术点**：基于LLM的多语言TTS + LoRA发音控制适配器
+- **主要指标**：客观和主观评估确认有效性。
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -512,6 +674,60 @@
 - **一句话贡献**：针对NAR-TTS中音素时长预测不准确、难以刻画说话人个性化韵律，以及复杂韵律导致声码器合成谱不和谐的问题，提出FNH-TTS。核心是将MoE首次引入时长预测器（MoE-DP），并用VOCOS声码器配合CoMBD与SBD双判别器应对高复杂度韵律。在LJSpeech/VCTK上MOS达4.48/4.63，Libri460韵律预测准确率67.07%，CPU/GPU RTF较HiFiGAN快约7.6/1
 - **关键技术点**：NAR依赖显式Duration Predictor对齐序列，现有DP无法捕捉上下文相关及说话人特有的时长变化，且MAS等对齐标签并非真值；同时实验发现韵律信息越多样，HiFiGAN在频谱上产生的"不和谐成分"越严重，成为合成质量瓶颈。
 - **主要指标**：- MOS：LJSpeech 4.48、VCTK 4.63（VITS原版4.26/4.34、F5-TTS 3.87/4.49） - 韵律准确率（Libri460）：67.07%（F5-TTS仅11.17%） - RTF：CPU 0.046、GPU 0.0046（HiFiGAN为0.352/0.007
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CoSTA: Cognitive-State-Conditioned TTS Data Augmentation Using ASR Transcripts for Alzheimer's Disease Detection](https://arxiv.org/abs/2606.06170)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-06-04
+- **一句话贡献**：CoSTA提出一种基于TTS的数据增强框架用于阿尔茨海默病(AD)检测。通过构建Cognitive-State-Conditioned (CS-Cond) TTS模型，合成为AD和健康对照特征的语音。使用CosyVoice2和F5-TTS进行适配，并研究文本来源(MT vs ASR转录本)对TTS增强的影响。在ADReSS数据集上，CoSTA相比基线获得4.16%提升，达到85.83%的音频单独准
+- **关键技术点**：基于CosyVoice2和F5-TTS构建Cognitive-State-Conditional TTS模型。转录本池包括人工转录(MT)和36个ASR自动转录。
+- **主要指标**：音频单独准确率85.83%，相比基线提升4.16%，优于先前方法。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Precise Video-to-Audio Generation with Cross-Modal Alignment in Latent Space](https://arxiv.org/abs/2607.07985)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-07-09
+- **一句话贡献**：视频到音频（V2A）生成旨在为无声视频合成语义一致且时间同步的逼真音频。现有方法依赖多阶段训练导致高计算成本和长推理时间，或将视觉输入转换为文本牺牲细粒度时间线索。提出Flowley，一种端到端单阶段训练架构，结合视觉特征和文本提示生成声轨。核心创新是Progressive Soft-masked Cross-Attention，将视听同步直接嵌入注意力机制且零额外计算成本。此外提出SoundCa
+- **关键技术点**：端到单阶段V2A模型，Progressive Soft-masked Cross-Attention机制嵌入视听同步。
+- **主要指标**：VGGSound上多指标SOTA，零样本设置下超越最强闭源方法音频质量。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Data Augmentation for L2 English Speaking Assessment using TTS](https://arxiv.org/abs/2607.10790)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-07-12
+- **一句话贡献**：本文探索使用TTS和语音克隆为二语（L2）英语口语评估生成合成训练数据。自动口语评估依赖大规模标注数据，但相比书面语料库严重不足。研究发现书面文本与口语存在结构差异，直接使用书面文本生成会导致严重不匹配。提出使用LLM将书面回答转换为口语风格转录（speechification），并探索不同说话人-文本配对策略。
+- **关键技术点**：基于TTS/语音克隆的合成数据生成框架，结合LLM进行speechification。
+- **主要指标**：Speechification显著缩小书面与口语差距，按熟练度匹配的合成语音评分性能最佳。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AutoSIFT: Automatic Style Sifting for Controllable Speech Generation with Arbitrary Style Infilling](https://arxiv.org/abs/2607.12706)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-07-14
+- **一句话贡献**：最先进的文本到语音（TTS）模型实现了令人印象深刻的自然度和表现力，但细粒度、解耦的风格控制仍然具有挑战性。在电影配音、游戏语音表演和视频内容生成等专业场景中，用户通常需要修改特定风格类别（如情感、年龄或性别），同时保留其他所有内容。
+- **关键技术点**：AutoSIFT将说话风格分解为可文本描述的已知类别和捕获非语言韵律和说话人特定细微差别的未知残差风格。
+- **主要指标**：在细粒度风格控制、自然度和表现力上取得显著改善，支持任意风格组合的灵活控制。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Efficient Text-to-Audio Generation via Pruning](https://arxiv.org/abs/2607.13330)
+
+- **方向**：语音前端 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-07-14
+- **一句话贡献**：基于扩散的文本到音频生成模型如AudioLDM可实现高感知质量和强语义一致性，但实际部署面临高计算成本问题。本研究探索剪枝用于高效文本到音频生成，分析不同剪枝策略对模型性能和效率的影响。
+- **关键技术点**：基于AudioLDM的扩散模型，采用结构化剪枝减少计算量。
+- **主要指标**：在压缩模型大小的同时保持生成质量，实现效率提升。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [StellarTTS: Sparse Temporal Embedding for Low-Latency and Robust Speech Synthesis](https://arxiv.org/abs/2607.19859)
+
+- **方向**：语音前端 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-07-22
+- **一句话贡献**：本文介绍StellarTTS，一种基于稀疏时间嵌入策略的新型移动端优化非自回归TTS框架。延迟、鲁棒性和韵律之间的权衡是TTS系统的关键挑战。自回归模型虽保真度高但慢且易出错；非自回归模型虽快但通常牺牲韵律自然性。StellarTTS支持对音素持续时间、发音和韵律的细粒度控制。83M参数的轻量级掩码生成式Transformer在稀疏时间嵌入条件下达到0.08的实时因子。
+- **关键技术点**：83M参数轻量级掩码生成式Transformer，稀疏时间嵌入策略。
+- **主要指标**：RTF=0.08，更低延迟和更强鲁棒性，音频质量、韵律自然度和说话人相似度保持竞争性能。
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -528,8 +744,8 @@
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-08-26
 - **一句话贡献**：现有情感 TTS 系统往往忽视情感的时间演化特性，无法生成句内平滑情感转换。EmoTra-TTS 采用多遍流混合管道、双阶段 VAD 条件以及方向-幅度解耦注入三大设计，实现流畅的句内情感转换。实验表明其性能优于 SOTA 基线与商业系统，已被 EMNLP 2026 主会接收。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -537,8 +753,8 @@
 
 - **方向**：语音前端 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-08-26
 - **一句话贡献**：面向野外 360° 语音场景中空间音频采集设备受限、质量有限的问题，本文提出视觉引导的第一阶声场（FOA）语音空间化方法，并构建 YT-SPEECH 数据集。采用 Localizer-Renderer 框架，从视觉信息估计声源方向并重建定向 FOA 信号，实用地提升了音频相关性能。该工作已被 INTERSPEECH 2026 接收。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -546,8 +762,8 @@
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-08-27
 - **一句话贡献**：现有神经声码器扩展到空间音频时往往出现空间质量下降，且难以满足实时性要求。CSAVocoder 提出基于因果 GAN 的空间音频声码器，通过空间适配器与空间一致性判别器实现空间保真度与音频质量的联合优化，在大规模数据集上验证其同时具备高空间保真度、有竞争力的音频质量与实时推理性能。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -555,7 +771,7 @@
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-08-29
 - **一句话贡献**：当前TTS系统多为开环单次生成，易在局部产生错位重音、不自然停顿、语调扁平化等韵律缺陷，而语句级指标往往无法暴露此类问题。本文提出LoopTTS闭环TTS框架，采用Filter-Judge-Refiner流水线：由AudioLLM Judge对初版语音进行诊断并输出结构化修正指令，再由细粒度指令跟随TTS模型Refiner基于初版语音、目标文本与指令做受控重合成。为训练Refiner构建了42K条
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- 恢复质量（人工主观评测）：LoopTTS修正后的音频显著优于原始生成音频 - 开环重生成对比：LoopTTS的恢复质量优于直接重生成基线 - 韵律指令跟随：Refiner在重音与停顿的目标韵律修改上指令跟随能力优于基线TTS
 - **代码**：暂无 | **Demo**：暂无
 
@@ -564,7 +780,7 @@
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-08-31
 - **一句话贡献**：现有情感TTS仅建模单一语句级情感，无法控制多情感。本文提出HybridEmo框架，针对两种互补任务——情感轨迹（有序情感阶段序列）和情感混合（多种情感共存于同一语句）——先SFT初始化再通过GRPO对齐语音token策略。轨迹分支使用分段对齐一致性（平均+最弱阶段证据）维护阶段完整性，混合分支使用基于GMM的奖励。在MultiEmo-Test上显著提升轨迹正确性和混合强度，人类评测优于CosyV
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- 轨迹正确性：HybridEmo显著优于基线 - 混合强度：HybridEmo显著优于基线 - 说话人相似度：无明显退化 - 人类偏好：优于CosyVoice 3 和 EmoVoice-0.5B，与Qwen3-TTS持平
 - **代码**：暂无 | **Demo**：暂无
 
@@ -625,9 +841,9 @@
 ---
 ## [COT-TTS: Audio Context-Aware Text-to-Speech with Chain-of-Thought Reasoning](https://arxiv.org/abs/2609.22697)
 
-- **方向**：语音大模型；**作者**：Weizhen Bian、Sitong Cheng、Rongxiu Zhong、Junlan Feng、Bei Liu、Wei Xue 等；**机构**：香港科技大学、中国移动九天研究院、北京大学多媒体信息处理国家重点实验室；**发布日期**：2026-09-22 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
+- **方向**：语音大模型； | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：现有TTS的表现力依赖用户显式风格指令，而自然对话中的说话方式应由上下文推断。本文提出音频上下文感知的推理式TTS任务COT-TTS：给定历史多说话人对话音频、目标文本与参考音色，模型先生成带情绪标签的历史转写和显式说话方式推理（CoT），再合成目标语音。作者构建了9M样本双语训练集（含1M高质量子集）与800条人审源隔离测试基准，并训练0.6B/1.7B端到端自回归模型，以约1/30的参数量达到
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- Human MOS（英文）：4.15（0.6B），最强基线3.60，提升约0.55 - 时长误差：1.16s/1.10s（英/中），基线多在5.1–12.5s，优4倍以上 - 情绪一致性：约0.95，优于全部基线（0.91–0.95） - UTMOSv2：2.94（英文），低于Fish Audi
 - **代码**：暂无（承诺发布数据构建管线、数据集、模型与训练代码） | **Demo**：https://luckybian.github.io/COT-TTS
 
@@ -636,7 +852,7 @@
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：指令跟随语音合成在需同时控制音高、语速、情感的复杂指令下，单遍生成常只实现部分属性。本文将自我反思推理范式首次扩展到音频token空间：单个大音频语言模型先生成语音草稿，"听"自己的输出并用文本 critiques 声学缺陷，再据此生成精炼版语音，形成生成-批评-精炼闭环。以GRPO强化学习训练，引入基于草稿改进量的refinement-aware奖励。InstructTTSEval上精炼输出相对
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- CLSP均值：0.538（零样本0.505、RL单跳0.527），弥合到真值差距64.7% - Gemini-2.5-Pro风格一致性：65.9%（零样本61.5%、单跳64.2%） - 人评指令遵循48.5、自然度54.7，较零样本相对提升24.4%、9.2% 关键对比：优于最强开源基线Vox
 - **代码**：https://github.com/Chee-En-Yu/ReflectTTS | **Demo**：暂无
 
@@ -645,7 +861,7 @@
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：零样本TTS使高保真声音克隆泛滥，专有模型被窃取后经微调、量化、蒸馏洗白转售的黑市兴起，而TTS模型级版权验证长期空白。本文提出TTS-Guard，首个面向TTS的黑箱所有权验证框架：模型属主在关键说话人对的参考音频上优化对抗扰动构成"说话人对指纹"，向疑似API提交该音频并检验合成结果是否被误判归属目标说话人，以此证明衍生关系。在五个主流TTS上平均指纹成功率FSR达96.4%、单查询误报率FP
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- FSR（平均）：96.4% - 单查询FPR：5.8%；决策级FPR：4.7%（K=20）、≤0.5%（K=40） - STOI：0.822；NISQA-MOS：3.87，与干净参考差≤0.05 **关键对比**：对比跨域移植的IPGuard与指令指纹IF，基线干净FSR仅0.78/0.86，蒸
 - **代码**：暂无 | **Demo**：暂无
 
@@ -661,100 +877,100 @@
 ---
 ## [Interactive TTS: Dynamic Speaking Style Adaptation for Expressive Speech Synthesis](https://arxiv.org/abs/2609.25707)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：针对现有上下文感知TTS将对话语境端到端隐式映射为语音、风格决策难以监督、风格与音色纠缠导致多轮音色漂移的问题，提出交互式TTS框架：用Context-to-Instruction模块把多模态对话语境显式解析为可执行风格指令，再经Iterative RSFT与CADPO多目标对齐指令条件生成器。VStyle综合3.82分超全部CTTS基线，共情维度3.55为TTS系统最佳；SpeechParali
 - **关键技术点**：多轮多模态交互要求系统按用户意图动态调整语速、情绪、音量并维持说话人身份。现有CTTS三大瓶颈：风格决策被吸收进隐式声学映射、难以监督与解释；训练目标仅对齐真值语音、不校验表达是否合语境；风格与音色、内容纠缠，强风格变化引发跨轮音色漂移。
 - **主要指标**：- VStyle综合：3.82，超最强CTTS基线HarnessTTS（3.47）0.35分，亦超商用Qwen-Audio-3.0-Realtime（3.64） - VStyle共情：3.55，全部参评系统TTS类最高 - SpeechParaling-Bench：总胜率49.8%，情境适应80.3
-- **代码**：暂无 | **Demo**：暂无
+- **代码**：暂无 | **Demo**：https://wjtian-wonderful.github.io/InteractiveTTS/
 
 ---
 ## [Learnable Classifier-Free Guidance Null Embeddings for Enhanced Controllable Speech Synthesis](https://arxiv.org/abs/2609.25411)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：CFG 已广泛用于 LLM 类 TTS 以提升生成质量与条件保真度，但其无条件分支惯用固定零向量作"空表示"，既可能偏离训练分布引发数值与训练不稳定，也无法区分说话人与文本这两类正交条件。本文提出为每个条件模态学习一个专属空嵌入作为无条件基线，并据此解耦说话人与文本两路引导强度，推理时可用引导权重作旋钮，在音色相似度与稳定性、表达力与自然度之间精细权衡。客观与主观实验均验证可学习空嵌入优于固定零向
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：https://airtimemedia.github.io/IS2026-LearnableCFG/
 
 ---
 ## [SceneTTS-Bench: A Benchmark for Scene-Level TTS in Drama Dubbing](https://arxiv.org/abs/2609.26255)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：面向短剧配音的场景级TTS评测基准：现有评测停留在句级，无法暴露音色漂移、表演不足、语速不连续三类配音关键失效。SceneTTS-Bench沿音色一致性、情感表现力、节奏连贯性三维构建，语料含真实与生成剧本共160个中英双语场景、约10300句；以引擎无关的规范中间表示（Canonical IR）统一四类TTS后端输入，配套SCS/UAR/RDR三条自动管线输出逐句诊断。实验表明无系统在三维同时占
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://piedpiperg.github.io/scenetts-bench/ | **Demo**：https://piedpiperg.github.io/scenetts-bench/
 
 ---
 ## [From Reliable Text to Real Voices: Trust-Aware Progressive Adaptation for Low-Resource TTS](https://arxiv.org/abs/2609.25951)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：低资源语言缺乏文本-语音成对数据且人工转写昂贵，现成零样本TTS难以直接适配。该文发现监督顺序决定适配权衡：合成语音发音准但韵律平、音色单一，先以其训练可建立文本-语音对应、提升内容准确率却损伤说话人相似度；真实录音伪标签韵律自然、音色多样，但ASR转写带噪，反序（真实→合成）又会丢失相似度。据此提出信任感知渐进适配：先合成后真实的合成到真实两阶段训练，并以两个固定独立ASR转写的一致度作为伪标签
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：未明示公开（论文未给出代码仓库链接） | **Demo**：https://insiderx-pro.github.io/S2R-Adaptation-TTS/
 
 ---
 ## [EditVoice: Variable-Length Non-Autoregressive Zero-Shot TTS and Speech Editing with Edit Flows](https://arxiv.org/abs/2609.29889)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文提出 EditVoice，据作者所知首个变长非自回归零样本 TTS 模型。它基于 Edit Flows 离散流匹配框架，通过插入、删除、替换操作在采样时联合更新语音内容与序列长度，摆脱了传统 NAR 模型需预先指定目标长度的限制。模型采用随机区间语音填充训练，统一了零样本 TTS 与文本驱动的语音编辑，并支持前缀/后缀两种 prompt 位置。作者进一步提出互补 prompt 采样（CPS）融
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：https://dhy02.github.io/editvoice-demo/
 
 ---
 ## [AdaptDuplex: from static to adaptive full-duplex spoken dialogue](https://arxiv.org/abs/2609.29217)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：现有全双工语音对话模型（如 DuplexOmni、MiniCPM-o 4.5）在设计与训练期就把窗口时长和可用动作集合写死，打断、附和、静默监听等行为沦为静态操作点，无法随对话节奏与认知负荷逐时刻调整。AdaptDuplex 以 Qwen3-Omni 为底座，围绕"每个行为决策都是一个显式 token"这一原则进行三层协同设计：紧凑的规范化 token 序列协议、动态预测短/中/长三档窗长并可叠加
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：与Demo：暂无(仅公开附录语法页 https://adaptduplex.github.io/appendix) | **Demo**：暂无(仅公开附录语法页 https://adaptduplex.github.io/appendix)
 
 ---
 ## [ReaFlow-TTS: Realization-Conditioned Flow Matching for High-Quality and Controllable Speech Synthesis](https://arxiv.org/abs/2609.28906)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：针对流匹配TTS中同文本不同语音实现（realization）导致目标速度不一致、确定性网络只学到条件均值而抹平实现变化的问题，本文提出ReaFlow-TTS：引入话语级随机实现潜变量z并在整条流轨迹上条件化速度预测，同时用VAD（效价-唤醒-支配）语义结构化潜空间。推理时可直接从先验采样、无需目标语音，并沿VAD轴做分级属性操控。实验在音质上超越F5-TTS基线，且潜变量跨初始噪声可复现地影响音
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Depth through recurrence: Looped transformers for flow-matching TTS](https://arxiv.org/abs/2609.29768)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文系统研究在 flow-matching TTS 的 velocity 网络中如何用"循环深度"（权重跨层复用、迭代加深）组织 Transformer，即以参数共享的若干 block 在同一网络前向内被多次执行，用更少独特参数保留等效执行深度。作者在统一目标、采样器与宽度下比较七种复用布局（全共享环、相邻序列重复、部分共享的前/中/后段），在 Seed-TTS 与 LibriSpeech-PC 
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 ｜ Demo：https://jiabaoai67.github.io/loop-f5/ | **Demo**：https://jiabaoai67.github.io/loop-f5/
 
 ---
 ## [A Comprehensive Study of Content Representations for Speech Synthesis](https://arxiv.org/abs/2609.30975)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-28
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-28
 - **一句话贡献**：本文提出一个无参考的生成式统一评测框架，系统比较 SSL 特征、k-means/RVQ 令牌、监督令牌、后验图谱与神经音频编码器等语音内容表示。生成模型仅以表示为条件且不含说话人信息，生成音频在内容、说话人身份、韵律三轴上量化评估。结果揭示两种机制：接近完整重建音频的表示，与有效剥离说话人身份的表示。关键发现是解耦并非仅靠监督实现，而是训练目标与信息容量交互作用的结果。
 - **关键技术点**：语音内容表示广泛用于语音转换、语音翻译与多模态大模型，但以往基准将声学令牌与内容令牌混排，且缺乏在统一生成框架下直接度量各表示保留何种属性的方法。
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：https://content-demo.diegotg2000.workers.dev/
 
 ---
 ## [InstCharVoice: Grounding Natural-Language Instructions for Character-Level Control in Text-to-Speech](https://arxiv.org/abs/2609.36287)
 
-- **方向**： | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-30
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-09-30
 - **一句话贡献**：现有指令驱动TTS对"哪几个字要变、怎么变"是隐式的，字级可控TTS又要求用户手动配置声学属性，两者之间存在接口与可解释性断层。本文提出InstCharVoice，将自然语言指令落地（grounding）到字级声学控制：先用Qwen3-Omni结合字级标注生成带定位标签的指令，再训练自回归模型在生成语音token前识别指令相关字符并预测其时长、边界、能量、音高、音调五维属性，实现可解释、可干预的细
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：/Demo：Demo https://xxh333.github.io/instcharvoice-demo/ ，代码暂无 | **Demo**：Demo https://xxh333.github.io/instcharvoice-demo/ ，代码暂无
 
 ---
 ## [Region-Aware Masking for Accent-Robust Cross-Lingual Text-to-Speech](https://arxiv.org/abs/2610.07524)
 
-- **方向**：语音大模型；**作者**：Haoqi Li、Shivam Mehta、Ravi Teja Gadde、Yinghong Lan；**机构**：Netflix Inc., USA；**发布日期**：2026-10-07 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-07
+- **方向**：语音大模型； | **子方向**：TTS | **评分**：7/10 | **日期**：2026-10-07
 - **一句话贡献**：跨语言零样本TTS常出现口音泄漏：模型在保留参考音色的同时，把源语言发音习惯带入目标语言输出。在掩码重建式TTS中，训练用同语言上下文、推理却用跨语言上下文，该失配进一步放大问题。本文提出区域感知掩蔽：将两种语言语句拼接为一条训练样本，掩码相对语言边界放置，使训练复现推理的跨语言提示模式，无需语言ID、口音标签、平行语料或架构改动。母语听者评测将感知口音从4.3降至0.5（0-5分制），清晰度与自
 - **关键技术点**：Voicebox、E2 TTS、F5-TTS等掩码重建范式训练时从同语言上下文复原被掩码区域，跨语言推理却须依赖外语声学上下文，模型倾向从参考音频复制语言相关属性（尤其中口音）。同说话人平行跨语言语料稀缺昂贵，语言ID、对抗口音抑制等显式解耦方案条件复杂。
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：https://doubleblindauthor.github.io/region-aware-masking-TTS-demo
 
 ---

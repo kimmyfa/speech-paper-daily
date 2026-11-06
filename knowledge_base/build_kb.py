@@ -3,6 +3,7 @@
 """从 speech-paper-daily 输出构建语音论文知识库。"""
 import json
 import re
+import sys
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -51,8 +52,33 @@ MAIN_DIRS = {
 }
 
 
+PARSE_STATS = {"blocks": 0, "headers": 0, "compact": 0, "no_id": 0, "no_score": 0}
+
+# 批次文件里的小节标题，形如 "## [1] 语音大模型"，不是论文条目
+SECTION_TITLE = re.compile(r"^(语音大模型|语音前端|其他论文.*|未进入前\s*\d+.*)$")
+
+# 「仅列标题」附录的一行式条目：
+#   16. **Title** | 语音大模型 | arXiv: 2610.10868 | 评分：7/10 | https://arxiv.org/abs/2610.10868
+COMPACT_LINE = re.compile(
+    r"^[0-9]+\.\s*\*\*(?P<title>.+?)\*\*\s*\|\s*(?P<direction>[^|]+?)\s*\|"
+    r"\s*arXiv:\s*(?P<id>[0-9]{4}\.[0-9]{4,5})\s*\|\s*评分[：:]\s*(?P<score>[0-9]+(?:\.[0-9]+)?)/10",
+    re.M,
+)
+
+# 编辑侧写下的“该条与前文重复”占位，不是论文
+DUPLICATE_TITLE = re.compile(r"\(重复[，,].*见上\)")
+
+
 def parse_output_files(output_dir: Path):
-    """解析所有速递 md，返回 {arxiv_id: entry}，已去重且优先高评分。"""
+    """解析所有速递 md，返回 {arxiv_id: entry}，已去重且优先高评分。
+
+    兼容三种历史格式（字段后的冒号可有可无，字段间用 | 或 ；分隔）：
+      新：**arXiv ID**：2606.05852 | **方向**：语音大模型
+      旧：**arXiv ID** 2606.05852 | **方向** 语音大模型   （2026-06 ~ 2026-07 早期批次）
+      旧：arXiv ID：2606.05852|方向：语音大模型          （2026-09 起无加粗）
+    另解析「仅列标题」附录的一行式条目（10-09 起出现），这类条目只有标题、
+    方向、评分和链接，没有精读内容。
+    """
     papers = {}
     for f in sorted(output_dir.glob("*/*.md")):
         if f.parent.name.startswith("_"):
@@ -60,23 +86,34 @@ def parse_output_files(output_dir: Path):
         content = f.read_text(encoding="utf-8", errors="ignore")
         for entry in re.split(r"\n## \[", content)[1:]:
             entry = "## [" + entry
-            m = re.search(r"arXiv ID[^\n:：]*[:：]\s*([0-9]{4}\.[0-9]{4,5})", entry)
-            if not m:
-                continue
-            aid = m.group(1)
+            PARSE_STATS["blocks"] += 1
             title_line = entry.split("\n", 1)[0]
             tm = re.match(r"^##\s*\[\d+\]\s*(.+)$", title_line)
             title = tm.group(1).strip() if tm else title_line.replace("## [", "").replace("]", "", 1).strip()
+            if SECTION_TITLE.match(title):
+                PARSE_STATS["headers"] += 1
+                continue
+            if DUPLICATE_TITLE.search(title):
+                PARSE_STATS["headers"] += 1
+                continue
+            m = re.search(r"arXiv\s*ID\s*\**\s*[：:]?\s*([0-9]{4}\.[0-9]{4,5})", entry)
+            if not m:
+                PARSE_STATS["no_id"] += 1
+                continue
+            aid = m.group(1)
             score_m = re.search(r"评分[^\d]*([0-9]+(\.[0-9]+)?)/10", entry)
             score = float(score_m.group(1)) if score_m else 0.0
-            dm = re.search(r"方向[^\n:：]*[:：]\s*([^\n|]*)\s*\|?\s*\*\*", entry)
+            if not score_m:
+                PARSE_STATS["no_score"] += 1
+            dm = re.search(r"方向\s*\**\s*[：:]?\s*([^\n|*]+)", entry)
             direction = dm.group(1).strip() if dm else ""
-            date_m = re.search(r"发布日期[^\n:：]*[:：]\s*([0-9]{4}-[0-9]{2}-[0-9]{2})", entry)
-            code_m = re.search(r"\*\*代码\*\*：([^\n|]*)", entry)
-            demo_m = re.search(r"\*\*Demo\*\*：([^\n|]*)", entry)
+            date_m = re.search(r"发布日期\s*\**\s*[：:]?\s*([0-9]{4}-[0-9]{2}-[0-9]{2})", entry)
+            code_m = re.search(r"代码\s*\**\s*[：:]?\s*([^\n|]*)", entry)
+            demo_m = re.search(r"Demo\s*\**\s*[：:]?\s*([^\n|]*)", entry)
             intro_m = re.search(r"### 📌 简介\n+\s*(.+?)\n\n###", entry, re.DOTALL)
-            tech_m = re.search(r"\*\*问题背景：\*\*\s*(.+?)(?=\n\n\*\*模型架构|\n\n\*\*核心创新)", entry, re.DOTALL)
-            exp_m = re.search(r"\*\*主要指标\*\*\s*[:：]\s*(.*?)(?=\n\*\*是否开源|\Z)", entry, re.DOTALL)
+            tech_m = re.search(r"\*\*问题背景[：:]?\*\*\s*(.+?)(?=\n\n\*\*模型架构|\n\n\*\*核心创新)", entry, re.DOTALL) \
+                or re.search(r"\*\*模型架构\*\*\s*[：:]?\s*(.+?)(?=\n\n\*\*核心创新|\n\n\*\*训练策略|\Z)", entry, re.DOTALL)
+            exp_m = re.search(r"\*\*主要指标\*\*\s*[：:]?\s*(.*?)(?=\n\*\*是否开源|\Z)", entry, re.DOTALL)
 
             new_entry = {
                 "id": aid,
@@ -92,6 +129,24 @@ def parse_output_files(output_dir: Path):
             }
             if aid not in papers or score >= papers[aid]["score"]:
                 papers[aid] = new_entry
+
+        for cm in COMPACT_LINE.finditer(content):
+            aid = cm.group("id")
+            if aid in papers:
+                continue
+            PARSE_STATS["compact"] += 1
+            papers[aid] = {
+                "id": aid,
+                "title": cm.group("title").strip(),
+                "score": float(cm.group("score")),
+                "direction": cm.group("direction").strip(),
+                "date": "",
+                "code": "暂无",
+                "demo": "暂无",
+                "contribution": "",
+                "tech_points": "",
+                "metrics": "",
+            }
     return papers
 
 
@@ -139,13 +194,14 @@ def render_entry(e: dict) -> str:
     code = e["code"]
     if code.strip().lower() in ("暂无", "", "none"):
         code = "暂无"
+    placeholder = "（仅标题，未精读）"
     lines = [
         f"## [{e['title']}](https://arxiv.org/abs/{e['id']})",
         "",
-        f"- **方向**：{e['direction']} | **子方向**：{subtag(e['title'], e['direction'])} | **评分**：{e['score']:.0f}/10 | **日期**：{e['date']}",
-        f"- **一句话贡献**：{e['contribution']}",
-        f"- **关键技术点**：{e['tech_points']}",
-        f"- **主要指标**：{e['metrics']}",
+        f"- **方向**：{e['direction']} | **子方向**：{subtag(e['title'], e['direction'])} | **评分**：{e['score']:.0f}/10 | **日期**：{e['date'] or '—'}",
+        f"- **一句话贡献**：{e['contribution'] or placeholder}",
+        f"- **关键技术点**：{e['tech_points'] or placeholder}",
+        f"- **主要指标**：{e['metrics'] or placeholder}",
         f"- **代码**：{code} | **Demo**：{e['demo']}",
         "",
     ]
@@ -182,6 +238,15 @@ def incremental_update(papers: dict):
 def main():
     import datetime
     papers = parse_output_files(OUTPUT_DIR)
+    print(
+        f"[build_kb] 扫描条目 {PARSE_STATS['blocks']}，"
+        f"解析成功 {PARSE_STATS['blocks'] - PARSE_STATS['headers'] - PARSE_STATS['no_id']}，"
+        f"补录仅列标题条目 {PARSE_STATS['compact']}，"
+        f"跳过小节标题 {PARSE_STATS['headers']}，"
+        f"无 arXiv ID {PARSE_STATS['no_id']}，无评分 {PARSE_STATS['no_score']}"
+    )
+    if PARSE_STATS["no_id"]:
+        print("[build_kb] 警告: 存在无法解析的条目，请检查格式", file=sys.stderr)
     incremental_update(papers)
     selected = {k: v for k, v in papers.items() if v["score"] >= MIN_SCORE}
     index = {

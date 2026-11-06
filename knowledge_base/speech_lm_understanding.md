@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 234 篇
+共 277 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -20,11 +20,29 @@
 - **代码**：暂无（承诺随上游许可发布LoRA适配器） | **Demo**：暂无
 
 ---
+## [Lychee-FD: Hierarchical Acoustic-Semantic Modeling for Full-Duplex Spoken Language Models](https://arxiv.org/abs/2607.06540)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：9/10 | **日期**：2026-07-07
+- **一句话贡献**：开发高性能全双工口语语言模型(SLM)仍是语音和NLP领域的重要挑战。尽管已有进展，但现有方法受制于严重的模态干扰问题，导致知识退化、语义完整性受损，使全双工SLM显得不自然和不够智能。本文通过精细分析模型优化动态，揭示了性能退化的根本原因： acoustic和semantic建模在被迫共享深层参数空间时存在固有的梯度冲突。基于这一洞察，提出Lychee-FD，一个原生端到端全双工框架。核心是层次
+- **关键技术点**：Lychee-FD采用原生端到端全双工架构，包含两个核心组件：(1)层次化参数分离模块：在深层将acoustic和semantic建模解耦；(2)语义对齐通道：专门设计用于保持跨模态一致性。模型基于Transformer架构，针对全双工语音交互优化。
+- **主要指标**：Spoken QA上+7.4%，FullDuplexBench 1.5上+28.5%的交互流畅性提升。推理效率与基线相当。 **对比基线** 显著优于先前的全双工SLM方法，解决模态干扰问题。 ### ⭐ 评分：9/10 Lychee-FD通过深入分析揭示了全双工SLM的性能瓶颈根源，层次化参数分离
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Encoder-Side Neuron Identification and Amplification for Acoustic Perception in Large Audio-Language Models](https://arxiv.org/abs/2607.11801)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：9/10 | **日期**：2026-07-13
+- **一句话贡献**：大音频语言模型（LALM）在语音内容等语义属性上表现强劲，但在说话人情感等细粒度非语义属性上表现不佳。在不重新训练的情况下改进这一问题需要有效的推理时干预方法。大多数现有方法仅在音频编码器之后进行干预，且粒度相对较粗。本研究提出IAAN方法，在音频编码器内部神经元级别进行识别和增强。
+- **关键技术点**：基于LALM的音频编码器，通过识别和放大特定神经元来增强声学感知。
+- **主要指标**：Audio-Flamingo-3提升25.7点，Qwen2.5-Omni提升21.4点，Kimi-Audio提升9.7点。实验证明编码器位置和神经元级别选择性都是必要的。
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [ThinkOmni: A Reasoning-Driven Omni-Modal LLM Framework for Audio Forgery Detection and Localization](https://arxiv.org/abs/2607.26553)
 
 - **方向**：语音伪造检测与定位 | **子方向**：SpeechLM | **评分**：9/10 | **日期**：2026-07-29
 - **一句话贡献**：ThinkOmni是一个推理驱动的全模态大语言模型框架，可同时执行显式取证推理、伪造检测和时序篡改定位。为了支持显式推理监督，作者构建了FACoT（Forensic-Aware Chain-of-Thought）数据集，包含10万样本带有结构化取证证据和推理标注。实验表明ThinkOmni在检测和定位任务上都实现了强大的跨数据集泛化能力。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- 跨数据集检测：平均ACC 93.70%，F1 93.72% - 跨数据集定位：ADD 2023上F1 80.74%，Speech-Forensics上F1 85.15% - 显著优于SSL基线（W2V2-AASIST）和ALLM基线（ALLM4ADD）
 - **代码**：https://beyond0814.github.io/ThinkOmni/ | **Demo**：暂无
 
@@ -87,7 +105,7 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：9/10 | **日期**：2026-08-20
 - **一句话贡献**：本文提出 NAPE（Next-Audio-Patch-Embedding prediction），将大语言模型中"预测下一个元素"的自回归范式引入自监督音频表示学习：把一个因果 Transformer 训练为，仅凭之前谱图模块的嵌入去预测下一个 patch 的连续嵌入。设计刻意极简，只用因果掩码加 stop-gradient 作为全部训练信号，彻底摆脱了重建解码器、声学 tokenizer、tea
-- **关键技术点**：
+- **关键技术点**：：主流音频 SSL 方法要么走掩码谱图重建（如 Audio-MAE），要么走 EMA 师生蒸馏（如 EAT、ASiT、SSLAM、BEATs），前置配方日趋复杂：需要重建解码器把隐表示映射回 mel、需单独训练声学 tokenizer 提供离散目标、需 EMA 更新目标编码器和额外正则损失来稳定训练。与此同时，视觉与语言领域已证明"从上下文直接预测下一元素"的简单自回归目标即可学到数据分布，但这一思路在音频 SSL 中尚属空白，而音频恰恰是最适合因果预测的模态。
 - **主要指标**：NAPE-L raster 达到 AS-2M 50.2 mAP、AS-20K 40.5、ESC-50 96.0%、KS1 97.9%、KS2 98.8%、ER 68.0%；NAPE-L diagonal（96.2%/98.2%/98.9%/68.8%）在除 AS-2M 外的任务上略优。与最强基线 S
 - **代码**：https://github.com/umbertocappellazzo/nape | **Demo**：暂无
 
@@ -96,7 +114,7 @@
 
 - **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：9/10 | **日期**：2026-08-20
 - **一句话贡献**：现代语音合成技术可生成高度逼真的伪造语音，因此深度伪造语音溯源（识别伪造语句背后的具体生成器）对取证、内容溯源与平台问责日益重要。本文在作者此前"透明概率属性"工作（将语句表示为合成器子组件的概率分布）的基础上做了两项关键扩展：一是用多任务学习（MTL）联合训练概率属性提取器，二是引入结构化 Kolmogorov-Arnold 网络（SKM）作攻击分类器。SKM 的拓扑显式遵循 ASVspoof 
-- **关键技术点**：
+- **关键技术点**：：语音深度伪造溯源需从二分类检测（真人/伪造）扩展为识别具体生成模型（如 TTS 或 VC 系统的子组件）。现有方案要么是端到端黑盒模型难以解释，要么采用两阶段设计——先独立训练一批概率属性 MLP 提取器，再用决策树或逻辑回归做后端分类、事后用 SHAP 算特征重要性——管线割裂、稳定性差、解释开销高，且难以保证解释忠实反映模型真实逻辑。
 - **主要指标**：最优配置 ST_RB_SSL-AASIST_ff（全微调 SSL-AASIST 骨干）在属性提取上 BAcc 99.59%–99.92%、EER 0.07%–0.16%，17 类攻击分类 BAcc 99.64%、EER 0.11%（最好）；AASIST 骨干下从零训练与全微调攻击分类为 99.53%
 - **代码**：https://github.com/HoangHPham/KAN-Probabilistic-Deepfake-Attribution | **Demo**：暂无
 
@@ -173,21 +191,201 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [StanceBench: A Benchmark for Audio LLM-Based Interpersonal Stance Evaluation from Speech](https://arxiv.org/abs/2607.22658)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：—
+- **一句话贡献**：语音到语音对话模型越来越依赖韵律和交互细节来传达社交意图，但此类线索的基准仍然有限。本文提出StanceBench，用于测量对话语音中人际立场并评估音频LLM作为自动化评判员的表现。使用Seamless Interaction语料库，StanceBench通过角色提示极定义9个立场维度，标准化单说话人和基于交互的评估，报告LLM作为评判员的鲁棒性、偏差和立场推断。同理心和礼貌最容易区分，诚实最难且
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Beyond Generative Decoding: Discriminative Hidden-State Readout from a Native Omni-Modal LLM for Multimodal Sentiment Analysis](https://arxiv.org/abs/2606.05713)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-06-03
+- **一句话贡献**：本文重新审视多模态情感分析(MSA)中大型多模态模型的读出机制。传统方法使用生成式读出(将情感分数作为文本字符串输出)，存在连续回归依赖离散自回归解码的问题。提出判别式读出方法，基于原生全模态LLM (Qwen2.5-Omni-7B)的Thinker模块，将最后一层的隐藏状态直接映射到连续分数。使用4-bit量化和QLoRA，整个7B管道可在单卡GPU上训练。在CMU-MOSI和CMU-MOSEI
+- **关键技术点**：基于Qwen2.5-Omni-7B，使用Thinker模块的最终层隐藏状态，通过轻量级回归头映射到连续分数。单次前向传播完成推理，避免自回归解码。
+- **主要指标**：MOSI: MAE 0.551, Corr 0.888；MOSEI: MAE 0.506, Corr 0.790，达到SOTA。生成式读出即使经过同等监督训练，MAE也会翻倍，产生2.8%的无法解析或超出范围的输出(零样本)。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [LoRA-Tuned LLMs for Dementia Detection via Multi-View Speech Features](https://arxiv.org/abs/2606.28445)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-06-26
+- **一句话贡献**：本文提出基于LoRA微调大语言模型进行痴呆症早期检测的方法。通过融合多视角语音特征（声学特征和语义特征），利用预训练LLM的强大表示能力识别痴呆症的早期信号。方法在多个痴呆症语音数据集上验证，展示了LoRA高效微调策略在医疗语音分析任务中的有效性。
+- **关键技术点**：基于LLaMA或类似大语言模型，使用LoRA进行参数高效微调。多视角特征提取器分别处理声学和语义特征。
+- **主要指标**：最佳模型F1-score达到90.14%，LoRA微调策略相比全参数微调参数量减少99%但效果相当。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Proteus: Automated Adversarial Robustness Testing for Audio Deepfake Detectors](https://arxiv.org/abs/2606.29544)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-06-28
+- **一句话贡献**：本文提出Proteus系统，用于系统性评估音频深度伪造检测器的对抗鲁棒性。通过生成多种对抗攻击样本，揭示现有检测器面对对抗攻击的脆弱性，为构建更安全的音频深度伪造检测系统提供依据。
+- **关键技术点**：多类型对抗攻击生成框架，包括FGSM、PGD等经典方法以及针对音频特性的定制攻击。
+- **主要指标**：现有检测器在对抗攻击下准确率下降可达40%，对抗训练后恢复至接近原始水平。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AV-SyncBench: Decoupled Benchmarking of Temporal and Semantic Audio-Visual Synchronization](https://arxiv.org/abs/2607.00726)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-01
+- **一句话贡献**：音视频特征提取是多模态理解和生成任务的基础组件。然而现有评估协议存在维度偏差，通常只关注语义匹配或时间偏移检测其一。数据构建仍耦合，无法独立评估时间和语义一致性。本文提出AV-SyncBench，首个完全分离时间和语义评估的基准测试，实现独立评估时间一致性和语义一致性。
+- **关键技术点**：音视频同步评估框架，完全分离时间和语义评估维度。
+- **主要指标**：首次实现时间和语义评估完全分离，在多个音视频特征提取模型上验证维度偏差问题。
+- **代码**：暂无 | **Demo**：https://fgt7t6g.github.io
+
+---
+## [Positive-Incentive Noise Predictor for Adversarial Purification in Speaker Verification](https://arxiv.org/abs/2607.00899)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-01
+- **一句话贡献**：现代自动说话人验证(ASV)系统易受对抗扰动攻击。基于扩散的净化方法已显示对这类扰动的强有效性，但反向去噪过程需要迭代采样导致高推理延迟。本文发现前向noising过程提供大部分鲁棒性增益。基于此观察，将对抗净化重新表述为可学习的noising问题，提出Positive-Incentive Noise Predictor，避免迭代采样的高推理延迟。
+- **关键技术点**：基于扩散的说话人验证对抗净化框架，核心为Positive-Incentive Noise Predictor。
+- **主要指标**：保持净化效果的同时显著降低推理延迟，实现效率和鲁棒性的平衡。
+- **代码**：暂无 | **Demo**：https://eurecom-asp.github.io
+
+---
+## [SPEARBench: A Benchmark for Naturalness Evaluation in Streaming Speech-to-Speech Language Models](https://arxiv.org/abs/2607.05365)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-06
+- **一句话贡献**：SPEARBench提出首个针对流式语音到语音语言模型(S2S LM)自然度的评估基准。现有语音和文本基准无法评估对话场景中的自然行为，包括时序、打断、副语言学、立场、语言/方言一致性和关系适当性等多维因素。SPEARBench从Seamless Interaction语料库构建受控对话提示，在多个模型上运行推理，并使用多维协议评估生成的回答，覆盖响应延迟、打断、语音质量、ASR鲁棒性、语言/方言
+- **关键技术点**：SPEARBench评估框架包含三个核心组件：(1)对话提示构建器：从Seamless Interaction语料库提取自然对话场景，构建包含不同关系、情感和语境的提示；(2)多模型推理引擎：支持在多种S2S LM上进行流式推理；(3)多维评估协议：覆盖9个评估维度——响应延迟、打断模式、语音质量(MOS)、ASR鲁棒性、语言/方言一致性、情感自然度、人际立场、关系适当性、分布基线。
+- **主要指标**：实验报告了多个S2S LM在各维度上的表现。结果显示当前模型在信号级质量(如MOS)和ASR错误率上表现良好，但在时序行为(响应延迟、对话重叠)、方言保留、情感适应和人际立场动态方面与人类对话行为仍有显著差距。 **模型对比** 测试了多个当代S2S LM，包括商业和开源系统。 ### ⭐ 评分：8
+- **代码**：暂无 | **Demo**：https://thomasthebaud.github.io/SPEAR-benchmark-website/#welcome
+
+---
+## [InsideSSL: Understanding Self-Supervised Speech Representations using a Model-Centric Perspective](https://arxiv.org/abs/2607.06392)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-07
+- **一句话贡献**：Wav2Vec2、HuBERT、WavLM等自监督学习模型已成为语音任务的基础，但其内部层间动态理解仍是挑战。提出InsideSSL框架，从三个固有层间视角分析：压缩（熵）、几何（曲率）和扰动鲁棒性。研究表明不同训练目标诱导不同的声学压缩和流形展开机制。引入跨层生成兼容性矩阵（GCM）评估功能可迁移性，揭示稳定音素核心、身份波动性和深层语义剪枝。线性探测连接模型中心视角与下游任务，展示层拓扑如何决
+- **关键技术点**：InsideSSL框架：任务无关的三视角分析（压缩、几何、鲁棒性）+ 跨层GCM评估。
+- **主要指标**：揭示层拓扑与音素、音高、说话人编码的关系，为下游任务提供理论指导。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Escaping the Procrustean Bed: Groupwise Orthogonal Connectors for Audio-Language Models](https://arxiv.org/abs/2607.06014)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-07
+- **一句话贡献**：本文揭示音频-语言模型中Q-Former连接器的两个失效问题：输出向量向单一方向塌缩，不同说话人的输出几乎无法区分，韵律等副语言线索在压缩过程中丢失。提出ORCA方法，通过将查询分组并约束各组输出指向不同方向来逆转这种塌缩。在SAKURA多跳推理任务上，ORCA相比4B基线提升26.4点，达到75.2%（vs 8B Audio Flamingo-3的49.0%）。连接器层面，查询冗余度降低12倍，
+- **关键技术点**：基于Q-Former的音频-语言模型连接器，将语音编码器输出压缩后送给大语言模型。ORCA将查询分组，各组输出被约束指向不同方向。
+- **主要指标**：ORCA在SAKURA上达75.2%（vs 4B基线49.0%，8B Audio Flamingo-3 49.0%）。查询冗余降低12倍，跨说话人方差提升75倍。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Text-Independent Speaker Verification Using Discrete Audio Tokens](https://arxiv.org/abs/2607.07579)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-08
+- **一句话贡献**：神经音频编解码器（NAC）虽在语音合成等下游任务取得成功，其离散表示在说话人验证（ASV）中始终不如传统谱特征。本文通过实验证明说话人线索隐式保存在离散token中，但被常规ASV训练范式低估。提出Cross-Feature Knowledge Distillation（CFKD）框架，通过引导基于codec的学生模型模仿强Fbank教师的嵌入空间，为有效利用token中的说话人信息提供结构化监督
+- **关键技术点**：CFKD框架：基于codec的学生模型 + Fbank特征的教师模型。学生模型通过知识蒸馏学习教师模型的嵌入空间。
+- **主要指标**：CFKD显著提升基于codec系统的ASV性能，使其接近Fbank教师模型精度，证明了离散音频令牌在多种语音任务中的潜力。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [GigaChat Audio: Time-aware Large Audio Language Model](https://arxiv.org/abs/2607.10387)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-11
+- **一句话贡献**：本文提出GigaChat Audio，一个支持长达120分钟音频时间锚定的大型音频语言模型。现有音频条件LLM在长录音时间定位方面仍面临挑战，该模型通过周期性时间标记与连续音频token交错的方式，结合大规模合成监督信号实现时间感知能力。模型在短时和长时基准测试中均达到较强的时间定位精度，并支持时间锚定的片段描述和摘要生成。
+- **关键技术点**：基于10B参数音频编码器与1.8B参数LLM的级联结构，支持长达120分钟音频输入处理。
+- **主要指标**：在短时（<1分钟）和长时（>10分钟）基准测试中达到领先时间定位精度，时间锚定片段描述F1提升显著。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [PC-Mix: Partial-Component Audio Spoofing Detection under Mixed Speech and Environmental Sound Conditions](https://arxiv.org/abs/2607.10345)
+
+- **方向**：语音前端（语音鉴伪） | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-11
+- **一句话贡献**：现有部分音频欺骗研究主要关注录音室录制的语音和欺骗段的时间定位，通常忽略欺骗和真实段同时共存于语音和环境声音成分中的真实条件。本文提出PC-Mix，首个部分组件欺骗检测数据集，其中任一或两个音频组件都可能被部分欺骗。设计联合学习框架优化语音、环境声音和混合音频的欺骗检测。实验强调混合条件带来的增加难度，表明在匹配目标条件下训练比直接迁移更有效。
+- **关键技术点**：PC-Mix数据集和联合学习框架，涵盖语音、环境声音和混合音频的欺骗检测。
+- **主要指标**：混合条件显著增加检测难度。在匹配目标条件下训练比直接迁移模型更有效。联合学习框架在三种音频类型上均获得有效检测性能。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Improving Text-to-Audio Instruction Following via Fine-Grained Feedback from Audio-Aware Large Language Models](https://arxiv.org/abs/2607.13408)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-15
+- **一句话贡献**：最近的文本到音频模型能生成高质量音频，但在涉及多个声音事件和时间顺序的指令跟随上常常失败。现有评估和训练信号主要强调全局相似性或感知质量，对指令级正确性的监督有限。本研究提出使用音频感知大语言模型（ALLM）作为细粒度判断器来验证生成音频中的目标事件存在性和时间关系。
+- **关键技术点**：使用ALLM作为细粒度判断器，构建偏好对进行直接偏好优化（DPO）。
+- **主要指标**：方法改善了事件完整性、时间排序和联合指令跟随准确率，同时保持音频质量。S3Bench和其他基准上均取得了显著提升。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Auditing Protocol-Level Shortcuts in Large Audio Language Model Judges for Speech Evaluation](https://arxiv.org/abs/2607.13477)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-15
+- **一句话贡献**：大音频语言模型（LALM）越来越多地被用作语音评估的自动评判器。然而，与人类评级的高度一致性并不能保证它们的判断是基于音频的。评判器可能依赖评估协议本身提供的专家标签或参考数据，从而走捷径而不听音频。本研究审计了LALM评判器在三种常见部署协议中的协议级捷径。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：多个LALM在协议级捷径探测下表现显著下降，证明aggregate agreement可能高估有效性。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Dialogs: a studio-quality expressive conversational Russian speech corpus for dialog assistants](https://arxiv.org/abs/2607.14310)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-15
+- **一句话贡献**：本文介绍Dialogs，一个用于对话助手的工作室级俄语会话语音语料库。数据集包含20.6小时在专业工作室录制的人脸对话（44.1 kHz立体声），分割成11796个话语，涵盖3个说话人。与朗读语音资源不同，Dialogs捕捉话轮节奏和表达韵律，并提供涵盖12个类别的每话语风格/情感标签。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：与俄语工作室基线相当的音频质量和可懂度，更高的表达力和会话自然度评分。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [RW-Voice-EQ Bench: A Real World Benchmark for Evaluating Voice AI Systems](https://arxiv.org/abs/2607.14846)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-16
+- **一句话贡献**：当前语音AI基准通常评估孤立的能力，如语音清晰度、词错误率或基于文本的对话质量，但很少测试系统是否利用了区分口语与其文本表示的声学信息。为此，本研究引入真实世界语音EQ基准（RW-Voice-EQ），这是一个多维基准，用于评估跨文本到语音（TTS）、语音到语音（STS）、语音理解（SU）和自动语音识别（ASR）的语音AI。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：性能高度依赖具体维度，揭示现有基准无法捕捉真实环境中的失败。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Large Audio Language Models for Spoofing-Aware Speaker Verification](https://arxiv.org/abs/2607.14753)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-16
+- **一句话贡献**：文本到语音和语音克隆的最新进展使高质量欺骗变得廉价且可扩展，威胁语音认证系统，特别是自动说话人验证（ASV）。现有防御主要通过深度伪造检测的二元对策（CM）或欺骗感知说话人验证（SASV）来解决。本研究系统评估LALM用于SASV，在零样本提示、监督适应、推理导向训练和基于强化学习的优化下与传统流水线比较。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：预训练LALM零样本接近随机，任务特定适应后性能显著提升。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SLT 2026 REAL-TSE Challenge: Real-world Target Speaker Extraction from Conversational Recordings](https://arxiv.org/abs/2607.15198)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-16
+- **一句话贡献**：REAL-TSE Challenge是IEEE SLT 2026卫星挑战赛，专注于从真实对话录音中提取目标说话人。与模拟朗读语音基准不同，REAL-TSE评估包含自然重叠、混响、噪声、通道不匹配和会话动态的普通话和英语录音。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：概述了任务定义、数据集、基线、评估协议、提交系统和条件发现，为未来真实世界TSE基准提供经验教训。
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Time-Frequency Consistency Learning for Robust Speech Deepfake Detection](https://arxiv.org/abs/2607.17761)
 
 - **方向**：语音深度伪造检测 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-20
 - **一句话贡献**：TFCL针对语音深度伪造检测在现实声学前端（AFE）处理下的鲁棒性问题。AFE引入的非线性和时频耦合失真显著降低检测性能。TFCL通过时域注意力软对齐和频域结构一致性约束学习AFE不变表示，在完整AFE pipeline下达到EER 9.78%，AUC 96.40%。
-- **关键技术点**：
+- **关键技术点**：基于AASIST后端分类器，结合时频一致性学习模块。
 - **主要指标**：在完整AFE pipeline下：EER 9.78%，AUC 96.40%，显著优于所有基线方法。干净条件下：EER 0.55%，AUC 99.96%。在各种AFE条件下一致提升。
 - **代码**：https://github.com/JunXue-tech/TFCL | **Demo**：暂无
+
+---
+## [Audio-Zero: Label-Free Self-Evolution for Fine-Grained Audio Reasoning](https://arxiv.org/abs/2607.20166)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-22
+- **一句话贡献**：大型音频语言模型（LALM）在细粒度音频推理（如识别事件顺序、重复和持续时间）方面仍存在挑战。现有后训练方法依赖昂贵的外部标签或仅提供粗粒度语义信号。本文提出Audio-Zero首个无标签自演进框架，通过构建来自无标签音频对比对的听觉自博弈游戏，模型首先生成描述所听内容的线索，然后通过推理线索间的不一致性识别异常听众。
+- **关键技术点**：基于Qwen2-Audio-7B-Instruct和Qwen2.5-Omni-7B构建听觉自博弈框架。
+- **主要指标**：Audio-Zero在细粒度音频推理任务上显著提升，同时保持广泛音频理解能力。演化分析显示游戏压力自然催生细粒度描述。
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Unlocking Spatial Grounding in Large Audio-Visual Retrieval models](https://arxiv.org/abs/2607.24786)
 
 - **方向**：音频视觉定位 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-22
 - **一句话贡献**：LAIP框架证明大规模音频视觉检索模型可适配为有效的声源定位器。核心发现是中间层视觉token保留了结构化空间信息，通过音频信息空间池化（AiSP）模块可恢复定位能力。该方法在AVSBench和AVATAR上实现SOTA，性能几乎翻倍。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：AVATAR：CIoU达到27.63%（single-sound）、27.35%（mixed-sound）、23.69%（multi-entity），相比TAVLO提升约10个百分点。AVSBench S4：F-score达到65.18%。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Listen, Do Not Copy: Internalizing Audio-Grounded Scaffold Context for Robust Omni-Model Speech Understanding](https://arxiv.org/abs/2607.21943)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-24
+- **一句话贡献**：Omni模型在转录干净单speaker语音时表现良好，但在说话人重叠和场景嘈杂时准确率急剧下降，而这正是知道"谁说了什么"最关键的场景。本文发现提供完整转录作为上下文会让模型通过"复制"而非"聆听"来提高分数，这种失败模式被称为"感知绕过"。提出Audio-Grounded Scaffold Context (AGSC)方法，通过提供不完整的线索来引导聆听，同时限制直接复制。
+- **关键技术点**：基于Qwen3-Omni 30B、MiniCPM-o 4.5 (9B)和Ming-flash-omni 2.0（100B总参数，6.1B活跃per-token专家混合）进行实验。
+- **主要指标**：在重叠+噪音条件下，无线索的capped mean mpWER从25%-71%降至9%-15%。最难1/3样本上，从50%-96%降至13%-17%。门控GDPO达到timeline F1 0.753-0.803，延迟约0.2s。
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -204,7 +402,7 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-28
 - **一句话贡献**：本文首次系统分析大语言音频模型（LALM）中音频token的内部角色，使用时间音频定位作为诊断任务。研究发现基础模型已包含事件证据，微调主要改善解码器对现有证据的读取能力，而非创建新证据。跨检查点实验验证增益来自解码器适应而非token语义改变。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：Qwen2.5-Omni微调后：mIoU从0.3707提升到0.6817，F1从0.4416提升到0.7626，R@0.7从0.2349提升到0.5817。Qwen2-Audio也呈现类似的解码器可读性和预测对齐改进。
 - **代码**：暂无 | **Demo**：暂无
 
@@ -213,7 +411,7 @@
 
 - **方向**：语音deepfake检测 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-29
 - **一句话贡献**：本文提出跨域音频deepfake检测框架，使用仅在真实语音上训练的Diffusion Transformer (DiT)作为冻结重建探测仪。在0.5、0.75、0.9三种掩码比下进行重建，产生显式的多比残差图。提出音频锚定融合机制，将冻结WavLM听觉表示直接传入融合和，仅用残差作为标量门控加性校正。在ASVspoof 5和真实环境ITW数据集上验证了跨域泛化能力。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- ASVspoof 5 Eval：EER 6.54%，min-DCF 0.1846 - ITW Full：EER 13.84%，min-DCF 0.3692 - 三种子平均：Eval EER 6.89%，ITW EER 15.33% - 辅助监督损害动态竞争融合：ITW从18.40%恶化到25.3
 - **代码**：暂无 | **Demo**：暂无
 
@@ -222,7 +420,7 @@
 
 - **方向**：语音LLM安全 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-07-29
 - **一句话贡献**：本文研究韵律驱动的语音LLM越狱攻击，固定文本内容仅改变语音韵律来触发有害响应。提出PJ-Break黑盒评估协议和AdvAudio-Prosody基准（600样本），使用6种韵律预设（Panic/Anger/Commanding/Fast/Whisper/Neutral）。实验表明情感韵律音频（44/95）远高于情感文本（11/95），证明韵律是语音LLM安全评估的一等公民。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- Qwen2-Audio上：Panic 38/95，Anger 35/95，Fast 32/95，均远超Neutral 4/95 - 六条件池化：44/95（46.3%），超过StyleBreak（27/95） - 消融：情感音频 alone（44/95）远超情感文本 alone（11/95） -
 - **代码**：暂无 | **Demo**：暂无
 
@@ -231,7 +429,7 @@
 
 - **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-07-30
 - **一句话贡献**：生成式AI使制作假音频更容易，在选举期间放大政治虚假信息。本文引入ParlaSpoof-BR，一个基于巴西众议院官方录音构建的葡萄牙语政治语音deepfake数据集，包含40名说话人（性别和地区平衡）、2,000个真实样本，通过5种TTS、5种语音转换和部分操控（音频infilling）扩展至134,400个文件（11,200真实/123,200伪造）。评估发现：AASIST和AASIST-L在P
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- 总体EER：AASIST 50.98%, AASIST-L 53.70%, DF-Arena-1B 32.30% - TTS检测（DF-Arena-1B）：平均EER 39.3%，Qwen3-TTS最差（EER 58.0%, 召回31.2%） - VC检测（DF-Arena-1B）：平均EER 
 - **代码**：https://huggingface.co/datasets/freds0/ParlaSpoof-BR | **Demo**：https://ermisai.github.io/parlaspoof-br-demo
 
@@ -322,7 +520,7 @@
 - **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-08-17
 - **一句话贡献**：现有语音深度伪造检测方法大多依赖SSL特征提取器加全局池化，丢弃了时序顺序信息，在跨语料库泛化时性能急剧下降。本文提出利用人类语音生理约束在SSL潜空间中产生的结构化轨迹动态进行检测：训练一个因果LSTM下一帧预测器（Stage 1），仅在ASVspoof 2019的真实语音上学习轨迹动态，以预测误差作为异常分数；可选Stage 2将冻结的LSTM隐状态均值池化后训练一个有监督MLP分类器。在AS
 - **关键技术点**：现有SSL检测方法（如AntiDeepfake、SLIM、QAMO、BreathNet）大多对帧级嵌入做全局平均池化或注意力加权汇总，完全丢弃时序顺序。少量利用时序结构的工作（FGFM、TRACE、BreathNet）要么针对局部拼接伪影，要么需要伪造监督信号，均未建模整段语音的全局生理合理性轨迹。
-- **主要指标**：
+- **主要指标**：（EER%，越低越好）： - ASVspoof 2019：Stage 1 = 2.57，Stage 2 = 1.11，Static = 1.51 - ASVspoof 2021：Stage 1 = 1.88，Stage 2 = 0.75（最佳已发表），Static = 0.98 - Codecfak
 - **代码**：https://doi.org/10.5281/zenodo.21879214 | **Demo**：暂无
 
 ---
@@ -393,7 +591,7 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-08-20
 - **一句话贡献**：人类语音的韵律承载着超越词汇内容的语言与情感信息，理想的音频语言模型（audio-LLM）应能理解"怎么说"而不只是"说了什么"，但现有基准只评测最终答案，无法定位模型韵律失败的根源。本文提出一个分阶段的探针阶梯（probe ladder），把韵律失败划分为三大机制：F1 感知失败（语音通路未保留韵律对比）、F2 解释失败（内部表征了错误的韵律类别）、F3 使用不足（内部表征正确但未充分表达在答案
-- **关键技术点**：
+- **关键技术点**：：Dynamic-SUPERB、AIR-Bench、SD-Eval 等基准均以最终答案为唯一指标，一个模型把问句判成陈述句既可能源于音频通路丢失信息、也可能源于内部误解或表征未被使用，这些机制性不同的失败在传统评测中被混为一谈。作者指出韵律承载两类信息：语言性/语调信息（intonational，如问句与陈述句）与副语言/情感信息（paralinguistic，如情绪类别），需要用分层诊断而非端到端精确率来定位故障。
 - **主要指标**：音频通路探针在三个 Whisper 塔模型（Qwen、AF3、DeSTA）的 projector 处，CREMA-D/ESD 上 WA 达 0.79–0.92（相对随机基线提升 +0.28~+0.35），VESUS 达 0.69–0.72，IViE Q/stmt 达 0.71–0.81，纯 F1 在
 - **代码**：暂无 | **Demo**：暂无
 
@@ -402,7 +600,7 @@
 
 - **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-08-20
 - **一句话贡献**：早期研究普遍报告人对深度伪造语音有 70–80% 的检出率，但这些结论大多基于 2019 年左右的旧一代合成器。本文针对 2019、2022、2024 三个不同发布时期的合成工具（RTVC、YourTTS、ElevenLabs）开展受控实证比较：82 名 IT 从业者在明确被告知"存在深度伪造"的条件下，对全合成（full spoof）与局部替换（partial spoof）语音做逐句真实性判断，
-- **关键技术点**：
+- **关键技术点**：：深度伪造语音在讹诈、虚假信息与语音钓鱼中威胁日益增大，但人类听觉防御的有效性随合成技术的迭代快速变化。以往研究几乎只覆盖全合成语音、且多依赖"提示存在伪造"的情境，几乎无人研究"部分伪造"这一更贴近现实的攻击形态（一条真实录音中仅替换一个句子即可改变整段话语的含义），也缺乏在同一材料上人类与自动检测器的直接对照。
 - **主要指标**：全伪造方面，RTVC 与 YourTTS 的人类 F1 与 All OK 均约 0.90（逐句准确率 0.96–0.97），而 ElevenLabs 的 All OK 仅 28%、Over 50 Percent 仅 33%（接近 31% 的随机基线）、F1 为 0.48、逐句准确率 0.43（低于 
 - **代码**：暂无 | **Demo**：暂无
 
@@ -762,62 +960,62 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-22
 - **一句话贡献**：长音频理解能力常被上下文长度与聚合准确率两个单一指标概括，掩盖了语言、证据与任务共同塑造的条件化难度。本文提出MuLA-Bench：基于1769条野生长录音（共1377.9小时）构建5038道开放式问题，覆盖16种语言、8个领域；语义轨在每个语言×领域格点严格均衡30题，声学轨保留自然出现的非语音事件，经证据锚定、捷径测试与母语专家复审做可审计质检。对10个音频-语言模型评测显示，最强Gemini
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- 总体准确率：Gemini 3.8 Flash 73.40%、Gemini 3.7 Flash 73.12%；Qwen3.5-Omni-Plus 60.92% - 声学-语义差：3.8 Flash为55.26/79.06；Gemini 3.1 Pro声学仅26.63，其事实题语义89.75对声学1
 - **代码**：https://github.com/QwenLM/Omnilingua-Bench/tree/main/MuLA-Bench | **Demo**：暂无
 
 ---
 ## [SPADE: A Multilingual Dataset for Speech Partial Deepfake Detection and Localization](https://arxiv.org/abs/2609.25197)
 
-- **方向**： | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-23
 - **一句话贡献**：语音局部篡改深伪检测的核心瓶颈已从模型算法转向训练与评测数据。以往多语言局部深伪数据集仅覆盖一两种生成系统，难以考察检测器对未见系统与未见语言的泛化能力。本文提出 SPADE：覆盖 12 种主要语言、每语言最多 5 种语音合成与编辑系统生成、含内容改变与内容不变两类局部编辑样本的检测与定位数据集，同时提供训练集与评测基准。作者用其训练帧级定位模型，系统研究跨生成系统、跨语言、跨声学环境三个维度的泛
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://huggingface.co/datasets/rogertseng/spade | **Demo**：暂无
 
 ---
 ## [Acoustic-to-Text KV Compression for Full-Duplex Speech Models](https://arxiv.org/abs/2609.31224)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-28
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-28
 - **一句话贡献**：全双工语音大模型在持续监听中不断累积声学KV状态，长时间交互内存开销巨大。本文提出声学到文本的KV压缩：利用"监听空闲时间"（约900ms）引入转录旁路通道，将语音转为紧凑文本记忆，缓存超预算时驱逐旧声学状态而保留转录与近期声学窗口。在MiniCPM-o 4.5上实现：10分钟LongSpeech会话峰值流式KV缓存降低64.6%，转录、时序问答与摘要均优于原生流式，且保持实时性与打断、轮转等全双
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [MultiTalk: Scaling Full-Duplex Speech Models to Long, Multi-Party, Bilingual Conversation](https://arxiv.org/abs/2609.36903)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-30
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-30
 - **一句话贡献**：现有端到端全双工语音模型受数据与评测双重瓶颈制约，难以支撑长时、多方、双语并存的真实会话（如会议、机器人接待）。MultiTalk沿长时序与多方两轴联合扩展Moshi范式：发布57.6k小时英中合成全双工并行流语料（MultiTalkPT 54.4k小时+MultiTalkFT 3.2k小时）及自动数据引擎；基于真实人类录音构建MultiTalkBench（104条、平均32.6分钟）；训练双语M
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://huggingface.co/datasets/MultiTalk/MultiTalkPT | **Demo**：暂无
 
 ---
 ## [HEAR: Real Voices, Real Bias: A Large-Scale Human-Recorded, Demographically Diverse Benchmark for Audio Language Models](https://arxiv.org/abs/2609.35952)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-30
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-09-30
 - **一句话贡献**：Meta 推出 HEAR，是首个完全基于真实人声（非 TTS 合成）的大规模 Audio-LLM 人口统计偏见评测基准，含 87k 条真人录音、843 名人口多样性的美国参与者，覆盖性别、年龄、母语等维度。任务分 Spoken BBQ 多选题与开放式长回答两类，同时评测端到端 speech-to-speech 与 speech-to-text 两种架构。结果揭示语音条件偏见是模型特有属性，个性化系
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：/Demo：https://github.com/facebookresearch/hear_voice_bias_benchmark | **Demo**：graphically Diverse Benchmark for Audio Language Models
 
 ---
 ## [Learning as Deepfakes Evolve: RF-Prompt for Continual Audio Deepfake Detection](https://arxiv.org/abs/2609.37586)
 
 - **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：8/10 | **日期**：2026-09-30
 - **一句话贡献**：语音生成系统（Qwen3-TTS、Seed-TTS、GPT-Live、Gemini Live 等）以周或月为周期快速迭代，部署后的音频深伪检测器面对的是持续移动的靶标：必须在不遗忘历史真伪知识的前提下纳入新出现的伪造方法。现有持续学习评测普遍按数据集组织任务，把真实语音域变化与伪造机制变化耦合在一起，难以分辨究竟在更新何种知识。本文从任务组织与检测器自适应两个维度联合入手：提出真实锚定机制增量协议
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：https://github.com/xieyuankun/RF-Prompt | **Demo**：论文未提供公开演示页面，开源代码库即为验证入口
 
 ---
 ## [Conversation Is a Two-Body Problem: Dyadic Evaluation of Full-Duplex Dialogue Models](https://arxiv.org/abs/2610.08125)
 
-- **方向**：语音大模型；**作者**：Sungnyun Kim、Sungwoo Cho、Jihwan Oh、Se-Young Yun；**机构**：韩国科学技术院（KAIST）；**发布日期**：2026-10-07 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-07
+- **方向**：语音大模型； | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-10-07
 - **一句话贡献**：全双工语音对话模型能边听边说，但现有基准普遍按"单边"会话打分：对无法反应的预录音频，或对只按固定题序提问、自身不被评分的自动考官。本文指出对话是两位说话人持续互相塑造的双体问题，单边评测只测了一半。作者提出DyaFDB双边评测框架：让两个全双工模型在同一帧级时钟平台上直接对话，各自持有分配的、常常冲突的角色，环内不设考官，双方录音由外部LLM法官离线共同打分。框架探针覆盖轮流发言、角色维持、信道
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂未链接，计划发布场景、角色提示与录制/评分协议 | **Demo**：无
 
 ---
@@ -845,7 +1043,7 @@
 - **一句话贡献**：全双工对话模型推理与工具执行能力弱，顺序编码代理缺乏直播对话的实时性；现有异步委托协作的任务更新、取消、替换与结果交付决策耦合在系统特定启发式里，难以从痕迹中定位与修复。本文提出DuplexAgent全双工协作系统，将协作流程显式化为六个可编辑harness模块，并给出Duplex-Harness-RSI闭环：委托池推理LLM任Exam Planner、编码代理任Harness Editor，依据
 - **关键技术点**：领域正收敛到"全双工模型守活频道、推理/编码代理异步承接任务"的协作范式，但用户修改请求时如何更新、取消或替换进行中的任务、结果何时开口交付并无定论。现有系统用手写耦合启发式实现交接、确认与交付控制，同一失败反复出现时痕迹无法明确指向委托、解释、执行还是交付环节，有界修复难以隔离、评估与迁移。
 - **主要指标**：- MMSU：80.5（VoiceChat）/82.7（Qwen-Realtime），对比独立交互模型36.1/64.8 - OBQA：80.6/92.1，对比独立54.2/86.3 - BFCL-v3均值：75.8/90.8，对比独立53.5/82.0（Qwen-Audio-Agent 24.9/
-- **代码**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/ | **Demo**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/
+- **代码**：https://amphionteam.github.io/DuplexAgent-RSI-Demo/ | **Demo**：/
 
 ---
 ## [7. SAVU-BENCH: A Real-World Benchmark for Spatial Audio-Visual Understanding](https://arxiv.org/abs/2610.10624)
@@ -1064,11 +1262,200 @@
 - **代码**：暂无 | **Demo**：https://elpsykongloo.github.io/beyond-two-tracks/
 
 ---
+## [Conversational Voice Aesthetic Model with Reinforcement Learning from Human Listeners](https://arxiv.org/abs/2610.10868)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：—
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Local Prototype Reconstruction for Text-Compatible Speech-to-LLM Bridge Pretraining](https://arxiv.org/abs/2610.11159)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：—
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Detection-Guided Adaptive Purification with Diffusion Models for Robust Audio Deepfake Detection](https://arxiv.org/abs/2610.10752)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：—
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ATTEST: Evidence-Grounded Reinforcement Learning for Long-Audio Temporal Understanding](https://arxiv.org/abs/2610.17149)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：—
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [To Be Multimodal or Not to Be: Query-Adaptive Audio-Visual Person Retrieval via Active Modality Detection](https://arxiv.org/abs/2606.05931)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-06-03
+- **一句话贡献**：从视频档案中通过声音和人脸检索人员时，系统是否应该多模态？在真实世界广播档案中，目标可能只闻其声不见其人，或只见其人不闻其声。融合缺席模态的分数会注入噪声，将精度降至最佳单模态系统以下。提出查询自适应框架，通过跨模态分数一致性检测活动模态：当两个模态都活动时，一个模态检索的文件在另一个模态上评分也高；当模态缺席时一致性打破。在BBC Rewind语料库(12000+视频)上，自适应系统达到94.2
+- **关键技术点**：查询自适应框架：跨模态分数一致性驱动活动模态检测。分类器基于跨模态特征检测模态是否活动。
+- **主要指标**：P@1 94.2% (vs 说话人82.9%、人脸93.4%、固定融合90.0%)，恢复64%的oracle差距(96.6%)。模态检测准确率89%。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Learning Emotion-discriminative Representations for Zero-Shot Cross-lingual Speech Emotion Recognition](https://arxiv.org/abs/2606.06200)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-06-04
+- **一句话贡献**：零样本跨语言语音情感识别(SER)面临挑战：跨语言分布不匹配且目标语言缺乏情感标注。本文提出情感判别表示学习方法，结合监督对比学习和说话人对抗学习。对比学习促进跨语言情感对齐，说话人对抗学习抑制说话人相关线索，鼓励说话人不变表示。零样本跨语言SER设定下的实验证明该方法显著优于传统训练策略。
+- **关键技术点**：结合监督对比学习和说话人对抗学习的联合框架。前者通过跨语言情感对齐提升泛化，后者通过对抗训练消除说话人信息。
+- **主要指标**：显著提升跨语言SER性能，超越传统训练策略。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Do Multimodal Large Language Models Need Reasoning to Classify Dementia from Speech?](https://arxiv.org/abs/2607.00260)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-06-30
+- **一句话贡献**：多模态大语言模型(MLLMs)已成为从语音录音进行自动痴呆症分类(ADC)的有前景方法。但推理能力是否对ADC有益，以及如何利用这些能力尚不清楚。本文对推理MLLMs进行仔细评估，发现依赖基于文本推理的naive策略可能误导模型。通过蒸馏和GRPO阶段学习认知标签和可解释的推理理由，MLP adaptor阶段用小规模MLP分类器学习任务特定表示。
+- **关键技术点**：基于MLLM的痴呆症分类系统，包含MLP adaptor和推理模块。
+- **主要指标**：展示推理MLLMs在ADC任务上的表现，分析推理理由的效用，为实际应用提供指导。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Disentangling Speaker and Language Effects in Cross-Lingual Speaker Verification for Iberian Languages](https://arxiv.org/abs/2607.01161)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-07-01
+- **一句话贡献**：跨语言说话人验证(SV)系统在注册和测试语音语言不同时通常表现下降。然而标准评估协议混淆了语言不匹配与说话人间变异性，因为评估通常在不同语言的不同说话人之间进行。本文引入五种Iberian语言的双语同说话人评估集，在固定说话人身份下进行跨语言SV分析，使用跨语言迁移矩阵(CLTM)量化donor language训练数据对目标语言性能的影响。
+- **关键技术点**：跨语言说话人验证框架，分析语言和说话人效应的解耦。
+- **主要指标**：固定说话人ID下跨语言性能分析，分离语言和说话人效应，揭示语言迁移的真实模式。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [PluraMath: Extending Mathematical Reasoning Evaluation Beyond High-Resource Languages](https://arxiv.org/abs/2607.05992)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-07
+- **一句话贡献**：数学推理已成为评估LLM的核心任务，但现有基准严重偏向高资源语言。PolyMath数据集仅覆盖18种高资源语言。提出PluraMath，将PolyMath扩展到18种额外低资源语言（涵盖6个语系，从中等资源到极低资源）。通过人工审核流程构建，本地发言者彻底验证预计算翻译。评测27个推理LLM，揭示高资源和低资源语言间持续存在的数学推理性能差距，强结果与更好指令遵循能力高度相关。
+- **关键技术点**：PluraMath基准：18种低资源语言的数学推理评估集。
+- **主要指标**：揭示高资源和低资源语言间持续性能差距，强结果与指令遵循能力相关。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Compress the Cache, Not the Speech Embedding: KV Compression for Efficient Speech LLMs](https://arxiv.org/abs/2607.06827)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-07
+- **一句话贡献**：Speech LLM通常将语音编码为比文本长得多的序列，在自回归解码时造成主要效率瓶颈。常见方法是在adapter级压缩语音序列以去除时间冗余，但这种早期下采样可能丢失无法恢复的细粒度信息。提出SpeechKV，在Speech LLM内部对speech token的KV cache应用学习到的池化操作。关键发现是speech embedding本身不应压缩，只需压缩其KV cache即可保持细粒度
+- **关键技术点**：SpeechKV在LLM内部对KV cache应用learned pooling，对speech embedding保持原样。
+- **主要指标**：在保持性能的同时实现KV cache压缩，提升推理效率。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Audio Sentiment Analysis via Distillation and Cross-Modal Integration of Generated Multilingual Transcripts](https://arxiv.org/abs/2607.06611)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-07
+- **一句话贡献**：本文提出基于蒸馏和多语言转录本跨模态融合的音频情感分析方法。核心方案是通过ASR自动生成转录本，并将其翻译成多种语言创建多文本模态。音频和多语言文本特征通过级联架构的跨模态Transformer块逐个整合。多模态模型（教师）的知识蒸馏到单模态（音频仅）学生模型。实验证明自动生成的文本信息能显著提升多模态情感分类性能，消融实验确认自动转录和自动翻译都有帮助，蒸馏可增强音频仅模型性能且推理时无额外计算
+- **关键技术点**：多模态融合框架：音频特征提取、ASR转录、多语言机器翻译、跨模态Transformer融合。教师-学生蒸馏架构。
+- **主要指标**：自动文本信息显著提升多模态分类性能，消融实验验证转录和翻译的贡献。蒸馏后音频仅模型性能提升。
+- **代码**：https://github.com/andreidurdun/cross-modal-audio-sentiment | **Demo**：暂无
+
+---
+## [Why Do You Say It Like That? A Phoneme-Level Framework for Explainable Speech Deepfake Detection](https://arxiv.org/abs/2607.08586)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-07-09
+- **一句话贡献**：语音深度伪造检测技术已接近实用，但模型决策的可解释性仍是挑战。本文提出音素级分析框架，将模型预测与可测量的音素单元关联。使用Grad-CAM结合语音识别生成与音素和停顿对齐的显著图，揭示统计显著的攻防和说话人相关的音素线索。在ASVspoof 5数据集上验证，在保持与相似架构相当的检测性能同时，提供跨说话人和攻防条件的语言学可解释分析。
+- **关键技术点**：基于CNN的语音深度伪造检测系统，结合wav2vec 2.0或HuBERT自监督表示。框架使用Grad-CAM生成音素级显著图。
+- **主要指标**：在ASVspoof 5上达到与相似架构相当的检测性能，同时提供跨说话人和攻防条件的语言学可解释分析。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Evidence Subspace Projection: Measuring How Much Evidence Explains Deepfake Detection in Self-Supervised Speech Models](https://arxiv.org/abs/2607.11538)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-07-13
+- **一句话贡献**：自监督学习（SSL）模型被广泛用作最新音频深度伪造检测的特征提取器，但如何直接定量地将SSL模型捕获的内容与检测决策联系起来仍不清楚。为解决这一差距，本研究提出证据子空间投影方法。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：验证了提出方法，确认了已建立研究的发现，并揭示了关于模型行为的新见解。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CHARM: Charge Calibration and Acoustic Rescue for LLM-based Multimodal Sarcasm Detection](https://arxiv.org/abs/2607.11102)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-13
+- **一句话贡献**：本文提出CHARM，一个无需微调的LLM多模态讽刺检测框架。零样本指令微调LLM存在系统性正类（讽刺）过预测问题，人类依赖的韵律线索未得到充分利用。CHARM包含双向电荷校准（BiCAL）和声学后融合救援（ALFR）两个模块，分别从文本和声学角度修正LLM预测偏差。
+- **关键技术点**：无需微调的模块化框架，BiCAL处理文本，ALFR处理声学特征。
+- **主要指标**：BiCAL在MUStARD上达到最高零样本Macro-F1 0.787；ALFR在CMMA上为弱骨干模型提升最多+0.382 Macro-F1。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [The Sound of Absence: Audio-Language Embedding Models Struggle with Negation](https://arxiv.org/abs/2607.12290)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-14
+- **一句话贡献**：CLAP等音频-语言嵌入模型在匹配present声音事件上被广泛评估，但很少在否定上评估。本研究表明这种仅肯定评估隐藏了一个关键局限：这些模型无法编码否定的声音概念，将肯定和否定caption映射到几乎相同的表示。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：否定类型MCQ准确率远低于随机，免训练方法仅边际改善Retrieval-Neg。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Summary of DCASE 2026 Task 5: Audio-Dependent Question Answering](https://arxiv.org/abs/2607.18718)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-21
+- **一句话贡献**：DCASE 2026 Task 5引入Audio-Dependent Question Answering（ADQA），测试大型音频语言模型是否真正从音频而非文本先验作答。提出Audio-Dependency Filtering（ADF）管道移除可从文本解决的题目。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：- 最佳系统：Lim_CAU（MOSS+Qwen3-Omni ensemble）达58.33% - 轻量级冠军：57.30%（8B模型） - 开发到评估准确率平均下降11.91pp - 全部系统均错过同一233题
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Efficient Chain-of-Modality Reasoning via Progressive Compression for Spoken Language Models](https://arxiv.org/abs/2607.19932)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-22
+- **一句话贡献**：口语语言模型（SLM）支持自然人机交互，但推理能力仍落后于文本大模型，尤其是在口语数学问答任务上。SLM基于纯语言化数学表达式进行推理，比符号文本更难理解。本文提出Efficient Chain-of-Modality Reasoning（ECoM Reasoning），首个将压缩推理引入SLM的框架。通过压缩文本组件使其同时作为语音引导和推理表示，ECoM在更少token预算下提升推理准确率。
+- **关键技术点**：基于压缩推理的SLM架构
+- **主要指标**：相比标准CoM无显式推理提升21%，相比CoM全推理轨迹提升3%，同时仅使用40%文本token。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Multimodal Speaker Verification as a Threat to Speaker Anonymization](https://arxiv.org/abs/2607.19636)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-07-22
+- **一句话贡献**：大多数自动说话人验证（ASV）系统对单个话语操作，尽管现实世界交互通常由多个话语组成。随着语音积累，通过声学、韵律和语言线索可获得更丰富的说话人信息，可能挑战主要针对声音特征的说话人匿名化方法。本文研究多话语、多模态设置中的ASV，检查跨匿名化语音聚合信息是否影响隐私。
+- **关键技术点**：多话语多模态ASV系统
+- **主要指标**：5个匿名化话语下，音频+文本组合相比音频单独EER降低15%以上。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SoundscapeAgent: Agentic Soundscape Construction for Controllable Synthesis and Scalable Audio-Language Supervision](https://arxiv.org/abs/2607.21857)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-23
+- **一句话贡献**：本文提出智能音景构建框架，用于可控的组合音频生成。该框架使场景规划、源选择，时间布局和渲染步骤显式化，而不是像单shot文本到音频模型那样隐式处理。LLM代理将用户意图转换为可执行场景计划，通过检索和按需生成获取资产，渲染可控多事件混合，并导出对齐的场景元数据。
+- **关键技术点**：LLM代理层+渲染层双耦合架构。代理层解释用户意图并生成场景计划，渲染层执行确定性时间线调度，波形的Post-processing和导出。
+- **主要指标**：人类对齐评分上，SoundscapeAgent在整体align得分3.63，优于TangoFlux (3.41)、EzAudio (2.98)、AudioLDM2 (2.91)。在下游音频推理任务上，使用100k合成示例后，MMAU整体准确率从51.05%提升至56.50%，最大提升出现在Hard问
+- **代码**：即将发布 | **Demo**：https://haozhang6720.github.io/SoundscapeAgentDemoPage/
+
+---
+## [Probing Speaker Identity Sensitivity in Audio Deepfake Detectors](https://arxiv.org/abs/2607.21820)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-07-23
+- **一句话贡献**：音频深度伪造检测器用于区分真实语音和合成语音，在标准基准上表现良好，但在跨数据集评估时错误率可能增加20倍。本文认为一个原因是检测器依赖说话人身份：标准训练语料库中说话人身份与真实/合成标签相关联，允许检测器部分依赖说话人相关线索而非仅依赖合成伪影。本文提出Identity Sensitivity Score (ISS)，一种无需标签的per-utterance诊断指标。
+- **关键技术点**：使用AASIST（图注意力网络）和RawNet2（端到端CNN）两种架构不同的检测器进行评估。
+- **主要指标**：在2019 LA上，AASIST错误预测的ISS比正确预测高29倍，RawNet2高52倍。ISS单独预测错误分类的AUC达0.954。语音转换验证显示，高ISS utterances对身份manipulation的响应比低ISS utterances强19.2-30.7倍。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Reflector: Arrangement-Aware Harmonic Retrieval for Sample-Based Composition](https://arxiv.org/abs/2607.22413)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-24
+- **一句话贡献**：样本检索工具可以帮助作曲者找到和谐兼容的材料，但随着编曲演进和每个音乐决定的谐波上下文变化，从固定参考样本查询变得不那么有效。本文提出Reflector，一个交互式音频工作站，跟踪谐波组合随着作曲者时间线上的积累而变化，并随着编曲发展调整检索。
+- **关键技术点**：核心是手工设计的12×12间隔类权重表，作为固定间隔类oracle。一个完全在合成音频上训练的编码器学习在128维嵌入空间中近似oracle，其中点积代替交互速度下的兼容性评分。
+- **主要指标**：学习到的嵌入保留oracle的成对判断，同时覆盖整个库。NDCG@10达到0.85。直接内核评分覆盖率仅64个样本（崩溃到通用donor），但学习嵌入覆盖625个样本。相似度和兼容性几乎相反——相似回答"什么相似"，兼容性回答"什么组合"。
+- **代码**：https://github.com/austinrockman/reflector | **Demo**：暂无
+
+---
 ## [Text-Prompted CLAP: Learning Query-Conditioned Audio Representations via Contrastive Learning](https://arxiv.org/abs/2607.25085)
 
 - **方向**：音频理解 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-27
 - **一句话贡献**：TP-CLAP是一个参数高效的CLAP扩展，通过跨注意力融合模块将文本提示融入音频特征，学习查询条件音频表示。该方法使用音频多选题框架进行对比学习，在音频问答任务上与音频LLM具有竞争力，同时在检索和零样本分类上改进基础CLAP。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：音频问答：TP-CLAP在MMAU上达到71.47%准确率（sound）和55.99%（music），优于CLAP+AudioMCQ的64.56%和52.99%。音乐检索任务也持续优于CLAP基线。
 - **代码**：暂无 | **Demo**：暂无
 
@@ -1077,7 +1464,7 @@
 
 - **方向**：ASR | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-07-27
 - **一句话贡献**：本文提出双路径对话智能框架处理执法记录仪（BWC）音频：diarization分支使用DeepFilterNet+NVIDIA MSDD+TitaNet，ASR分支使用loudness normalization+WhisperX。核心创新是发现"增强陷阱"现象（增强有益diarization但损害ASR），并提出概率引导VAD后处理和基于时间重叠的说话人归因。
-- **关键技术点**：
+- **关键技术点**：双路径架构：diarization路径使用DeepFilterNet+Pyannote VAD+NVIDIA MSDD+TitaNet；ASR路径使用loudness normalization+WhisperX。
 - **主要指标**：报告了VAD、diarization、ASR和说话人归因的组件级评估结果，验证了任务特定声学条件和概率引导分割的有效性。
 - **代码**：暂无 | **Demo**：暂无
 
@@ -1097,7 +1484,7 @@
 - **一句话贡献**：基于自监督学习（SSL）的语音深度伪造检测中，下游骨干网络通常通过单次前向处理SSL表示。本文系统研究循环层次推理对检测性能的影响，比较单次前向、权重共享循环、同质HRM和异构HRM四种架构。异构HRM在高层次模块使用MHSA（多头自注意力），低层次模块使用线性注意力（GDN2），在保持竞争力的同时减少10.8%的下游参数。代码开源。
 - **关键技术点**：SSL模型（如WavLM、HuBERT）在语音deepfake检测中取得进展，但下游骨干网络的设计选择缺乏系统研究。单次前向（single forward pass）能否充分利用SSL表示的多层次信息？循环和层次推理是否带来提升？这些问题尚未被系统回答。
 - **主要指标**：- 异构配置在多个设置下达到竞争力性能 - EER（等错误率）在19LA、21LA、21DF上表现优异 - 比匹配基线减少10.8%的下游参数 - 与单次前向基线相比，异构HRM在多个设置上取得改进
-- **代码**：暂无 | **Demo**：暂无
+- **代码**：https://github.com/saki-ciallo/REIMU-SDD | **Demo**：暂无
 
 ---
 ## [LSEAD: A Privacy-Preserving LLM-Based Speech Analysis Framework for Early Alzheimer's Disease Screening](https://arxiv.org/abs/2608.07378)
@@ -1185,8 +1572,8 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-08-26
 - **一句话贡献**：本文提出多语言多模态音频理解基准 EXAM²，系统评估现有音频语言模型在多语言、多模态理解上的表现，发现模型存在明显的多语言跨模态理解差距。作者进一步构建微调的 Gemma3n-EXAM² 模型，其性能较基线显著提升，为多语言音频理解研究提供了新的评测工具与改进方向。核心价值在于填补了现有基准对非英语语言与多模态结合场景覆盖不足的空白。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -1194,8 +1581,8 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-08-26
 - **一句话贡献**：针对长音频会议理解任务中问答数据集稀缺、现有语音模型声学信息丢失与长期记忆能力差的问题，本文构建了 LongAudioQA 数据集，并提出基于图的检索-生成智能体（GRGA）。GRGA 利用智能体规划实现检索与答案生成，将语义信息组织为图结构以缓解长期记忆与信息丢失问题。该工作已被 ACL Findings 2026 接收，为长会议场景下的语音理解提供了新的数据资源与建模范式。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -1212,8 +1599,8 @@
 
 - **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-08-27
 - **一句话贡献**：部分（局部）语音被替换、拼接式的深度伪造难以被整段检测器捕获。本文提出一种无需训练的主动防御方法，将自嵌入策略与现有音频隐写术结合，在待保护语音中内嵌自身摘要，解码器据此修复被操纵区域从而实现操纵检测。该方法无需重新训练模型、数据效率高，可与被动检测互补。已被 Interspeech 2026 接收。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -1284,7 +1671,7 @@
 
 - **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-08-31
 - **一句话贡献**：语音增强（SE）常作为语音AI流水线的预处理模块，其隐含假设是提升音频质量可改善下游任务表现。本文提出输出发散率（ODR），量化SE处理相对于干净语音改变LLM意图分类结果的频率，并在2,974条SLURP音频、五种条件及Whisper large-v3与wav2vec2-large串联系统上验证。结果显示所有条件下ODR均显著大于零（p<0.001），MetricGAN+虽改善PESQ却使ODR
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- ODR：未增强加噪0.135，MetricGAN+增强0.318，未处理回声0.836 - PESQ与ODR相关性：ρ=-0.467（中等负相关） - 跨架构复现：Whisper large-v3和wav2vec2-large下表现一致
 - **代码**：暂无 | **Demo**：暂无
 
@@ -1366,7 +1753,7 @@
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-17
 - **一句话贡献**：针对 Speech-LLM 在儿童语音、方言语音等声学域偏移场景下微调失效的问题（CE 损失仅作用于 LLM 输出，编码器难以获得充分适配且易灾难性遗忘），本文提出 EAVA 两阶段域自适应微调方法：先在每层编码器插入轻量残差 adapter 并仅训练 adapter"唤醒"编码器，再联合微调 adapter、编码器、投影层与 LLM LoRA。在 OGI、MyST、CORAAL 三个域偏移数据集
 - **关键技术点**：Speech-LLM（编码器+投影层+LLM）在通用域 ASR 上表现强劲，但迁移到儿童/方言语音时性能骤降。根本矛盾在于：占主导的 LLM 使 CE 梯度对编码器更新不足，而直接全量微调编码器又会破坏预训练知识；多阶段对齐方案面向从零整合原始编码器，不适用于域自适应微调。
-- **主要指标**：
+- **主要指标**：（test WER%，Canary-Qwen+64 维 adapter）： - OGI：9.05（vanilla 微调 10.95，先前 SOTA 11.60） - MyST：8.04（vanilla 8.37，先前 SOTA 8.50） - CORAAL：8.54（vanilla 8.87，先前 
 - **代码**：https://github.com/morganshi/EAVA | **Demo**：暂无
 
 ---
@@ -1471,9 +1858,9 @@
 ---
 ## [AURA: Uncertainty-Routed Activation Editing for Acoustic Grounding in Speech Foundation Models](https://arxiv.org/abs/2609.23979)
 
-- **方向**：语音大模型；**作者**：Natarajan Balaji Shankar, Zilai Wang, Zihan Wang, Mohan Shi, Kaiyuan Zhang, Abeer Alwan；**机构**：加州大学洛杉矶分校（UCLA）电子与计算机工程系；**发布日期**：2026-09-22 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
+- **方向**：语音大模型； | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：Whisper等AED语音基础模型ASR性能优异，但在非语音、弱声学证据或 imperfect 标签输入下仍会输出流畅却无声学支撑的幻觉文本。本文提出AURA超高效表示编辑方法：冻结全部预训练权重，对解码器交叉注意力头施加稀疏缩放-平移编辑，并用三个交叉注意力不确定性特征（过度集中、熵弥散、帧间跳变）动态路由编辑强度。在非语音音频上无需预先识别幻觉头，将幻觉率从89.18%降至1.94%且不损坏干
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- HRnorm：89.18%降至1.94%（15轮），25轮达0.93% - MyST WER：14.2（Large-v3），优于LoRA 14.4与全量微调14.9 - TED-LIUM 3 WER：7.8，与LoRA 7.9持平 - FluencyBank WER：16.4（Medium），零
 - **代码**：https://github.com/balaji1312/aura | **Demo**：暂无
 
@@ -1482,7 +1869,7 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：本文聚焦具身智能体的空间音频理解问题：现有全模态大模型几乎只处理单声道语义音频，无法利用一阶高保真环绕声（FOA）线索对视野外或遮挡声源进行定位与导航。作者提出 OmniEchoBench——覆盖 6 类任务、基于 30 个真实环境采集、含 197 个场景、2972 条问答与 900 条导航样本的统一基准，并配套可控空间音频渲染管线合成人机视觉一致的百万级训练数据。模型 OmniEcho 在 Qw
-- **关键技术点**：
+- **关键技术点**：以 Qwen3-Omni-30B-A3B 为主干，设双路音频编码：原生音频塔接收 W 通道下混的单声道信号以保留语义 token（冻结）；另设轻量 FOA 编码器，输入 5 通道表征（W 通道 log-mel 谱加三轴主动强度 ix、iy、iz 与扩散系数 delta），输出 384 维空间 token，重采样至 7Hz 音频网格后经可训练投影器嵌入 LLM，并插入对应语义音频 token 之后。 **核心创新：** (1) 首个面向全模态具身智能体的真实录音空间音频基准 OmniEchoBench，统一感知问答与声音导航两套评测；(2) 统一 FOA 渲染框架，由时变声源轨迹与听者位姿经球谐
 - **主要指标**：- 整体准确率（音视频）：28.5，对比基座 Qwen3-Omni 18.5，差值 +10.0；最强空间音频基线 SO-7B 为 11.4 - 音频单模态整体：21.8，超过所有单声道与 FOA 基线 - 导航 SR/SPL：16.2/11.5，与文本引导最强基线 InternVLA-N1（17.8
 - **代码**：暂无 | **Demo**：暂无
 
@@ -1491,7 +1878,7 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：LALM 推理常依赖语言先验而非真实声学证据，且现有无标签测试时强化学习（TTRL）的多数投票奖励与模态无关，易强化语言捷径、加剧感知欠利用。本文通过注意力掩码量化逐层感知依赖，发现依赖峰值位于中间层，其与任务准确率（r≈0.51）及音频因果贡献（r≈0.59）正相关；据此提出感知接地 TTRL（PG-TTRL），以轨迹级声学接地分数校准 GRPO 优势，在 MMAR、MMAU 上最高提升 4.6
-- **关键技术点**：
+- **关键技术点**：以 Qwen2.5-Omni（3B/7B）为策略模型、冻结副本为参考模型，音频经编码器投影进入 LLM 表征空间；分析时对文本到音频的跨模态注意力施加掩码（置为负无穷），以原始与掩码两种条件下问题及选项 token 池化表征的余弦距离定义层级感知依赖。 **核心创新**：(1) 提出感知-推理边界层概念，证明峰值感知依赖与任务准确率及屏蔽音频后的性能下降量正相关，确立声学接地的因果价值；(2) 定义轨迹级接地分数 gi（full 与 mask 两次 teacher-forcing 逐 token 对数概率差均值）与声学接地边际 s（多数派与少数派 gi 之差），归一化映射为可靠性权重 r 介于
 - **主要指标**：- Greedy（MMAR，7B）：56.0，较 Base +2.8、较最强基线 TTRL +0.1 - Avg@8（MMAR，7B）：51.9，较 Base +4.6、较 TTRL +3.9 - Avg@8（MMAU，7B）：67.2，较 Base +4.9、较 TTRL +3.0 - Maj@8
 - **代码**：暂无 | **Demo**：暂无
 
@@ -1500,14 +1887,14 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：现有音频大模型在ASR上接近人类，但对副语言层面（说话人特质、表达变化、声学环境）理解薄弱：GPT-4o-Audio在自建基准仅36%准确率，而人类达78%。本文提出涵盖22项副语言特性的分类体系，通过声学仿真与模板/LLM生成构建120万条音频-QA数据，采用"原子属性到多属性联合"的两阶段课程训练ParA-LLM，并发布6000题的ParA-Bench。ParA-LLM总准确率43.53%，超
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- ParA-Bench总准确率：43.53% - Speaker-Speech：55.85%（全场最优） - Acoustic：34.80%（低于GPT-4o-Audio的41.85%） - MMAU-Pro Speech：42.09%（较基线+1.13） - MMAR Speech：42.86%
 - **代码**：暂无（论文承诺发布模型、基准与数据） | **Demo**：https://nishitanand.github.io/paralinguistic-understanding-llm/
 
 ---
 ## [MECT: Mixture of Experts with CNN-Transformer Network for Speaker verification](https://arxiv.org/abs/2609.24061)
 
-- **方向**：语音大模型；**作者**：Yu Zheng、Jinghan Peng、ChangHao Zhang、Jian Liu（通讯）、Weiqiang Wang；**机构**：蚂蚁集团机器智能部（Ant Group, Machine Intelligence）；**发布日期**：2026-09-22 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-22
+- **方向**：语音大模型； | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：说话人验证全监督模型此前从未引入混合专家机制。本文提出MECT，首个在CNN-Transformer骨干中集成MoE的全监督SV模型，系统比较句子级/帧级与稠密/稀疏四种路由方案，仅增加0.17M参数即较无MoE基线取得平均EER相对提升4.7%、minDCF提升7.8%。MECT-B2（9.57M参数）在VoxCeleb1刷新SOTA，Vox1-O/E/H minDCF达0.012/0.026/
 - **关键技术点**：现有SV中的MoE仅用于自监督预训练模型的层间融合微调，全监督端到端模型尚未利用动态专家路由；同时流式嵌入提取在短分块下性能严重退化。
 - **主要指标**：- Vox1-O minDCF：0.012（EER 0.22%） - Vox1-E minDCF：0.026（EER 0.28%） - Vox1-H minDCF：0.048（EER 0.52%） - CN-Celeb EER：4.87%（minDCF 0.297） - 流式100ms块 Vox1-
@@ -1516,137 +1903,137 @@
 ---
 ## [Boundary and Intra-Segment Learning for Partial Audio Deepfake Localization](https://arxiv.org/abs/2609.25822)
 
-- **方向**： | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：针对仅篡改语音局部区域的部分音频深度伪造定位难题，本文提出边界与段内学习框架 BISL。现有方法多依赖边界位置识别，却忽略真实与伪造转换处的特征变化建模，同时连续真伪区段的整体特性未被充分挖掘。BISL 通过对相邻帧特征差分构建边界标签以刻画可信度转换，并利用段内均值与标准差聚合表示及紧致性损失捕捉区段整体特性，联合帧级、边界级与段级三任务监督实现细粒度定位。在 PartialSpoof 上取得 
 - **关键技术点**：部分音频伪造只替换语句中选定区域，真伪内容在同一话语内共存，需在帧级别定位篡改区间。现有定位方法或做帧级检测，或利用边界注意力与图网络挖掘转换信息，但普遍只关注边界位置判别，未显式建模表征真伪转换的特征差异；同时连续真/假段落的整体统计特性长期被忽视，限制了细粒度定位精度。
 - **主要指标**：- PS EER：2.52%（优于 BFC-Net 2.73%、SAL 3.07%、BAM 3.58%，相对 SOTA 降低 7.69%） - PS F1：97.40%（SAL 97.06%、BFC-Net 96.69%） - HAD EER：0.07%，与 SAL 0.06% 相当 - HAD F
-- **代码**：暂无 | **Demo**：暂无
+- **代码**：暂无（承诺录用后开源） | **Demo**：暂无
 
 ---
 ## [REVE: Efficient Hallucination Correction for Large Audio-Language Models via Reused Encoder States](https://arxiv.org/abs/2609.26028)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：大型音频-语言模型（LALM）生成的描述常提及输入中不存在的声学事件，且幻觉发生在事件提及级别，仅凭文本或 token 概率难以核验。现有事后方案需外接 CED 等独立音频标签器，被迫引入第二个音频编码器并再次波形前向编码，参数与延迟开销显著。本文提出 REVE，直接复用目标模型生成描述时已计算的投影前音频编码器状态作为声学证据：帧级分数统计读出与四段时序均值读出互补刻画事件存在性，经类别感知校准
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无（论文承诺后续在 GitHub 发布处理/评测/复杂度分析脚本） | **Demo**：暂无
 
 ---
 ## [Reward-Tilted On-Policy Distillation for Acoustic Grounding in Audio-Language Models](https://arxiv.org/abs/2609.28778)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：音频语言模型（ALM）常借助文本捷径答题而忽视声学证据，导致"伪接地"。本文提出奖励倾斜在线蒸馏 RT-OPD：在同一问题与学生自生成文本下，让冻结教师分别在有音频与无音频条件下预测下一 token，以两者对数概率之差定义全词表奖励，用指数倾斜重塑教师分布，得到突出声学证据的蒸馏目标，再沿学生在线轨迹做反向 KL 蒸馏。在 MMAU、MMAR、ADQA-clean 三个基准上稳定超越 Vanill
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：与Demo https://github.com/KaiyangLi1992/RT-OPD | **Demo**：https://github.com/KaiyangLi1992/RT-OPD
 
 ---
 ## [TEMA: Evidence-Grounded Temporal Question Answering in Multi-Turn Multi-Audio Dialogs](https://arxiv.org/abs/2609.30029)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：多轮多音频时序问答要求模型在追问、录音切换与历史引用中持续追踪目标事件，恢复每条时间轴上的完整实例及其边界，才能完成时间计算与比较。本文提出TEMA框架：每轮依次生成Route（限定音频范围）、Span（把所有匹配区间描述为条件化音频字幕）、Reason与Answer，将事件感知与循证回答连接起来。配套构建40,704段对话的TEMA-Dialog语料与证据-答案联合评测的TEMA-Bench，训
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://github.com/KadeeYoung/TEMA | **Demo**：暂无
 
 ---
 ## [AEGIS: Audio Endogenous Guarding via Internal Signals Against Large Audio-Language Model Jailbreaks](https://arxiv.org/abs/2609.29287)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文针对大型音频语言模型（LALM）面临的异构音频越狱攻击（语义混淆、多语言、副语言风格、波形扰动等），提出一个关键问题：越狱成功究竟是模型没识别出有害意图，还是识别之后没能触发拒绝？作者通过逐层探针分析发现风险信息在中间层仍可解码，但深层拒绝倾向接近于零，将此解耦现象命名为"风险-拒绝鸿沟"。据此提出 AEGIS 端到端防御：用轻量 MLP 风险门读取中层隐藏状态得到连续风险分，据此选择性激活后
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://github.com/azzzzliao/aegis-audio-defense | **Demo**：暂无
 
 ---
 ## [PTC-Bias: Phoneme-Level Temporal Competition for Bias Retrieval and Post-Decoding Correction in Speech LLMs](https://arxiv.org/abs/2609.28727)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文提出 PTC-Bias，一个面向 SpeechLLM 的音素级时序竞争两阶段上下文偏置框架。预填充阶段，PTC Retrieval 在帧同步音素解码基础上对候选发音做时序竞争，产出精简偏置词表及对应语音区间；解码后，PTC Correction 在区间内对检索词与不匹配转写片段做第二次局部竞争，选择性纠正近同音与词切分错误，同时保留正确转写。两阶段共享同一音素后验，无需额外 SpeechLLM
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://github.com/aizhiqi-work/PTC-Bias | **Demo**：暂无
 
 ---
 ## [A Harness for Synthesizing Diverse Naturalistic Full-Duplex Conversations](https://arxiv.org/abs/2609.28806)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文提出一个可编程控制的语音数据合成harness（管线），用于批量生成带意图标注的英/中双语两通道全双工对话语音，直指真实语料对打断、附和、旁聊等事件缺乏可控性与意图标签的痛点。LLM仅编写含说话人、文本、对话行为与依附关系的关系事件列表，不预测绝对时间戳；随后经TTS独立渲染、强制对齐测词界、按锚点与偏移装配到共享时钟上，覆盖8大家族42种现象。论文以生成消融、语义VAD标注恢复和Moshi微
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：与Demo：暂无 | **Demo**：暂无
 
 ---
 ## [To Trust or Not to Trust: Retrieval-Augmented Fact Checking in Speech](https://arxiv.org/abs/2609.30227)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文提出 VeriSpeak：面向大音频语言模型（LALM）的语音事实核查探针基准，含 3879 条时间、地理、关系三类语音声明，标签真假平衡，声学与文本证据跨模态。论文系统检验核查能力能否从文本迁移到语音，以及检索与显式推理能否弥合模态差。核心发现是该迁移并不自动发生：语音输入平均准确率骤降约 5 个点到 86.1% 之间波动，单纯检索收益有限，模型常把检索文本误当作待核查声明，而"检索加推理"
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无（数据集 Hugging Face: abhiram4572/VeriSpeak）
 
 ---
 ## [Exploring a Single Autoregressive LLM for Unified Target Speech Extraction across Synchronous and Asynchronous Inference](https://arxiv.org/abs/2609.29238)
 
 - **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-25
 - **一句话贡献**：本文提出 TSE-Omni，用单一自回归 LLM 主干统一目标语音提取的两类线索：时间同步线索（唇动、协同手势）与时间异步线索（注册语音、文本）。传统范式按线索单独训练部署提取器，视觉体系还需损坏匹配训练才鲁棒。TSE-Omni 利用 next-token prediction 的天然属性：每一步都以自身已预测的目标语音语义 token 为条件，形成连续刷新的"自注册"上下文，初值来自异步音频或文
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无（无 repo 与权重） ｜ Demo：https://alexwxwu.github.io/tseomni-main/ | **Demo**：https://alexwxwu.github.io/tseomni-main/
 
 ---
 ## [Learning Natural Conversational Behavior in Tandem Speech-to-Speech Models with Randomized Guidance](https://arxiv.org/abs/2609.30773)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-28
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-28
 - **一句话贡献**：串联式语音到语音（tandem S2S）架构如 KAME 用异步 LLM 后端在用户说话期间向前端持续推送候选回复作为引导流，从而兼得全双工交互的低延迟与文本 LLM 的知识能力。但监督微调需要中间引导轨迹，而真实对话录音只包含最终回复，KAME 原本要逐条样本调用模拟器 LLM 生成逐渐收敛到目标回复的引导序列，成为规模化使用真实语音的数据准备瓶颈。本文提出随机中间引导：训练时末位更新用目标回复
 - **关键技术点**：级联 ASR-LLM-TTS 延迟破坏对话流畅性，Moshi 等全双工模型知识推理有限；KAME 让异步文本 LLM 以 2 Hz（每 0.5 秒）基于用户部分输入向全双工语音前端推送候选回复组成引导流（原文称"oracle"流）。训练时普通对话数据缺少该中间引导，原方案需对每条训练对话逐例 LLM 模拟生成收敛到目标回复 y 的引导轨迹，无法扩展到大规模真实语料。
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Who Says What: Symbolic Trimodal Binding Mechanisms in Audio-Visual LLMs](https://arxiv.org/abs/2609.31193)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-28
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-28
 - **一句话贡献**：本文系统研究音视频大模型（AVLLM）在多说话人对话视频中如何完成"文本-语音-视觉"三模态符号绑定。作者发现模型涌现出模态特异的符号ID机制：听觉属性被编码为记录说话时序的时间ID，视觉属性被编码为记录画面位置的空间ID，绑定经锚点ID提取、目标ID选择、特征检索三阶段完成。借助表征相似性分析（RSA）与因果中介分析（CMA），作者定位绑定失败主要发生在目标ID选择阶段，即音-画对齐的根本缺陷，
 - **关键技术点**：video-SALMONN2+（7B）、Qwen2.5-Omni（3B/7B）、MiniCPM-o-4.5（9B）等AVLLM在单镜头多说话人视频（画面每帧同时出现多个候选人）中频繁把话语归属到错误人脸。LLM/VLM的一模态与双模态绑定已被证实使用内容无关的符号ID，但AVLLM的三模态绑定机制与失败位置仍是黑箱。 **方法：** 作者构造4只动物说话人分布在四象限、各说一个随机国家名的玩具数据集，定义AAVR（声音锚点检索视觉目标）与VAAR（视觉锚点检索语音内容）两个双向绑定任务。先用上下文priming诱导正确绑定，对每层注意力输出做RSA，与时间ID、空间ID、语义内容三个假设空间算
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Louder, Longer, Livelier: Acoustic Shortcuts and Underspecified Rationales in Speech LLM Judges](https://arxiv.org/abs/2609.36979)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
 - **一句话贡献**：语音大模型正日益充当TTS与语音交互质量"评审"甚至训练奖励信号。本文首次系统刻画语音评审的模态特有风险"声学捷径"：评审把易感知的声学线索（音量、内容丰富度、情绪演绎）误当作质量证据，或给予远超人类听众的权重。作者对六个语音评审做控制变量审计，发现评审系统性偏好更响、内容更丰富的音频，并把 Happy 等情绪演绎转成质量偏好；更令人担忧的是，其配套理由解释反复复用水泛化的"自然度、韵律"等评价词
 - **关键技术点**：语音质量多维且依赖细粒度声学感知，MOS等人工听测慢而昂贵，神经MOS预测器不透明、难泛化；SpeechJudge、SQ-LLM、UniSRM等专用评审与Gemini等通用音频大模型正被用于打分、偏好选择与奖励建模。文本评审已知存在位置、长度偏差，但语音评审是否以目标准则可辩护的方式使用声学线索，此前从未被系统检验。 **方法：** 提出声学捷径审计框架：对语音刺激做单一因子控制操纵，检验其是否系统性改变最终判断，并在改变发生时追问理由是否点名该线索；对可能合理影响感知的因子引入人类偏好校准作为基准。共审计六个评审：SpeechJudge-BTRM、SpeechJudge-GRM、UniSRM
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **主要指标**：（仅标题，未精读）
+- **代码**：/Demo：https://huggingface.co/datasets/mingyue66/SpeechJudgeAudit/（语音评审审计工具集） | **Demo**：https://huggingface.co/datasets/mingyue66/SpeechJudgeAudit/（语音评审审计工具集）
 
 ---
 ## [ReDimNet2+: Multi-Corpus Data Scaling for Robust Speaker Verification](https://arxiv.org/abs/2609.37014)
 
-- **方向**： | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-30
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-09-30
 - **一句话贡献**：面向设备、房间与压缩链路差异导致的说话人验证退化问题，本文在固定 ReDimNet2 紧凑骨干（12.3M 参数）的前提下，通过七个公开语料（63,934 说话人、约 8,675 小时）的数据规模化、编解码器与波形增强、大间隔微调（LMFT）以及图结构检索重排序，在统一的随机 4 秒评估窗口协议下将 VoxCeleb1 池化 EER 从 2.42% 降至 0.82%，26 条件鲁棒性压力测试 EE
 - **关键技术点**：现代 ASV 系统在干净基准上 EER 已低于 1%，但在未见信道、激进压缩、短片段与开放集检索下显著退化。作者分析 VoxBlink2 子集（训练 673,277 条、11,053 人、约 1,458 小时；评估 134,697 条）发现域失配：FLAC 中位字节率从训练侧 21,040 B/s 降到评估侧 14,021 B/s，NISQA 色彩度预测低于 2.0 的文件占比从 6.2% 升至 41.4%，884 位多录音说话人的组内字节率标准差中位数为 1,753，提示录音通道与压缩异质性，由此引出显式编解码器仿真。
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **主要指标**：（仅标题，未精读）
+- **代码**：/Demo：https://github.com/lab260ru/redimnet2-plus（预训练权重 https://huggingface.co/lab260/redimnet2-plus） | **Demo**：https://github.com/lab260ru/redimnet2-plus（预训练权重 https://huggingface.co/lab260/redimnet2-plus）
 
 ---
 ## [Pruning for Efficiency, Paying in Fairness: Demographic Disparities in Pruned Speech-LLMs](https://arxiv.org/abs/2609.38106)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
 - **一句话贡献**：语音大模型推理开销大，剪枝压缩是部署前的常规步骤，但业界普遍只用聚合词错误率（WER）验收剪枝模型，可能掩盖其对不同人口学群体的不均衡损害。本文对SLAM-ASR管线（冻结Whisper编码器+可训练投影器+冻结Qwen2.5-3B）开展首个系统性公平性审计：在Fair-Speech与Common Voice上逐步剪枝编码器并在每个深度重训投影器，逐群体测量WER。结果剪枝使种族与性别差距扩大，聚
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：/Demo https://github.com/KarthikKolluriKB/SpeechLLM-Pruning-Fairness | **Demo**：graphic Disparities in Pruned Speech-LLMs
 
 ---
 ## [τ-Multilingual: Benchmarking Voice Agents Across Languages](https://arxiv.org/abs/2609.35820)
 
-- **方向**： | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-09-30
 - **一句话贡献**：现有语音智能体基准几乎只测英语，仅覆盖行为分布的狭窄切片。本文提出 τ-Multilingual，将 τ-Voice（τ-bench 系列的全双工语音版）扩展到西班牙语、巴西葡萄牙语、印地语、韩语、中文五语言，构建由母语者审核、同时度量任务完成、交互质量与生成质量的多语言全双工语音智能体基准，含九百个本地化任务实例、五种语音配置四千五百通电话并设文本对照。结果显示西/葡/印地语基本保持、韩语与中文
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：/Demo：https://github.com/sierra-research/tau2-bench/tree/tau-multilingual | **Demo**：https://github.com/sierra-research/tau2-bench/tree/tau-multilingual
 
 ---
 ## [Logbook: Extremely Long-form Audio Event Understanding](https://arxiv.org/abs/2610.07338)
@@ -1654,7 +2041,7 @@
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
 - **一句话贡献**：本文提出 Logbook，首个小时级（10 分钟至 6 天）连续音频事件理解基准。任务要求系统对不间断录音输出无缝隙、无重叠的切分，每段附带一个事件标签与自由文本描述。作者将 Ego4D、EgoLife、SINS 三个公开数据集统一为日志式标注格式，评测 52 个系统（48 个级联 + 4 个端到端），并对微调、上下文窗口与推理预算做消融。结论：任务可行但最佳系统仍低于人工基线；过分割普遍存在，端
 - **关键技术点**：现有音频基准建立在短且预切分的片段上（AudioSet、Clotho 等），长音频基准上限仅 20-30 分钟且偏重语音；声音事件检测器依赖固定词表，captioning 模型无论输入多长只输出一句话，导致模型设计无法应对全天连续听音场景。
-- **主要指标**：
+- **主要指标**：（Ego4D，人工基线 fAcc：0.646 / dF1：0.550） - fAcc：最佳 E2E Gemini 3.5 为 0.445；Qwen3-o + SFT 达 0.633 - dF1：最佳未微调系统 Gemma 4 级联 0.238；Qwen3-o + SFT 提升至 0.422 - ev
 - **代码**：https://github.com/facebookresearch/logbook | **Demo**：无
 
 ---
@@ -1663,7 +2050,7 @@
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
 - **一句话贡献**：全双工语音模型要在流式帧里同时决定「说什么」与「何时说/停」。现有 RL 只把时机优势打到扁平 token 流或干脆不管内容语义。HiPLEX 把 Moshi 的文本策略无损拆成两层：控制层每帧选 pad/epad/cont（要不要出内容），条件内容层只在 cont 时选 token。交互奖励经事件因果掩码归到控制层，LLM-judge 语义优势归到内容层，双因子共用同一个头，零新增参数。在 Fu
 - **关键技术点**：全双工 SLM 需在 80ms 帧粒度上持续听用户音频同时生成流式语音，涉及 turn-taking、user pause 静默、backchannel 短应答、barge-in 让位/重入四类时序行为；同时不能牺牲文本内容质量。先前工作（DuplexPO 只在标注窗口内做纯时序 GRPO）把语义排除在外，作者实测发现「纯时序训练」会拖低 Judge 分数并引发复读。
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：未发布 | **Demo**：-
 
 ---
@@ -1671,17 +2058,17 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
 - **一句话贡献**：音频大模型（LALMs）存在显著的"语义强、感知弱"失衡：音高比较、响度排序等信号级任务需要迭代式精细声学分析，而现有架构对难易问题消耗相同计算深度。AdaLoop在音频编码器与语言模型之间的连接器位置插入轻量循环潜块（RLB），共享权重反复迭代，并由以问题为条件、可学习的停机单元（ACT机制）自主决定每个样本精化的轮数（上限K_max=8）。新增参数仅占基座2.4%至2.9%，且不改动编码器与L
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [EMODE: Dynamic Para-Semantic Experts for Emotion-Aware Speech Language Modeling](https://arxiv.org/abs/2610.06956)
 
-- **方向**：语音大模型；**作者**：Jianan Pan、Yiwen Gu、Xinze Li、Rui Wang、Kejie Huang；**机构**：浙江大学（杭州）；**发布日期**：2026-10-07 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
+- **方向**：语音大模型； | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
 - **一句话贡献**：大型语音-语言模型在跨模态理解与生成上表现强劲，但情感等副语言信息难以保留：单一纠缠声学表征使语言模型过度依赖转写出的词汇内容走捷径。本文提出情感感知语音语言模型 EMODE，核心模块为动态副语义专家 DPSE，将连续语音特征解耦为语义与副语言双通路，动态路由后融合再送入语言模型；配合三阶段课程训练与正交专家引导、语义-声学对齐、门控多样性正则三项约束。在九数据集 SER、SpeechAlpaca
 - **关键技术点**：现有语音连接器以语义转写为优化目标，情感隐含在单一表征中易丢失；模型可用词汇捷径完成情感任务，缺少对韵律、音色等声学证据的真正依赖，且自然带情感标注的对话语料稀缺。
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无（已被 ACM Multimedia 2026 接收）
 
 ---
@@ -1689,8 +2076,8 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
 - **一句话贡献**：本文针对端侧级联（ASR-LLM-TTS）语音智能体中工具延迟串行暴露的问题，提出投机式工具执行框架。核心思想是利用流式ASR的部分识别假设，在用户尚未说完时提前预测并发起高延迟只读工具（如网页搜索）调用，将结果缓存并直接注入LLM提示，把工具延迟隐藏在用户说话时间内。方法由规则预测器、缓存校验回退与LLM自主回退三重机制组成，保证最坏情况不劣于串行基线。在完整实现的Android语音助手真机实测
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -1698,8 +2085,8 @@
 
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-07
 - **一句话贡献**：音频大模型需同时掌握音高对比、说话人计数、音乐节奏估计、情感识别等数十种技能，联合训练存在明显的技能干扰：提升一项往往以牺牲另一项为代价。本文提出 SkillFormer，将音频理解为技能分解式适配问题：把不同技能路由到不同的低秩适配器参数上，推理时由问题条件路由器动态选择并加权组合 K=6 个技能专属 LoRA，使音高查询与曲风分类走不同参数路径。交替训练调度先让各适配器在专属技能簇上独立专精，
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -1735,7 +2122,7 @@
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-12
 - **一句话贡献**：大音频语言模型（LALM）的编码器为几秒语音生成数百个token，自注意力二次方开销推高推理成本；现有免训练压缩仅凭粗粒度注意力或特征相似度剪枝，抹平了承载关键信息的音素过渡区。AudioTETRIS提出两阶段免训练框架：先从编码器中间层隐状态相邻帧平方L2距离导数构建音素过渡声学先验，再在LLM解码器内与深度自适应注意力分数相乘融合，于两个剪枝层做渐进式top-k选择。在Qwen2-Audio-
 - **关键技术点**：语音信息密度集中于快速声学过渡而非稳态段，均匀token化本身冗余；但SpeechPrune依赖早期层注意力、LTBM依赖局部特征相似度，均将音频token视作各向同性特征，破坏音素级过渡细节，导致ASR等需精确词法恢复的任务在强压缩下急剧退化。
-- **主要指标**：
+- **主要指标**：（Qwen2-Audio-7B）： - WER：压缩0.36时4.52，优于未压缩4.61；0.75时8.50，最低（SpeechPrune 9.75，差值−1.25；随机剪枝31.59） - 准确率：0.36时IEMOCAP 58.04（未压缩55.11，+2.93）、MMAU-mini 42.3
 - **代码**：https://github.com/ShreyaSajid/AudioTETRIS | **Demo**：暂无
 
 ---
@@ -1780,7 +2167,7 @@
 - **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-10-14
 - **一句话贡献**：针对连续自回归语音大模型（AR backbone + flow/diffusion head）偏好后训练中"如何构对、选哪个flow time、更新哪个模块"的三联决策，本文在统一flow-matching偏好目标下控制变量研究候选扰动构造、时间采样与可训练模块。受控重放与单patch干预表明：采样噪声改动会经自回归反馈传导至后续backbone状态，而表征变化幅度并不必然反映音质。在Ming与d
 - **关键技术点**：DiTAR/dots.tts/Ming等连续AR SLM用flow-matching head生成声学patch且patch回喂AR历史，局部采样变化会级联影响后续生成；但DPO依赖序列对数似然难以应用于flow head，且目标本身不告诉你该比较哪些候选、更新backbone还是head，既有工作（ARDM-DPO等）亦缺乏对这三者交互的受控研究。
-- **主要指标**：
+- **主要指标**：（held-out，Ming）： - Δreward：AR-16 +0.737（95%CI[0.361,1.169]），Joint 16+8 +0.701，head-only仅+0.076 - WER：0.143→0.060；SIM：0.466→0.508；DNSMOS：2.82→2.88 - ti
 - **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,7 +1,52 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 29 篇
+共 38 篇
 
+## [Position-Aware Target Speaker Extraction for Long-Form Multi-Party Conversations](https://arxiv.org/abs/2606.29497)
+
+- **方向**：语音大模型 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-06-28
+- **一句话贡献**：本文提出位置感知的目标说话人提取方法PATSE，解决多方会议语音识别中的说话人分离问题。通过引入位置先验信息（DOA），方法能够更准确地从未分离的多人语音中提取目标说话人的语音，提升多方会议场景下的ASR准确率。
+- **关键技术点**：基于注意力机制的说话人提取网络，融合音频特征和空间位置信息。
+- **主要指标**：目标说话人WER相对降低25%，干扰抑制比提升8dB。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [TF-MoE: Time-Frequency Mixture-of-Experts for Efficient Speech Separation](https://arxiv.org/abs/2606.29575)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-06-28
+- **一句话贡献**：本文提出时频域混合专家模型（TF-MoE），专为语音分离任务设计。方法通过在时频维度上引入稀疏激活的专家网络，实现参数高效且表达能力强的语音分离。在WSJ0-2mix等基准数据集上取得显著提升。
+- **关键技术点**：时频混合专家网络：不同时频区域由不同的专家网络处理，通过门控机制动态选择专家。共享底层参数捕获通用特征。
+- **主要指标**：SDRi提升2dB以上，计算量相比同等性能的全专家模型降低50%。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Flow Matching-Based Speech Source Separation with Best-of-N Biometric Sampling](https://arxiv.org/abs/2607.06088)
+
+- **方向**：语音大模型 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-07-07
+- **一句话贡献**：本文提出基于条件流匹配的单通道语音分离方法，通过生物特征最佳-N采样解决排列歧义和长录音分块推理难题。核心创新是使用冻结的说话人编码器定义训练时的源顺序，推理时复用于生物特征最佳-N候选选择和分块级通道对齐。模型在Libri2Mix基准上评估，使用SI-SDR、PESQ、ESTOI等指标衡量分离质量，并使用cpWER和EER衡量下游ASR和说话人验证影响。Transformer U-Net变体在分
+- **关键技术点**：基于条件流匹配的语音分离方法，输出为排列无关的两个源。冻结的说话人编码器定义训练时的源顺序，推理时用于生物特征最佳-N候选选择和分块级通道对齐。
+- **主要指标**：SI-SDR、PESQ、ESTOI等分离指标具有竞争力，cpWER（ASR）和EER（说话人验证）错误率在所有评估设置中最低。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [PS4: Proxy-Supervised Joint Training for Real Target Speaker Extraction](https://arxiv.org/abs/2607.08111)
+
+- **方向**：语音大模型 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-07-09
+- **一句话贡献**：目标说话人提取（TSE）在真实对话混合语音上的训练面临挑战：缺乏大规模训练语料和干净的目标语音监督数据。本文提出PS4代理监督训练框架，包含两个主要贡献：构建大规模语料库（71,771训练样本，涵盖中英文，来自四个公开数据集，每个样本包含重叠语音混合、说话人注册音频、真实转录本和帧级语音活动标签）；提出代理监督联合训练策略，使用四个互补的可微目标微调BSRNN-based TSE模型：ASR交叉熵
+- **关键技术点**：BSRNN-based TSE模型作为基础，只更新BSRNN separator。
+- **主要指标**：REAL-T排名第2，所有提交系统中最佳说话人相似度和时序F1。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Breaking the Quality--Intelligibility Trade-off in Streaming Target Speaker Extraction via Deep-Feature-Anchored Preference Optimization](https://arxiv.org/abs/2607.10191)
+
+- **方向**：语音前端（语音分离） | **子方向**：Separation | **评分**：8/10 | **日期**：2026-07-11
+- **一句话贡献**：流式目标说话人提取(TSE)模型常表现出质量-可懂度 trade-off，naive优化感知音频质量会降低语音可懂度，反之亦然。本文揭示这一 trade-off 源于优化锚点的选择不当，而非流式架构约束。提出扩大Conformer卷积核以增强局部频谱-时间建模，以及WavLM锚定的直接偏好优化(DPO)微调策略。在560ms流式 chunk size下，实现相对可懂度提升10.9% (WER: 0
+- **关键技术点**：扩大Conformer卷积核的流式TSE模型，WavLM锚定的DPO微调框架。
+- **主要指标**：相对可懂度提升10.9% (WER: 0.138至0.123)。音频质量和说话人相似度同时略有提升。流式 chunk size仅560ms，兼顾实时性。
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [WeSep: A Modular and Cue-Composable Framework for Target Speaker Extraction](https://arxiv.org/abs/2607.27436)
 
 - **方向**：语音大模型 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-07-29
@@ -110,6 +155,42 @@
 - **代码**：https://cslikai.cn/Falcon/ | **Demo**：https://cslikai.cn/Falcon/
 
 ---
+## [Music-Source-Separation-Training (MSST): A Unified Framework for Training and Evaluating Music Demixing Models](https://arxiv.org/abs/2607.23395)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：—
+- **一句话贡献**：音乐源分离(MSS)是从复调混合中恢复单个声音成分的任务，应用广泛。本文提出MSST，一个用于MSS任务的通用开源框架，统一训练、验证和推理流程。框架支持各种模型架构、数据预处理和增强、多种损失函数和评估指标。框架还支持多项提升分离质量的实用技术，如滑动窗口推理+交叉fade、测试时增强、模型集成、LoRA微调。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Toward accurate speaker inventories for online speaker diarization](https://arxiv.org/abs/2610.11278)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：—
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Using the enrollment gallery as evidence: affine-invariant score calibration for target speaker tagging](https://arxiv.org/abs/2610.11272)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：—
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Investigating the Integration of Spatial Information in Foundation-Model-Based Speaker Diarization](https://arxiv.org/abs/2607.12647)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-07-14
+- **一句话贡献**：来自多通道输入的空间信息已被证明可以改善会议处理任务如 diarization 和源分离。同时，基于大规模预训练单通道基础模型（如WavLM）的特征提取的diarization达到了最先进性能。本研究比较了三种将空间特征整合到基础模型diarization系统的方法。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：条件方法在空间信息整合中表现最佳，有效处理重叠语音。
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Dynamic Clustering for Cross-Segment Permutation Alignment in Long Speech Separation](https://arxiv.org/abs/2608.09451)
 
 - **方向**：语音大模型（语音前端） | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-10
@@ -124,7 +205,7 @@
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-17
 - **一句话贡献**：现有音乐源分离系统通常提取单一歌声轨道，无法区分多歌手混合中的不同歌手。本文提出一种歌手感知的歌声源分离框架，利用目标歌手的短时长注册录音提取歌手嵌入向量，通过特征拼接或特征线性调制（FiLM）条件化分离模型，使其聚焦目标歌手并抑制干扰。基于DAMP-VSEP数据集构建了含质量过滤和非重叠注册段的二重唱数据集。实验表明：在二重唱场景下，基线方法的target-singer SI-SDR仅为0.33
 - **关键技术点**：传统音乐源分离系统（如Open-Unmix、Demucs、Spleeter）将混合信号中的所有人声视为单一源，提取的是"所有歌声之和"而非特定歌手。在多歌手场景（如二重唱）中，歌声在时频域高度重叠，传统模型无法区分不同歌手。语音领域的说话人提取（如SpeakerBeam、VoiceFilter、SpEx+）已证明注册音频引导分离的有效性，但将其迁移到歌声面临两大挑战：一是缺乏含干净人声和多歌手混合的标注数据集；二是歌声在音高、音色和表达方式上的变化远大于语音，使条件化过程更加困难。
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：https://github.com/jocelynxu01/singer-separation-paper | **Demo**：暂无
 
 ---
@@ -141,7 +222,7 @@
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-21
 - **一句话贡献**：远场说话人日志在混响、噪声、说话人数目动态变化与重叠语音等条件下仍是极具挑战的问题。本文面向模型驱动方法 neural FCASA，提出贝叶斯日志模型：为说话人活动引入 Beta 先验，推导出可视为"带正则的连续活动度得分"的变分下界目标函数，替代原始交叉熵损失训练日志模型。在 AMI 数据集上，该方法相较基线实现 DER 绝对下降至少 3%（相对 16%）、JER 绝对下降至少 4%（相对 20
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- DER：较基线绝对下降至少 3%，相对降低 16% - JER：较基线绝对下降至少 4%，相对降低 20%
 - **代码**：暂无 | **Demo**：暂无
 
@@ -150,8 +231,8 @@
 
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-08-26
 - **一句话贡献**：实际麦克风阵列场景中说话人数量与麦克风数量往往事先未知。REDnet 采用递归编码器和解码器结构，摆脱了对固定说话人数与固定通道数的依赖，同时解决"说话人数量未知"与"麦克风数量可变"两大问题，在多个公开数据集上实现领先性能。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -193,11 +274,11 @@
 ---
 ## [Dialogue-Based Streaming Audio-Visual Target Speaker Extraction with Predictive Dialogue Information](https://arxiv.org/abs/2609.30774)
 
-- **方向**： | **子方向**：Separation | **评分**：7/10 | **日期**：2026-09-28
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-09-28
 - **一句话贡献**：面向面对面实时对话场景，系统需在自然停顿、轮换与 backchannel 中持续追踪目标说话人，同时抑制对话伙伴与无关第三方插话。本文构建了首个基于完整双人类对话并叠加独立第三方干扰的在线流式音视频目标说话人提取（AV-TSE）基准，保留真实轮换结构而非模拟拼接。并提出基于语音大模型的目标说话人语音活动预测模块 TS-VAP，从重叠混合的语义、声学与面部线索中预测目标与对话伙伴的未来活动，作为预测
 - **关键技术点**：现有 AV-TSE 多在完全重叠或人工模拟稀疏重叠混合上评测，缺乏真实对话的轮换结构；流式模型不可见未来帧，目标在轮次边界沉默处歧义最大。传统语音活动投影（VAP）仅在干净单通道训练，靠停顿与韵律预测，未利用决定轮换的语言知识（提问预示回答、句满即交接）。
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **主要指标**：（仅标题，未精读）
+- **代码**：暂无 | **Demo**：https://jjjjiaozi.github.io/TS-VAP/
 
 ---
 ## [Geometry-Conditioned Target Speaker Extraction based on spatial features incorporating acoustic propagation principles](https://arxiv.org/abs/2610.29778)
@@ -205,7 +286,7 @@
 - **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-10-22
 - **一句话贡献**：针对几何条件化空间选择非线性滤波（GCSSF）目标说话人提取中位置编码（MPE）只给抽象正弦嵌入、不含声学传播物理的问题，提出用两类显式空间特征做阵列几何条件化：捕获麦克风间相位差的波束转向矢量（TSV），以及表征各时频bin目标存在性的GCC-PHAT空间掩码，经Conv1d编码器与FiLM层注入GCSSF分支。在随机阵列训练、随机与圆阵评测下，GCSSF-TSV取得SI-SDR 9.43 dB
 - **关键技术点**：基于空间线索的目标说话人提取依赖训练时固定的阵列几何；GCSSF用MPE将目标DOA与麦克风坐标映射为抽象高维正弦嵌入，未显式编码声学传播关系，网络需隐式学习相位差、DOA与几何间的物理联系，限制了跨几何提取性能。
-- **主要指标**：
+- **主要指标**：（随机阵列，GCSSF-TSV vs GCSSF-MPE vs SSF vs 未处理）： - SI-SDR：9.43 ± 3.96 dB vs 7.77 vs 6.78 vs 2.21 dB - PESQ：2.27 ± 0.55 vs 1.96 vs 1.79 vs 1.27；ESTOI：0.75 
 - **代码**：暂无 | **Demo**：暂无
 
 ---

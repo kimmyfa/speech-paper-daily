@@ -1,12 +1,12 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 41 篇
+共 51 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
 - **方向**：语音增强 | **子方向**：Enhancement | **评分**：9/10 | **日期**：2026-07-28
 - **一句话贡献**：本文实现faster-enhancer.c，将FastEnhancer-Medium 48kHz模型移植到纯C int8 runtime，无需外部依赖库。通过per-frame激活范围重计算、Winograd卷积、GRU融合等技术，在Apple M2上实现0.069实时因子（3.3倍加速），Galaxy S23+达到0.096。量化损失仅-0.006 PESQ和-0.08dB SNR。
-- **关键技术点**：
+- **关键技术点**：FastEnhancer-Medium 48kHz，6层int8 GEMM tiers，Winograd F(2,3)卷积，fp16跨级状态。
 - **主要指标**：Apple M2: RTF 0.069 vs fp32 ONNX 0.230 (3.3x加速)；Galaxy S23+: RTF 0.096。量化损失：PESQ -0.006，SNR -0.08dB。节拍pacing节省49%能量。
 - **代码**：https://github.com/kdrkdrkdr/faster-enhancer.c | **Demo**：暂无
 
@@ -18,6 +18,51 @@
 - **关键技术点**：三类现有方法均不匹配恶劣声学环境：静态几何对齐（协方差白化、线性探测）将噪声视为刚性整体平移，无法应对每个环境独特的旋转/平移/低秩变形；梯度 TTA（TENT 等）在 <0dB 多音噪声下产生确认偏差，把高置信伪标签反馈回循环等于在噪声底上训练；提示优化（TPT、ContextDA）需推理时不可得的噪声类型特权标注且迭代反传与实时流不兼容。
 - **主要指标**：- US8K 准确率：71.71%，较 zero-shot +12.94pp，超 PCA++ +3.83pp、超 oracle ContextDA +9.41pp - -6dB 严重区间：57.45% vs zero-shot 32.69%（+24.76pp） - ESC-50：93.39%，超 T
 - **代码**：https://github.com/Ashish-1108/PRISM | **Demo**：暂无
+
+---
+## [Schrödinger Bridge Mamba for One-Step Speech Enhancement](https://arxiv.org/abs/2510.16834)
+
+- **方向**：语音大模型 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2025-10-19
+- **一句话贡献**：本文提出Schrödinger Bridge Mamba（SBM），一种新型高效语音增强模型，整合了Schrödinger Bridge（SB）训练范式和Mamba架构。实验证明SBM在联合去噪和去混响任务上仅用一步推理就优于强生成式和判别式方法，多项指标达到最优，同时具有竞争性的实时因子支持流式推理。消融实验表明SB范式在不同架构上一致提升性能，Mamba在SB范式下表现优于Multi-Head
+- **关键技术点**：核心为Mamba状态空间模型结合Schrödinger Bridge训练范式。
+- **主要指标**：联合去噪和去混响任务上多项指标达到最优，实时因子具有竞争力。
+- **代码**：暂无 | **Demo**：https://sbmse.github.io
+
+---
+## [Absorbing Discrete Diffusion for Speech Enhancement](https://arxiv.org/abs/2602.22417)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-02-26
+- **一句话贡献**：本文提出ADDSE，使用吸收离散扩散(ADD)进行语音增强，通过建模干净语音码给定噪声语音码的条件分布。方法利用神经音频 codec 的表达潜在空间和扩散模型的非自回归采样过程。为高效建模RVQ码的分层结构，提出RQDiT，结合RQ-Transformer和扩散Transformer技术。在两个数据集上的非侵入式客观指标表现具有竞争力，尤其在低信噪比和少采样步数条件下。
+- **关键技术点**：使用神经音频 codec (NAC)将干净和噪声语音编码为离散码(RVQ，4个codebook，K=1024)，RQDiT进行非自回归建模。RQDiT包含沿帧维度的Frame-DiT和沿深度维度的Depth-DiT。
+- **主要指标**：ADDSE在低SNR和少采样步数下表现竞争力。在Libri-TUT和Clarity-FSD50K上进行评估，对比Conv-TasNet、BSRNN、SGMSE+、EDM-SE等基线。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AmbiDrop: Ambisonics-Based Array-Agnostic Neural Speech Enhancement](https://arxiv.org/abs/2607.00548)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-07-01
+- **一句话贡献**：多通道深度神经网络(DNNs)显著提升了语音增强性能，但通常受限于固定麦克风阵列几何，导致在不可见或不规则配置上泛化差。现有阵列无关方法依赖高复杂度架构或大规模多样化数据集，仍难以泛化到分布外布局。本文深入分析AmbiDrop方法，通过球面谐波域处理实现任意麦克风阵列配置的泛化。
+- **关键技术点**：基于Ambisonics的阵列无关神经语音增强，通过球面谐波域处理实现泛化。
+- **主要指标**：在不可见阵列配置上表现鲁棒，实现真正的阵列无关语音增强。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Where Speech Enhancement Hurts Recognition: An Inference Time Polar Projection Diagnosis](https://arxiv.org/abs/2607.11157)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-07-13
+- **一句话贡献**：语音增强（SE）可以显著提高感知质量，但增强后的语音并不一定提高自动语音识别（ASR）。现有补救措施（如联合重新训练增强器和解码器或将增强语音与噪声输入插值）可以缓解这种不匹配，但常见解释（如伪影和过度抑制）仍然是定性的，无法定位哪个增强组件损害了识别。本研究提出推理时极坐标投影诊断方法。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：幅度强度是影响ASR的主要因素，最佳强度因识别器而异。wav2vec2.0偏好强校正，Whisper偏好弱校正。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Towards Array-Invariant Speech Enhancement via Geometry-Aware Dynamic Convolution](https://arxiv.org/abs/2607.18658)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-07-21
+- **一句话贡献**：提出Geometry-Aware Dynamic Convolution（Geo-DConv）框架，使固定阵列语音增强模型能够适应任意麦克风阵列几何结构。该方法显式利用麦克风坐标信息。
+- **关键技术点**：Geo-DConv = Geometry-Aware Dynamic Kernel Generation + Topology-Aware Coordinate Transformer (TACT)。TACT使用Fourier位置编码和Transformer Encoder建模全局阵列拓扑。
+- **主要指标**：- Geometry-Invariant设置：SpatialNet-Geo-DConv达到SI-SDR 4.22dB，OVRL 2.68 - 跨阵列泛化：1/2/5 mic配置均显著优于baseline - CHiME-4无微调：OVRL从1.42提升到2.64-2.73
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [AnyBand: Unified Multi-Bandwidth Speech Extension](https://arxiv.org/abs/2608.00572)
@@ -133,7 +178,7 @@
 - **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-09-28
 - **一句话贡献**：本文提出 AV-PVQE，反向的思路是从个性化语音增强模型 PVQE 出发适配到在线音视频目标说话人提取（TSE）。PVQE 虽输出音质高，但在双人混合中有 46% 的概率错误恢复竞争说话人（目标混淆）。作者在 PVQE 的说话人条件输入上引入 AV-HuBERT 唇动特征并与注册向量以门控残差融合，联合微调视觉网络与重建网络，将目标混淆降至 1.6%，且无未来帧、算法延迟仅 20 ms。在 LR
 - **关键技术点**：现有在线视听 TSE 模型多从零训练、只在合成双人混合上评估，监听音质与真实会议行为缺乏验证；而个性化语音增强模型音质好却在混合中频繁选错目标说话人。
-- **主要指标**：
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -148,10 +193,10 @@
 ---
 ## [Separate First, Then Associate: A Two-Stage Approach for Real-World Audio-Visual Speech Enhancement](https://arxiv.org/abs/2608.14812)
 
-- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：
-- **一句话贡献**：
-- **关键技术点**：
-- **主要指标**：
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：—
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -160,7 +205,7 @@
 - **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-08-24
 - **一句话贡献**：论文系统研究合成房间冲激响应（RIR）数据集真实度对单通道语音增强模型DeepFilterNet3训练效果的影响，对比基于镜像源法（ISM）的DNS4标准RIR数据集与采用混合波动/几何声学仿真生成的Treble高保真数据集。在保持模型与训练流程不变的前提下，全部8种训练配置下高保真数据集均带来稳定但温和的客观指标提升，并在未见实测RIR环境上将ASR词错误率（WER）从0.1663降至0.127
 - **关键技术点**：消费与嵌入式设备普遍采用单麦克风采集，缺乏空间信息使增强极具挑战。主流深度增强方法依赖改进源法（ISM）生成RIR做数据扩充，但ISM基于镜面反射假设，无法刻画衍射、干涉、房间模态等波动现象，且DNS4数据集使用单一均匀吸声系数近似整个房间，低频与中频建模误差显著。Gusó等曾为DeepFilterNet3隔离研究频变吸收与声源指向性等单因素，本文则从实用数据集生成视角对比完整流水线的整体真实度。
-- **主要指标**：
+- **主要指标**：（中位数，ISM vs Hybrid）： - PESQ：Small 30ep 2.17 vs 2.35（+0.18）；Full 120ep 2.27 vs 2.43（+0.16） - SI-SDRi：Small 30ep 1.20 vs 1.41（+0.21）；Full 120ep 1.35 vs 
 - **代码**：https://github.com/TrebleTechnologies/iwaenc2026milo | **Demo**：暂无
 
 ---
@@ -170,6 +215,51 @@
 - **一句话贡献**：StrixAE面向真实世界中噪声、混响、干扰说话人等多失真耦合与个性化增强并存的难题，提出以MLLM（Audio-Reasoner）为控制器、编排多个开源专家增强模型作为工具的音频增强智能体范式。采用"CoT监督微调+音频感知强化学习（APRL）"两阶段训练。在真实盲测集上全面超越TF-GridNet等开源方法，多数指标优于部分闭源方案。
 - **关键技术点**：现有音频增强要么单任务方法、要么全一模型，二者均无法同时应对真实场景未知组合的复合失真与按人定制需求；标注含混合失真的配对数据稀缺，且缺乏统一基准评测泛化性。
 - **主要指标**：- Real Recordings：DNSMOS 3.18/NISQA 3.67/UTMOS 2.84/SCOREQ 3.59 - URGENT 2025 track1 Rank1：DNSMOS 2.88/NISQA 3.22、全面超越Rank2/3 - 较TF-GridNet：+0.17 (DNS
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [SB-RF: Schrodinger Bridge Rectified Flow for One-Step Robust Speech Enhancement](https://arxiv.org/abs/2606.05575)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-06-02
+- **一句话贡献**：生成模型在语音增强上取得优异结果但通常面临多步推理问题。提出SB-RF，将Rectified Flow (RF)与Schrodinger Bridge (SB)理论结合的单步生成框架。SB-RF通过熵正则最优传输在干净和噪声语音分布之间构建条件桥。通过RF的速度匹配目标对齐SB轨迹与最优传输测地线，实现高质量一步增强。在VoiceBank-DEMAND基准上达到生成方法的领先性能，并验证了低SNR
+- **关键技术点**：基于Schrodinger Bridge和Rectified Flow的条件生成模型。通过熵正则最优传输构建干净-噪声条件桥。
+- **主要指标**：在VoiceBank-DEMAND上达到生成方法领先性能，低SNR条件下强鲁棒性。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [DBHN-Net: Dual-Branch Hybrid Neural Network For Low-Complexity Monaural Speech Enhancement](https://arxiv.org/abs/2606.05911)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-06-03
+- **一句话贡献**：基于人工神经网络(ANN)的语音增强方法性能优异但高计算复杂度和高能耗阻碍实际部署。尖峰神经网络(SNN)有降低功耗的潜力，但离散二元激活和复杂时空动力学导致信息丢失。提出双分支混合神经(DBHN)网络：SNN分支降低功耗，ANN分支解决信息丢失。BandSplit和TF-Mamba模块压缩能耗同时增强性能。结果显示模型在三个公共数据集上保持优越性能，同时相比基线模型实现平均7.5倍计算复杂度降低
+- **关键技术点**：双分支网络整合ANN和SNN：SNN分支降低功耗，ANN分支处理信息丢失。BandSplit和TF-Mamba模块用于压缩能耗和增强性能。交互模块和TF-Cross Attention-Fusion模块促进分支间信息融合。
+- **主要指标**：保持优越性能同时实现平均7.5倍计算复杂度降低。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CoFi-Lite: Pushing the Limits of Ultra-Lightweight Speech Enhancement](https://arxiv.org/abs/2607.10142)
+
+- **方向**：语音前端（语音增强） | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-07-11
+- **一句话贡献**：超轻量模型对边缘设备上深度学习语音增强算法的部署至关重要。虽然近期方法在计算复杂度和性能之间取得一定平衡，但进一步推进复杂度极限需要更精细的设计。本文提出CoFi-Lite，将频谱建模解耦为粗粒度和细粒度流，通过两个并行对称编码器-解码器路径同时提取全带包络和低频细节。引入新型Cross-Path Fusion模块促进高效特征交互。仅需12.87M MACs/s和83.12k参数，性能超越超轻量基
+- **关键技术点**：双流并行编码器-解码器，粗粒度流提取全带包络，细粒度流提取低频细节。Cross-Path Fusion模块连接两流促进特征交互。
+- **主要指标**：仅12.87M MACs/s和83.12k参数，性能超越GTCRN且仅需40.26%计算量。放大版本与AdaptCRN性能持平同时降低19.34%计算量。
+- **代码**：暂无 | **Demo**：https://acceleration123.github.io/CoFiLite-demo/
+
+---
+## [Teaching Speech Enhancement Models to Sing: Domain Adaptation from Speech Enhancement to Singing Voice Separation](https://arxiv.org/abs/2607.11630)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-07-13
+- **一句话贡献**：最先进的语音增强模型受益于大规模标注数据集，而唱歌声音分离模型受限于可用的训练数据。为解决这一限制，本研究将唱歌声音分离形式化为从语音增强到唱歌声音分离的域适应问题。研究了两种微调策略：全微调和使用低秩适应（LoRA）的参数高效微调。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：SDR提升0.29-1.8 dB。生成模型展现出对未见测试集的更好泛化能力。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Listen first: Output-based multi-microphone speech enhancement](https://arxiv.org/abs/2607.12529)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-07-14
+- **一句话贡献**：传统上，助听器语音增强（SE）算法依赖基于输入的特征估计，通常来自语音活动检测器（VAD）来配置波束形成器。然而，在用户最需要帮助的挑战性声学场景中，从噪声麦克风信号提取的特征可能变得不可靠。本研究引入一种新范式，其中声音处理系统的设置由评估其输出的特征决定。
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：在低SNR下持续优于传统MVDR基线，SNR、ESTOI和PESQ均有提升。
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -231,8 +321,8 @@
 
 - **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-08-26
 - **一句话贡献**：现有 Ambisonics 编码方案受固定麦克风阵列布局限制。本文提出生成式框架 ADEPS（Array-agnostic Diffusion Encoding via Posterior Sampling），将物理采集模型嵌入扩散后验采样推理过程，从而补偿阵列失真并实现对任意麦克风阵列的零样本编码，性能优于传统基线。
-- **关键技术点**：
-- **主要指标**：
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -312,7 +402,7 @@
 
 - **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：Ambisonic上混（AU）长期由确定性方法主导：混响中扩散声场破坏方向稀疏假设，使模型基与判别式网络的输出出现空间模糊、性能骤降。本文将AU重构为给定低阶观测下高阶球谐分量的条件生成问题，首次系统比较两大连续时间范式——得分模型（SGM）与流匹配（FM）。混响HARP测试集上FM高阶通道平均STFT-SDR达7.53 dB，较最强判别基线CTN（4.90 dB）高2.63 dB，方向角误差低至
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- STFT-SDR（混响HARP四人数平均）：FM 7.53 dB，较CTN（4.90）+2.63、较SGM（4.69）+2.84、较COMPASS（3.27）+4.26 dB - STFT-SDR（消声平均）：FM 15.03 dB优于CTN 10.97，SGM因随机噪声注入反降至10.02 -
 - **代码**：暂无 | **Demo**：暂无
 
@@ -321,18 +411,18 @@
 
 - **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-22
 - **一句话贡献**：生成模型在语音超分辨（SSR）中潜力显著，但现有工作集中于标准或通用设定，1/2 kHz→16 kHz 的极端带宽受限场景几乎空白，当前方法在此出现显著性能崩塌。本文提出 P2Flow，一个音素感知渐进流匹配框架：以 HuBERT 音素后验引导补全缺失高频，配合分频带渐进重建与声码器后训练。在 TIMIT、VCTK 的 2 kHz→16 kHz 设定下取得 LSD 0.935、ViSQOL 3.9
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- LSD：0.935（TIMIT 2k→16k），较最强基线 AP-BWE 0.998 低 0.063 - ViSQOL：3.954，较 FLowHigh 3.712 高 0.242；STOI：0.908，较 AP-BWE 0.875 高 0.033 - VCTK 同样全面领先：LSD 0.979
 - **代码**：https://github.com/ningyuan33/P2Flow | **Demo**：暂无
 
 ---
 ## [SE-MSB: End-to-End Unpaired Speech Enhancement using Mamba Schrödinger Bridges](https://arxiv.org/abs/2609.26000)
 
-- **方向**：语音大模型 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：真实语音的混响、噪声、削波难以精确模拟，配对数据几乎不可得，监督式增强在跨域环境性能受限。本文提出 SE-MSB，首个完全非配对、端到端在原始波形上运行的语音增强框架：以扩散薛定谔桥（DSB）学习干净与退化语音分布间的随机输运过程，仅用两独立分布样本训练；搭配自研高效 Mamba 扩散网络，借线性序列复杂度与少步采样能力，同等计算预算下超越非配对基线，推理快约两个数量级，并在混合退化任务上逼近监督
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://anonymous.4open.science/r/Latent-DSB | **Demo**：暂无
 
 ---
 ## [HC-AINet: An Auditory-Inspired Network with Harmonic Compensation for Low-Complexity Speech Enhancement](https://arxiv.org/abs/2610.30818)

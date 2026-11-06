@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 32 篇
+共 37 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -38,6 +38,24 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [DTM-Codec: Dynamic Token Masking for VFR Speech Coding with Efficient Boundary Selection](https://arxiv.org/abs/2606.29480)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-06-28
+- **一句话贡献**：本文提出动态Token掩码策略（DTM-Codec）用于可变帧率语音编码。针对语音中不同帧信息密度不同的问题，自适应地调整编码比特分配，对高信息密度帧精细编码，对低信息密度帧粗略编码。在保持音质的前提下显著降低比特率。
+- **关键技术点**：可变帧率编码器-解码器框架，动态掩码模块预测各帧的信息重要性。
+- **主要指标**：比特率降低30%的同时保持相同主观质量MOS分数。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [OLIVE: View-Augmented Latent Prediction with Waveform Reconstruction for Speech SSL](https://arxiv.org/abs/2606.30356)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-06-29
+- **一句话贡献**：本文提出视图增强的潜在预测框架OLIVE用于语音自监督学习。通过在表示学习过程中引入多种视图增强（时频变换、噪声添加等），同时结合波形重建目标，提升模型对下游任务的泛化能力。在多个语音任务上验证了方法的有效性。
+- **关键技术点**：多视图对比学习框架，共享编码器和多个视图增强变换。
+- **主要指标**：在下游任务上相比单一视图SSL方法相对提升10-15%，同时改善波形重建质量。
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [EffVOC: Low-Delay Efficient Speech Waveform Reconstruction from Spectral Representations Without Phase](https://arxiv.org/abs/2609.04226)
 
 - **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-07-14
@@ -60,7 +78,7 @@
 
 - **方向**：自监督学习、语音表示 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-07-28
 - **一句话贡献**：本文系统分析基于神经音频codec（NAC）token的自监督学习（SSL）中的语言敏感性。实验表明：下游性能对NAC训练语言不敏感，但强烈依赖于SSL预训练语言。这一发现表明单个NAC可以跨语言重用，而SSL预训练语言与目标语言对齐至关重要。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- RQ1：DAC训练语言对重建语音下游性能影响有限，CoV < 3.38% - RQ2：SSL预训练语言敏感性强，CoV达42.99% - RQ3：固定SSL预训练语言后，NAC训练语言影响有限，CoV < 3.90% - 结论：NAC可跨语言重用，SSL预训练语言需与目标语言对齐
 - **代码**：暂无 | **Demo**：暂无
 
@@ -182,6 +200,33 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [P2PSynCodec: An Ultra-Low-Bitrate Neural Speech Codec with Plain-to-Pseudo Synergistic Vector Quantization](https://arxiv.org/abs/2606.05876)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-06-03
+- **一句话贡献**：大多数神经语音codec使用残差向量量化(RVQ)，后续VQ贡献更少但消耗相同比特率，效率低下。提出P2PSynCodec，使用Plain-to-Pseudo协同向量量化器(P2PSVQ)的超低比特率神经语音codec。P2PSVQ包含一个plain VQ和多个pseudo VQ。Plain VQ通过量化产生基本token，pseudo VQ通过神经预测生成辅助token且不消耗传输比特率。语音从
+- **关键技术点**：P2PSVQ包含plain VQ(产生基本token)和多个pseudo VQ(神经预测，不消耗比特率)。语音从plain-VQ token + 预测的pseudo-VQ token联合解码。
+- **主要指标**：0.5 kbps下达到与2.0 kbps竞品相当的质量，实现超低比特率语音编码。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [VoCodec: A Low-bitrate Streamable Neural Speech Codec with Voicing-driven Quantization](https://arxiv.org/abs/2606.05892)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-06-03
+- **一句话贡献**：神经语音codec是语音传输和存储的关键，但大多数在帧间使用均匀量化，分配相同比特率而不考虑内容，造成浪费。提出VoCodec，具有发声驱动量化的低比特率可流式神经语音codec，根据感知敏感性为发声帧分配更高比特率、为非发声帧分配更低比特率。VoCodec在完全因果编码器-量化器-解码器框架中嵌入发声检测器，对发声帧使用残差标量-向量量化，对非发声帧使用简单标量量化。实验显示在16kHz Lib
+- **关键技术点**：完全因果编码器-量化器-解码器框架。发声检测器决定量化策略：发声帧用残差标量-向量量化，非发声帧用标量量化。
+- **主要指标**：1.1 kbps下优于基线，相比均匀量化策略降低约27%比特率。
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Streaming Neural Speech Codecs through Time-Invariant Representations](https://arxiv.org/abs/2607.05250)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-07-06
+- **一句话贡献**：神经语音编解码器日益广泛地用作基于编解码器语音生成系统的中间表示。TiCodec引入分解表示，通过时间不变表示提取(TIRE)模块将时变语音内容与时不变信息分离，可能减少帧级建模的信息量。本工作研究TIRE表示捕获的信息性质及其对低延迟语音处理的适用性。通过一系列探测任务，分析编码器层的影响，表明中间层捕获互补的说话人和环境相关信息，同时包含较少语言内容。进一步研究TIRE训练的多种片段选择策略，
+- **关键技术点**：基于TiCodec的分解表示框架，包含TIRE(时间不变表示提取)模块。将语音分解为时变内容(如语言信息)和时不变信息(如说话人特征、环境特征)。Dual-TIRE进一步利用多层编码器的互补性。
+- **主要指标**：语音重建质量和说话人相似度。流式推理(660ms块)下无显著性能退化，验证了低延迟语音生成的可行性。 **消融实验** 编码器层选择策略、跨文件采样、dual-layer架构的 ablation study。 ### ⭐ 评分：7/10 TiCodec的分解表示设计有理论价值，信息分析揭示了编码器各
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [KVAE: Family of Tokenizers for Multimodal Generative Models](https://arxiv.org/abs/2608.05798)
 
 - **方向**：多模态tokenizer | **子方向**：Codec | **评分**：7/10 | **日期**：2026-08-06
@@ -195,7 +240,7 @@
 
 - **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-08-31
 - **一句话贡献**：神经音频编解码器（NAC）将语音转为离散token序列，此前研究声称其服从类语言统计定律。本文对13个NAC（覆盖多码本残差量化RVQ、单码本VQ与非VQ三类架构）在三个语料库、干净/白噪声/真实DEMAND噪声三种条件下系统估计Zipf与Heaps参数、unigram熵、码本占用率及JSD。结果显示：语料身份对各指标解释力极低，声学条件与量化器元类别按指标差异主导，unigram熵与元类别关联最
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- unigram熵：与量化器元类别关联最强的指标 - 码本占用率：单码本VQ噪声下出现占用与分布形状迁移 - clean-to-noise JSD：与mel倒谱失真相关，DEMAND噪声下关联最清晰
 - **代码**：暂无 | **Demo**：暂无
 
@@ -204,7 +249,7 @@
 
 - **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-08-31
 - **一句话贡献**：本文系统研究了基于预测器的强化学习（RL）奖励在编解码器语音语言模型中对齐人类感知的条件。使用 GRPO 算法，以动漫风格、自然度、喜好度和唤醒度四个主观预测器作为奖励，并引入 CER 区域约束防止转录漂移。实验发现：各奖励主要优化自身指标，不可互换；Best-of-8 重排在感知上与 GRPO 相当，表明 GRPO 本质是将奖励选择行为摊销到策略中，而非统一优于重排。
-- **关键技术点**：
+- **关键技术点**：（仅标题，未精读）
 - **主要指标**：- 单奖励实验：各奖励主要提升自身指标，主观预测器不可互换 - 奖励差距分析：符号化奖励差距显著预测听者选择 - Best-of-8 重排结果：在感知上不劣于 GRPO
 - **代码**：暂无 | **Demo**：暂无
 
@@ -220,11 +265,11 @@
 ---
 ## [NeuMark: Neural Codec Resynthesis-Robust Audio Watermarking in the Codec Latent Space](https://arxiv.org/abs/2609.25719)
 
-- **方向**： | **子方向**：Codec | **评分**：7/10 | **日期**：2026-09-23
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-09-23
 - **一句话贡献**：现有音频水印多嵌入于波形、音色特征或生成潜变量，可抗传统DSP攻击，但当生成语音经VALL-E、CosyVoice等语音大模型所用神经音频编解码器（EnCodec、DAC、WavTokenizer）重合成后，与编解码器保留结构不对齐的水印证据会被抹除，溯源失效。NeuMark提出编解码潜空间水印框架：以冻结的SpeechTokenizer编码语音得到8层RVQ声学token流，通过Transfor
-- **关键技术点**：
-- **主要指标**：
-- **代码**：暂无 | **Demo**：暂无
+- **关键技术点**：（仅标题，未精读）
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://github.com/goannan/NeuMark | **Demo**：暂无
 
 ---
 ## [SemiCodec: Bridging Speech Tokenization and High-fidelity Reconstruction with Semi-discrete Representations](https://arxiv.org/abs/2610.14834)
