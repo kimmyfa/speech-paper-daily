@@ -1,6 +1,20 @@
-knowledge_base/.cache/
-knowledge_base/__pycache__/
-.pytest_cache/.DS_Store
+# macOS
+.DS_Store
+
+# Python
 __pycache__/
-*.rar
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# 知识库缓存（可由 build_kb.py 重建）
+knowledge_base/.cache/
+
+# 已退役的脚本输出目录
 .skills/speech-paper-daily/output/
+
+# 本机软链接，不属于项目内容
+.skills/lark
+
+# 压缩包
+*.rar
