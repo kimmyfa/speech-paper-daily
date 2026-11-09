@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 135 篇
+共 136 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -675,6 +675,15 @@
 - **关键技术点**：前端存在预读-感受野两难，摧毁音画对齐（V-AURA 0.64s、SoundReactor的DeSync 1.03）；后端LocDiT逐patch孤立去噪，音质逊于离线双向扩散。实测感知阈值：动作音0.34s/语音0.49s/环境音0.85s，需按场景权衡延迟与算力。
 - **主要指标**：- DeSync：LiveFoley-48k 0.48，追平离线MMAudio-L（0.47），优于最强流式WorldSonus（0.67，差0.19） - FDPANNs/FDPaSST：16k为9.56/92.48流式最优；PQ 6.26全场最高 - 主观评测：MOS-Q 3.23、MOS-A 
 - **代码**：暂无 | **Demo**：https://dalision.github.io/livefoley-page/
+
+---
+## [VoxCanvas-41M: A Large-Scale Bilingual Dataset for Instruction-Based Speech Editing and Its Learning Dynamics](https://arxiv.org/abs/2611.08251)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-05
+- **一句话贡献**：针对指令式语音编辑大规模配对训练数据匮乏、公开数据不含自然语言指令且副语言编辑几乎空白，以及编辑能力习得与"生成—编辑"关系不明两大问题，作者开源可扩展数据构建 pipeline，基于 Emilia 与六个非言语语料合成约 4100 万条中英双语编辑对（内容编辑：单 span/多 span/位置指称；副语言：39 类非言语事件插删），并用 LoRA 微调 AuK 得到 VoxCanvas-Edit
+- **关键技术点**：infilling 方法推理需外部 ASR+强制对齐定位编辑区间；指令式方法依赖大规模配对数据，而 Step-Audio-EditX、Ming-UniAudio、AuK 全部用私有数据；最大公开集 GigaEdit-L 仅 2.1M 英文对、无指令覆盖与副语言编辑，编辑模型的训练动态基本未被研究。
+- **主要指标**：- SpeechEditBench 内容编辑 ACC：中文 88.32→93.66，英文 93.78→96.78，均值 95.22 较 AuK 基线 +4.17；副语言 54.50（+1.25） - Ming Full-EN ACC：86.84 vs AuK 85.69；Basic-EN WER：3
+- **代码**：https://github.com/ZhikangNiu/VoxCanvas | **Demo**：https://zhikangniu.github.io/voxcanvas/
 
 ---
 ## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)

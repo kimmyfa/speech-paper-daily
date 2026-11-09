@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 128 篇
+共 130 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -522,6 +522,24 @@
 - **关键技术点**：空间音频问答需将声音身份与方位、距离绑定并推理源间关系，但主流ALM用单声道音频丢失方向线索；BAT、Spatial-Omni、Sci-Phi等空间模型或仅支持固定模板问答、或不建模后续指代对话与工具调用，且现有基准任务覆盖窄（ASA-Bench 18任务、SO-Bench 16子任务）。
 - **主要指标**：- MASU单轮总分44.9%，vs Sci-Phi+Qwen3.5-4B的37.5%与Spatial-Omni的30.3%，领先最强基线7.4个百分点；方向组60.1%（俯仰角67.1% vs 基线31.6%） - MASU对话轨36.7%，超最强基线Qwen2.5-Omni（28.2%）8.5个
 - **代码**：https://github.com/microsoft/sciphi-chat | **Demo**：暂无
+
+---
+## [Route-DMD: Distribution Matching Distillation with Task-Routed Mechanism for Speech Foundation Models](https://arxiv.org/abs/2611.08011)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-05
+- **一句话贡献**：基于 flow matching 的语音基础模型（如 AuK）统一支持生成、编辑、处理等 15 类任务，但每次推理需 20–50 步迭代，且 CFG 使每步计算翻倍。本文提出 Route-DMD 两阶段蒸馏框架：先用 consistency distillation 初始化学生模型，再按任务路由——分离类任务改用回归损失，其余任务保留 Decoupled DMD，并以 APG 替代 CFG 做 t
+- **关键技术点**：语音基础模型推理成本高，现有语音蒸馏工作全部只在生成任务上验证，从未覆盖编辑与处理。作者发现分布匹配目标并非对所有任务适用：在分离任务上，错误的学生输出加噪后严重偏离 teacher 训练分布，real score 预测失准，DMD 直接导致分离能力崩溃。
+- **主要指标**：- SeedTTS-Eval 平均：SIM 0.790 / WER 2.85%（teacher 32 步为 0.795 / 2.65%），zh-hard SIM 0.784 反超 teacher - MMAE 编辑：IFR 46.62 / CR 86.41 / EMR 13.85（teacher 4
+- **代码**：https://github.com/iHateTheWorld555/AuK-RouteDMD | **Demo**：https://route-dmd.github.io/
+
+---
+## [Gabor Gabor: E-Gaborformer, a Strictly Causal Speech Recognizer with Gabor-Dictionary Convolutions and Delta-Rule Memory](https://arxiv.org/abs/2611.08092)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-05
+- **一句话贡献**：实时语音代理要求流式 ASR 严格因果且每路通话内存不随时长增长，而因果化的注意力编码器 KV 缓存持续膨胀，同规模模型 10 分钟即超 1GB。本文提出 E-Gaborformer 编码器：以 3:1 比例混合 Gated DeltaNet-2 递归层与滑动窗口注意力，全部时序深度卷积由固定因果 Gabor 原子字典线性组合构成。基于此构建 0.6B 参数希伯来语-英语 RNN-T 流式转录机，
+- **关键技术点**：语音代理需在用户说话时同步转写，且数千并发下服务成本不能随通话时长增长；Conformer、E-Branchformer 等强编码器均为双向，靠掩码因果化后注意力仍需缓存全部历史键值（18 层、d=1024 约 110MB/分钟/路），分块截断与线性注意力是现有两种限界手段。
+- **主要指标**：- 流式状态：约 19MB/路恒定；同规模无界因果注意力 10 分钟超 1.1GB - LibriSpeech 因果对比：10 epoch dev-clean/dev-other 20.5/39.2，优于同配方 E-Branchformer 的 20.8/39.2，达到同等 WER 快 5-18% 
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Speech Entrainment in Multi-Party Conversations with a Digital Agent](https://arxiv.org/abs/2607.22939)

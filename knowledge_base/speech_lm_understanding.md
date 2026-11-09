@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 284 篇
+共 286 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1251,6 +1251,15 @@
 - **关键技术点**：一个分数只能回答一个问题，来源追溯与成对验证需另训孪生网络；已有音频LLM的解释是教师模型蒸馏的自由文本，既不校验其真实性也不检验决策是否依赖它；且学界未量化ALM瓶颈在编码器表征、特征用法还是LLM。
 - **主要指标**：- Speech-DF-Arena pooled/mean EER：Plus 2.14%/1.79%，比次优开源DF-Arena-1B（9.52%）降一半以上，总榜第三（仅次于两个闭源系统）；仅0.38M数据的Base即达4.43% - SpoofRadar pooled EER：Plus 4.04
 - **代码**：https://github.com/swagshaw/verispoof | **Demo**：https://huggingface.co/spaces/AustinXiao/VeriSpoof-demo
+
+---
+## [Decode Before You Hear: Speculative Listening for Chunk-Interleaved Full-Duplex Speech Language Models](https://arxiv.org/abs/2611.06982)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-04
+- **一句话贡献**：分块交错式全双工语音大模型负载跨 chunk 极不对称：listen chunk 等待音频期间 70–89% 算力空转，speak/tool-call chunk 串行解码常超 1 秒 chunk 硬截止，响应解码延迟 417–1089 ms 且工具调用全部错过 deadline。本文提出 Speculative Listening——训练无关、无损的"输入时刻自投机解码"框架：以静音为假设输入，
+- **关键技术点**：全双工语音 LLM 按固定时长 chunk 交替听/说，chunk 时长即硬截止；自回归解码下工具调用需数十次串行前向（受权重与 KV cache 内存带宽限制），95% 的 speak chunk（LWS）与全部 tool-call chunk 违约。已有无损投机解码须等输入就绪，Chronological Thinking、PredGen 等提前计算方案依赖额外训练、级联管线或独立草稿模型，端到端全双工模型的空闲窗口此前未被利用。
+- **主要指标**：- speak chunk 加速：四模型平均 2.6–2.8×（基线 PLD/Token Recycling/Lookahead 仅 0.96–1.23×） - tool-call 加速：Streaming SLM 23.41×、Gander 3.45×（AR 基线全部违约） - 响应启动解码延迟：
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
@@ -2556,5 +2565,14 @@
 - **关键技术点**：跨合成方法与录音条件的泛化仍是ADD核心难题；分析表明XLS-R的24层表征判别力不均，而层加权聚合、逐层决策融合等方法仅利用单层或聚合特征，未将层间差异与交互线索显式作为检测输入。
 - **主要指标**：- External-5平均EER：XLSR-SLS 7.158%→6.462%（相对降9.7%），XLSR-Conformer-TCM 6.849%→6.316%（降7.8%），XLSR-AASIST 7.170%→5.972%（降16.7%，五个数据集全部改善） - 受控对比（近等参数Conca
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Adaptive and High-Fidelity Matching Algorithm for Retrieval-Based Accent Conversion (AA-kNN-AC)](https://arxiv.org/abs/2611.07420)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-05
+- **一句话贡献**：检索式口音转换（AC）用 kNN 直接从目标口音语料检索声学特征、训练时无需源口音数据，但存在三大缺陷：顺序选取构建匹配池导致音素覆盖不全、可懂度低；固定 k 无法适配源语音局部特征几何变化；粗粒度风格调制造成频谱不连续。本文提出 AA-kNN-AC，包含音素覆盖导向的匹配池贪心构建、基于 SVD 各向异性分析的自适应 kNN 检索、以及 progressive AdaIN 细粒度解码器。在 L2
+- **关键技术点**：生成式 AC 参数化重建易过度平滑、损失高频谐波细节；基线 kkNN-AC 靠时序顺序采样建池，稀有音素（/ʒ、tʃ、ð、ŋ 等）覆盖不足引发检索错配与频谱断裂；固定 k 在各向异性强的区域引入不相关近邻、在平滑区检索不稳；双级 AdaIN 仅在粗时间分辨率注入样式，与 HiFi-GAN 细粒度上采样解耦导致元音高频结构衰减。
+- **主要指标**：- WER（ASI）：8.35%（kkNN-AC 13.12%，相对降 36.4%；优于 Seed-VC 9.58%） - CER（ASI）：4.04%（相对 kkNN-AC 降 38.7%） - SMOS/ACT（ASI）：3.74/4.18，均最优（kkNN-AC 为 3.24/3.92） - 
+- **代码**：暂无 | **Demo**：https://aa-knn-ac.github.io/demo/
 
 ---
