@@ -1,8 +1,8 @@
 # 2026-11-06 语音论文速递
 
-**共收录**: 7 篇 | **语音大模型**: 5 篇 | **语音前端**: 2 篇
+**共收录**: 9 篇 | **语音大模型**: 5 篇 | **语音前端**: 4 篇
 
-> 目标日期 2026-11-06（北京时间）arXiv 语音相关论文共命中 7 篇（cs.SD 与 eess.AS 两分类 New+Cross 去重合并共 15 篇，剔除音乐生成/音乐评测 5 篇、音乐接口设计 1 篇、声学与心理声学研究 2 篇、医疗 ML 综述 1 篇，无历史重复）。
+> 目标日期 2026-11-06（北京时间）arXiv 语音相关论文共命中 9 篇（批次 New+Cross 共 15 篇，过滤音乐生成/舞蹈/音乐制作/文生音乐评测/NIME声音设计/XR心理声学/音乐分离 6 篇，无历史重复）。
 > 以下是按评分排序的结果。
 
 ---
@@ -17,158 +17,157 @@
 
 **机构**：香港中文大学（深圳）、Amphion Technology Co., Ltd
 
-**发布日期**：2026-11-04 | **论文**：https://arxiv.org/abs/2611.06982 | **PDF**：https://arxiv.org/pdf/2611.06982.pdf | **代码**：暂无 | **Demo**：暂无
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.06982 | **PDF**：https://arxiv.org/pdf/2611.06982.pdf | **代码**：暂无（承诺释出 TickTock-Bench 会话清单与评测脚本，未附链接） | **Demo**：暂无
 
 ### 📌 简介
-分块交错式全双工语音大模型负载跨 chunk 极不对称：listen chunk 等待音频期间 70–89% 算力空转，speak/tool-call chunk 串行解码常超 1 秒 chunk 硬截止，响应解码延迟 417–1089 ms 且工具调用全部错过 deadline。本文提出 Speculative Listening——训练无关、无损的"输入时刻自投机解码"框架：以静音为假设输入，在空闲窗口用目标模型自身草拟下一 chunk 输出，音频到达后一次前向完成预填与整段草稿验证，并辅以跨 chunk 假设池与次选首 token 分支。在其构建的 8 任务 TickTock-Bench 上，speak chunk 加速 2.6–2.8 倍、tool-call 最高 23.4 倍，响应启动解码延迟平均降 73% 至 74–241 ms，最大实时滞后降 94.4%。
+Chunk 交错的端到端全双工语音大模型以固定时长 chunk 为硬deadline，listen chunk 有 70–89% 算力空闲，而 speak 与工具调用 chunk 需串行生成，导致响应与工具调用严重滞后。作者发现两个性质：下一个音频 chunk 在 95.3% 情况下不改变输出，且 88% 的变化始于首个 token，据此提出免训练、无损的 Speculative Listening：在空闲窗口以"静音假设"提前草拟下一 chunk，配合跨 chunk 假设池与次优首 token 分支，音频到达后在一次前向内验证。在自建的 TickTock-Bench 上，speak chunk 加速 2.6–2.8 倍、工具调用最高 23.41 倍，响应起始前解码延迟平均降 73% 至 74–241ms，最大实时滞后降 94.4%。
 
 ### 🔧 技术方案
 
-**问题背景：** 全双工语音 LLM 按固定时长 chunk 交替听/说，chunk 时长即硬截止；自回归解码下工具调用需数十次串行前向（受权重与 KV cache 内存带宽限制），95% 的 speak chunk（LWS）与全部 tool-call chunk 违约。已有无损投机解码须等输入就绪，Chronological Thinking、PredGen 等提前计算方案依赖额外训练、级联管线或独立草稿模型，端到端全双工模型的空闲窗口此前未被利用。
+**问题背景：** Chunk 交错全双工模型把流式对话切成固定时长（1s）chunk，音频按实时到达，chunk 时长即硬 deadline；负载严重不对称：listen chunk 空闲窗口占 70–89%，而工具调用需数十次串行前向、音频到达后 1.8–2.6s 才完成、全部超时；AR 解码使响应起始额外延迟 417–1089ms。现有无损投机解码与 PredGen 等方案均未利用端到端模型的 idle 窗口。
 
-**模型架构：** 输入时刻自投机解码：chunk t−1 结束后，模型在自有 KV cache 上以"静音假设"输入贪心解码 γ 个 token 得主草稿；真音频到达后回滚 KV，对（真实音频, 草稿）一次前向并行算出各位置分布并贪心验证，提交全部匹配前缀加校正 token；全程会话各 chunk 草稿存入按 n-gram 索引的跨 chunk 假设池，验证后可续接最长匹配草稿；主草稿先在空闲窗内完成时，再从次选首 token（listen/speak 决策位）另起一条 runner-up 分支。评测覆盖四个公开/自训 chunk-interleaved 模型（Streaming SLM 基于 Qwen2.5-Omni-7B Thinker 改造，Gander、Realtime-Venus、LWS 基于 MiniCPM-o），仅计 Thinker。
+**模型架构：** 推理期解码器框架，不改模型参数。以目标模型自身为 draft 模型：chunk t-1 算完后在其 KV cache 上以静音假设输入贪心草拟 γ 个 token，idle 窗口结束即停；新音频到达后将 KV cache 回滚至 x_<t，做一次 prefill 前向验证，接受最长匹配前缀并补一个修正 token，提交结果与 AR 逐 token 相同。配套组件：跨 chunk 假设池按 n-gram 索引保存整个会话的所有草稿，检索最长匹配续写拼接；runner-up 分支从首 token 的次优选择再起草一条，覆盖"继续听/开始说"决策。评测对象为四个 chunk 交错模型的 Thinker：自训 Streaming SLM（基于 Qwen2.5-Omni-7B）、Gander（MiniCPM-o 4.5）、Realtime-Venus、三通道全双工 LWS。
 
-**核心创新：** (1) 基于两项 oracle 探针观察——下一 chunk 真实音频 95.3% 不改变输出、87.7% 的分歧始于首 token——把"静音"作为假设输入用目标模型自草拟，草稿验证折叠进音频预填那次前向，post-audio 计算量只随真正变化的 token 增长，training-free 且严格无损。(2) 跨 chunk 假设池：用户请求横跨多 chunk，早期空闲窗草拟可提前覆盖数十 token 的工具调用，使 tool-call 加速从 1.42× 跃至 22.04×。(3) runner-up 分支针对首 token 决策分歧提供备选草稿，把 Gander tool-call 加速由 2.04× 提到 3.45×。
+**核心创新：** (1)静音假设的输入时间自投机：95.3% chunk 在静音下输出与真实音频逐 token 一致，草拟全部置于音频到达前，post-audio 计算量只随变化 token 增长；随机采样下用 speculative sampling 保持分布，仍无损。(2)跨 chunk 假设池：早期 idle 草稿已含最终工具调用大部分内容，n-gram 检索拼接使数十 token 的工具调用在单 chunk 内就绪，消融显示工具调用加速从 1.42 升至 22.04 倍。(3)runner-up 首 token 分支：针对 87.7% 分歧发生在首 token 的性质，Gander 工具调用加速 2.04→3.45 倍。(4)TickTock-Bench：仿 Spec-Bench 的统一 chunk 级 deadline 评测协议，度量 post-audio 时延、deadline 失效率、会话最大滞后与 #MAT。
 
-**训练策略：** 无训练推理框架。主实验贪心解码、1 秒 chunk、bfloat16、batch=1，单张 A100 逐会话回放；随机采样下用 speculative sampling 验证保持目标分布（T=0.3/0.7/1.0），并测 N=1/2/4 多会话并发；以相对 AR 的同类 chunk 平均 post-audio 延迟作加速比，外加 deadline 违约率、最大滞后、#MAT。
+**训练策略：** 本方法免训练、无新增损失函数，仅用贪心 argmax 与投机验证规则。实验协议：所有模型单张 A100、bfloat16、greedy、batch size 1、1s chunk、逐会话回放；草拟预算=chunk 时长减去上一 chunk 实测时延。消融另设温度 T∈{0.3,0.7,1.0} 与并发会话 N∈{1,2,4}。
 
 ### 📊 实验结果
-**数据集**：自构 TickTock-Bench：760 个会话、15,883 个 1s chunk、8 任务（Web Questions、Llama Questions、TriviaQA、AlpacaEval、Big Bench Audio、FDB v1/v1.5、FDB v3 工具调用）
+**数据集**：TickTock-Bench，8 任务 760 会话共 15,883 个 1s chunk：语音推理（Web Questions、Llama Questions、TriviaQA、AlpacaEval、Big Bench Audio）、会话动态（FDB v1/v1.5）、工具调用（FDB v3，100 会话 4,765 chunks）
 
 **主要指标**：
-- speak chunk 加速：四模型平均 2.6–2.8×（基线 PLD/Token Recycling/Lookahead 仅 0.96–1.23×）
-- tool-call 加速：Streaming SLM 23.41×、Gander 3.45×（AR 基线全部违约）
-- 响应启动解码延迟：417–1089 ms → 74–241 ms（平均降 73%，近人类 200 ms 轮次间隔）
-- 最大实时滞后：平均降 94.4%，Streaming SLM 2619 ms→0、滞后>1s 会话占比 35%→0
-- 无损性：float32 下逐 token 复现 AR，bf16 下 AlpacaEval 评分差 <0.1 分
+- speak chunk 平均加速 2.6–2.8 倍，工具调用最高 23.41 倍；基线 PLD/Token Recycling/Lookahead 仅 0.96–1.23 倍
+- #MAT 2.15–2.63（基线 1.01–1.23）；65–128 token 输出 AR 需 73.6 次前向，本方法仅 1.0–1.4 次
+- 响应起始解码延迟由 417–1089ms 降至 74–241ms（平均降 73%）；FDB v3 最大滞后 2619ms→0；N=4 并发时工具调用 deadline 失效率 100%→2.9%
+- 无损性：float32 下逐 token 复现 AR，bfloat16 下判分差 ≤0.07
 
-**是否开源**：承诺发布 TickTock-Bench，正文未附链接；方法代码暂无
+**是否开源**：承诺释出 TickTock-Bench 评测资产，论文未附代码链接
 
 ### ⭐ 评分：8/10
-评分理由：首次将空闲窗转化为"先于音频到达的解码"并给出 95.3%/首 token 两条经验规律，静音假设 self-speculation 简洁新颖、训练无关且无损；四个全双工模型、8 任务基准加消融/采样/并发/质量验证实验充分，工具调用 23.4× 与滞后清零实用价值高。不足是收益随并发与批处理衰减、仅适用有 idle window 的 chunk-interleaved 架构（Moshi 类并行流不适用），且基准与代码尚未给出可下载链接。
+评分理由：首次将"输入时间投机"落到端到端 chunk 交错全双工模型的 idle 窗口，实证观察驱动的静音假设+假设池+次优分支设计简洁且严格无损，免训练即插即用，创新性强。实验覆盖 4 模型 8 任务、含逐组件消融与多会话争用，证据链完整；23 倍工具调用加速和把响应延迟压到约 200ms 具有直接部署价值。局限是高并发批处理会压缩 idle 窗口致收益衰减、不适用于 Moshi 式并行流架构，属实质贡献扎实的工作。
 
 ---
 
-## [2] Route-DMD: Distribution Matching Distillation with Task-Routed Mechanism for Speech Foundation Models
-
-**arXiv ID**：2611.08011 | **方向**：语音大模型
-
-**作者**：Yanru Huo, Zhikang Niu, Wenming Tu, Junxi Liu, Tian Tan, Shan Yang, Yipeng Kang, Ziyang Ma, Xie Chen, Zilong Zheng
-
-**机构**：上海交通大学 X-LANCE Lab（MoE Key Lab of AI）、北京大学人工智能研究院 BIGAI、上海创智学院、南洋理工大学、腾讯混元
-
-**发布日期**：2026-11-05 | **论文**：https://arxiv.org/abs/2611.08011 | **PDF**：https://arxiv.org/pdf/2611.08011.pdf | **代码**：https://github.com/iHateTheWorld555/AuK-RouteDMD | **Demo**：https://route-dmd.github.io/
-
-### 📌 简介
-基于 flow matching 的语音基础模型（如 AuK）统一支持生成、编辑、处理等 15 类任务，但每次推理需 20–50 步迭代，且 CFG 使每步计算翻倍。本文提出 Route-DMD 两阶段蒸馏框架：先用 consistency distillation 初始化学生模型，再按任务路由——分离类任务改用回归损失，其余任务保留 Decoupled DMD，并以 APG 替代 CFG 做 teacher rollout。4 步无 CFG 的学生在 SeedTTS-Eval 平均 WER 2.85%、RTF 0.0958，匹配 32 步 teacher 并实现 4.5 倍端到端加速。
-
-### 🔧 技术方案
-
-**问题背景：** 语音基础模型推理成本高，现有语音蒸馏工作全部只在生成任务上验证，从未覆盖编辑与处理。作者发现分布匹配目标并非对所有任务适用：在分离任务上，错误的学生输出加噪后严重偏离 teacher 训练分布，real score 预测失准，DMD 直接导致分离能力崩溃。
-
-**模型架构：** 以 AuK（32 步采样+CFG）为 teacher，学生继承其 velocity 参数化。Stage 1 用 consistency distillation 初始化：teacher 以一步 CFG 速度在相邻时刻间推进，学生以两点一致性目标映射到干净端点。Stage 2 为任务路由：说话人/人声分离样本仅施 L2 回归损失并排除出 DMD，TTS、指令编辑等样本走 Decoupled DMD（fake score 网在线流匹配训练，无对抗损失）。teacher rollout 采样改用 APG（在干净预测空间分解条件-无条件残差，正交分量保留、平行分量按 η 降权）替代 CFG。论文未给出模型参数量。
-
-**核心创新：** (1) 首次系统揭示并定位 DMD 在分离任务上的失效机制——用"加噪 GT 目标替代加噪学生输出"作 teacher 输入可避免崩溃（SI-SDRi 维持 +5.1~+5.4dB），证明问题出在 teacher 收到的输入分布，据此将分离路由到回归监督，因指令下分离存在唯一正确答案。(2) consistency distillation 初始化使 DMD 阶段收敛更快、上限更高，消融中与 meanflow、ODE 回归、无初始化对比全面领先。(3) APG 引导的 teacher rollout 抑制高 guidance scale 下 CFG 过外推伪向学生的传播，同样 α=4 下训练后期 SIM/WER 持续优于 CFG rollout。
-
-**训练策略：** AdamW，lr 1e-5 恒定，梯度裁剪 1.0，batch 2.56M 音频帧，用与 AuK 相同训练数据；Stage 1 训练 500 更新（teacher CFG scale 2）；Stage 2 fake-score:student 更新比 5:15，APG guidance scale 4、η=0；学生推理 4 步、CFG-free。
-
-### 📊 实验结果
-**数据集**：SeedTTS-Eval、InstructTTSEval、MMAE-Speech、CHiME-4、Libri2Mix、VCTK-SR；H20 GPU 测端到端 RTF
-
-**主要指标**：
-- SeedTTS-Eval 平均：SIM 0.790 / WER 2.85%（teacher 32 步为 0.795 / 2.65%），zh-hard SIM 0.784 反超 teacher
-- MMAE 编辑：IFR 46.62 / CR 86.41 / EMR 13.85（teacher 48.23/88.11/12.44，EMR 反超）
-- 处理全面超 teacher：CHiME-4 OVRL 3.35 / WER 7.84 / UTMOS 3.91；Libri2Mix UTMOS 4.03；VCTK-SR OVRL 3.25 / WER 2.92 / UTMOS 4.05
-- 主观与效率：N-MOS 4.34 / I-MOS 4.57（teacher 4.23/4.50）；RTF 0.4333→0.0958，4.5x 加速
-- 消融：无路由时分离 SI-SDRi 从 +6.6 崩至 -1.7dB，PER 7.1%→54.4%；路由后稳定于 +6.7dB / 8.8%
-
-**是否开源**：代码与 Demo 均已开源
-
-### ⭐ 评分：8/10
-评分理由：首次将分布匹配蒸馏扩展到统一语音基础模型的多任务场景，并精准诊断出分离任务失效的根因（teacher 输入分布外推不可靠），任务路由方案简洁有效且消融充分。4 步无 CFG 学生在保持多任务能力的同时实现 4.5x 加速，处理类指标甚至反超 teacher，部署价值明确。不足：仅在单一基座 AuK 上验证，路由判据依赖任务先验，未报告参数量与更多 teacher 规模的可扩展性。
-
----
-
-## [3] Gabor Gabor: E-Gaborformer, a Strictly Causal Speech Recognizer with Gabor-Dictionary Convolutions and Delta-Rule Memory
-
-**arXiv ID**：2611.08092 | **方向**：语音大模型
-
-**作者**：Nir Krakowski, Tamir Cohen, Ohad Zohar, Chen Zarfati
-
-**机构**：Deepdub
-
-**发布日期**：2026-11-05 | **论文**：https://arxiv.org/abs/2611.08092 | **PDF**：https://arxiv.org/pdf/2611.08092.pdf | **代码**：暂无 | **Demo**：暂无
-
-### 📌 简介
-实时语音代理要求流式 ASR 严格因果且每路通话内存不随时长增长，而因果化的注意力编码器 KV 缓存持续膨胀，同规模模型 10 分钟即超 1GB。本文提出 E-Gaborformer 编码器：以 3:1 比例混合 Gated DeltaNet-2 递归层与滑动窗口注意力，全部时序深度卷积由固定因果 Gabor 原子字典线性组合构成。基于此构建 0.6B 参数希伯来语-英语 RNN-T 流式转录机，每路通话状态恒定约 19MB，英文实时语音流量 WER 较 Nemotron 3.5 ASR Streaming 低 28-31%，两格点化 RNN-T lattice 使训练加速 2.6 倍。
-
-### 🔧 技术方案
-
-**问题背景：** 语音代理需在用户说话时同步转写，且数千并发下服务成本不能随通话时长增长；Conformer、E-Branchformer 等强编码器均为双向，靠掩码因果化后注意力仍需缓存全部历史键值（18 层、d=1024 约 110MB/分钟/路），分块截断与线性注意力是现有两种限界手段。
-
-**模型架构：** 保留 E-Branchformer macaron 块，全局分支按 GGGS 模式每 4 层放 3 个 GDN-2 递归层（每头 64×64 矩阵状态）加 1 个滑动窗口注意力层（窗口 128 帧≈10.24s，RoPE）；cgMLP 门控与 merge 两处 depthwise 卷积改为 Gabor 字典卷积（kernel 31 覆盖 2.48s，小波包 0.375-5Hz 对应音节/短语调制带）。生产版 18 层 d=1024（598M 编码）+RNN-T 头（640 维 joint、13100 SentencePiece），预测网络同样交替 GDN-2 与最近 128 token 因果注意力，总 626M 参数。
-
-**核心创新：** (1) 3:1 递归/注意力混合并修复 GDN-2 训练停摆：标准 SiLU 输出门下 GDN-2 分支 RMS 比注意力分支低 50-60 倍导致空白平台停滞（18 次运行 4 次停摆），改 sigmoid 门（起始 0.5）并将 RMSNorm eps 降至 1e-6，零参数开销使后续 36 次运行全部起步，递归 state 负责长程压缩、少量注意力提供窗口内精确召回。(2) 固定因果 Gabor 字典卷积：每通道核为 16 个单边单位范数原子的线性组合（2 个高斯+7 频率 log 间隔 cos/sin 小波包），构造即因果、线性于系数、每通道仅 16 参数，作为软平滑先验从第一步训练（区别于训练后拟合再冻结），三 epoch 时较自由核低 1.2 点 dev-clean。(3) 两格点化 RNN-T lattice：动态规划仅算每格点"出下一 token/出 blank"两个 log-prob 并推导闭式 logit 梯度，保留全部路径且 loss 与梯度精确，配合 Toeplitz 张量核卷积、128 对齐输出层、保权重长度重组，单步训练快 2.6 倍；训练时 chunk 大小从 {1,2,7,14} 采样，同一权重支持严格因果与 480ms lookahead 解码。
-
-**训练策略：** 控制研究用 LibriSpeech train-clean-100（加扰动 304h）训练 27.6M CTC 模型，Muon+AdamW、峰值 LR 1e-3；产线模型用约 12k 小时希伯来语+96k 小时英语，SpecAugment+变速扰动，3-4 块 H200、每更新约 8500s 音频，前 10750 步以 Nemotron 3.5 为教师（embedding 初始化+编码输出与 lattice 两路蒸馏），之后仅 RNN-T 损失。
-
-### 📊 实验结果
-**数据集**：LibriSpeech-100（控制研究）；Deepdub 语音代理内部生产测试集（英/希伯来语 general 与 hard、名单、地址 URL 邮箱、WhatsApp 语音），general English 24 条录音 1214 词；基线为 Nemotron 3.5 ASR Streaming（0.6B）
-
-**主要指标**：
-- 流式状态：约 19MB/路恒定；同规模无界因果注意力 10 分钟超 1.1GB
-- LibriSpeech 因果对比：10 epoch dev-clean/dev-other 20.5/39.2，优于同配方 E-Branchformer 的 20.8/39.2，达到同等 WER 快 5-18%
-- vs Nemotron-3.5：因果 WER 9.6 对 14.0（-31%），480ms lookahead 9.6 对 13.3（-28%）
-- vs 旧生产系统：希伯来语 hard 14.2→11.5、名单 10.2→8.2，最高相对降 20%
-- 训练效率：目标函数不变，每更新加速 2.6×；WhatsApp 语音严格因果与 lookahead 同为 16.0% 精度无损
-
-**是否开源**：未开源模型与代码，生产测试集不公开，暂无
-
-### ⭐ 评分：8/10
-评分理由：将 LLM 领域的递归/注意力混合与 Gabor 结构化滤波成功迁移到严格因果 ASR，系统性解决 GDN-2 训练停摆与恒定内存推理两大落地痛点；160 次运行的受控研究加 0.6B 生产规模双重验证，WER 对同尺寸 Nemotron 优势显著，两格点化 RNN-T lattice 可直接复用。不足是权重与内部评测未开源，与教师的对比存在轻微偏置，缺公开多语基准，故未达 9 分。
-
----
-
-## [4] VoxCanvas-41M: A Large-Scale Bilingual Dataset for Instruction-Based Speech Editing and Its Learning Dynamics
+## [2] VoxCanvas-41M: A Large-Scale Bilingual Dataset for Instruction-Based Speech Editing and Its Learning Dynamics
 
 **arXiv ID**：2611.08251 | **方向**：语音大模型
 
 **作者**：Zhikang Niu, Wenming Tu, Yalin Li, Yanru Huo, Junxi Liu, Tianrui Wang, Ruiqi Yan, Junxuan Liang, Ziyang Ma, Zilong Zheng, Xie Chen
 
-**机构**：上海交通大学 X-LANCE 实验室、上海期智研究院、北京通用人工智能研究院、天津大学
+**机构**：上海交通大学 X-LANCE 实验室、上海创智学院、北京通用人工智能研究院、天津大学
 
-**发布日期**：2026-11-05 | **论文**：https://arxiv.org/abs/2611.08251 | **PDF**：https://arxiv.org/pdf/2611.08251.pdf | **代码**：https://github.com/ZhikangNiu/VoxCanvas | **Demo**：https://zhikangniu.github.io/voxcanvas/
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.08251 | **PDF**：https://arxiv.org/pdf/2611.08251.pdf | **代码**：https://github.com/ZhikangNiu/VoxCanvas | **Demo**：https://zhikangniu.github.io/voxcanvas/
 
 ### 📌 简介
-针对指令式语音编辑大规模配对训练数据匮乏、公开数据不含自然语言指令且副语言编辑几乎空白，以及编辑能力习得与"生成—编辑"关系不明两大问题，作者开源可扩展数据构建 pipeline，基于 Emilia 与六个非言语语料合成约 4100 万条中英双语编辑对（内容编辑：单 span/多 span/位置指称；副语言：39 类非言语事件插删），并用 LoRA 微调 AuK 得到 VoxCanvas-Edit。SpeechEditBench 内容编辑均值 ACC 从 91.05 升至 95.22，副语言 53.25→54.50；并系统给出数据规模、任务交互、课程学习等学习动力学发现。
+指令式语音编辑依赖大规模高质量配对数据，而现有开源资源仅 GigaEdit-L（约 2.1M 英文对/2.2k 小时）且受规则剪切拼接限制，缺少双语、多跨度、位置引用与副语言编辑。本文提出 VoxCanvas-41M：约 4100 万条中英各半的编辑对，覆盖单词级插入/删除/替换、2–6 处多跨度编辑、序号/时间/句边界位置引用，以及 39 类非语言事件（笑声、叹气、咳嗽）插删。基于该数据以 LoRA 微调 AuK 得到 VoxCanvas-Edit，SpeechEditBench 内容编辑平均 ACC 由 91.05 提升至 95.22，副语言 53.25→54.50；并系统给出七类学习动态结论。
 
 ### 🔧 技术方案
 
-**问题背景：** infilling 方法推理需外部 ASR+强制对齐定位编辑区间；指令式方法依赖大规模配对数据，而 Step-Audio-EditX、Ming-UniAudio、AuK 全部用私有数据；最大公开集 GigaEdit-L 仅 2.1M 英文对、无指令覆盖与副语言编辑，编辑模型的训练动态基本未被研究。
+**问题背景：** infilling 类方法需推理时提供编辑转写与精确跨度，依赖外部 ASR 与强制对齐；指令式方法虽免对齐、可组合多类编辑，但其配对数据几乎全为闭源自采。真实录音难保证编辑区外韵律一致，规则拼接会引入边界断裂，合成配对又需精确定位与质检。
 
-**模型架构：** 数据流为：开源语料→Qwen3-ASR-1.7B 重转写+Qwen3-ForcedAligner-0.6B 词级时间戳→Qwen3.6-35B-A3B 生成替换/插入内容并按模板组装中英指令→按时间戳掩蔽编辑区、区域两侧各外扩 0.5s，用 F5-TTS 条件重生成得到目标语音→三级自动过滤+人工抽检；单 span/多 span/副语言样本对再"反转"（合成语音为源、真实语音为目标、指令取逆操作）。模型侧 AuK 由冻结 Qwen2.5-Omni 语义编码器、audio VAE、双流 MMDiT+单流 DiT 的 flow-matching Transformer 构成。
+**模型架构：** 数据管线：源音频取 Emilia 中英子集（内容）与六个非语音语料（副语言）→ Qwen3-ASR-1.7B 重转写 + Qwen3-ForcedAligner-0.6B 得词级时间戳 → Qwen3.6-35B-A3B 生成语法通顺的替换/插入内容，2–6 个非重叠编辑区一次生成，模板化组装指令 → F5-TTS 对定位区域做掩码重生成，掩码两侧各扩展 0.5 s → 三重质检（超长剔除、编辑后 ASR 校验英文 WER=0/中文 PER=0、WavLM-TDNN 说话人相似度>0.5）+人工抽检。借鉴图像编辑采用配对反转（合成作源、真实作目标、指令取逆）。基线 VoxCanvas-Edit 即 AuK：冻结 Qwen2.5-Omni 编码器语义特征 + 音频 VAE + flow-matching Transformer（双流 MMDiT+单流 DiT）+ VAE 解码。
 
-**核心创新：** (1) 首个千万级公开双语指令式语音编辑数据集与全开源 pipeline：约 20.5M/语言，含单 span 插删改各 10M、2–6 操作多 span 10M、位置/句界/时间指称各 100K、副语言插删各 210K；质控用 WER（中文拼音 PER）为零、WavLM-TDNN 说话人相似度>0.5、超 30s 剔除与人工抽检，保证配对质量可复现。(2) pair reversal 策略借鉴视觉编辑数据构造，让模型预测真实录音而非合成语音，从源头缓解合成目标带入的声学伪影。(3) 首个语音编辑学习动力学系统度量：围绕 8 个研究问题提炼 7 条 findings，指导数据配比与训练策略设计。
+**核心创新：** (1)目前最大开源语音编辑数据集（41M 对、中英各约 20.5M），首次统一覆盖多跨度、位置引用与 39 类副语言插删，并开源可复用管线。(2)以 TTS 重生成替代真实拼接，配合掩码扩展与三重自动过滤，消除边界不连续并保证说话人一致。(3)系统学习动态研究：删除最快收敛（约50K步）、插入最难、生成密集操作与删除存在非对称任务交互、编辑与生成互补、简单到复杂课程与数据反转等 8 条 finding。
 
-**训练策略：** VoxCanvas-Edit 以 LoRA（rank 16、alpha 32、约 20M 可训练参数，1.3%）AdamW lr=5e-4、warmup 500、batch 2.24M 帧训练 1 epoch；动力学分析用 278M 参数 backbone 从零训练 200K 步；推理 32 步 Euler、CFG 2.0、sway 系数 -1，3 seeds 平均。
+**训练策略：** 主实验 LoRA 微调 AuK，仅约 20M 可训练参数（原骨干 1.3%），rank 16、alpha 32，注入注意力投影/FFN/自适应归一化/输出投影；训练 1 epoch，AdamW，lr 5e-4，500 步 warmup，总 batch 2.24M 帧。学习动态用小 AuK（约 278M）从零训 200K 步，规模实验 50K/500K/5M 样本（约 100/1000/10000 小时）。推理 EMA 权重、32 步 Euler、CFG 2.0、sway 系数 -1；结果取三种子平均。
 
 ### 📊 实验结果
-**数据集**：SpeechEditBench（中英内容+副语言）、Ming-Freeform-Audio-Edit 语义编辑（Basic/Full 双语）、自建 1000 样本多 span 集（2–6 操作各 200）
+**数据集**：VoxCanvas-41M（约 4100 万条中英编辑对）；评测 SpeechEditBench、Ming-Freeform-Audio-Edit、自建 1000 条多跨度集与 100 条副语言集
 
 **主要指标**：
-- SpeechEditBench 内容编辑 ACC：中文 88.32→93.66，英文 93.78→96.78，均值 95.22 较 AuK 基线 +4.17；副语言 54.50（+1.25）
-- Ming Full-EN ACC：86.84 vs AuK 85.69；Basic-EN WER：3.68 vs 4.05
-- 同配置 GigaEdit-L 微调英文 ACC 仅 94.22、WER 5.80，明显弱于 VoxCanvas-Edit
-- 动力学：deletion 约 50K 步即收敛、insertion 最慢；500K→5M 数据边际收益递减；1:1:1 均衡配比与生成-编辑联合训练显著加速编辑收敛；单→多 span 课程最优
+- SpeechEditBench 内容编辑 ACC：中文 93.66、英文 96.78、平均 95.22（AuK 基线 91.05，+4.17 点）；副语言 54.50 vs 53.25
+- Ming-Freeform WER：Basic-ZH 4.40、Full-ZH 2.93、Basic-EN 3.68、Full-EN 3.77，均低于 AuK；SIM 0.87→0.89、0.88→0.90
+- 关键对比：同设置下 AuK+GigaEdit-L 英文 WER 5.80/5.95（反而劣于基线）、ACC 仅 83.94，VoxCanvas-41M 全面更优
+- 学习动态：1:1:1 均衡配比收敛最快；编辑+生成联合训练反向提升 Seed-TTS test-en 生成效率；反转训练在 UTMOS 与 SIM 上稳定优于正向
 
-**是否开源**：是（HF 数据集 zkniu/VoxCanvas、GitHub pipeline、Demo 页均公开）
+**是否开源**：数据集、构建管线与 demo 均公开（GitHub + HuggingFace）
 
 ### ⭐ 评分：8/10
-评分理由：首次提供千万级、带自然语言指令且覆盖副语言的公开双语编辑训练集，pipeline 全开源，工程与社区价值突出，填补了 GigaEdit-L 之外的数据空白。学习动力学度量是该领域首创，7 条 findings 对数据配比与训练策略有直接指导意义。不足在于模型侧仅为 AuK 的 LoRA 微调、验证较薄，评测以自动指标与大模型 judge 为主，缺人工听感评估。
+评分理由：把语音编辑数据的规模与任务谱系推到新量级，并首次系统回答"编辑能力如何习得"这一社区空白，8 条 finding 对数据配比与训练策略有直接工程指导价值。LoRA 仅调 1.3% 参数即在两个独立基准全面超越闭源数据训练的 AuK，与 GigaEdit-L 严格同设置对照，说服力强。局限是提升幅度受 AuK 骨干上限约束（副语言绝对水平仍低），合成配对受 F5-TTS 上限约束且未做人工 MOS。整体属实质贡献且实验充分的数据集+分析型工作，实用价值高。
 
 ---
 
-## [5] Adaptive and High-Fidelity Matching Algorithm for Retrieval-Based Accent Conversion (AA-kNN-AC)
+## [3] Route-DMD: Distribution Matching Distillation with Task-Routed Mechanism for Speech Foundation Models
+
+**arXiv ID**：2611.08011 | **方向**：语音大模型
+
+**作者**：Yanru Huo, Zhikang Niu, Wenming Tu, Junxi Liu, Tian Tan, Shan Yang, Yipeng Kang, Ziyang Ma, Xie Chen, Zilong Zheng
+
+**机构**：上海交通大学 X-LANCE 实验室、北京通用人工智能研究院、上海创智学院、南洋理工大学、腾讯混元
+
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.08011 | **PDF**：https://arxiv.org/pdf/2611.08011.pdf | **代码**：https://github.com/iHateTheWorld555/AuK-RouteDMD | **Demo**：https://route-dmd.github.io/
+
+### 📌 简介
+基于flow matching的统一语音基础模型AuK覆盖15项任务，但单次推理需20-50步且CFG使每步翻倍，而已有语音蒸馏只验证过生成。作者发现分布匹配目标并非对所有任务有效：分离任务中学生错误输出加噪后偏离teacher训练分布，real score预测失真致能力崩塌。Route-DMD以两阶段蒸馏（一致性初始化+任务路由）并用APG取代teacher rollout的CFG，4步学生即追平32步teacher，端到端加速4.5倍。
+
+### 🔧 技术方案
+
+**问题背景：** 把DMD直接套到统一语音基础模型会使语音分离崩塌：real score model（冻结teacher）只在噪声-真值路径上训练过，学生错误输出加噪后落在分布外，梯度不可信。此前音频少步蒸馏（SplitMeanFlow、DMOSpeech 2）仅验证于TTS，未触及编辑与处理。
+
+**模型架构：** 三网络结构：冻结多步teacher充当real score，在线辅助网络f_φ在学生输出上训练充当fake score，学生f_θ沿用velocity参数化。阶段1一致性蒸馏：teacher以一步CFG速度把x_t推进至x_t'，学生以两点目标（stop-gradient、除以t'-t）把两时刻映射到同一干净终点。阶段2按任务标签路由：集合S（说话人与语音分离）走回归损失‖x̂₁−x₁‖²并排除出DMD，其余TTS与指令编辑走Decoupled DMD，梯度为real−fake条件分数差加(α−1)倍real条件-无条件分数差（独立加噪采样）。teacher rollout改用APG：干净预测空间分解残差，保正交分量、以η压低平行分量。
+
+**核心创新：** (1)指出并归因DMD的任务相关性失效（teacher改看noised GT即缓解），据此设计任务路由监督，同时保住分离与生成能力。(2)以一致性蒸馏（500更新、CFG 2）作DMD起点，比meanflow、ODE回归、无初始化收敛更快、SIM/WER更优。(3)首次在DMD teacher rollout用APG（scale 4、η=0）取代CFG，阻断高guidance过外推伪影传给学生。
+
+**训练策略：** 沿用AuK训练数据，总batch 2.56M音频帧；student与fake score均AdamW、恒定lr 1e-5、梯度裁剪1.0、更新比5:1，无对抗损失。评测口径：WER用Whisper-large-v3/Paraformer-zh，SIM用WavLM-large余弦，质量用DNSMOS P.835与UTMOS，RTF测于单张H20。
+
+### 📊 实验结果
+**数据集**：SeedTTS-Eval（en/zh/zh-hard）、InstructTTSEval、MMAE语音、CHiME-4、Libri2Mix、VCTK-SR
+
+**主要指标**：
+- SeedTTS-Eval平均 SIM 0.790/WER 2.85，对比teacher 0.795/2.65、Qwen3-TTS 0.745/3.07；zh-hard SIM 0.784最优
+- MMAE编辑 IFR 46.62/CR 86.41/EMR 13.85，对比Step-Audio-EditX 43.52/77.27/4.69、Ming-UniAudio 34.13
+- 处理任务：CHiME-4 OVRL 3.35/UTMOS 3.91，VCTK-SR 3.25，三基准OVRL与UTMOS均超teacher
+- 效率：N-MOS 4.34±0.10、I-MOS 4.57±0.09（与teacher差在95%CI内），RTF 0.0958 对 0.4333，4.5×加速
+- 关键消融：去路由时SI-SDRi由+6.6dB跌至−1.7dB、PER由7.1%升至54.4%，路由后稳定在+6.7dB/8.8%
+
+**是否开源**：是，代码与Demo均已公开
+
+### ⭐ 评分：8/10
+评分理由：首次把分布匹配蒸馏推广到集生成、编辑、处理于一体的语音基础模型，noised-GT对照使失效归因清晰，优于只蒸TTS的已有工作。实验覆盖6个基准、含客观主观RTF与三组消融，4步追平32步具直接部署价值。不足是路由依赖任务先验人工设定，且仅在AuK单一teacher上验证，跨骨干泛化未知。
+
+---
+
+## [4] Gabor Gabor: E-Gaborformer, a Strictly Causal Speech Recognizer with Gabor-Dictionary Convolutions and Delta-Rule Memory
+
+**arXiv ID**：2611.08092 | **方向**：语音大模型
+
+**作者**：Nir Krakowski, Tamir Cohen, Ohad Zohar, Chen Zarfati
+
+**机构**：Deepdub（以色列实时语音智能体公司）
+
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.08092 | **PDF**：https://arxiv.org/pdf/2611.08092.pdf | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+实时语音智能体要求ASR编码器严格因果（不等未来音频）且每路推理状态不随通话时长增长。本文提出E-Gaborformer：保留E-Branchformer块，将全局分支改为Gated DeltaNet-2循环层与滑动窗口注意力3:1混合，所有深度卷积由固定因果Gabor原子字典参数化，并用sigmoid输出门消除循环分支训练停摆。LibriSpeech-100受控实验中27.6M模型dev-clean/dev-other WER达20.5/39.2，追平或超越同规格因果E-Branchformer，状态仅约3MB恒定；0.6B希伯来-英语流式Transducer较NVIDIA Nemotron 3.5 ASR Streaming降低英语WER 28-31%，训练提速2.6倍。
+
+### 🔧 技术方案
+
+**问题背景：** Conformer、E-Branchformer等强ASR编码器均为双向，因果掩码后注意力仍需缓存全部历史K/V——18层d=1024、80ms帧的fp32缓存约每分钟110MB，十分钟即超1GB，服务成本随通话时长线性增长。分块Transformer靠截断限成本，纯线性注意力又丢失近期精确召回；严格因果加恒定内存下达到注意力级精度是核心矛盾。
+
+**模型架构：** 基于E-Branchformer macaron块做三处替换：全局分支按GGGS模式，每4层中3层为GDN-2循环（每头64×64矩阵状态，衰减/擦除/写入门控，核4因果短卷积，flash-linear-attention分块Triton核），第4层为窗口128帧（10.24s）加RoPE的滑动窗口因果注意力；cgMLP门卷积与merge卷积均改为固定Gabor字典——M=16个归一化单侧原子（2个高斯σ∈{1.5,4}+7个对数间隔频率0.03-0.4 cycles/frame的cos/sin波包），K=31跨2.48s，每通道仅学16个系数加偏置；GDN-2输出门SiLU→sigmoid、RMSNorm eps 1e-5→1e-6。研究版12层d=256共27.6M；生产版为18层d=1024编码器（598M）+RNN-T（640维joint，13100 SentencePiece+blank），其混合预测网络4层GDN-2/词元注意力交替，总626M。前端128 log-mel+因果Conv2d 8×下采样至80ms帧。生产规模流式状态约19MB/路恒定。
+
+**核心创新：** (1)多数循环的因果全局分支：GDN-2以固定状态携带超长程上下文，少量滑窗注意力补足精确召回；3:1与1:1精度持平且省一半注意力层；sigmoid门修复使36次因果运行0停摆（修复前18次中4次卡blank平台）。(2)Gabor字典卷积：时域核约束在因果Gabor张成空间、对系数线性，兼作平滑软先验（能量集中于0.4 cycles/frame以下，对应0.375-5Hz韵律/音节调制带），从第一步端到端学习而非事后拟合冻结。(3)两类RNN-T格：每格点只算next-token与blank两个log概率，forward-backward与闭式logit梯度精确等价全格，配合128行对齐输出层与Toeplitz张量核深度卷积，单更新7.55s降至2.90s（2.6×）。
+
+**训练策略：** 受控实验：LibriSpeech train-clean-100+变速扰动（0.9/1.0/1.1，每epoch 304h），纯CTC（5000 BPE），贪心解码无LM；Muon+AdamW，峰值lr 1e-3，500步warmup后inv-sqrt衰减，bf16，训10 epoch、主配置3种子，架构筛选共36配置约160次运行。生产Transducer：约96k小时英语+12k小时希伯来语，变速扰动+SpecAugment，3-4张H200，每更新约8500s音频；前10750更新以Nemotron 3.5为teacher蒸馏，后纯RNN-T训115k更新。
+
+### 📊 实验结果
+**数据集**：LibriSpeech train-clean-100（增广后304h/epoch）；内部生产测试集（英语/希伯来语语音智能体流量，通用英语集1214词，WhatsApp语音54条1.18h）
+
+**主要指标**：
+- 受控实验10 epoch：E-Gaborformer dev-clean/dev-other WER 20.5/39.2 vs 因果E-Branchformer 20.8/39.2；3 epoch均值25.2/43.0 vs 26.3/43.7，达同一精度快5-18%
+- 生产规模英语通用集：9.6% WER（严格因果）vs Nemotron 3.5 ASR Streaming 14.0%/13.3%（480ms lookahead），相对降28-31%
+- 希伯来语生产集：general/hard/names较旧生产系统相对降11%/19%/20%
+- 流式状态：恒定约19MB/路，同规格无界因果注意力10分钟超1GB；0ms与480ms lookahead WhatsApp WER均为16.0%
+- 训练效率：单更新2.6×加速，损失与梯度精确不变
+
+**是否开源**：论文未提供代码或模型发布
+
+### ⭐ 评分：7/10
+评分理由：首次将GDN-2线性注意力循环与固定因果Gabor字典系统化引入严格因果语音编码器，160次运行的分轮架构筛选与停摆诊断扎实，sigmoid门与两类RNN-T格有直接可复用的工程价值。生产级0.6B双语Transducer对同规格Nemotron取得28-31%相对WER优势且流式状态恒定19MB，实用性强。不足：不开源，核心大规模对比落在内部私有测试集（通用英语仅1214词），LibriSpeech短训WER绝对值仍高，缺少公开大规模验证与发射延迟测量。
+
+---
+
+## [5] Adaptive and High-Fidelity Matching Algorithm for Retrieval-Based Accent Conversion
 
 **arXiv ID**：2611.07420 | **方向**：语音大模型
 
@@ -176,116 +175,190 @@
 
 **机构**：华东理工大学信息科学与工程学院（上海）
 
-**发布日期**：2026-11-05 | **论文**：https://arxiv.org/abs/2611.07420 | **PDF**：https://arxiv.org/pdf/2611.07420.pdf | **代码**：暂无 | **Demo**：https://aa-knn-ac.github.io/demo/
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.07420 | **PDF**：https://arxiv.org/pdf/2611.07420.pdf | **代码**：暂无 | **Demo**：https://aa-knn-ac.github.io/demo/
 
 ### 📌 简介
-检索式口音转换（AC）用 kNN 直接从目标口音语料检索声学特征、训练时无需源口音数据，但存在三大缺陷：顺序选取构建匹配池导致音素覆盖不全、可懂度低；固定 k 无法适配源语音局部特征几何变化；粗粒度风格调制造成频谱不连续。本文提出 AA-kNN-AC，包含音素覆盖导向的匹配池贪心构建、基于 SVD 各向异性分析的自适应 kNN 检索、以及 progressive AdaIN 细粒度解码器。在 L2-ARCTIC（ASI）上 WER/CER 降至 8.35%/4.04%，较 kkNN-AC 相对降低 36.4%/38.7%，SMOS、ACT、NMOS 均为最佳，综合优于检索式与生成式基线。
+检索式口音转换以kNN直接从目标口音真实语音中检索声学特征，可绕开参数化生成的高频过平滑问题，但存在匹配池音素覆盖不足、固定k不适应源语音变化、粗粒度风格调制致谱不连续三大缺陷。本文提出AA-kNN-AC：音素覆盖贪心选池、SVD各向异性感知的自适应kNN检索、渐进式AdaIN上采样解码器。在L2-ARCTIC(ASI)上WER 8.35%、CER 4.04%，较kNN-AC相对降低36.4%/38.7%，SMOS 3.74、ACT 4.18为对比中最佳。
 
 ### 🔧 技术方案
 
-**问题背景：** 生成式 AC 参数化重建易过度平滑、损失高频谐波细节；基线 kkNN-AC 靠时序顺序采样建池，稀有音素（/ʒ、tʃ、ð、ŋ 等）覆盖不足引发检索错配与频谱断裂；固定 k 在各向异性强的区域引入不相关近邻、在平滑区检索不稳；双级 AdaIN 仅在粗时间分辨率注入样式，与 HiFi-GAN 细粒度上采样解耦导致元音高频结构衰减。
+**问题背景：** SSL表征中口音与语言内容纠缠强于音色，使检索式AC比kNN-VC更依赖匹配池质量与邻域选择策略；kNN-AC按时序选池漏采稀有音素，固定k在各向异性强的瞬态区引入失配置邻、在平坦区检索不稳，双阶段AdaIN仅在50Hz注入风格、依赖HiFi-GAN恢复细节，导致共振峰模糊与音素边界谱断裂。
 
-**模型架构：** 以 WavLM-large 为特征骨干，第 6 层作说话人嵌入、第 23 层作内容嵌入；AA-kNN 模块从离线构建的 25 分钟固定目标口音匹配池中按自适应邻域检索并平均目标内容特征；融合源说话人嵌入后经五级级联 AdaIN ResBlock 解码器与 HiFi-GAN 合成 16kHz 波形，帧长 25ms、帧移 20ms，总上采样倍率 320。
+**模型架构：** 推理管线：WavLM-large分别取第6层输出作说话人嵌入、第23层作内容嵌入；AA-kNN在离线构建的固定目标口音匹配池（25分钟，各向异性分数预计算）内检索k近邻并均值合成目标内容特征；经五个级联AdaIN ResBlock将说话人统计量γ(s)/β(s)调制注入检索内容特征，再由HiFi-GAN声码器生成16kHz波形，RTF 0.13。
 
-**核心创新：** (1) 音素覆盖导向匹配池构建：基于 CMU 词典完成字素-音素映射，定义质量评估函数 Q=λ1·唯一音素数+λ2·Shannon 多样性+λ3·宽音素类别数+λ4·稀有音素数+λ5·分布均匀度（λ 取 0.20/0.30/0.05/0.40/0.05），三阶段贪心选择：先强制覆盖稀有音素，再按 Q 降序补充，最后按 Q/时长效率补足规定时长；在 Zipf 分布下用少量数据实现近完整音系覆盖。(2) 各向异性自适应 kNN：对每帧取感受野 w=10 的邻窗特征矩阵去均值后做 SVD，以自适应阈值过滤奇异值，用显著奇异值最大最小比的对数作各向异性分数并施 sqrt 边界缩放修正；按批次百分位秩反向映射邻域大小 k∈[2,6]，使过渡区检索精准、平稳区充分平滑。(3) Progressive AdaIN 解码器：在第三级 ResBlock 两级 AdaIN 之间插入 2× 转置卷积上采样，将风格调制耦合到 50Hz 与 100Hz 双分辨率，vocoder 上采样率改为 [10,4,2,2]，粗到细对齐样式注入与时间重建，缓解频谱不连续。
+**核心创新：** (1)音素覆盖匹配池：CMU词典字素-音素映射，质量函数Q融合唯一音素数、香农多样性、宽音类数、稀有音素数、分布均匀度五项（权重0.20/0.30/0.05/0.40/0.05，稀有音素权重最高），三阶段贪心选取：优先覆盖稀有音素→按Q降序补齐→按Q/时长效率补足至25分钟。(2)AA-kNN检索：对感受野w=10窗内帧特征矩阵中心化后SVD，以显著奇异值对数极差为各向异性分数，平方根边界校正后取分位数，将k线性映射到[2,6]（高各向异性→小k，边界帧k减1），按余弦距离检索。(3)渐进AdaIN解码器：将2×转置卷积上采样嵌入第三个AdaIN ResBlock两层AdaIN之间，在50Hz与100Hz双分辨率完成风格调制，声码器上采样率由[10,8,2,2]改为[10,4,2,2]，总倍率320不变。
 
-**训练策略：** 解码器与 HiFi-GAN 在 LibriSpeech train-clean-100（100h、251 位母语者）上单卡 RTX 4090 训练，AdamW，batch size 64，学习率 2e-4；转换阶段不涉及训练，池与近邻各向异性分数离线预计算，RTF 约 0.13。
+**训练策略：** 解码器与HiFi-GAN声码器在LibriSpeech train-clean-100（约100小时、251名美式英语母语者）训练，不用源口音数据；帧长25ms、帧移20ms，AdamW、学习率2×10⁻⁴、batch 64、单张RTX 4090。声码器沿用kNN-AC的AdaIN+HiFi-GAN训练范式，匹配池与AA-kNN为免梯度的推理端机制。
 
 ### 📊 实验结果
-**数据集**：L2-ARCTIC（ASI 印地语口音 1131 句、ABA 阿拉伯语口音 1129 句）、VCTK（P248 印度口音 376 句）作源口音测试；CMU-ARCTIC BDL/SLT 各 25 分钟构目标池；Whisper-large-v3 测 WER/CER，另用 SECS、ΔPPG 及 20 人 MOS（NMOS/SMOS/ACT）
+**数据集**：L2-ARCTIC（ASI印地口音1131句、ABA阿拉伯口音1129句）、VCTK（P248印度口音376句）；目标池CMU-ARCTIC BDL/SLT各25分钟
 
 **主要指标**：
-- WER（ASI）：8.35%（kkNN-AC 13.12%，相对降 36.4%；优于 Seed-VC 9.58%）
-- CER（ASI）：4.04%（相对 kkNN-AC 降 38.7%）
-- SMOS/ACT（ASI）：3.74/4.18，均最优（kkNN-AC 为 3.24/3.92）
-- VCTK P248：WER 5.86%/CER 2.37%，大幅优于未见说话人上的 TokAN（24.74%/15.62%）
-- 消融：去各向异性修正 WER 升至 8.92%；25 分钟池即达 60 分钟水平
+- WER/CER（ASI/ABA/P248）：8.35%/4.04%、15.72%/7.31%、5.86%/2.37%；超Seed-VC（9.58/16.04/6.38）、kNN-AC（13.12/17.52/6.40）与TokAN
+- SECS 0.80/0.82/0.78，ΔPPG 0.36/0.51/0.30，RTF 0.13
+- 主观（20人，ITU-T P.800）：ASI上NMOS 4.20、SMOS 3.74、ACT 4.18；对kNN-AC的WER/CER/SMOS相对提升36.4%/38.7%/13.9%
+- 消融：去渐进AdaIN WER 8.35→9.06，去稀有音素权重→9.15，去各向异性边界校正→8.92；w=10、k∈[2,6]为最优点；跨性别目标池与反向转换均稳健
 
-**是否开源**：代码暂未开源，提供 demo 页
+**是否开源**：仅提供Demo页，代码暂无
 
 ### ⭐ 评分：7/10
-评分理由：针对 kkNN-AC 三项结构性缺陷的改进均有明确机理支撑（音素覆盖贪心选择、SVD 条件数自适应 k、双分辨率 AdaIN），消融、超参敏感性、跨性别与双向转换实验充分，无需源口音训练且 RTF 低，实用性强。但整体为检索式范式的增量增强，主观 NMOS 未全面超越 TokAN，WER 仍处 8% 量级，各向异性自适应 kNN 之外的架构改动有限。
+评分理由：三项改进均直击kNN-AC的结构性缺陷，其中SVD各向异性驱动的自适应k与双分辨率AdaIN调制设计新颖且有数值分析依据。实验充分：覆盖8个生成式与检索式基线、完整模块消融、超参敏感性与双向泛化分析，以100小时训练匹敌用101000小时训练的Seed-VC。不足在于仅限英语口音对、损失函数与训练轮数等细节披露不全、代码未开源，实用性受限于固定目标池设定。
 
 ---
 
 ## 语音前端
 
-## [6] SubRoformer: Subband Time-Domain Representation for Music Source Separation
+## [6] Joint Higher-Order Low-Rank Tensor Decompositions for Multichannel Acoustic System Compression
 
-**arXiv ID**：2611.08130 | **方向**：语音前端
+**arXiv ID**：2611.07975 | **方向**：语音前端
 
-**作者**：Chunyat Wu, Chuang Ding, Paris Smaragdis, Qiuqiang Kong
+**作者**：Matthias Blochberger, Filip Elvander, Jan Østergaard, Toon van Waterschoot
 
-**机构**：香港中文大学（CUHK）、Moonstep AI、麻省理工学院（MIT）
+**机构**：阿尔托大学（芬兰）、奥尔堡大学（丹麦）、鲁汶大学 KU Leuven（比利时）
 
-**发布日期**：2026-11-05 | **论文**：https://arxiv.org/abs/2611.08130 | **PDF**：https://arxiv.org/pdf/2611.08130.pdf | **代码**：https://github.com/ArchiMickey/SubRoformer | **Demo**：暂无
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.07975 | **PDF**：https://arxiv.org/pdf/2611.07975.pdf | **代码**：暂无 | **Demo**：暂无
 
 ### 📌 简介
-音乐源分离（MSS）通常在波形或全带频谱上工作：波形序列过长，单一 STFT 分辨率在全频段强加共享的时频分辨率折衷。本文提出 SubRoFormer，由固定子带分析/综合前端与残差 RoFormer 分离器组成：将混音分解为频率局部化、低采样率的复基带子带，在其局部频谱上以细速率预测复数掩码、以时间 patch 后的粗速率做长程 axial 注意力，并经门控残差融合。MUSDB18-HQ 上无额外数据四 stem 平均 SDR 10.63 dB（超越 BS-RoFormer 0.61 dB），加 500 首歌额外数据后单模型四 stem 达 11.59 dB。
+多通道房间冲激响应（RIR）按FIR滤波器表示样本量巨大（大厅可达数十万样点），存储与实时卷积代价高；已有的低秩压缩（截断SVD、GLRAM、单通道CPD）未利用同房间多位置RIR共享极点带来的通道间冗余。本文证明极零点（PZ）模型隐含张量化RIR的低秩CPD结构——早期反射为稀疏rank-1之和、晚期混响为由极点决定的模态因子CPD，并基于块项分解BTD提出两种联合压缩方案：SMCBTD与JMCBTD（跨通道共享因子子集的耦合BTD，共享簇由因子子空间亲和图上的谱聚类发现），均用交替HOOI优化。在仿真与SMARD/SRIRACHA/ChurchIR实测数据上，同压缩率下重建误差较GLRAM基线降低约5–10 dB。
 
 ### 🔧 技术方案
 
-**问题背景：** 波形模型需在高采样率下压缩序列，全带 STFT 系统则用统一窗长折衷低频瞬态与高频分辨率；现有 spectral band-split（BSRNN/BS-RoFormer/Mel-RoFormer）仍计算全带 STFT，未从分析端解耦时频分辨率；前人 channel-wise subband 方法只用均匀频带，难以按频段自适应分配分辨率。
+**问题背景：** VR/AR等场景需大量存储并实时卷积多位置RIR。既有方法或仅处理单通道张量化RIR，或将RIR矩阵化后用GLRAM联合压缩，均未系统利用"同房间RIR共极点（common-pole model）"导致的因子子空间相似性；而C-CPD类耦合分解要求某模式全部因子强制共享，过于刚性。
 
-**模型架构：** 子带分析四步：Hamming 窗三角 FIR 带通（firwin2 构造、非均匀 mel–linear 划分，低频 mel 间距、高频 390 Hz 线性间距共 128 个重叠子带）→ Hilbert 解析信号 → 复数解调至基带 → 降采样 D=60 得 800 Hz 复子带；对每子带做 32 点 Hann 局部 STFT（hop 8）得 100 帧/秒细速率特征。分离器含预处理块（ConvNeXt-V2 风格时间混合器+时间/子带轴 Transformer）、仅沿时间轴的 patch 化（×4 → 25 帧/秒）、堆叠 axial RoFormer（SubRoFormer-S：6 层 dim 384；SubRoFormer-B：12 层 dim 576；S 单 stem 22.52M、B 97.17M、多 stem 97.23M）、GEGLU 门控融合与后处理块；输出复掩码逐子带相乘，iSTFT 后经插值、重调制、取实部、带求和综合回波形。支持单 stem 与多 stem（共享 backbone+多头）两种推理合同，并有 polyphase+FFT 快速实现。
+**模型架构：** 三层结构。①张量化：将长L的RIR按L=∏I_d重排为D-mode张量；②理论桥梁：h(n)=h_F(n)+h_R(n)，头部件N个延迟冲激对应N个标量核rank-1项，每对共轭极点尾项展开至多2^D个实rank-1项、或一个K_d=2的BTD块（2×…×2核含阻尼cos/sin模态系数），整体满足实值CPD秩≤N+2^(D-1)P_A；BTD统一涵盖CPD（标量核）与Tucker（R=1）。③多通道压缩：SMCBTD将M条RIR堆叠为(D+1)-mode张量直接做正交约束BTD；JMCBTD先对每条RIR做独立BTD，用chordal子空间距离构造亲和权，按阈值剪枝后取归一化Laplacian特征值eigengap定簇数，k-means得每(r,d)的通道簇，再以交替HOOI联合拟合：共享因子对簇内残差展开矩阵水平拼接后做截断SVD更新。ChurchIR级长RIR下SMCBTD因临时内存超限不可行，JMCBTD工作集随最大簇尺寸（≪M）扩展。
 
-**核心创新：** (1) 固定子带时域表示：以经典复解调滤波器组把每个频段变为低码率复基带信号，频带宽度可随频率任意设计，掩码仍在局部频谱上估计、保留幅度与相位；论文用重建 SDR 量化该有损前端的失真（mix 约 28 dB，低于 STFT 138 dB，但系数率与 STFT 相当）。(2) 分离两种时间压缩：子带降采样与分离器内 temporal patch 各自独立控制，细速率 skip 路径保证掩码精度，25 Hz 粗网格上做 12 层长程建模，大幅降低注意力序列长度。(3) 门控残差融合：以 GEGLU 自适应混合粗速率长程上下文与细速率局部特征，使 100 Hz 预测与 25 Hz 建模解耦，且表征/掩码头仅占参数 11.45%（BS-RoFormer 为 70.47%）。
+**核心创新：** (1)首次建立PZ模型与低秩张量分解的理论等价刻画，把房间模态共振显式映射为CPD/BTD因子（Vandermonde型模态因子），为"CPD最参数高效"提供可检验假设。(2)提出SMCBTD与JMCBTD两种联合压缩框架，JMCBTD允许任意(r,d)层级的因子子集共享，比C-CPD全共享和Kronecker固定部分共享更一般。(3)数据驱动的共享结构发现：因子子空间亲和图+谱聚类自动确定共享簇，配套定制HOOI算法与精确的运算量/峰值内存闭式分析。
 
-**训练策略：** 损失为波形 L1 + 五种分辨率（窗 4096/2048/1024/512/256，Hann，hop 147）复 STFT 幅度谱误差之和；2 s 立体声裁剪@48 kHz，ZFTurbo 增广配方。AdamW，峰值 lr 3e-4，β1=0.9/β2=0.95，无 weight decay，1000 步 warmup+余弦退火至零，bfloat16，梯度裁剪 1.0，EMA 衰减 0.999。无额外数据训 1M 更新（6×RTX 5090，全局 batch 18）；含 500 首内部额外歌曲训 1.4M 更新（8×RTX 4090，batch 16）。推理 2 s 段、75% overlap-Hamming 叠加。
+**算法与实验设置：** 拟合迭代N_o=80、内环N_i=8；张量阶D∈{3,4,5}，核秩K_d∈{1,2,4}；聚类超参σ按数据集0.2…6.0、τ=0.4、Q_max=6。仿真用随机化虚源法（RISM）生成鞋盒房8×8×3 m、T60≈0.53 s、48 kHz，64元麦克风网格。实测：SMARD 2X0X（M=168）、SRIRACHA C1（M=256，36 kHz）、ChurchIR（Eigenmike 64通道，RT30=4.12 s、截断7 s）。基线为单通道独立BTD与GLRAM。指标：平均归一化失配NM（dB）、尾包络误差TEE、降精度对数误差比LER。
 
 ### 📊 实验结果
-**数据集**：MUSDB18-HQ（44.1 kHz 无损，100 训练/50 测试首，vocals/bass/drums/other 四 stereo stem；额外数据为未公开的 500 首内部歌曲）
+**数据集**：RISM仿真鞋盒房RIR（64通道，近/远场）；SMARD（M=168）；SRIRACHA C1（M=256）；ChurchIR（M=64，7 s超长混响）
 
 **主要指标**：
-- 无额外数据 single-stem 四 stem 平均 SDR：10.63 dB，高于 BS-RoFormer 10.02 dB 约 0.61 dB、高于 BSRNN 8.24 dB 约 2.39 dB（bass 低于 BS-RoFormer 1.38 dB）
-- 额外数据 multi-stem：11.59 dB，单模型 97.23M；低于 BS-RoFormer L12 的 11.99 dB（后者 3×93.4M），但比商业系统 ACE Studio 10.92 dB 高 0.67 dB
-- multi-stem 无额外数据：S 10.29 dB 以 22.59M 超 SCNet-large 9.69 dB（41.2M）
-- 消融：换 64 子带降 1.31 dB；改全局-STFT/mel 带切分前端降至 9.43/8.88 dB
+- 同压缩率C=0.8、D=4仿真远场：JMCBTD平均NM约−16 dB，优于GLRAM（−13 dB）3 dB、优于SMCBTD（−12 dB）4 dB
+- 关键对比（vs GLRAM，K_d=1）：SMARD增益约8–10 dB；SRIRACHA约5–8 dB；ChurchIR约10 dB
+- 标量核CPD误差最低且核秩增大性能变差（验证PZ→CPD理论）；D=3为性价比甜点
+- 量化：float16存储几乎无额外损失，8-bit下e4m3劣于e5m2、SMCBTD对量化最敏感
 
-**是否开源**：是，代码与 checkpoints 已发布于 GitHub，已投 IEEE/ACM TASLP
+**是否开源**：暂无（论文在审，未提供代码/数据链接）
 
-### ⭐ 评分：7/10
-评分理由：把经典复解调滤波器组现代化为可微训练友好的固定子带前端，并与双速率 axial RoFormer、GEGLU 残差融合形成完整闭环，创新性较强；无额外数据 SOTA、参数量仅约 BS-RoFormer 1/3 的部署效率有实用价值。不足是前端重建 SDR 仅 28 dB、bass 落后最强基线、额外数据不可复现、多数实验单 seed 且作者自认对比非受控，结论偏保守。
+### ⭐ 评分：8/10
+评分理由：创新性扎实，PZ模型与低秩CPD/BTD的理论联系干净且填补文献缺口，JMCBTD的子集级因子共享加谱聚类是超越C-CPD的实质推进。实验充分：覆盖仿真加三个特性迥异的实测库（含7 s教堂级超长RIR），系统扫描压缩率、张量阶、核秩，并附内存、复杂度与降精度分析，5–10 dB的稳定增益说服力较强。实用价值明确，可服务VR/AR空间音频与分布式声学传感的RIR存储与快速卷积。不足在于聚类超参选择缺乏理论指导、多线性秩仍需手工设定，且未做听觉感知评估，属TASLP水平的稳健贡献。
 
 ---
 
-## [7] Design of a Speech Enhancement-Based Deep Semantic Autoencoder for Wireless Communications (S-DSA)
+## [7] A Unified Multi-Encoder Framework for Music Lyric Intelligibility Assessment: Bridging Invasive and Non-Invasive Paradigms
+
+**arXiv ID**：2611.07485 | **方向**：语音前端
+
+**作者**：Jing Yang, Shenghao Liao, Shuqing Zhang, Yongyi Deng, Pan Li, Zerui Han, Gongping Huang
+
+**机构**：武汉大学电子信息学院、小米公司 MiLM Plus
+
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.07485 | **PDF**：https://arxiv.org/pdf/2611.07485.pdf | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+本文针对STOI/PESQ等传统语音可懂度指标因歌唱的音高变化、发声方式与风格自由而在音乐场景失效的问题，提出支持侵入式（有参考歌词）与非侵入式（无参考歌词）双范式的统一多编码器歌词可懂度评估框架。框架融合WavLM的局部声学-语义对齐、MuQ的全局音乐语义、Whisper转写衍生的文本线索与WER软监督、T5语义嵌入，经交叉注意力与层次化融合输出评分。在ICASSP 2026 Cadenza数据集上，最优侵入式模型验证集RMSE 26.61（较基线Whisper提升9.2%）、相关系数0.69；非侵入式模型评测集RMSE降14.9%、相关系数从0.21升至0.57。
+
+### 🔧 技术方案
+
+**问题背景：** 歌唱歌词在韵律、时序与频谱动态上区别于朗读语音，STOI/PESQ等有参考指标在音乐伴奏下不可用；且实际评估常缺乏参考歌词，非侵入式方法又缺少监督信号。本文依托ICASSP 2026 Cadenza挑战赛（模拟无/轻度/中度听力损失的多样曲风音频）构建对两种范式均鲁棒的可懂度预测模型。
+
+**模型架构：** 冻结四个预训练编码器并对立体声左右耳非对称输入分别提特征：WavLM分支取最后一层帧级特征与T5-base文本嵌入做双向交叉注意力，MLP输出单耳评分，捕获歌声-歌词精细时序对齐；MuQ分支拼接第1–3层低声学与第10–12层高语义特征、经注意力池化得全局嵌入，与T5-large嵌入交叉注意力后同流程评分；Whisper分支生成转写，侵入式时与参考歌词算WER作软监督，非侵入式时以Whisper-large转写替代参考歌词交由T5编码。融合策略：侵入式将单耳评分与WER拼接过线性层，再以可学习权重β_L/β_R加权左右耳，S_WavLM与S_MuQ拼接过线性层得终分；非侵入式将两编码器单耳评分拼接线性融合后以可学习α_L/α_R加权。总参数约3.3B，仅融合模块约6M可训练。
+
+**核心创新：** (1)双范式统一：同一框架内Whisper转写充当"软监督信号（侵入式WER）"或"文本输入（非侵入式）"两种角色切换，无参考歌词时可端到端训练，打通invasive与non-invasive的建模壁垒。(2)局部-全局互补编码：WavLM帧级交叉注意力负责声学-语义局部对齐，MuQ多层池化负责全局音乐语境，缓解歌唱节奏拉伸与配器干扰导致的评分漂移。(3)双耳不对称建模：左右耳独立提特征、独立评分并以可学习权重融合，适配听力损失模拟音频的立体声不对称性。
+
+**训练策略：** 预训练编码器核心不改动，仅训练约6M融合参数；SGD优化（动量0.9），初始学习率1e-4，batch size训练4/验证2，单卡A800；WER取Whisper small/medium/large三尺寸平均以降方差。以人工可懂度分为回归目标（RMSE口径），论文未明示损失函数形式与训练轮数。消融为逐一移除WavLM/MuQ/Whisper。
+
+### 📊 实验结果
+**数据集**：ICASSP 2026 Cadenza（CLIP）数据集，含模拟无/轻/中度听力损失、跨曲风音乐片段及人工歌词可懂度评分
+
+**主要指标**（RMSE↓/相关系数↑）：
+- 侵入式：验证26.61/0.69、评测26.54/0.67，对比最强基线Baseline Whisper（29.32/0.59）RMSE降9.2%、相关升16.9%
+- 非侵入式：验证29.75/0.59、评测29.68/0.57，对比Baseline STOI（评测34.89/0.21）RMSE降14.9%、相关0.21→0.57
+- 消融：去Whisper（30.48/0.57）退化最大，去WavLM（28.03/0.64）次之，去MuQ（27.11/0.68）最小；传统指标STOI仅36.11/0.14
+
+**是否开源**：暂无（数据由Cadenza Challenge发布）
+
+### ⭐ 评分：6/10
+评分理由：将Whisper转写在双范式间"监督信号↔文本输入"的角色切换及局部-全局-双耳三路互补设计有实质新意，为歌词可懂度这类难例任务提供了统一建模思路；但本质是既有预训练模型的组合封装，可训练参数仅6M，架构创新偏增量。实验仅单数据集、缺跨库泛化验证，且损失函数、轮数等训练细节报告不全；相关系数0.67–0.69说明歌唱可懂度预测天花板仍低。实用价值主要体现在为Cadenza挑战赛提供了强基线与可复用的融合范式。
+
+---
+
+## [8] Improving the Clinical Generalizability of Machine Learning-Based Alzheimer's Disease Detection Across Domains and Modalities: A Comprehensive Review
+
+**arXiv ID**：2611.08188 | **方向**：语音前端
+
+**作者**：Yingchao Huang, Yuhan Su, Xin Wang, Shanshan Yao
+
+**机构**：阿尔伯塔大学（加拿大）、河北大学、Saskatchewan Polytechnic（加拿大）
+
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.08188 | **PDF**：https://arxiv.org/pdf/2611.08188.pdf | **代码**：暂无 | **Demo**：暂无
+
+### 📌 简介
+机器学习AD检测模型在跨队列、跨设备、跨采集协议场景下性能骤降，域偏移是其临床落地的核心瓶颈，而已有的综述多局限于神经影像单一模态的域适应（DA）。本综述以范围综述方式系统梳理2016–2026年DA/域泛化（DG）在AD检测中的研究，纳入83篇文献并按神经影像（31）、EEG（10）、眼动（15）、语音/文本（14）、多模态（13）五类模态组织。关键结论：语音模态中LLM微调达90%以上、域自适应ASR解码使准确率从82.6%升至88%、英法跨语言迁移AUC从0.85升至0.89；眼动模型在分布外队列下降约8个百分点，外部验证不足与数据泄漏是当前最大缺口。
+
+### 🔧 技术方案
+
+**问题背景：** AD检测ML模型存在临床泛化鸿沟，既有综述仅覆盖MRI/PET影像的DA/DG，忽视行为信号模态与跨域评测方法学。本文是首个横跨神经影像、EEG、眼动、语音的多模态DA/DG系统综述。
+
+**模型架构：** 分类体系按三层组织：（1）模态层（MRI/PET、EEG、ET、语音/文本、多模态）；（2）设定层——DA细分有监督/半监督/无监督，DG细分单源/多源，并将数据增强、多模态融合、LLM推理等标注为"双用"策略；（3）方法族层——对抗训练（发文最多）、MMD/特征对齐、自训练伪标签、少样本/元学习、注意力、集成、类/实例加权。每模态附表记录源/目标域、目标标签可用性、训练/测试划分与受试者级泄漏控制。
+
+**核心创新：** (1)以"域偏移类型—部署场景"匹配框架取代方法排名，明确对抗训练虽最流行但可能抹除与病程相关的临床有用变异，MMD稳定但不保类别边界。(2)首创逐文献的泄漏与评测规范审查列，揭示语音模态跨域评测最成熟（ADReSS→ADReSSo、英→法等真实跨库/跨语迁移为主）但泄漏控制与LLM基准污染（DementiaBank/ADReSS疑似进入预训练语料）风险也最突出。(3)将DA/DG定位到语音管线各环节：语言学特征选择、实例重加权、ASR解码适应、跨语言迁移、LLM表征学习、音频-文本最优传输融合，并对应给出各环节量化增益。
+
+**处理方法：** 检索Google Scholar、PubMed、IEEE Xplore、Scopus、ACM DL、arXiv六个数据库，以模态×方法×疾病三元布尔组合关键词检索至2026年，纳入显式处理域偏移且面向AD/MCI/痴呆检测的研究，排除纯ML/DL文献；最终纳入83篇（31/10/15/14/13），参考文献258条，单评审员筛选、未注册。
+
+### 📊 实验结果
+**数据集**：神经影像以ADNI、AIBL、OASIS为主；EEG多为小样本（10–459人）；语音以DementiaBank系为核心：ADReSS（78/78）、Pitt（181/101）、ADReSSo、WLS（115/839）、ADBC文本语料（1654/1151）、中文NCMMSC2021、法语Dem@Care；多模态PROMPT、I-CONECT等。普遍规模小、CN类过采样、单中心。
+
+**主要指标**：
+- 语音/文本：LLM少样本提示97%、LLaMA2软提示微调81.31%（超BERT 4.46pp）、7B模型微调>90%（ADReSSo）；域自适应beam-search使82.6%→≈88%、AUC 0.873→0.90，英→法迁移AUC 0.85→0.89，多语言DA跨语对AUC仅0.71–0.84
+- EEG与ET：EEG基础模型预训练带来F1 +9pp；ET经典模型>90%准确率，但分布外（养老院）验证从91.1%降至83.3%
+- 关键对比：MRI/PET的DA/DG证据最强（GAN harmonization提升目标域>8%）；跨模态泛化差距根源在评测协议而非算法——跨中心、跨语言、跨设备外部验证严重缺失
+
+**是否开源**：综述本身无代码；逐篇标注了文献代码可用性（多数未开源），暂无统一基准与工具包
+
+### ⭐ 评分：6/10
+评分理由：作为首个跨模态AD检测DA/DG综述，其模态×设定×方法族三维分类和逐文献泄漏/污染审查表提供了稀缺的体系化洞察，对语音AD检测方向的评测规范建设尤其有指导价值。局限在于单评审员非注册检索、纳入仅83篇、无定量meta分析，各模态性能区间只能定性罗列；EEG/ET部分依赖相邻域文献迁移，深度受限。实用价值高于方法创新，适合做研究选题与论文写作的方法学参照。
+
+---
+
+## [9] Design of a Speech Enhancement-Based Deep Semantic Autoencoder for Wireless Communications
 
 **arXiv ID**：2611.07361 | **方向**：语音前端
 
 **作者**：Xiaoling Han, Bin Lin, Nan Wu, Tony Q. S. Quek
 
-**机构**：大连海事大学信息科学与技术系、新加坡科技设计大学（SUTD）
+**机构**：大连海事大学信息科学与技术学院、新加坡科技设计大学
 
-**发布日期**：2026-11-05 | **论文**：https://arxiv.org/abs/2611.07361 | **PDF**：https://arxiv.org/pdf/2611.07361.pdf | **代码**：暂无 | **Demo**：暂无
+**发布日期**：2026-11-06 | **论文**：https://arxiv.org/abs/2611.07361 | **PDF**：https://arxiv.org/pdf/2611.07361.pdf | **代码**：暂无 | **Demo**：暂无
 
 ### 📌 简介
-针对语音语义通信在低信噪比下语义提取不足、噪声抑制有限的问题，本文提出端到端联合信源信道编码系统 S-DSA：以双分支语义编码器加交互模块实现语音语义与环境噪声的自适应解耦，训练期引入噪声重建监督、推理期剪除噪声解码支路实现轻量传输重建。AWGN 信道 0 dB 下 PESQ 达 2.05、STOI 达 0.89，输入 SNR 20 dB 时 PESQ 2.67、STOI 0.935，全面优于 CNN-AE 与 DeepSC-S 基线。该文已被 IEEE TVT 接收（vol.75, no.7, 2026）。
+针对传统以波形为中心的语义通信系统在低信噪比无线信道下语义提取不足、噪声抑制能力有限的问题，本文提出基于语音增强的深度语义自编码器（S-DSA）端到端联合信源信道编码系统，由双分支语义编码器、信道编解码器与两个语义解码器构成。核心是自适应语义-噪声解耦机制：交互模块在语音/噪声分支间进行交叉门控消息传递，驱动两分支表征正交。训练联合优化语音重建与噪声估计，测试时剪除噪声解码支路实现轻量推理。信道SNR 0 dB下三信道PESQ达2.05/2.08/2.14（基线1.40-1.77）；输入混合SNR 20 dB时SI-SDR 24.48 dB、PESQ 2.67、STOI 0.935，全面优于CNN-AE与DeepSC-S。
 
 ### 🔧 技术方案
 
-**问题背景：** 传统以波形为中心的通信依赖香农语法传输与固定信号处理框架，低 SNR 下信号失真与语义丢失严重；DeepSC-S、DeepSC-TS 等现有语音语义通信方法又普遍缺乏显式的语义-噪声解耦机制，时变背景噪声会严重破坏语义一致性。
+**问题背景：** IoT与自主网络中语音通信需在噪声环境下保证端到端语义一致性；传统Shannon式波形传输在低SNR下语义损失严重，现有语音语义通信方案（DeepSC-S、DeepSC-TS等）缺乏对混合信号中语义与噪声的显式解耦机制。
 
-**模型架构：** 端到端 JSCC 收发机。16 kHz 音频经 STFT（512 点、hop 256）成实-虚 2 通道谱图。发射端为双分支语义编码器（语音/噪声并行分支，各含 3 个 Conv 块+4 个 Residual-Attention 块，内嵌时间-频谱可分离自注意力），每个 RA 级后接交互模块以门控消息传递对齐特征；语义解码器 N 在训练期估计噪声；3 层 Conv 信道编码器功率归一化后经 AWGN/Rician/Rayleigh 平坦衰落信道发送。接收端为 3 层 Conv 信道解码器+语义解码器 S，输出复数比率掩码与含噪混合谱相乘、ISTFT 重建增强语音。语义特征维 4Ds、传输维 Dc，参数规模未公布。
+**模型架构：** 端到端JSCC框架。输入混合语音经STFT（512点FFT、hop 256）取实虚部双通道谱。发送端：双分支语义编码器（语义编码器S与结构相同的编码器N并行），每支为3个Conv块+4个RA块（残差Conv stack+可分离自注意力SSA，分别在时间轴与频率轴建注意力）；RA后接4个交互块，两支特征拼接生成独立sigmoid门控做交叉残差更新，实现特征级解耦。噪声语义向量经语义解码器N输出复数比掩膜（仅训练用）；语音语义向量与跳连特征拼接经信道编码器3个Conv块输出发射信号并功率归一化。信道建模为平坦衰落r=h·t+n（AWGN/Rician/Rayleigh）。接收端信道解码器镜像结构，语义解码器S输出掩膜恢复目标语音，ISTFT合成波形。
 
-**核心创新：** (1) 自适应语义-噪声解耦机制：双分支分别精炼语音语义特征与噪声统计特征，交互模块将两分支特征拼接成联合上下文、生成独立 sigmoid 门控并做残差交叉更新，使语音/噪声语义向量在特征空间趋向互信息正交，从而低 SNR 下语义不被噪声表征污染。(2) 联合训练监督：噪声支路加语义解码器 N 提供噪声估计与混合一致性（Ŝ+N̂≈Y）监督，迫使编码器显式建模真实噪声分布，单分支系统无法实现这种特征级解耦。(3) 轻量测试策略：推理时剪除语义解码器 N、仅保留编码器端解耦与单条传输重建路径，在不损失分离鲁棒性的前提下降低时延与计算开销，适配资源受限终端。
+**核心创新：** (1)自适应语义噪声解耦机制：双分支编码器分别建模语音语义与噪声统计特征，交互模块在每个RA阶段用交叉门控消息传递迫使语音/噪声嵌入落入正交子空间，低SNR下保持语义一致性。(2)编解码器内嵌语音增强：系统同时输出目标语音重建与环境噪声估计，噪声估计经掩膜-MSE监督并加混合一致性约束Ŝ+N̂≈Y，把语音增强前移到发射侧特征域完成。(3)训练-测试不对称策略：训练五损失联合优化，推理时剪除噪声解码支路形成轻量路径，保留双分支编码器解耦能力，适合资源受限IoT终端。
 
-**训练策略：** 总损失为五项加权和：语音谱 MSE、噪声谱 MSE、混合一致性、时域 L1、多分辨率 STFT（谱收敛+对数幅度）。PyTorch+Adam，batch 32，最多 120 epochs 配 early stopping，LR 从 1e-3 验证驱动衰减至 1e-4。训练时混合 SNR 固定 10 dB，信道 SNR 按 3/15 dB 双锚点采样，环境噪声仅 AWGN，验证集占 20%。
+**训练策略：** 总损失为语音谱MSE、噪声谱MSE、混合一致性MSE、时域L1、M分辨率STFT损失加权和（权重数值未给出）；理论目标max I(s_s;i_s)−β·I(s_s;i_n)。PyTorch+Adam，batch 32，最多120轮+早停，学习率初始1e-3、验证驱动降至1e-4（实验显示0.0001-0.000125最优）；16 kHz采样，20%验证划分；训练输入混合SNR固定10 dB，信道SNR按3 dB与15 dB双锚点采样。
 
 ### 📊 实验结果
-**数据集**：论文未公布具体语料名称；仿真实验，16 kHz 语音叠加时域 AWGN 环境噪声，基线为同一数据协议训练的 CNN-AE 与 DeepSC-S，另设理想链路 S-DSA@Oracle 参照
+**数据集**：论文未给出语音语料库名称与规模（仅仿真：16 kHz音频、AWGN环境噪声），基线CNN-AE与DeepSC-S同数据协议重训
 
 **主要指标**：
-- PESQ（AWGN 信道，信道 SNR 0 dB）：2.05，较 CNN-AE 与 DeepSC-S 的 1.73 提升约 0.32
-- PESQ/STOI（Rayleigh 0 dB）：2.14/0.90，较 DeepSC-S 提升 0.37，较 CNN-AE 提升 0.74
-- PESQ（输入 SNR 20 dB）：2.67，较 DeepSC-S（2.21）提升 0.46；STOI 0.935 优于基线（<0.912）；MSE 0.0024 低于 DeepSC-S 的 0.0046
-- SI-SDR：信道 SNR 0 dB 下达 18.24 dB；三信道、SNR −10~20 dB 全域系统一稳定超越基线
+- 信道SNR 0 dB（输入SNR 10 dB）PESQ：AWGN 2.05、Rician 2.08、Rayleigh 2.14；基线CNN-AE/DeepSC-S仅1.40-1.77，STOI达0.89-0.90
+- 信道SNR 20 dB、输入混合SNR 20 dB：MSE 0.0024（CNN-AE 0.066、DeepSC-S 0.0046）、SI-SDR 24.48 dB、PESQ 2.67、STOI 0.935
+- 关键对比：5 dB输入SNR时MSE 0.039略逊DeepSC-S 0.029；其余0-20 dB区间全指标领先，低SNR与深衰落信道增益最大
 
-**是否开源**：暂无（未提供代码、数据或 Demo 链接）
+**是否开源**：暂无
 
-### ⭐ 评分：6/10
-评分理由：将语音增强的比率掩码与双分支解耦嵌入 JSCC 收发机，交互门控+推理剪枝的整合思路对该方向有实质新意，实验覆盖三种信道与双 SNR 维度扫描、趋势一致可复现。但数据集与参数量未公开、环境噪声仅 AWGN、基线偏旧且缺码率与主观 MOS 对比，绝对 PESQ 仍在中等区间，属于工程扎实的系统级增量工作，与其 IEEE TVT 定位相符。
+### ⭐ 评分：5/10
+评分理由：将语音增强与语义通信结合、以双分支门控交互实现语义-噪声解耦并配剪枝推理的构思有实用性，创新偏组合式增量。实验仅仿真信道且环境噪声只有AWGN一种，未披露数据集、模型规模、损失权重等关键复现信息，基线仅两个且无解耦机制消融，PESQ绝对值偏低（2-2.7），说服力有限。轻量推理策略对资源受限场景有价值，整体为中等水平的增量工作。
 
 ---
 
-*Generated on 2026-11-09* | Powered by VAgent SpeechAI Researcher
+*Generated on 2026-11-09*

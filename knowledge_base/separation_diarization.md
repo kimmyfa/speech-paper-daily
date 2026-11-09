@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 39 篇
+共 38 篇
 
 ## [Position-Aware Target Speaker Extraction for Long-Form Multi-Party Conversations](https://arxiv.org/abs/2606.29497)
 
@@ -342,14 +342,5 @@
 - **关键技术点**：现有TSE的条件信号要么需要目标干净语音（可能缺失或与环境失配），要么依赖精确DOA/RTF估计（混响、噪声、动态下不可靠）；区域/扇区式线索仍以麦克风阵列为参照、需要绝对角度，且无法区分同处一个预定义区域的两个说话人。
 - **主要指标**：- 4麦两说话人SI-SDR：SpatialNet RPC 14.20 dB、U-Net RPC 11.02 dB（STOI最高0.911） - 3说话人4麦：SpatialNet RPC 6.70 dB，超oracle MVDR（5.70 dB） - 关键对比：SpatialNet提取版比其分离版
 - **代码**：暂无 | **Demo**：https://aviad3189.github.io/RPC-extraction/
-
----
-## [SubRoformer: Subband Time-Domain Representation for Music Source Separation](https://arxiv.org/abs/2611.08130)
-
-- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-11-05
-- **一句话贡献**：音乐源分离（MSS）通常在波形或全带频谱上工作：波形序列过长，单一 STFT 分辨率在全频段强加共享的时频分辨率折衷。本文提出 SubRoFormer，由固定子带分析/综合前端与残差 RoFormer 分离器组成：将混音分解为频率局部化、低采样率的复基带子带，在其局部频谱上以细速率预测复数掩码、以时间 patch 后的粗速率做长程 axial 注意力，并经门控残差融合。MUSDB18-HQ 上无额
-- **关键技术点**：波形模型需在高采样率下压缩序列，全带 STFT 系统则用统一窗长折衷低频瞬态与高频分辨率；现有 spectral band-split（BSRNN/BS-RoFormer/Mel-RoFormer）仍计算全带 STFT，未从分析端解耦时频分辨率；前人 channel-wise subband 方法只用均匀频带，难以按频段自适应分配分辨率。
-- **主要指标**：- 无额外数据 single-stem 四 stem 平均 SDR：10.63 dB，高于 BS-RoFormer 10.02 dB 约 0.61 dB、高于 BSRNN 8.24 dB 约 2.39 dB（bass 低于 BS-RoFormer 1.38 dB） - 额外数据 multi-stem
-- **代码**：https://github.com/ArchiMickey/SubRoformer | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 130 篇
+共 131 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -526,19 +526,19 @@
 ---
 ## [Route-DMD: Distribution Matching Distillation with Task-Routed Mechanism for Speech Foundation Models](https://arxiv.org/abs/2611.08011)
 
-- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-05
-- **一句话贡献**：基于 flow matching 的语音基础模型（如 AuK）统一支持生成、编辑、处理等 15 类任务，但每次推理需 20–50 步迭代，且 CFG 使每步计算翻倍。本文提出 Route-DMD 两阶段蒸馏框架：先用 consistency distillation 初始化学生模型，再按任务路由——分离类任务改用回归损失，其余任务保留 Decoupled DMD，并以 APG 替代 CFG 做 t
-- **关键技术点**：语音基础模型推理成本高，现有语音蒸馏工作全部只在生成任务上验证，从未覆盖编辑与处理。作者发现分布匹配目标并非对所有任务适用：在分离任务上，错误的学生输出加噪后严重偏离 teacher 训练分布，real score 预测失准，DMD 直接导致分离能力崩溃。
-- **主要指标**：- SeedTTS-Eval 平均：SIM 0.790 / WER 2.85%（teacher 32 步为 0.795 / 2.65%），zh-hard SIM 0.784 反超 teacher - MMAE 编辑：IFR 46.62 / CR 86.41 / EMR 13.85（teacher 4
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-06
+- **一句话贡献**：基于flow matching的统一语音基础模型AuK覆盖15项任务，但单次推理需20-50步且CFG使每步翻倍，而已有语音蒸馏只验证过生成。作者发现分布匹配目标并非对所有任务有效：分离任务中学生错误输出加噪后偏离teacher训练分布，real score预测失真致能力崩塌。Route-DMD以两阶段蒸馏（一致性初始化+任务路由）并用APG取代teacher rollout的CFG，4步学生即追
+- **关键技术点**：把DMD直接套到统一语音基础模型会使语音分离崩塌：real score model（冻结teacher）只在噪声-真值路径上训练过，学生错误输出加噪后落在分布外，梯度不可信。此前音频少步蒸馏（SplitMeanFlow、DMOSpeech 2）仅验证于TTS，未触及编辑与处理。
+- **主要指标**：- SeedTTS-Eval平均 SIM 0.790/WER 2.85，对比teacher 0.795/2.65、Qwen3-TTS 0.745/3.07；zh-hard SIM 0.784最优 - MMAE编辑 IFR 46.62/CR 86.41/EMR 13.85，对比Step-Audio-E
 - **代码**：https://github.com/iHateTheWorld555/AuK-RouteDMD | **Demo**：https://route-dmd.github.io/
 
 ---
-## [Gabor Gabor: E-Gaborformer, a Strictly Causal Speech Recognizer with Gabor-Dictionary Convolutions and Delta-Rule Memory](https://arxiv.org/abs/2611.08092)
+## [Joint Higher-Order Low-Rank Tensor Decompositions for Multichannel Acoustic System Compression](https://arxiv.org/abs/2611.07975)
 
-- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-05
-- **一句话贡献**：实时语音代理要求流式 ASR 严格因果且每路通话内存不随时长增长，而因果化的注意力编码器 KV 缓存持续膨胀，同规模模型 10 分钟即超 1GB。本文提出 E-Gaborformer 编码器：以 3:1 比例混合 Gated DeltaNet-2 递归层与滑动窗口注意力，全部时序深度卷积由固定因果 Gabor 原子字典线性组合构成。基于此构建 0.6B 参数希伯来语-英语 RNN-T 流式转录机，
-- **关键技术点**：语音代理需在用户说话时同步转写，且数千并发下服务成本不能随通话时长增长；Conformer、E-Branchformer 等强编码器均为双向，靠掩码因果化后注意力仍需缓存全部历史键值（18 层、d=1024 约 110MB/分钟/路），分块截断与线性注意力是现有两种限界手段。
-- **主要指标**：- 流式状态：约 19MB/路恒定；同规模无界因果注意力 10 分钟超 1.1GB - LibriSpeech 因果对比：10 epoch dev-clean/dev-other 20.5/39.2，优于同配方 E-Branchformer 的 20.8/39.2，达到同等 WER 快 5-18% 
+- **方向**：语音前端 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-06
+- **一句话贡献**：多通道房间冲激响应（RIR）按FIR滤波器表示样本量巨大（大厅可达数十万样点），存储与实时卷积代价高；已有的低秩压缩（截断SVD、GLRAM、单通道CPD）未利用同房间多位置RIR共享极点带来的通道间冗余。本文证明极零点（PZ）模型隐含张量化RIR的低秩CPD结构——早期反射为稀疏rank-1之和、晚期混响为由极点决定的模态因子CPD，并基于块项分解BTD提出两种联合压缩方案：SMCBTD与JMC
+- **关键技术点**：VR/AR等场景需大量存储并实时卷积多位置RIR。既有方法或仅处理单通道张量化RIR，或将RIR矩阵化后用GLRAM联合压缩，均未系统利用"同房间RIR共极点（common-pole model）"导致的因子子空间相似性；而C-CPD类耦合分解要求某模式全部因子强制共享，过于刚性。
+- **主要指标**：- 同压缩率C=0.8、D=4仿真远场：JMCBTD平均NM约−16 dB，优于GLRAM（−13 dB）3 dB、优于SMCBTD（−12 dB）4 dB - 关键对比（vs GLRAM，K_d=1）：SMARD增益约8–10 dB；SRIRACHA约5–8 dB；ChurchIR约10 dB -
 - **代码**：暂无 | **Demo**：暂无
 
 ---
@@ -1170,5 +1170,14 @@
 - **关键技术点**：已有Hearpiece数据库仅含消声室HRIR；入耳环境噪声传函库不含驱动器响应，PANDAR面向ANC耳机、BRUDEX侧重外部麦克风阵列、indHARTF为半消声室个体化传函，均缺少"多通道原位麦克风+驱动器响应+受控混响+佩戴变异性"一体的标准化数据。
 - **主要指标**：- 混响表征：1 kHz倍频程能量衰减曲线外推至60 dB，三房间跨24方向RT60中位数约0.32 s、0.62 s、0.89 s - 数据规格：BRIR长1 s（48000点）、中心麦RIR 1.5 s、驱动器响应1536点，48 kHz - 关键对比：相对BRUDEX、Kayser 2009、
 - **代码**：https://doi.org/10.5281/zenodo.23667308（数据库+MATLAB脚本） | **Demo**：暂无
+
+---
+## [Gabor Gabor: E-Gaborformer, a Strictly Causal Speech Recognizer with Gabor-Dictionary Convolutions and Delta-Rule Memory](https://arxiv.org/abs/2611.08092)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-06
+- **一句话贡献**：实时语音智能体要求ASR编码器严格因果（不等未来音频）且每路推理状态不随通话时长增长。本文提出E-Gaborformer：保留E-Branchformer块，将全局分支改为Gated DeltaNet-2循环层与滑动窗口注意力3:1混合，所有深度卷积由固定因果Gabor原子字典参数化，并用sigmoid输出门消除循环分支训练停摆。LibriSpeech-100受控实验中27.6M模型dev-cle
+- **关键技术点**：Conformer、E-Branchformer等强ASR编码器均为双向，因果掩码后注意力仍需缓存全部历史K/V——18层d=1024、80ms帧的fp32缓存约每分钟110MB，十分钟即超1GB，服务成本随通话时长线性增长。分块Transformer靠截断限成本，纯线性注意力又丢失近期精确召回；严格因果加恒定内存下达到注意力级精度是核心矛盾。
+- **主要指标**：- 受控实验10 epoch：E-Gaborformer dev-clean/dev-other WER 20.5/39.2 vs 因果E-Branchformer 20.8/39.2；3 epoch均值25.2/43.0 vs 26.3/43.7，达同一精度快5-18% - 生产规模英语通用集：9
+- **代码**：暂无 | **Demo**：暂无
 
 ---

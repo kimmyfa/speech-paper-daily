@@ -679,10 +679,10 @@
 ---
 ## [VoxCanvas-41M: A Large-Scale Bilingual Dataset for Instruction-Based Speech Editing and Its Learning Dynamics](https://arxiv.org/abs/2611.08251)
 
-- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-05
-- **一句话贡献**：针对指令式语音编辑大规模配对训练数据匮乏、公开数据不含自然语言指令且副语言编辑几乎空白，以及编辑能力习得与"生成—编辑"关系不明两大问题，作者开源可扩展数据构建 pipeline，基于 Emilia 与六个非言语语料合成约 4100 万条中英双语编辑对（内容编辑：单 span/多 span/位置指称；副语言：39 类非言语事件插删），并用 LoRA 微调 AuK 得到 VoxCanvas-Edit
-- **关键技术点**：infilling 方法推理需外部 ASR+强制对齐定位编辑区间；指令式方法依赖大规模配对数据，而 Step-Audio-EditX、Ming-UniAudio、AuK 全部用私有数据；最大公开集 GigaEdit-L 仅 2.1M 英文对、无指令覆盖与副语言编辑，编辑模型的训练动态基本未被研究。
-- **主要指标**：- SpeechEditBench 内容编辑 ACC：中文 88.32→93.66，英文 93.78→96.78，均值 95.22 较 AuK 基线 +4.17；副语言 54.50（+1.25） - Ming Full-EN ACC：86.84 vs AuK 85.69；Basic-EN WER：3
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-06
+- **一句话贡献**：指令式语音编辑依赖大规模高质量配对数据，而现有开源资源仅 GigaEdit-L（约 2.1M 英文对/2.2k 小时）且受规则剪切拼接限制，缺少双语、多跨度、位置引用与副语言编辑。本文提出 VoxCanvas-41M：约 4100 万条中英各半的编辑对，覆盖单词级插入/删除/替换、2–6 处多跨度编辑、序号/时间/句边界位置引用，以及 39 类非语言事件（笑声、叹气、咳嗽）插删。基于该数据以 Lo
+- **关键技术点**：infilling 类方法需推理时提供编辑转写与精确跨度，依赖外部 ASR 与强制对齐；指令式方法虽免对齐、可组合多类编辑，但其配对数据几乎全为闭源自采。真实录音难保证编辑区外韵律一致，规则拼接会引入边界断裂，合成配对又需精确定位与质检。
+- **主要指标**：- SpeechEditBench 内容编辑 ACC：中文 93.66、英文 96.78、平均 95.22（AuK 基线 91.05，+4.17 点）；副语言 54.50 vs 53.25 - Ming-Freeform WER：Basic-ZH 4.40、Full-ZH 2.93、Basic-EN
 - **代码**：https://github.com/ZhikangNiu/VoxCanvas | **Demo**：https://zhikangniu.github.io/voxcanvas/
 
 ---

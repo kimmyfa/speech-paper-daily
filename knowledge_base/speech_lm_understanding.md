@@ -1255,11 +1255,11 @@
 ---
 ## [Decode Before You Hear: Speculative Listening for Chunk-Interleaved Full-Duplex Speech Language Models](https://arxiv.org/abs/2611.06982)
 
-- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-04
-- **一句话贡献**：分块交错式全双工语音大模型负载跨 chunk 极不对称：listen chunk 等待音频期间 70–89% 算力空转，speak/tool-call chunk 串行解码常超 1 秒 chunk 硬截止，响应解码延迟 417–1089 ms 且工具调用全部错过 deadline。本文提出 Speculative Listening——训练无关、无损的"输入时刻自投机解码"框架：以静音为假设输入，
-- **关键技术点**：全双工语音 LLM 按固定时长 chunk 交替听/说，chunk 时长即硬截止；自回归解码下工具调用需数十次串行前向（受权重与 KV cache 内存带宽限制），95% 的 speak chunk（LWS）与全部 tool-call chunk 违约。已有无损投机解码须等输入就绪，Chronological Thinking、PredGen 等提前计算方案依赖额外训练、级联管线或独立草稿模型，端到端全双工模型的空闲窗口此前未被利用。
-- **主要指标**：- speak chunk 加速：四模型平均 2.6–2.8×（基线 PLD/Token Recycling/Lookahead 仅 0.96–1.23×） - tool-call 加速：Streaming SLM 23.41×、Gander 3.45×（AR 基线全部违约） - 响应启动解码延迟：
-- **代码**：暂无 | **Demo**：暂无
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-06
+- **一句话贡献**：Chunk 交错的端到端全双工语音大模型以固定时长 chunk 为硬deadline，listen chunk 有 70–89% 算力空闲，而 speak 与工具调用 chunk 需串行生成，导致响应与工具调用严重滞后。作者发现两个性质：下一个音频 chunk 在 95.3% 情况下不改变输出，且 88% 的变化始于首个 token，据此提出免训练、无损的 Speculative Listenin
+- **关键技术点**：Chunk 交错全双工模型把流式对话切成固定时长（1s）chunk，音频按实时到达，chunk 时长即硬 deadline；负载严重不对称：listen chunk 空闲窗口占 70–89%，而工具调用需数十次串行前向、音频到达后 1.8–2.6s 才完成、全部超时；AR 解码使响应起始额外延迟 417–1089ms。现有无损投机解码与 PredGen 等方案均未利用端到端模型的 idle 窗口。
+- **主要指标**：- speak chunk 平均加速 2.6–2.8 倍，工具调用最高 23.41 倍；基线 PLD/Token Recycling/Lookahead 仅 0.96–1.23 倍 - #MAT 2.15–2.63（基线 1.01–1.23）；65–128 token 输出 AR 需 73.6 次前
+- **代码**：暂无（承诺释出 TickTock-Bench 会话清单与评测脚本，未附链接） | **Demo**：暂无
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
@@ -2567,12 +2567,12 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
-## [Adaptive and High-Fidelity Matching Algorithm for Retrieval-Based Accent Conversion (AA-kNN-AC)](https://arxiv.org/abs/2611.07420)
+## [Adaptive and High-Fidelity Matching Algorithm for Retrieval-Based Accent Conversion](https://arxiv.org/abs/2611.07420)
 
-- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-05
-- **一句话贡献**：检索式口音转换（AC）用 kNN 直接从目标口音语料检索声学特征、训练时无需源口音数据，但存在三大缺陷：顺序选取构建匹配池导致音素覆盖不全、可懂度低；固定 k 无法适配源语音局部特征几何变化；粗粒度风格调制造成频谱不连续。本文提出 AA-kNN-AC，包含音素覆盖导向的匹配池贪心构建、基于 SVD 各向异性分析的自适应 kNN 检索、以及 progressive AdaIN 细粒度解码器。在 L2
-- **关键技术点**：生成式 AC 参数化重建易过度平滑、损失高频谐波细节；基线 kkNN-AC 靠时序顺序采样建池，稀有音素（/ʒ、tʃ、ð、ŋ 等）覆盖不足引发检索错配与频谱断裂；固定 k 在各向异性强的区域引入不相关近邻、在平滑区检索不稳；双级 AdaIN 仅在粗时间分辨率注入样式，与 HiFi-GAN 细粒度上采样解耦导致元音高频结构衰减。
-- **主要指标**：- WER（ASI）：8.35%（kkNN-AC 13.12%，相对降 36.4%；优于 Seed-VC 9.58%） - CER（ASI）：4.04%（相对 kkNN-AC 降 38.7%） - SMOS/ACT（ASI）：3.74/4.18，均最优（kkNN-AC 为 3.24/3.92） - 
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-06
+- **一句话贡献**：检索式口音转换以kNN直接从目标口音真实语音中检索声学特征，可绕开参数化生成的高频过平滑问题，但存在匹配池音素覆盖不足、固定k不适应源语音变化、粗粒度风格调制致谱不连续三大缺陷。本文提出AA-kNN-AC：音素覆盖贪心选池、SVD各向异性感知的自适应kNN检索、渐进式AdaIN上采样解码器。在L2-ARCTIC(ASI)上WER 8.35%、CER 4.04%，较kNN-AC相对降低36.4%/3
+- **关键技术点**：SSL表征中口音与语言内容纠缠强于音色，使检索式AC比kNN-VC更依赖匹配池质量与邻域选择策略；kNN-AC按时序选池漏采稀有音素，固定k在各向异性强的瞬态区引入失配置邻、在平坦区检索不稳，双阶段AdaIN仅在50Hz注入风格、依赖HiFi-GAN恢复细节，导致共振峰模糊与音素边界谱断裂。
+- **主要指标**：- WER/CER（ASI/ABA/P248）：8.35%/4.04%、15.72%/7.31%、5.86%/2.37%；超Seed-VC（9.58/16.04/6.38）、kNN-AC（13.12/17.52/6.40）与TokAN - SECS 0.80/0.82/0.78，ΔPPG 0.36/
 - **代码**：暂无 | **Demo**：https://aa-knn-ac.github.io/demo/
 
 ---
