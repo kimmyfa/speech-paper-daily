@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 286 篇
+共 290 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1260,6 +1260,24 @@
 - **关键技术点**：Chunk 交错全双工模型把流式对话切成固定时长（1s）chunk，音频按实时到达，chunk 时长即硬 deadline；负载严重不对称：listen chunk 空闲窗口占 70–89%，而工具调用需数十次串行前向、音频到达后 1.8–2.6s 才完成、全部超时；AR 解码使响应起始额外延迟 417–1089ms。现有无损投机解码与 PredGen 等方案均未利用端到端模型的 idle 窗口。
 - **主要指标**：- speak chunk 平均加速 2.6–2.8 倍，工具调用最高 23.41 倍；基线 PLD/Token Recycling/Lookahead 仅 0.96–1.23 倍 - #MAT 2.15–2.63（基线 1.01–1.23）；65–128 token 输出 AR 需 73.6 次前
 - **代码**：暂无（承诺释出 TickTock-Bench 会话清单与评测脚本，未附链接） | **Demo**：暂无
+
+---
+## [Improving Large Audio-Language Model Embedding Baselines for Instruction-Aware Speech Retrieval](https://arxiv.org/abs/2611.09122)
+
+- **方向**：语音大模型（语音检索 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-09
+- **一句话贡献**：本论文关注指令感知的语音检索：仅凭语音查询难以判定检索目标，需自然文本指令指定说话内容、说话人、风格等属性要求。作者提出 IRIS-Embed，以对比训练与指令感知音频层加权，将大型音频语言模型（Qwen2.5-Omni-3B 与 Gemma-4-E2B-it）适配为嵌入模型，并构建约 900K 真实与合成训练样本。在 INSPIRE 基准上，最佳模型宏平均 Recall@50 达 62.92%，
+- **关键技术点**：既有语音检索只依赖查询内容难以判断真实意图，且通用文本嵌入与级联 ASR、字幕加检索方案无法兼顾音频层属性。原始 LALM 直接作嵌入时，不同检索任务偏好的音频编码器层不同，单用最终层会限制说话人与风格匹配。
+- **主要指标**：- 主基准宏平均 Recall@50：Qwen2.5-Omni-3B 62.92%、Gemma-4-E2B-it 47.41% - 最强基线 ECAPA-TDNN 45.15%；对应未训练基线分别为 16.27% 与 8.91% - VCTK Recall@50：Qwen2.5 版 85.00%；仅
+- **代码**：https://github.com/lca0503/IRIS | **Demo**：暂无
+
+---
+## [AudioSphere: Towards Self-Supervised Spatial Audio Representation Models](https://arxiv.org/abs/2611.09275)
+
+- **方向**：语音前端（空间音频自监督表征） | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-09
+- **一句话贡献**：当前音频表征模型几乎全部基于单通道信号，对空间结构"失明"；而空间音频模型（BAT、ELSA）依赖 clip 级监督，无法支撑帧级 SELD 任务。本文提出 AudioSphere——在一级 Ambisonics 录音上训练的多通道掩码自编码器，通过同时掩蔽频谱 patch 与强度向量的 tube masking，联合重建 log-mel 谱与方向线索，首次实现冻结骨干上的真实世界 SELD。在 
+- **关键技术点**：单通道 SSL 模型（BEATs、MW-MAE 等）无法定位声源且解析复杂声景能力受限；空间音频模型受限于合成标签监督与 clip 级目标，学不到帧级分辨率表征，且绑定特定麦克风几何、难以迁移。
+- **主要指标**：- HEAR 聚合：83.2±0.1，超过 Dasheng（82.8，其数据多 56 倍）与 MW-MAE（80.0），空间能力"零成本" - TAU-2019 冻结探测：ER 0.28 / F 84.6 / LE 14.1°，优于监督基线 SELDNet（0.34/79.9/28.5°）及 BAT
+- **代码**：https://github.com/labhamlet/AudioSphere | **Demo**：https://huggingface.co/labhamlet
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
@@ -2574,5 +2592,23 @@
 - **关键技术点**：SSL表征中口音与语言内容纠缠强于音色，使检索式AC比kNN-VC更依赖匹配池质量与邻域选择策略；kNN-AC按时序选池漏采稀有音素，固定k在各向异性强的瞬态区引入失配置邻、在平坦区检索不稳，双阶段AdaIN仅在50Hz注入风格、依赖HiFi-GAN恢复细节，导致共振峰模糊与音素边界谱断裂。
 - **主要指标**：- WER/CER（ASI/ABA/P248）：8.35%/4.04%、15.72%/7.31%、5.86%/2.37%；超Seed-VC（9.58/16.04/6.38）、kNN-AC（13.12/17.52/6.40）与TokAN - SECS 0.80/0.82/0.78，ΔPPG 0.36/
 - **代码**：暂无 | **Demo**：https://aa-knn-ac.github.io/demo/
+
+---
+## [Conflict-Aware Meta-Learning for Generalizable Speech Deepfake Detection](https://arxiv.org/abs/2611.08758)
+
+- **方向**：语音大模型（语音安全 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：SSL 大模型驱动的语音深伪检测器在未见合成器、编解码与声学环境下因域漂移性能骤降；MLDG 元学习虽可模拟域移，但有效的域移模拟会引发 meta-train 与 meta-test 梯度高冲突（超 43% 迭代余弦相似度为负），破坏双层优化稳定性。本文提出冲突感知元学习框架 CAML，包含非对称域梯度手术 base-DGS、以 EMA 梯度为稳定锚点的 EMA-DGS、以及逐参数张量干预的 LW
+- **关键技术点**：ERM 联合训练不显式利用域间结构差异；直接套用 MLDG 时，meta-test 泛化信号与 meta-train 源域信号常方向相悖，朴素梯度聚合导致优化震荡，且 mini-batch 梯度噪声使冲突检测误判频发。
+- **主要指标**：（EER%，越低越好）： - XLSR-AASIST+EMA-DGS：21DF 1.43 / ITW 4.98 / FoR 2.87，对比 MLDG（2.74/7.33/5.81） - 超越最强相关方法 DPDA-XLSR-AASIST（2.13/5.42/3.04）全部三项 - 多数据集 XLSR
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Mind the Divergence: Divergence-Guided Reliability-Aware Fusion and Adaptive LLM Prompting for Conversational Emotion Recognition](https://arxiv.org/abs/2611.08860)
+
+- **方向**：语音大模型（多模态对话情感识别） | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：多模态对话情感识别（MERC）中，语义不一致、情绪掩饰、噪声观测会使文字、声学、视觉三路证据可信度随样本剧烈波动，而无差别融合会传播不可靠证据。论文受 Brunswik 透镜模型启发提出 MiD-ERC，将上述异质不一致抽象为单模态情感分布间的"预测分歧"这一来源无关信号，据此协调分歧引导的跨模态门控、分歧调制的可靠性加权与分歧条件化的自适应 LLM 提示。在 IEMOCAP 与 MELD 上取得
+- **关键技术点**：现有多模态方法（如 Causal-ERC）的融合与提示策略不显式依赖模态间预测分歧与样本级可靠性，强冲突证据仍被无差别整合；多数 LLM 方法（InstructERC、BiosERC、PRC-Emo）局限于文本模态，且依赖 SBERT 检索、说话人传记等外部组件与辅助数据构建，工程复杂并引入新误差源。
+- **主要指标**：- IEMOCAP：Acc 73.44%、W-F1 73.38% - MELD：Acc 71.79%、W-F1 70.60% - 相对最强多模态 LLM 基线 Causal-ERC：Acc +1.84/+1.71、W-F1 +1.92/+1.58；W-F1 超最强非 LLM 基线 CFN-ESA +
+- **代码**：暂无 | **Demo**：暂无
 
 ---

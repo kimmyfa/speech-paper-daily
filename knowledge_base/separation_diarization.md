@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 38 篇
+共 40 篇
 
 ## [Position-Aware Target Speaker Extraction for Long-Form Multi-Party Conversations](https://arxiv.org/abs/2606.29497)
 
@@ -342,5 +342,23 @@
 - **关键技术点**：现有TSE的条件信号要么需要目标干净语音（可能缺失或与环境失配），要么依赖精确DOA/RTF估计（混响、噪声、动态下不可靠）；区域/扇区式线索仍以麦克风阵列为参照、需要绝对角度，且无法区分同处一个预定义区域的两个说话人。
 - **主要指标**：- 4麦两说话人SI-SDR：SpatialNet RPC 14.20 dB、U-Net RPC 11.02 dB（STOI最高0.911） - 3说话人4麦：SpatialNet RPC 6.70 dB，超oracle MVDR（5.70 dB） - 关键对比：SpatialNet提取版比其分离版
 - **代码**：暂无 | **Demo**：https://aviad3189.github.io/RPC-extraction/
+
+---
+## [GTCRN-SS: Lightweight Causal Speech Separation with Residual Allocation and Reconstruction Refinement](https://arxiv.org/abs/2611.09358)
+
+- **方向**：语音前端（语音分离） | **子方向**：Separation | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：面向噪声环境下低算力因果语音分离的两难：既要在不访问未来帧的前提下保留说话人历史，又要把混杂的语音/噪声/不确定能量分配到固定输出集。作者把 GTCRN 单输出增强骨干改造为两阶段时频分离器 GTCRN-SS，引入带残余汇聚的复数掩码头(GCM-RS)、重建条件精修和帧对齐低秩跨执行桥(CE Bridge)。在带噪 8-kHz Libri2Mix 上以 0.9 M 参数、6.1 G MACs 取得
+- **关键技术点**：主流分离网络(TF-GridNet、DPRNN)依赖双向或整句上下文；SkiM、TFACM 虽因果但用记忆 LSTM 缓存块间状态，参数与计算仍偏重。同时复数相位敏感重建要在语音、噪声与不确定混合能量之间做输出分配。
+- **主要指标**：- SDRi：10.1 dB；SI-SNRi：9.5 dB - 复杂度：0.9 M 参数、1 s 输入 6.1 G MACs（对比表中最低） - 对比 TFACM-Small：SI-SNRi 高 0.2 dB 且 MACs 仅 6.1 G vs 19.4 G；8 s 输入 CPU 4888.4 vs
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [AISHELL8-FISHEYE: A Fisheye Audio-Visual Dataset for Target Speaker Extraction with Distortion-Aware Baselines](https://arxiv.org/abs/2611.09368)
+
+- **方向**：语音前端（视听目标说话人提取 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：鱼眼相机视场宽，是机器人与可穿戴设备的首选，但其径向畸变会破坏唇部几何，使视听目标说话人提取（AVTSE）的常规视觉表征难以迁移。本文发布 AISHELL8-FISHEYE：47.03 小时、94 名母语普通话说话人的自发独白语料，同步配对鱼眼与普通相机视频，采用无交叉划分说话人并以 −10~10 dB 信干比合成双说话人混合，支持可复现评测。基线将预训练唇读编码器与从鱼眼头姿估计迁移的失真感知（
+- **关键技术点**：既有 AVTSE 几乎全部基于普通视角视频，缺少带干净参考且畸变可控的同步视听数据；鱼眼图像的径向畸变随位置变化，常规唇读特征的 ROI 对齐与时序一致性受破坏，现有研究既无评测协议也无法在相同声学输入下对比视觉采集条件。
+- **主要指标**：- 鱼眼最优配置 SI-SDRi：11.84 dB（STOI 0.81、PESQ 2.96），同配置去 DA 为 10.47 dB，DA 增益 +1.37 dB - 普通相机基线 SI-SDRi：19.33 dB（STOI 0.90、PESQ 3.41），鱼眼最优仍落后 7.49 dB - 冻结唇编
+- **代码**：https://huggingface.co/datasets/phot0nqqq/AISHELL8-FISHEYE | **Demo**：https://e181d4.github.io/AISHELL8-FISHEYE/
 
 ---
