@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 136 篇
+共 138 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -684,6 +684,24 @@
 - **关键技术点**：infilling 类方法需推理时提供编辑转写与精确跨度，依赖外部 ASR 与强制对齐；指令式方法虽免对齐、可组合多类编辑，但其配对数据几乎全为闭源自采。真实录音难保证编辑区外韵律一致，规则拼接会引入边界断裂，合成配对又需精确定位与质检。
 - **主要指标**：- SpeechEditBench 内容编辑 ACC：中文 93.66、英文 96.78、平均 95.22（AuK 基线 91.05，+4.17 点）；副语言 54.50 vs 53.25 - Ming-Freeform WER：Basic-ZH 4.40、Full-ZH 2.93、Basic-EN
 - **代码**：https://github.com/ZhikangNiu/VoxCanvas | **Demo**：https://zhikangniu.github.io/voxcanvas/
+
+---
+## [M5-TTS: A Mini-Scale Multilingual and Multi-Dialect Text-to-Speech Language Model with Multi-Token Prediction](https://arxiv.org/abs/2611.10162)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-06
+- **一句话贡献**：面向端侧语音交互，M5-TTS 用仅 50M 参数（不含 codec）的语言模型实现多语言+中国方言零样本音色克隆与 CPU 流式合成。架构为时序主干 Transformer 预测第 0 码本 + 局部 MTP 模块逐帧自回归生成第 1–15 码本（Qwen3-TTS 12.5Hz 16 码本 tokenizer），并采用 GRPO 后训练：说话人相似度与停顿奖励组内归一化加权，叠加 CER 引导
+- **关键技术点**：现有 LM-based TTS（CosyVoice 2、Qwen3-TTS 等）模型规模与推理成本难以在 CPU 端侧做低延迟流式；轻量模型（MOSS-TTS-Nano 等）又难以兼顾多语言、方言覆盖与音色克隆质量。
+- **主要指标**：- Seed-ZH CER：1.37%（MOSS-TTS-Nano 3.62%，相对降 62.2%）；Seed-EN WER：2.91%（vs 4.50%，相对降 35.3%） - Seed SIM：0.65/0.53 vs 0.64/0.50；Seed-Hard 上仍逊于 MOSS（CER 17.
+- **代码**：https://github.com/ASLP-lab/M5-TTS | **Demo**：https://aslp-lab.github.io/M5-TTS-Demo-Page
+
+---
+## [Guidance at Pure Noise Erodes Speaker Similarity in Few-Step Token-Conditioned Flow-Matching TTS](https://arxiv.org/abs/2611.11179)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-08
+- **一句话贡献**：零样本 TTS 的 flow-matching 解码器在生产中常被压到 2–4 步 Euler，此时 WER 不变但说话人相似度（SIM）掉 1–6 分。本文证明损失主要来自首步 CFG：纯噪声点网络只能输出条件均值，制导演化使全部轨迹平移同一矢量，步长越长损失越大，后续步骤无法消除。据此提出免训练的 FSU（首步不去guidance）与 FSU-Mid（中点步），仅 3 次网络评估即在 Cosy
+- **关键技术点**：蒸馏/少步解码器普遍报告 SIM 下降但无文献解释成因；图像域 guidance 调度工作均在 5–250 步规模、以模式丢失/范数增长解释，未隔离单步作用，也不涉及语音。
+- **主要指标**：- FSU-Mid（NFE 3）：CosyVoice 2 SIM 74.87/81.27（两步官方 68.86/76.63，teacher 74.70/80.93），恢复 103%/108%；GLM-TTS 全 null 分支恢复 145%/135% - 8 个已发表规则平均恢复率对比：FSU-Mi
+- **代码**：https://github.com/16jhlee/FSU | **Demo**：暂无
 
 ---
 ## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)

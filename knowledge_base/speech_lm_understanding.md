@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 290 篇
+共 291 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1260,6 +1260,15 @@
 - **关键技术点**：Chunk 交错全双工模型把流式对话切成固定时长（1s）chunk，音频按实时到达，chunk 时长即硬 deadline；负载严重不对称：listen chunk 空闲窗口占 70–89%，而工具调用需数十次串行前向、音频到达后 1.8–2.6s 才完成、全部超时；AR 解码使响应起始额外延迟 417–1089ms。现有无损投机解码与 PredGen 等方案均未利用端到端模型的 idle 窗口。
 - **主要指标**：- speak chunk 平均加速 2.6–2.8 倍，工具调用最高 23.41 倍；基线 PLD/Token Recycling/Lookahead 仅 0.96–1.23 倍 - #MAT 2.15–2.63（基线 1.01–1.23）；65–128 token 输出 AR 需 73.6 次前
 - **代码**：暂无（承诺释出 TickTock-Bench 会话清单与评测脚本，未附链接） | **Demo**：暂无
+
+---
+## [Task-adaptive anonymisation enables privacy-preserving sharing of clinical speech data](https://arxiv.org/abs/2611.11273)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-08
+- **一句话贡献**：临床语音既是数字生物标志又双重泄露隐私（声纹+所说内容），而不同病的评估依赖不同语音特性——固定匿名化流程顾此失彼。CASA 把匿名化变成任务引导的优化：LLM 控制体接收自然语言任务描述+隐私-效用要求，自主规划"声纹方法×内容脱敏"策略组合，通过递归自改进（RSI）按任务反馈迭代调整参数并将成败经验写入跨任务记忆。在 5 语言、11 个数据集 14 个临床任务（抑郁/自杀风险/AD/PD/言语
+- **关键技术点**：通用 VoicePrivacy 类方法压制声纹同时毁掉临床相关特征；疾病专用方案互不兼容。实证发现不同匿名方法对不同疾病的影响方向不一致（声障碍对 Resyn/Neural VC 极敏感，精神/认知任务耐受高）——不存在一劳永逸。
+- **主要指标**：- 联合达标率：CASA 14/14 vs 最强固定方法 8/14 vs SecureSpeech 4/14；ΔBACC 全任务优于 SecureSpeech - 敏感内容定位：F1 0.861 vs SecureSpeech-NER 0.570（Crisis热线）、0.914 vs 0.343（P
+- **代码**：https://github.com/JaderOx/AnonymiseAgent | **Demo**：暂无
 
 ---
 ## [Improving Large Audio-Language Model Embedding Baselines for Instruction-Aware Speech Retrieval](https://arxiv.org/abs/2611.09122)

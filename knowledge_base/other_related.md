@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 131 篇
+共 133 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -1178,6 +1178,24 @@
 - **一句话贡献**：实时语音智能体要求ASR编码器严格因果（不等未来音频）且每路推理状态不随通话时长增长。本文提出E-Gaborformer：保留E-Branchformer块，将全局分支改为Gated DeltaNet-2循环层与滑动窗口注意力3:1混合，所有深度卷积由固定因果Gabor原子字典参数化，并用sigmoid输出门消除循环分支训练停摆。LibriSpeech-100受控实验中27.6M模型dev-cle
 - **关键技术点**：Conformer、E-Branchformer等强ASR编码器均为双向，因果掩码后注意力仍需缓存全部历史K/V——18层d=1024、80ms帧的fp32缓存约每分钟110MB，十分钟即超1GB，服务成本随通话时长线性增长。分块Transformer靠截断限成本，纯线性注意力又丢失近期精确召回；严格因果加恒定内存下达到注意力级精度是核心矛盾。
 - **主要指标**：- 受控实验10 epoch：E-Gaborformer dev-clean/dev-other WER 20.5/39.2 vs 因果E-Branchformer 20.8/39.2；3 epoch均值25.2/43.0 vs 26.3/43.7，达同一精度快5-18% - 生产规模英语通用集：9
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [REAL: Reward Modeling through Evidence-Linked Analysis of Lifelikeness in Generated Speech](https://arxiv.org/abs/2611.12406)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：现有语音奖励模型的"解释文本"由单一理解模型生成、只按整句偏好一致性过滤，局部声学论断未必有音频依据。REAL 把"证据链"作为显式监督目标：REAL-Jury 用协调模型编排 Qwen3.5-Omni 与 Step-Audio-R1.1 交叉质证、强制对齐锚定时间戳、争议驱动的闭环审议合成证据关联报告；REAL-Judge 以 MiMo-Audio 为骨干 LoRA 蒸馏出带时间标记输入的单一奖
+- **关键技术点**：MOS 协议贵且慢；已有生成式评价模型（WavReward、SpeechJudge-GRM 等）的监督定义在话语/配对级，推理与音频证据之间的忠实性未经验证，CoT 忠实性研究表明解释可能只是事后合理化。
+- **主要指标**：- REAL-Judge：Standard 84.43%、Fine 65.36%（骨干 MiMo-Audio 68.42%/53.95%，相对提升 +16.01/+11.41pt） - 对比开源奖励模型：SpeechJudge 83.00%/58.45%、UniSRM 80.75%/63.29%；两
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Towards Trustworthy Mobile Speech Interaction: Ensuring Voice Authenticity and Transmission Integrity](https://arxiv.org/abs/2611.11777)
+
+- **方向**：语音前端 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：语音克隆让"声纹=身份"的移动端认证体系失效，现有音频水印多为离线、只管内容不管"是否真人当场说的"。MoBiMark 是首个把超声声道生物特征与语音水印结合的在线实时系统：手机听筒发射不可闻多频超声探针，录音麦克风接收声道路径回波，回波动态特征与语音内容嵌入融合生成双层动态水印（系统持久 UID+逐句 SID），联合训练的嵌入器/检测器在完成采集时嵌入水印。50 用户×4 机型、25 h 正样本
+- **关键技术点**：内容水印可被私有模型去除/重打；静态水印缺活体绑定；离线防护赶不上"边说边的伪造"；防御需在无专用硬件、端侧算力受限条件下闭环"信源真实性+传播完整性"。
+- **主要指标**：- 源级攻击（重放/克隆/联合攻击）平均防御 99.59%；传播级（片段编辑/删除/拼接/水印挪用/伪造）平均 99.91%；最难 P1/P2 编辑下水印相似度降至 76.59%/81.02%（真人 99.73%） - 感知与可懂度：SI-SNR/PESQ/ViSQOL/STOI 按 AudioSe
 - **代码**：暂无 | **Demo**：暂无
 
 ---

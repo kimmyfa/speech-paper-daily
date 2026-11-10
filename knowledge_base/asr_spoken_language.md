@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 94 篇
+共 95 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -468,6 +468,15 @@
 - **关键技术点**：现有稳定性方案要么靠推理期提交规则（local agreement、hold-n、mask-k）——模型本身仍在学习修订，无硬保证；要么因果化编码器或加注意力掩码——破坏预训练双向表征且不保证输出不回退。核心难题是"上下文界定"：何时收到的音频足以确定下一个token。
 - **主要指标**：- 总宏平均错误率（13集合）：R2T2 160ms U=1为5.76%，U=0为6.40%；基座Qwen3-ASR-1.7B全上下文5.15%、160ms未适配21.01% - 关键对比：R2T2 5.76% vs 开源流式基线X-ASR 8.97%、Voxtral Realtime 8.27%、
 - **代码**：https://github.com/netease-youdao/Confucius4-R2T2 | **Demo**：暂无
+
+---
+## [Pandemonium: Longform Target-Speaker Speech Recognition with Cross-Speaker Interactions](https://arxiv.org/abs/2611.10659)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-11-07
+- **一句话贡献**：针对 DiCoW 类目标说话人 ASR"各说话人独立解码、30 秒短窗"两个结构性缺陷，本文把 diarization 条件（STNO 掩码+FDDT 变换）集成进长form Parakeet FastConformer（DiCoP），并新增沿说话人轴的 cross-speaker attention（CSA）与 STNO 掩码精化器，让同一会话的多路解码在编码器内交互、互相消歧重叠段；用 DiC
+- **关键技术点**：TS-ASR 逐说话人独立前传，丢失跨说话人线索（重叠、轮次、backchannel）；Whisper 骨干 30 s 窗口限制长程上下文；SOT 类联合解码虽共享信息但对未知说话人数与重叠加噪泛化差。
+- **主要指标**：- Oracle 分离 6 集平均 cpWER：Pandemonium 14.7% vs DiCoW v3.3 16.3%、DiCoP 无 CSA 16.7%（CSA+精化器贡献约 2 个点） - +MOVER 全麦克风解码融合后均值 13.0%（NSF 10.8%）；预测分离 19.2%、+MOV
+- **代码**：https://hf.co/BUT-FIT | **Demo**：暂无
 
 ---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)

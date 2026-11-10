@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 52 篇
+共 54 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -468,5 +468,23 @@
 - **关键技术点**：通用语音增强需同时去除噪声、混响、带宽受限、削波及复合失真。连续域方法直接估计波形或声学特征，感知质量受限；离散 token 方法将增强转化为序列生成，感知质量强但存在质量-保真权衡。已有工作先生成声学 token 负担重，或用流匹配但语义恢复阶段建模能力不足，缺乏双向语言先验。
 - **主要指标**：- URGENT 2026 DNSMOS OVRL：3.225，全部系统最高 - BAK：4.093；NISQA：4.042（连续域最佳仅 3.952） - 内容准确率：80.61%，说话人相似度 0.640（较离散基线 0.592 提升 0.048） - 同配方控制实验：AATC 内容准确率 79
 - **代码**：暂无 | **Demo**：https://cantabile-kwok.github.io/timuse/
+
+---
+## [Virtual-Flow: Virtual Microphone-based Speech Enhancement via Semi-supervised Flow Matching](https://arxiv.org/abs/2611.11130)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-11-08
+- **一句话贡献**：虚拟麦克风估计（neural-VME）想用小型阵列等效大阵列，但监督式扩展需要每个虚拟位真值、数据集随 VM 数爆炸。Virtual-Flow 把 VME 建成条件 flow matching 生成任务并只依赖伪目标：利用"直达路径语音在 RM 间只是时延叠加"这一先验，用激励语音估计各 RM 时延、在 μ±3σ 等距网格取虚拟时延、生成 RM 时移相干叠加的伪 VM 谱，配合真实 4-rm 输入
+- **关键技术点**：消费设备麦数≤4 限制空间分辨率；已有 VME 单 VM 或需真值多 VM；判别式网络难当生成任务、GAN（Spatial-Magnifier）训练不稳且仍要目标；大规模 VM 数组的最优排布无解。
+- **主要指标**：- VM-BF PESQ（4麦生成12虚拟麦）：半监督 Virtual-Flow 2.79±0.02 > 有真值的 Spatial-Magnifier 2.61±0.06、FlowSE 2.40、SGMSE+ 2.38；SI-SDR 10.3 dB vs 未处理 −11.4 - 上界差距：16 物理
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Textraction: Unified Text-Guided Speaker Extraction and Enhancement for Single- and Multi-Channel Audio](https://arxiv.org/abs/2611.12493)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：现有文本引导提取消要 LLM 嵌入（贵）要么只支持单通道/绝对方位、无法表达 keep/remove 指令极性。Textraction 用一个统一网络覆盖单/双通道、语义/空间提示与增强任务：SC/MC 专用编码器+5 个共享 TF-Locoformer 块，提示与 SC/MC 身份经 cross-attention 注入每一层，一次前向直接输出目标，无分离-选择两阶段；文本侧用对比微调的轻量 E
+- **关键技术点**：注册语音/摄像头/阵列几何等条件常缺失；LLM 嵌入器计算重且需 LoRA 微调；冻结 CLAP 对指令极性不敏感（keep/remove 余弦近重合）；既有工作不联合单/多通道、不支持任意 keep/remove 组合或相对空间关系。
+- **主要指标**：- 属性提取：MC SI-SDR 11.11 dB / STOI 0.797 / WER 76.1→33.3%；SC 10.83 dB（语义提示下第二麦仅 +0.28 dB，作者如实分析） - 空间引导提取：SI-SDR 10.53 dB，接近用 oracle DOA 的 SSF 与 oracle 
+- **代码**：暂无 | **Demo**：https://aviad3189.github.io/Textraction/
 
 ---

@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 40 篇
+共 41 篇
 
 ## [Position-Aware Target Speaker Extraction for Long-Form Multi-Party Conversations](https://arxiv.org/abs/2606.29497)
 
@@ -153,6 +153,15 @@
 - **关键技术点**：现有AVTSE基准把说话人数固定在2、按控制SNR混合，忽略真实场景的近/远场几何、混响与突发噪声，且缺独立实拍评测集；因果高性能架构的参数量与每帧计算量超边缘实时预算，轻量方法则靠反复调用小分离器补容量；SI-SNR损失不显式把估计推离近场干扰者，泄漏随近场说话人数增加而恶化。
 - **主要指标**：- RealSSA-Sim：SI-SNRi 7.7 dB / SDRi 8.2 dB，较AV-TFGridNet（7.6）高0.1 dB、较Swift-Net-12（7.3）高0.4 dB - LRS3-2Mix：SI-SNRi 16.4 / SDRi 16.7 dB（超AV-Mossformer2
 - **代码**：https://cslikai.cn/Falcon/ | **Demo**：https://cslikai.cn/Falcon/
+
+---
+## [Nemotron 3 Diarization: Advancing the Accuracy–Efficiency Frontier in Streaming Speaker Diarization](https://arxiv.org/abs/2611.12246)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：8/10 | **日期**：2026-11-09
+- **一句话贡献**：把开源流式 Sortformer 从 4 说话人/80ms 输出升级到 8 说话人/10ms：骨干由 FastConformer+Transformer 117M 简化为纯 31 层 RoPE Transformer 99M，顶上加 subpixel 卷积把 80ms 帧映射到 10ms 分辨率，AOSC 缓存 188→264 帧并将静音 embedding 改为可学习。新增活动损失与"幽灵说话人
+- **关键技术点**：Streaming Sortformer-v2.1 限 4 人、预测 80ms 步进，说话人容量↑→缓存与推理成本↑、空通道易误激活（phantom）、10ms 帧步会爆炸注意力序列——四者互相耦合。
+- **主要指标**：- 离线（30.4s 缓冲）DER：DIHARD III 12.73 vs DiariZen 14.5、Sortformer-v2.1 19.09；CALLHOME 9.10 新 SOTA；NSF1-SC 11.00 vs v2.1 的 30.49 - 0.32s 超低延迟仍全面领先 v2.1 约 
+- **代码**：https://huggingface.co/nvidia/Nemotron-3-Diarization | **Demo**：暂无
 
 ---
 ## [Music-Source-Separation-Training (MSST): A Unified Framework for Training and Evaluating Music Demixing Models](https://arxiv.org/abs/2607.23395)
