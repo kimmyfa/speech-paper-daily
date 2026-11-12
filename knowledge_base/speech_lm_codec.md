@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 37 篇
+共 40 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -332,6 +332,33 @@
 - **一句话贡献**：RVQ神经语音编解码器对每帧固定分配相同数量码本，而相邻语音帧高度相似，独立量化造成码率冗余，低码率下尤为昂贵。本文提出即插即用的自适应关键-增量量化AKDQ：K帧用全部VQ量化作为参考锚点，D帧仅对帧间残差用少量VQ量化，由bit-bank驱动的因果调度器在目标码率下决策K/D，不改动编解码骨干、无需额外可训练模块。在LibriTTS上，DAC上1.5kbps的重建质量接近基线RVQ 2.0kb
 - **关键技术点**：SoundStream/DAC等RVQ编解码器每帧均匀分配码本，未利用相邻帧潜变量强相关性；直接减少VQ数或以FSQ等紧凑量化降码率往往需改架构或扩容量；已有的VRVQ虽可按帧分配但需引入可学习重要性子网络。
 - **主要指标**：- DAC@1.0kbps：MOS 3.830±0.370 vs RVQ 3.210±0.555，UTMOS 3.674 vs 3.395（+0.28），STOI 0.905、LSD 0.894、SIM 0.961均优于基线 - DAC@1.5kbps：MOS 4.220±0.210，逼近RVQ@2
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Which Acoustic Features Survive Compression? Tracker-Estimated First-Formant Statistics for Codec-Robust Audio Deepfake Detection](https://arxiv.org/abs/2611.13258)
+
+- **方向**：语音前端 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-11-09
+- **一句话贡献**：在干净录音上训练的深伪检测器经过电话/流媒体编解码后常大幅退化，但"哪些手工声学描述子在压缩后仍具判别力"从未被逐特征量化。本文对 36 个 utterance 级特征（共振峰、PNCC、LFCC、韵律）在 ASVspoof 2019 LA 上筛选，并在官方 ASVspoof 2021 LA 的 7 种 codec 条件下评估。33 个特征统计显著，但仅 4 个达到大效应量（|r|>0.5），且全
+- **关键技术点**：司法与生物识别场景中，检测器依赖的精细谱线索会被有损压缩扭曲或抹除，且神经嵌入不可解释。现有工作把前端当整体黑盒，缺乏逐特征、逐 codec 条件的退化测量。
+- **主要指标**：- 4 特征 F1-SVM：2021 LA 总体 EER 22.9%（范围 21.6–25.0%，最差 G.711 μ-law），跨 codec 波动 3.4pp；36 特征 SVM 23.5%，PSTN 达 31.1%，波动 13.1pp - 对比 AASIST：干净集 1.73%→2021 LA
+- **代码**：暂无（代码与预计算结果随补充材料发布，未提供公开仓库链接） | **Demo**：暂无
+
+---
+## [ESDCodec: Ultra-Low Bitrate Speech Codec with Enhanced Semantic Disentanglement and Subband Decoding](https://arxiv.org/abs/2611.14043)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：针对神经语音编解码器在约 1kbps 以下码率重建质量急剧退化、且语义-声学解耦不充分的问题，本文提出双流编解码器 ESDCodec：语义路采用 SimVQ 式冻结码本加可学习线性投影器生成单枚语义 token 并做 SSL 蒸馏，声学路用 RVQ 补充细节；解码端引入仅 9.6M 参数的子带感知条件网络，预测子带幅度/相位先验注入上采样各级。模型 89.78M 参数，在 0.85kbps 下 P
+- **关键技术点**：低码率（≤1kbps）下 RVQ 类编解码器重建质量显著劣化；单码本方法（WavTokenizer、Single-Codec）虽省码率但缺显式语义建模，双流方法（Mimi、SemantiCodec、DualCodec）语义-声学解耦与低码率目标仍难统一。
+- **主要指标**：（0.85kbps，LibriSpeech test-clean）： - PESQ 2.49、STOI 0.921、V/UV F1 0.936、Pitch 误差 33.86、ViSQOL 2.74、WER 4.18%、MUSHRA 88.2（GT PESQ 4.64） - 关键对比：同码率双流基线 
+- **代码**：https://github.com/vspeech/ESDCodec | **Demo**：暂无
+
+---
+## [AURA: Auditory Spatial Intelligence via a Unified Representation from a General-Audio Encoder through Complete Alignment](https://arxiv.org/abs/2611.13687)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：现有空间音频语言模型依赖单独训练的空间编码器，使空间与语义处理分裂在不同特征空间。本文发现无空间监督训练的通用音频编解码器（X-Codec）冻结表征本身保留空间信息，但双声源场景下 LLM 对其左右方向预测处于随机水平，并将其归因于"音频-文本信息不对称"。据此提出 AURA：六槽双耳表征（显式耳间差分）加场景/几何监督完成音频-文本对齐，编解码器与 Qwen3-8B 全程冻结，仅训练 64.63
+- **关键技术点**：空间音频理解系统需专用空间编码器（BAT/OWL 等），通用 LALM 在空间任务上接近随机（Qwen2-Audio 单声源方向 8.85% vs 随机 12.57%）。核心问题是：不经空间监督的通用编解码器能否同时支撑"识别声音"与"定位声音"，其空间信息为何不可用。
+- **主要指标**：- 单声源 DoA 73.58%（BAT 72.28%，DSPAST-BAT† 80.84%）；双声源 DoA 48.21%（最强基线 37.90%，+10.31） - 单/双声源 DER 42.69%/64.72%（全表最低）；关系方向 BA 68.86% - MMAU 44.50%、MMAR 3
 - **代码**：暂无 | **Demo**：暂无
 
 ---

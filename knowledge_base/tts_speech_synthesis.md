@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 138 篇
+共 142 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -704,6 +704,15 @@
 - **代码**：https://github.com/16jhlee/FSU | **Demo**：暂无
 
 ---
+## [Emilia2: A Large-Scale Dataset for Controllable Long-Form Speech Generation](https://arxiv.org/abs/2611.13614)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-10
+- **一句话贡献**：开源语音语料多为数十秒短切片，长文本基准最多 2 说话人且缺每说话人参考音频，导致长时程、可控 TTS 缺乏训练与评测基础。本文用 Emilia2-Pipe 从 in-the-wild 音频构建 229K 小时、41 语言数据集，统一短句、单人长语音、多人对话三视图（>5 分钟样本占长语音时长 50.0%、对话 66.8%），并附 477 万条自然语言指令与 93.3 万条非言语（NV）标签，同时
+- **关键技术点**：零-shot TTS 拼接短片段生成长语音有音色漂移、停顿不自然、韵律断裂问题；现有长语音模型（HALL-E、MOSS-TTSD 等）缺大规模含表现力标注的长时训练语料，公开长时基准又在说话人数与参考音频覆盖上不足。
+- **主要指标**：- TTSD-Eval：NAR 中文 CER 5.27%、英文 WER 9.93%，低于最强基线 8B MOSS-TTSD（6.08%/11.09%）约 0.8/1.2 点，ACC 95.30/94.89 几乎持平（MOSS 95.36/95.00） - InstructTTSEval：AR 均值 
+- **代码**：暂无 | **Demo**：https://charlesnii.github.io/Emilia2-demo/
+
+---
 ## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-19
@@ -1242,5 +1251,32 @@
 - **关键技术点**：音频域对抗攻击长期依赖"生成后"处理（加性噪声、LTI滤波、Hammerstein注入等），对抗环节与合成管线割裂，引入额外计算并可能残留可被更鲁棒取证方法利用的伪影；把规避能力内嵌进合成过程、零后处理产生对抗语音是现有空白。
 - **主要指标**：- 基线检测（对V）：RawNet2/TSSD/AASIST EER为5.8%/3.40%/0.85% - 单目标V^R：RawNet2 EER 39.05%（AUC 64.58%），TSSD 38.33%，AASIST 21.09% - 多目标V^RT：RawNet2 EER 43.87%、TSS
 - **代码**：https://github.com/polimi-ispl/adversarial-tts/ | **Demo**：https://github.com/polimi-ispl/adversarial-tts/（含生成音频样本）
+
+---
+## [Alania-2: Turkish text-to-speech with instant and fine-tuned voice cloning](https://arxiv.org/abs/2611.13845)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：针对土耳其语等中资源语言 TTS 数字/缩写/外来词朗读不可靠、零样本克隆丢字的问题，提出 488M 参数的 Alania-2：采用 VoxCPM 架构（LM 骨干+扩散头生成连续音频潜变量），从零用 18,195 小时土耳其语语音（90% 为教师模型合成并自动过滤）训练，配合含 134 条读音规则的文本正则化器。Freya-TR-Eval 上 WER 达 1.44%（前代 5.99%），内置音色
+- **关键技术点**：主流零样本 TTS 以英中数据为主，开源土耳其语系统可懂度相差一个数量级；土耳其语数字/日期带须随读音一致变化的格后缀，大小写转换易破坏点 i/免点 i；前代 3.3B SNAC codec-LM 在基准上约 17 词错 1 词。
+- **主要指标**：- Freya-TR-Eval WER：1.44%（Alania-1 为 5.99%，降约 4 倍；CER 0.28% vs 1.81%；UTMOS 3.67 vs 3.19；RTF 0.151 vs 2.49） - 正则化消融：150 句含数字测试，原始文本 WER 66.7% vs 正则化 6.
+- **代码**：https://huggingface.co/datasets/cloud0day3/alania-synthetic-speech-tr（数据集与评测 harness，权重不开源） | **Demo**：https://speech.patientdesk.ai
+
+---
+## [Antalia-2 Mini: A 7.6-million-parameter Turkish text-to-speech model trained entirely on synthetic speech](https://arxiv.org/abs/2611.13811)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：面向端侧 CPU 可运行的土耳其语单音色 TTS，本文提出 7.62M 参数的 Antalia-2 Mini，全部训练音频由约 300 倍大的 VoxCPM2（约 2.29B）克隆一条 9.88 秒合成参考音频生成，经自动质检保留约 1790 小时。模型为字符输入、无音素化器，采用 flow matching + shortcut 自一致生成器（8 步采样）与 Vocos 式 iSTFT 声码器，
+- **关键技术点**：小模型可在本地设备运行、无需 GPU 与上云，但已有的小型土耳其语系统（Piper 16M、MMS-TTS 36M）WER 达 3.41%/6.38%，远低于 2.38B 的 Trendyol-TTS（1.16%）；同时高质量真人语料在低资源语言上昂贵稀缺。本文验证纯合成蒸馏能否让小模型逼近大系统可读性。
+- **主要指标**：- Mini 1.0.1（公开 harness）：WER 1.09%，CER 0.220%，clean 句占比 92.9%，全带 UTMOS 3.18 - vs EMA Lightning 1.0.1（8.6M）：WER 差 +0.05 [−0.22,+0.32]、CER 差 −0.005，配对 b
+- **代码**：https://huggingface.co/cloud0day3/antalia-mini（权重+推理，Apache-2.0） | **Demo**：https://huggingface.co/spaces/cloud0day3/antalia-mini
+
+---
+## [DialInstruct-TTS: Interactive Expressive Speech Generation via Multi-Turn Dialogue with Fine-Grained Temporal Control](https://arxiv.org/abs/2611.13875)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：现有指令式 TTS 仅支持整句一次性风格控制，微调需重述指令并重生成全句，无法保留已满意片段。本文提出 DialInstruct-TTS 交互式多轮表现力 TTS 框架：冻结的 Qwen3-8B 作为对话修订规划器，将上下文反馈解析为结构化 TemporalPlan；时间声学控制模块在 Irodori-TTS 骨干上实现情感/语速/音量/气声的 span 级局部控制；参考潜变量修订机制跨轮锁定非目
+- **关键技术点**：指令式 TTS（PromptStyle、CosyVoice3、Qwen3-TTS 等）为句子级一次性控制，迭代精修代价高且会破坏已接受区域；现有语音编辑（VoiceCraft、VoxEditor）多为一次性，缺上下文化的多轮增量修订与非目标保留。
+- **主要指标**：- 全局风格：Overall Match 4.283 / MOS 3.930（基线 Irodori 2.792/3.935、Qwen3-TTS 3.077/3.186、CosyVoice3 2.911/2.688），Match 较最强基线高 1.21 - 局部控制盲测：偏好率 92.1% vs Qw
+- **代码**：暂无 | **Demo**：https://anonymous.4open.science/w/eacl-demo-17C5/
 
 ---

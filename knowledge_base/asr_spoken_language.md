@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 95 篇
+共 98 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -855,5 +855,32 @@
 - **关键技术点**：主流Speech LLM对齐依赖连续特征投影与大规模成对语音，多语言数据严重不均衡，低资源语种难以训练专用对齐模块；TASU/TASU2虽证明文本对齐可行但仅限英语，跨语种音系干扰与稀疏性下的共享后验接口能否成立尚属未知。
 - **主要指标**：- TASU-Real-LoRA：池化WER 8.21%（vs 独立OWSM-CTC 10.08%，相对降18.6%） - Projector-only：真实后验9.93% / 学习模拟器11.50% / 启发式CPS 20.55% - 低配对语音：CPS init+1/9语音一epoch 9.19
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Earlybird: Predictive Streaming Speech Recognition in 29M Parameters](https://arxiv.org/abs/2611.14421)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：流式 ASR 通常在说话人发音结束后 90–400ms 才输出词，拖慢语音智能体响应。本文提出 Earlybird——29M 参数（4-bit 仅 16.8MB）的预测式流式识别器：不改架构、不用未来音频，把音频按 80ms 粒度随机截断，以"已到期词全文+2 个预测下一词"为目标训练。在 LibriSpeech clean 上中位词在发音结束前 90ms 被正确预测，六大测试集均为最早；69% 
+- **关键技术点**：流式识别器"词说完才出词"的延迟直接侵占语音智能体的检索/规划时间。FastEmit、LocalAgreement 等只是逼近"词结束时刻"，无法提前；已有 predictive ASR 仅在句尾掩码音频上离线预测，不适用于逐帧流式场景。
+- **主要指标**：- 中位词延迟：LibriSpeech clean −90ms（发音结束前），对比 Moonshine Tiny runtime +270ms、Whistle +400ms、Whisper base +90ms，六集全为最早 - 结束前正确预测词占比：68.8%（clean）vs 基线 3.4–25
+- **代码**：https://huggingface.co/sahilmahendrakar/Earlybird-29M | **Demo**：暂无
+
+---
+## [Swanada: Split-Encoder Capability-Routed Conformer CTC and Sub-30 MB On-Device Speech Recognition Across Twelve Scripts](https://arxiv.org/abs/2611.13814)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：针对 12 种印度/古典文字（梵语、印地英语及 10 种印度语言）端侧 ASR 中单语言 Conformer 体积过大（12 语言超 2.1 GiB）、ONNX 导出常数膨胀、CTC 流式前缀抖动及移动 WebAudio 不稳四大瓶颈，提出 Swanada 开源系统：共享 INT8 Conformer 编码器按能力路由到 17 层 177 MiB Studio 与蒸馏 14 层 25.35 MiB
+- **关键技术点**：逐语言部署量化 Conformer-Large 需 12×177 MiB，超出浏览器缓存与手机内存预算；联合大词表 softmax 又带来 12 倍投影算力开销与跨文字漏字。静态相对位置编码表（10–20 MB FP32）与 1×1 Conv1d 触发的 ConvInteger 缺 WASM SIMD 快速内核，进一步阻碍子 30 MB 导出。
+- **主要指标**：- Held-out CER：Studio 5.43%（WER 25.88%）；Mobile 18.56% - Open 12-lang CER：Studio 8.87%，全部 16 集 12.06%；Mobile 19.23%/21.85% - 关键对比：与 12 个单体 Conformer-L（
+- **代码**：https://github.com/hemanth/swanada | **Demo**：暂无
+
+---
+## [AVCC: Audio-Visual Conversation Corpus for Turn-Taking Prediction with a Human Benchmark](https://arxiv.org/abs/2611.13957)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：多人下一说话人预测（NSP）领域缺乏匹配真实机器人"单摄像头+单麦克风"条件的公开基准，也没有人类在同一切点的表现参照。本文将 31 小时双人/三人在线对话语料 AVCC 扩展为公开基准：新增说话人不重叠的 7 视频测试集（865 hold+865 shift 互静默间隙事件）、全语料词级强制对齐转写，并采集 154 名受试者在相同预测点的人类基线。评测 RoleVAP 与 MuVAP：MuVAP
+- **关键技术点**：现有 NSP 研究多用逐人传感器（眼动仪、近讲麦、每人一摄像头）且各自定义事件，VAP 路线则依赖 Switchboard 等每说话人干净通道的电话语料；无任何公开基准覆盖机器人实际的单摄单麦多人场景，也无人类参照，导致"65% 准确率离信号上限多远"无从判断。
+- **主要指标**：- NSP 平衡准确率：MuVAP 63.3%（2-speaker 67.5%、3-speaker 59.4%）；Human-Ind 59.5%，Human-Maj 67.7% - Hold/shift 平衡准确率：MuVAP 67.9%、RoleVAP 66.5%；Human-Ind 64.0%，
+- **代码**：https://github.com/Haotian-Qi/AVCC | **Demo**：暂无
 
 ---

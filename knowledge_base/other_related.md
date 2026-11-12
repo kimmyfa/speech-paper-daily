@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 133 篇
+共 135 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -540,6 +540,15 @@
 - **关键技术点**：VR/AR等场景需大量存储并实时卷积多位置RIR。既有方法或仅处理单通道张量化RIR，或将RIR矩阵化后用GLRAM联合压缩，均未系统利用"同房间RIR共极点（common-pole model）"导致的因子子空间相似性；而C-CPD类耦合分解要求某模式全部因子强制共享，过于刚性。
 - **主要指标**：- 同压缩率C=0.8、D=4仿真远场：JMCBTD平均NM约−16 dB，优于GLRAM（−13 dB）3 dB、优于SMCBTD（−12 dB）4 dB - 关键对比（vs GLRAM，K_d=1）：SMARD增益约8–10 dB；SRIRACHA约5–8 dB；ChurchIR约10 dB -
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Walrus Technical Report](https://arxiv.org/abs/2611.13689)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-10
+- **一句话贡献**：本文提出 Walrus，一个 8B 参数的统一语音与音频基础模型，覆盖 ASR（含语码转换、多说话人重叠）、AST/S2ST、TTS、情感识别、字幕生成与音频理解等 20+ 任务、100+ 语言。其主张不是新架构而是数据中心配方：backbone 完全沿用 Gemma 4 E4B，靠三阶段课程学习+任务/数据集双权重训练 600M+ 样本。Walrus 在 CS-FLEURS 达 7.23 CER
+- **关键技术点**：现有 SpeechLLM 研究聚焦扩参数、改架构，数据配方很少被系统披露；而真正困难的能力（语码转换、重叠说话、娱乐域音频、推理式音频问答）恰是公共语料缺失的数据问题。此外各任务 token 预算悬殊（TTS/S2ST 输出远超 ASR），朴素混合会让生成任务主导损失、破坏识别核心能力。
+- **主要指标**：- ASR：MLS 6.89 WER（先前最佳 8.20，降 1.31）；VoxPopuli 7.84 vs Gemma4 11.78；FLEURS 5.33（94.7% 词准，超 Qwen3-Omni-30B） - CS-ASR：CS-FLEURS read 7.23 CER vs 32.30（降
+- **代码**：https://github.com/sony-speech/walrus | **Demo**：https://sony-speech.github.io/Walrus-Demo/
 
 ---
 ## [Speech Entrainment in Multi-Party Conversations with a Digital Agent](https://arxiv.org/abs/2607.22939)
@@ -1197,5 +1206,14 @@
 - **关键技术点**：内容水印可被私有模型去除/重打；静态水印缺活体绑定；离线防护赶不上"边说边的伪造"；防御需在无专用硬件、端侧算力受限条件下闭环"信源真实性+传播完整性"。
 - **主要指标**：- 源级攻击（重放/克隆/联合攻击）平均防御 99.59%；传播级（片段编辑/删除/拼接/水印挪用/伪造）平均 99.91%；最难 P1/P2 编辑下水印相似度降至 76.59%/81.02%（真人 99.73%） - 感知与可懂度：SI-SNR/PESQ/ViSQOL/STOI 按 AudioSe
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [On the information rate of phones, syllables and words](https://arxiv.org/abs/2611.13990)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-10
+- **一句话贡献**：编码同样语音内容时，phone、音节、词、词组哪个语言学单元信息率最低？文献报告的 phone 约 50 bps、音节约 39 bps 口径不一、不可直接比较。作者在 LibriSpeech 960h 英语有声书的强制对齐音素序列上，先用概率链式法则证明完美模型下所有切分单位的信息率严格相等，进而在"有限建模预算"下用 n-gram 与 20M 参数 transformer 统一以留出集交叉熵率计
+- **关键技术点**：信息率是语音单元选择、人类语言效率理论与零资源单元发现的核心度量，但既有研究定义与估计数据各异无法横比。作者指出该问题在理想信源编码下平凡（单位等价），只有模型容量受限时切分粒度才影响比特开销，现有文献缺少同数据、同预算的系统对比。
+- **主要指标**：（bps，音素层）： - transformer 词单元：28.07（全场最优） - 音素：29.56；word-BPE 5000 合并：29.27；phone 子词 BPE（2k 词表）：28.98±0.28 - n-gram：word-BPE 200 最优，词与 word-BPE 1000 并列
+- **代码**：https://github.com/kamperh/inforate/ | **Demo**：暂无
 
 ---
