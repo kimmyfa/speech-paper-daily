@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 291 篇
+共 292 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -2619,5 +2619,14 @@
 - **关键技术点**：现有多模态方法（如 Causal-ERC）的融合与提示策略不显式依赖模态间预测分歧与样本级可靠性，强冲突证据仍被无差别整合；多数 LLM 方法（InstructERC、BiosERC、PRC-Emo）局限于文本模态，且依赖 SBERT 检索、说话人传记等外部组件与辅助数据构建，工程复杂并引入新误差源。
 - **主要指标**：- IEMOCAP：Acc 73.44%、W-F1 73.38% - MELD：Acc 71.79%、W-F1 70.60% - 相对最强多模态 LLM 基线 Causal-ERC：Acc +1.84/+1.71、W-F1 +1.92/+1.58；W-F1 超最强非 LLM 基线 CFN-ESA +
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Kezek: Splitting Mono Two-Person Conversations into Per-Speaker Tracks for Full-Duplex Dialogue Data](https://arxiv.org/abs/2611.16933)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：全双工语音对话模型需要每人单声道的对话数据来学习轮替、重叠与附和（backchannel），但存量对话音频多为单声道混合。Kezek 将恰好两人的 16kHz 单声道录音转成每人一条、时长与时间轴不变的双轨输出，重叠与"嗯/对"等短插入语归位到原说话人。方法为两阶段：阶段 1 由相位不敏感声纹引导的 PairNet 对整段录音一次性决定"谁何时说、谁是谁"，阶段 2 是条件化时域分离器且两轨之和精
+- **关键技术点**：现有"diarization→分离/生成修复"级联用于构建对话数据时有三类致命失败：窗口聚类链接错误导致声道交换、轮替被学反；短、轻、常与主语音重叠的 backchannel 恰是 diarization 最容易丢弃的；另一人声音泄漏到本轨会让模型误以为自己是双声道。且级联常截断丢弃部分录音、速度慢，标准 SI-SDR/DER 均无法反映这些问题。
+- **主要指标**：（Kezek vs pyannote→DialogueSidon）： - 短回复保留：Open Yap 0.830 vs 0.687；CallHome 他人语音上 0.796 vs 0.711 - 泄漏：−13.9dB vs −10.1dB（Open Yap） - 无声道交换率：0.934 vs 0
+- **代码**：https://github.com/Manifestro/kezek | **Demo**：https://manifestro.io/models/kezek
 
 ---

@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 142 篇
+共 143 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -1278,5 +1278,14 @@
 - **关键技术点**：指令式 TTS（PromptStyle、CosyVoice3、Qwen3-TTS 等）为句子级一次性控制，迭代精修代价高且会破坏已接受区域；现有语音编辑（VoiceCraft、VoxEditor）多为一次性，缺上下文化的多轮增量修订与非目标保留。
 - **主要指标**：- 全局风格：Overall Match 4.283 / MOS 3.930（基线 Irodori 2.792/3.935、Qwen3-TTS 3.077/3.186、CosyVoice3 2.911/2.688），Match 较最强基线高 1.21 - 局部控制盲测：偏好率 92.1% vs Qw
 - **代码**：暂无 | **Demo**：https://anonymous.4open.science/w/eacl-demo-17C5/
+
+---
+## [RSE-TTS: Compact Text-to-Speech through Shared Text-Aware Reference Encoding and Generation](https://arxiv.org/abs/2611.15464)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：紧凑型零样本TTS难在小容量下既说准新文本又保留参考说话人音色与说话方式：声学续写把生成绑定参考音频长度，传统参考编码器的定长嵌入又丢失表现力细节。本文提出RSE-TTS，用预训练自回归TTS主干兼作重建式说话人编码器（RSE），将参考音频与对应文本联合压缩为8个连续向量作为生成条件，编码与生成共享参数，编码器加生成器参数减少48%。最终118M生成器在三个英文基准上WER与相似度全面超越官方MO
+- **关键技术点**：大模型与大数据显著提升零样本声音克隆，但紧凑生成器必须以小容量同时完成文本内容准确复现与参考音色/语气的保留，参考音频的高效利用成为核心设计问题。声学续写保留丰富语音线索却引入录音瑕疵、异常停顿并消耗生成上下文；说话人验证嵌入压缩过度，难以承载表达细节。
+- **主要指标**：- Seed-TTS：RSE共享文本+音频 WER 1.33% / SIM 0.552（随机初始化仅0.400，独立预训练音频编码器0.530） - CV3-eval：2.63% / 0.499；MiniMax：0.64% / 0.615，共享方案在多数槽位领先五种消融配置 - 参考时长扩展：3→2
+- **代码**：暂无 | **Demo**：https://voxnexusai.github.io/RSE-TTS/
 
 ---

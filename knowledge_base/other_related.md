@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 135 篇
+共 136 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -1215,5 +1215,14 @@
 - **关键技术点**：信息率是语音单元选择、人类语言效率理论与零资源单元发现的核心度量，但既有研究定义与估计数据各异无法横比。作者指出该问题在理想信源编码下平凡（单位等价），只有模型容量受限时切分粒度才影响比特开销，现有文献缺少同数据、同预算的系统对比。
 - **主要指标**：（bps，音素层）： - transformer 词单元：28.07（全场最优） - 音素：29.56；word-BPE 5000 合并：29.27；phone 子词 BPE（2k 词表）：28.98±0.28 - n-gram：word-BPE 200 最优，词与 word-BPE 1000 并列
 - **代码**：https://github.com/kamperh/inforate/ | **Demo**：暂无
+
+---
+## [# 2026-11-13 语音论文速递](https://arxiv.org/abs/2611.15691)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：孟加拉语书写顺序特殊（前置元音写在辅音左侧）且口语大量嵌套英语借词，严格因果流式ASR的固定前瞻窗无法"回头看"后缀去校正词根，在语码切换边界形态被截断。本文首次系统研究低资源黏着语句内 Bangla-English CS 流式ASR，提出 Dynamic Block-Online 框架：以 VAD 自然停顿对齐宏观块推理，块内使用离线训练的全局双向注意力，兼顾延迟与形态完整。配合 750 借词的
+- **关键技术点**：低资源印度语系流的在线ASR主要靠单语 transducer/CTC，句内切换几乎无人处理。黏着语中"前置元音+英语词根+巴语后缀"等语言单元常超出模型窗口，严格因果注意力缺乏后见上下文，无法用未来帧校正已提交的历史帧，在切换点产生不可逆对齐漂移。
+- **主要指标**：- WER 38.73%（CER 15.62%），Dynamic Block Paraformer (750h+aug, 3s)，对比 750h 因果流式 3s 为 37.20%（2.4s 为 39.45%） - 细粒度 CS-WER (.53/.29/.35) 对比 同预算因果流式 (.58/.3
+- **代码**：https://github.com/King-Rafat/Dynamic_Streaming_ASR | **Demo**：暂无
 
 ---
