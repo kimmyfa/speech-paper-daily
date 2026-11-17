@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 41 篇
+共 42 篇
 
 ## [Position-Aware Target Speaker Extraction for Long-Form Multi-Party Conversations](https://arxiv.org/abs/2606.29497)
 
@@ -369,5 +369,14 @@
 - **关键技术点**：既有 AVTSE 几乎全部基于普通视角视频，缺少带干净参考且畸变可控的同步视听数据；鱼眼图像的径向畸变随位置变化，常规唇读特征的 ROI 对齐与时序一致性受破坏，现有研究既无评测协议也无法在相同声学输入下对比视觉采集条件。
 - **主要指标**：- 鱼眼最优配置 SI-SDRi：11.84 dB（STOI 0.81、PESQ 2.96），同配置去 DA 为 10.47 dB，DA 增益 +1.37 dB - 普通相机基线 SI-SDRi：19.33 dB（STOI 0.90、PESQ 3.41），鱼眼最优仍落后 7.49 dB - 冻结唇编
 - **代码**：https://huggingface.co/datasets/phot0nqqq/AISHELL8-FISHEYE | **Demo**：https://e181d4.github.io/AISHELL8-FISHEYE/
+
+---
+## [eDIAR: Training-Free Open-Speaker Streaming Diarization for Long Meetings and Large Archives via e-means](https://arxiv.org/abs/2611.18529)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-11-16
+- **一句话贡献**：固定槽位的神经日志模型（Streaming Sortformer、Nemotron-3）能流式运行且身份稳定，但说话人数上限被槽位数卡死；传统聚类管线无上限，却在线漂移、无法修复早期错误决策。本文提出 eDIAR：完全不重训，槽头负责活动与重叠判定，仅当所有槽位都被用满后才用官方 e-means 对槽内嵌入做容量感知拆分，配合 90 秒有界窗口重聚类与槽锚定 ID。该方法把 Nemotron-3 
+- **关键技术点**：端到端固定槽位日志模型按到场顺序排列输出通道、经说话人缓存流式运行，四槽模型永远输不出第五个人；聚类管线只靠短而嘈杂的嵌入决定身份，在线版会锁死早期错误。两类弱点分别被"人多"和"会久"触发，而真实会议两者兼有，需要同时具备槽头的身份稳定性与聚类的无限说话人容量。
+- **主要指标**：- 非流式 DER：VoxConverse 4.5%、LibriSpeech 8.6%，说话人计数准确率 SCA 达 88.9%，均为全场最优 - 流式 1.04s LibriSpeech DER 16.4% vs Streaming Sortformer 41.4%；20 人规模把 Nemotro
+- **代码**：暂无 | **Demo**：https://kyudan1.github.io/eDIAR/
 
 ---

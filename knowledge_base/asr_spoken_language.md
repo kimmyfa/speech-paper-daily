@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 98 篇
+共 100 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -479,6 +479,15 @@
 - **代码**：https://hf.co/BUT-FIT | **Demo**：暂无
 
 ---
+## [Structured Speaker Conditioning for Diarization-Guided Target-Speaker ASR](https://arxiv.org/abs/2611.16371)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-11-13
+- **一句话贡献**：本文面向会议转写中的目标说话人语音识别（TS-ASR），针对 DiCoW 等四状态 STNO 活动条件会压缩干扰人数与交接历史、且在局部活动相似时无法区分说话人的问题，提出结构化说话人条件（SSC）：用 TCRE 编码逐说话人活动轨迹history并构造 target-centric 二阶/三阶关系，用 RSC 从整段 session 音频+diarization 中选取独占参考片段提取声学身份，
+- **关键技术点**：现有 diarization 引导的 TS-ASR（DiCoW/Dixtral 的 FDDT）把非目标轨迹聚合为静音/仅目标/仅干扰/重叠四态，不同干扰人数、不同交接历史会映射到相同条件；且两个局部活动完全相同的说话人无法靠活动信息区分，目标语音被完全遮盖或轨迹交换时条件失效。
+- **主要指标**：- Qwen3-ASR oracle 完整 SSC cpER：16.47 / 12.86 / 17.19 / 19.67%（四集），相对 STNO-FDDT 平均 RER 6.23% - FireRedAudio+SSC+GSPO vs DiCoW / MOSS-TD：四集平均相对降低 17.9% 
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)
 
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-01
@@ -882,5 +891,14 @@
 - **关键技术点**：现有 NSP 研究多用逐人传感器（眼动仪、近讲麦、每人一摄像头）且各自定义事件，VAP 路线则依赖 Switchboard 等每说话人干净通道的电话语料；无任何公开基准覆盖机器人实际的单摄单麦多人场景，也无人类参照，导致"65% 准确率离信号上限多远"无从判断。
 - **主要指标**：- NSP 平衡准确率：MuVAP 63.3%（2-speaker 67.5%、3-speaker 59.4%）；Human-Ind 59.5%，Human-Maj 67.7% - Hold/shift 平衡准确率：MuVAP 67.9%、RoleVAP 66.5%；Human-Ind 64.0%，
 - **代码**：https://github.com/Haotian-Qi/AVCC | **Demo**：暂无
+
+---
+## [Scaffolding Self-Transduction with Alignment Attention Mask for Aligner-Encoder ASR](https://arxiv.org/abs/2611.15087)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：针对 Aligner-Encoder ASR 中"自转导"（self-transduction）的对齐须由编码器自注意力隐式学习、易在上层突兀涌现且在长语音上累积删除错误的问题，本文提出对齐注意力掩码（alignment attention mask）。其用预训练 RNN-T 的强制对齐生成帧-词路径，构造掩码把选定编码器注意力头限制在对齐路径窄带内取值，并在训练中以门控方式渐隐（faded）或以
+- **关键技术点**：Aligner-Encoder 把帧到词的转导放进编码器自注意力，省去 transducer lattice 与 decoder cross-attention，解码快无格点，但对齐完全靠序列级监督，优化脆弱；掩码能奏效恰因执行对齐的模块本身可被 mask 直接干预。
+- **主要指标**：- LibriSpeech test-clean/other WER：faded path band 3.5/5.9，对比 Aligner baseline 3.9/6.4 降约 0.4–0.5 - oracle path band 达 1.2/2.9，远超 RNN-T teacher 2.2/5.
+- **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -96,7 +96,7 @@ def parse_output_files(output_dir: Path):
             if DUPLICATE_TITLE.search(title):
                 PARSE_STATS["headers"] += 1
                 continue
-            m = re.search(r"arXiv\s*ID\s*\**\s*[：:]?\s*([0-9]{4}\.[0-9]{4,5})", entry)
+            m = re.search(r"arXiv\s*ID\s*\**\s*[：:]?\s*(?:arXiv:?\s*)?([0-9]{4}\.[0-9]{4,5})", entry)
             if not m:
                 PARSE_STATS["no_id"] += 1
                 continue

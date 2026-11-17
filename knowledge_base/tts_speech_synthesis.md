@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 143 篇
+共 145 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -1280,6 +1280,15 @@
 - **代码**：暂无 | **Demo**：https://anonymous.4open.science/w/eacl-demo-17C5/
 
 ---
+## [An LLM Is All You Need: Data-Efficient Adaptation to Full-Duplex, Word-Level Spoken Dialogue](https://arxiv.org/abs/2611.14774)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：全双工语音对话通常靠数十万至上百万小时语音训练获得（如 Moshi 用 700 万小时），既昂贵又会改写承载知识的 LLM。本文将冻结的 Qwen3-Omni-30B-A3B 仅用 97M 可训练参数和约 30 GPU 小时的四阶段课程，改造成 80ms 帧时钟上逐词决策的全双工系统：停顿、让麦、接麦都是普通词表 token，由有限状态机在采样前屏蔽非法转移；talker 只读离散 token，两
+- **关键技术点**：现有全双工模型（dGSLM、Moshi、SyncLLM）靠海量语音训练获得重叠/打断/附和行为，代价高且灾难性遗忘 LLM 知识；即便显式建模轮换的系统也只在粗粒度时间片或二态控制 token 上决策，无人做到"冻结 LLM + 逐词轮换"。
+- **主要指标**：- 停顿误接麦 TOR：0.170（合成）/0.267（Candor），开源次优 0.584/0.662；附和 TOR 0.145 最低、频率 0.073 次/秒最高 - 打断停声/响应延迟（v1.5）：0.75/0.64s，全场景最低；但打断后响应率 0.42 低于 Freeze-Omni 0.7
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [RSE-TTS: Compact Text-to-Speech through Shared Text-Aware Reference Encoding and Generation](https://arxiv.org/abs/2611.15464)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-13
@@ -1287,5 +1296,14 @@
 - **关键技术点**：大模型与大数据显著提升零样本声音克隆，但紧凑生成器必须以小容量同时完成文本内容准确复现与参考音色/语气的保留，参考音频的高效利用成为核心设计问题。声学续写保留丰富语音线索却引入录音瑕疵、异常停顿并消耗生成上下文；说话人验证嵌入压缩过度，难以承载表达细节。
 - **主要指标**：- Seed-TTS：RSE共享文本+音频 WER 1.33% / SIM 0.552（随机初始化仅0.400，独立预训练音频编码器0.530） - CV3-eval：2.63% / 0.499；MiniMax：0.64% / 0.615，共享方案在多数槽位领先五种消融配置 - 参考时长扩展：3→2
 - **代码**：暂无 | **Demo**：https://voxnexusai.github.io/RSE-TTS/
+
+---
+## [CoTTAGE: An Explainable Judge for Text-to-Audio Generation](https://arxiv.org/abs/2611.17644)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-16
+- **一句话贡献**：TTA生成快速迭代使可扩展且可解释的自动评估成为刚需，但现有指标只输出标量、与人类判断相关性有限，通用音频大模型打分又常产生幻觉。本文提出CoTTAGE，一个"先推理后预测"的可解释TTA评审模型，基于声学证据生成自然语言理由后再给出文本相关性（REL）与整体音质（OVL）分数。作者新采集10,362条音频的人类OVL标注填补训练数据空白，采用SFT蒸馏推理链加Thurstone成对偏好强化学习两
+- **关键技术点**：人工MOS评测昂贵难扩展；CLAPScore/ELSA等嵌入指标与人类判断相关性有限，Audiobox-Aesthetics四维美学分与合成音频OVL相关LCC最高仅0.34，无法替代专用标注；闭源模型虽能解释但成本高不可复现。
+- **主要指标**：- REL XACLE：LCC 0.685 / SRCC 0.652，对比Gemini-3.1 Pro 0.551、CLAPScore 0.472、Qwen2.5-Omni 0.162 - OVL PAM-Audio：LCC 0.611 / SRCC 0.614，优于专门模型PAM的0.587；Cl
+- **代码**：https://github.com/YuXiangLin1234/CoTTAGE | **Demo**：暂无
 
 ---

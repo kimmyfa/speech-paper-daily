@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 40 篇
+共 41 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -198,6 +198,15 @@
 - **关键技术点**：ALM评测多在言语与环境声一致时进行，模型可靠语言捷径答对而无需真正感知声学事件，故相容条件下的成功无法区分忠实声学定位与文本偏置。已有冲突基准仅覆盖模态间冲突或词汇-韵律/场景级冲突，时间与空间定位基准又缺少矛盾言语声明，跨"何事/何时/何处"的音频内言语-声学冲突长期缺位。
 - **主要指标**：- Event Identity（五选一准确率，Qwen3-Omni）：audio-only 84.6%、冲突下39.8%；五模型相容-冲突gap 24.8-46.5pp - 语音跟随率SFR：Identity冲突47.0-80.8%（远超20%随机参考）；Temporal Order最高92.4%
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Speech Tokenizers are Vulnerable: Transferable Semantic Attack and Robust Tokenizer](https://arxiv.org/abs/2611.14929)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-11-13
+- **一句话贡献**：语音 tokenizer 是 ASR 与大音频语言模型（LALM）共同的语音前端，但其语义层面的脆弱性此前缺乏系统研究。本文提出 T-SemAttack：以多个代理语义编码器（S3Tokenizer、HuBERT、Whisper、MFCC）构成的集成联合漂移表征空间，并加入心理声学掩蔽约束保持感知质量，实现对 9 个开源/黑盒 ASR 与 4 个 LALM 的可迁移语义攻击。机理分析进一步揭示共享
+- **关键技术点**：现有可迁移 ASR 攻击多针对整条识别管线（依赖 CTC 等解码目标），成本高且掩盖了前端表征的作用；已有 tokenizer 研究只评估高斯噪声耐受性，而"抗随机噪声"并不等于"抗语义扰动"。攻击者无需目标模型梯度，仅凭代理模型即可生成对下游 ASR/LALM 通用有效的对抗样本，这是 LLM 化语音系统的安全缺口。
+- **主要指标**：- ASR 攻击效果：LibriTTS 平均 WER 61.35%（干净 2.50%），Seed-TTS-EN 81.87%、ZH 50.81%，E2E-VGuard 仅 23.15%/11.26% - 黑盒系统：讯飞 49.61%、GPT-4o-mini-transcribe 46.09%（Lib
+- **代码**：https://wxzyd123.github.io/t-semattack | **Demo**：https://wxzyd123.github.io/t-semattack
 
 ---
 ## [P2PSynCodec: An Ultra-Low-Bitrate Neural Speech Codec with Plain-to-Pseudo Synergistic Vector Quantization](https://arxiv.org/abs/2606.05876)

@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 292 篇
+共 297 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1287,6 +1287,15 @@
 - **关键技术点**：单通道 SSL 模型（BEATs、MW-MAE 等）无法定位声源且解析复杂声景能力受限；空间音频模型受限于合成标签监督与 clip 级目标，学不到帧级分辨率表征，且绑定特定麦克风几何、难以迁移。
 - **主要指标**：- HEAR 聚合：83.2±0.1，超过 Dasheng（82.8，其数据多 56 倍）与 MW-MAE（80.0），空间能力"零成本" - TAU-2019 冻结探测：ER 0.28 / F 84.6 / LE 14.1°，优于监督基线 SELDNet（0.34/79.9/28.5°）及 BAT
 - **代码**：https://github.com/labhamlet/AudioSphere | **Demo**：https://huggingface.co/labhamlet
+
+---
+## [Any Channel Count, One Token Stream: Incorporating Spatial Audio Understanding and Reasoning into Large Audio-Language Models](https://arxiv.org/abs/2611.18112)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-16
+- **一句话贡献**：现有大型音频语言模型为求输入稳定，普遍把多通道录音压成单通道内容，通道间相位差携带的方向、距离与运动信息被丢弃。本文提出 SpheraAudio：支持任意通道数（单通道、立体声、FOA、高阶 Ambisonics、标定麦克风阵列）输入的 4B 模型，空间编码器从多通道复数谱提取空间线索，生成与音频 token 按时序对齐交错的空间 token，并以 SMRoPE 显式编码配对 token 的时间对
+- **关键技术点**：主流 LALM（如 Qwen3-Omni）只消费单通道 log-mel 输入，方向、距离、运动信息随通道间相位差被丢弃；已有空间音频扩展要么绑定双耳或 FOA 固定格式，要么把空间 token 前置拼接、靠微调隐式学习时间对应，且多为 LoRA 适配，未考察空间适配对通用音频能力的影响。
+- **主要指标**：- SpheraQA 全答对率：60.18%，超 Spatial-Omni-7B（41.65%）18.53pp；仅收单通道 W 的 Gemini 3.1 Pro 为 42.73% - SO-Bench：66.94%（基线 64.61%）；TWNM：71.70%（+25.5pp） - 坐标 35.91
+- **代码**：暂无（论文承诺开源代码与 SpheraQA 基准） | **Demo**：暂无
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
@@ -2621,6 +2630,33 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [DeALR: Decoupled Audio-Latent Optimization with Acoustic Backtracking for Test-Time Reasoning](https://arxiv.org/abs/2611.15439)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：大型音频语言模型（LALM）通常只在首次前向传播中编码音频，此后多步推理在语言主导空间中展开，导致细粒度声学证据被语言先验淹没。本文提出 DeALR，首个在冻结 LALM 上组合潜空间搜索与声学片段回溯的免训练测试时推理框架：通过注意力引导的片段级声学回溯（SAB）定位关键音频片段并与思考 token 交错，再用解耦音频-潜变量优化（DALO）以置信度为奖励的策略梯度联合搜索思考向量与音频 pat
+- **关键技术点**：现有潜空间推理（Coconut、SoftCoT、LTPO）在音频域暴露两个缺陷：（1）声学证据衰减——音频只被编码一次，后续推理几乎全部关注文本语境，作者用自制的 AAR（Audio Attention Ratio）指标量化证实常规方法与朴素潜推理基线的音频注意力占比极低；（2）冻结模型缺乏在测试时主动回溯关键声学证据的机制。
+- **主要指标**：- MMAU（Qwen2.5-Omni-7B）：73.1%，优于 Vanilla 70.2%、CCoT 72.7%、LTPO 71.5%、DMLR 67.3% - MMAR（Qwen2.5-Omni-7B）：60.3%，较 Vanilla +2.6%；九子集平均 80.5%（+2.4%） - Qwe
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Right Answers, Inconsistent Evidence: Source-Level Counterfactual Auditing of Large Audio-Language Models](https://arxiv.org/abs/2611.15463)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：大音频语言模型（LALM）在多声混合上答对"某声音事件是否存在"，未必因为模型真正"听见"了被问声源。本文提出声源级反事实审计方法TRACE：依次删除被查询目标与每个竞争声源生成多个视图，比较冻结模型对同一问题的打分，检验"所有含目标视图得分高于删目标视图"这一证据排序是否成立。对8个开源LALM、3456条受控混合的审计显示，6.3%的正确答案存在排序失效，常规目标删除检查漏检其中42.5%；失
+- **关键技术点**：现有幻觉基准与目标删除测试都只读反事实"答案"，无法区分两类性质不同的错误：证据排序被打破（任何共享阈值都修不好）与阈值恰好落在错处（可校准修复），因此报警集合混杂、无法指导不同补救手段。
+- **主要指标**：- 总体排序失效率：正确答案的6.3%（1,184/18,911，95% CI 4.9–7.8%），其中2.7% competitor-confused、3.6% ungrounded - 目标-only分数检查漏检率：42.5% - SNR梯度：+5→−5 dB失效4.9%→8.4%（+3.5 p
+- **代码**：https://github.com/yikise/TRACE | **Demo**：暂无
+
+---
+## [Duo: A Reciprocal World Model for Full-Duplex Interaction](https://arxiv.org/abs/2611.15131)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：Duo v1 针对现有世界模型只模拟物理场景、智能却外置于键盘鼠标指令的困境，提出"互惠世界模型"（RWM）：世界同时内禀 Intent（交互认知）与 Realization（视听行为生成）两种对等能力。系统以 17 帧约 0.71 秒为一个 chunk，持续感知用户实时音视频文本并自主决定开口、聆听或打断；Intent 模块自回归输出参与决策，Realization 模块经双 rollout 蒸
+- **关键技术点**：主流世界模型只仿真物理场景演化，智能停留在外部键鼠控制；现有音视频模型仅把语言模型当一次性指令编码器，难以在连续音视频流上实时决定开口与打断。
+- **主要指标**：- 检查总通过率：93.3%（180 项、6 条二值标准） - 语言遵循 / 语音可懂度 / 视觉身份稳定：90/90 项全通过 - 视听情感一致性：96.7%；唇音同步准确率：90.0% - 内容响应性：73.3%（22/30），为唯一弱项；与最强基线无数值对比（论文未提供对照实验） - 响应延迟
+- **代码**：https://github.com/inclusionAI/Duo | **Demo**：https://duo-v1.github.io
+
+---
 ## [Kezek: Splitting Mono Two-Person Conversations into Per-Speaker Tracks for Full-Duplex Dialogue Data](https://arxiv.org/abs/2611.16933)
 
 - **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-13
@@ -2628,5 +2664,14 @@
 - **关键技术点**：现有"diarization→分离/生成修复"级联用于构建对话数据时有三类致命失败：窗口聚类链接错误导致声道交换、轮替被学反；短、轻、常与主语音重叠的 backchannel 恰是 diarization 最容易丢弃的；另一人声音泄漏到本轨会让模型误以为自己是双声道。且级联常截断丢弃部分录音、速度慢，标准 SI-SDR/DER 均无法反映这些问题。
 - **主要指标**：（Kezek vs pyannote→DialogueSidon）： - 短回复保留：Open Yap 0.830 vs 0.687；CallHome 他人语音上 0.796 vs 0.711 - 泄漏：−13.9dB vs −10.1dB（Open Yap） - 无声道交换率：0.934 vs 0
 - **代码**：https://github.com/Manifestro/kezek | **Demo**：https://manifestro.io/models/kezek
+
+---
+## [FineSpeaker: Reliable Speaker Representation Learning at Fine Temporal Resolution](https://arxiv.org/abs/2611.15288)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-13
+- **一句话贡献**：论文针对"时间分辨率—表征可靠性"矛盾：短时长验证与说话人日志需要细粒度帧级说话人表征，但短窗内说话人证据稀少、身份易与音素和声学变化混杂。作者提出 FineSpeaker：以可调 n 帧局部均值池化产出分辨率可控的帧wise说话人表征；用多尺度卷积+TCN+滑动窗口注意力做局部时序建模，增强近程上下文同时抑制跨说话人混合；并设计 VAE 概率潜变量 + DiT flow matching 的生成
+- **关键技术点**：现有说话人编码器（x-vector、ECAPA-TDNN、CAM++、Res2Net/ReDimNet 等）面向长语音池化的整句 embedding 优化，池化目标对帧级特征只有间接约束，单帧常依赖语言/声学内容即可完成区分，导致短片与逐帧表征不稳定；统计/注意力池化在帧数少时二阶统计不可靠，且长上下文易跨越发言人边界引入混合。
+- **主要指标**：- VoxCeleb1-O 整句 EER：0.670%（minDCF 0.0730，9.7M 参数 / 3.1G FLOPs，FLOPs 仅为最优 ReDimNet-B4 的 43%，后者 EER 0.574%） - 短语音 EER：0.5s 9.12%（ReDimNet-B4 11.25%）、1s
+- **代码**：暂无 | **Demo**：暂无
 
 ---
