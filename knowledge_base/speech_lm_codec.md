@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 41 篇
+共 42 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -369,5 +369,14 @@
 - **关键技术点**：空间音频理解系统需专用空间编码器（BAT/OWL 等），通用 LALM 在空间任务上接近随机（Qwen2-Audio 单声源方向 8.85% vs 随机 12.57%）。核心问题是：不经空间监督的通用编解码器能否同时支撑"识别声音"与"定位声音"，其空间信息为何不可用。
 - **主要指标**：- 单声源 DoA 73.58%（BAT 72.28%，DSPAST-BAT† 80.84%）；双声源 DoA 48.21%（最强基线 37.90%，+10.31） - 单/双声源 DER 42.69%/64.72%（全表最低）；关系方向 BA 68.86% - MMAU 44.50%、MMAR 3
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [UMelCodec: An Ultra-Low-Bitrate and Lightweight Mel-Domain Neural Speech Codec](https://arxiv.org/abs/2611.25569)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：7/10 | **日期**：2026-11-20
+- **一句话贡献**：针对几百 bps 级超低码率语音编码需同时保持可懂度、自然度与细粒度声学细节这一难题，现有纯声学码率偏高，而引入预训练语义表征的编解码器虽降码率却带来额外模型规模与算力开销，且可能丢失声学细节。论文提出 UMelCodec，一种仅依赖声学表征、工作在 325 bps 的轻量级 mel 域神经语音编解码器，采用两阶段架构。在 LibriTTS 上，它仅用 19.67 M 参数、1.93 G MACs
+- **关键技术点**：Opus/EVS 等传统码率多在数 kbps 以上；SoundStream、EnCodec、DAC、BigCodec 等波形域神经码本计算代价大；APCodec、MDCTCodec、Spectral Codec 虽在频谱域降低建模负担但码率仍偏高；WavTokenizer、Mimi、SNAC 用较复杂结构压码率；FlowMAC、FMelCodec 用流匹配迭代精修但增加推理步数；SemantiCodec、FocalCodec 靠大预训练模型降码率却使模型体积暴涨并牺牲声学细节。
+- **主要指标**：（325 bps）： - 参数量：19.67 M（最低） - MACs：1.93 G（最低） - RTF：GPU 0.006（156.37× 实时，RTX 3090）；CPU 0.120（8.36× 实时，Xeon E5-2680 v3） - test-clean：ViSQOL 3.80、LSD 0
+- **代码**：暂无 | **Demo**：https://redmist328.github.io/UMelCodecdemo/
 
 ---

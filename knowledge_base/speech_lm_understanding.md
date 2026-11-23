@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 297 篇
+共 299 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -2673,5 +2673,23 @@
 - **关键技术点**：现有说话人编码器（x-vector、ECAPA-TDNN、CAM++、Res2Net/ReDimNet 等）面向长语音池化的整句 embedding 优化，池化目标对帧级特征只有间接约束，单帧常依赖语言/声学内容即可完成区分，导致短片与逐帧表征不稳定；统计/注意力池化在帧数少时二阶统计不可靠，且长上下文易跨越发言人边界引入混合。
 - **主要指标**：- VoxCeleb1-O 整句 EER：0.670%（minDCF 0.0730，9.7M 参数 / 3.1G FLOPs，FLOPs 仅为最优 ReDimNet-B4 的 43%，后者 EER 0.574%） - 短语音 EER：0.5s 9.12%（ReDimNet-B4 11.25%）、1s
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [From Attention to Semantics: Detecting and Mitigating Sound Event Hallucinations in Large Audio-Language Models](https://arxiv.org/abs/2611.25789)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-20
+- **一句话贡献**：针对大型音频语言模型（LALM）声事件幻觉问题，本文推翻了"音频注意力不足导致幻觉"的主流假设：真实与幻觉事件可获得相当的注意力总量，但聚焦位置不同。作者将 LatentLens 隐语义检索适配到音频表征，发现幻觉事件与其所关注音频表征的检索文本语义不匹配，据此提出免训练"先检测后缓解"框架：聚合语义支持投票检测幻觉事件，再用差分音频掩蔽（保护有据事件区域、静音幻觉区域）重生成。在 AudioSe
+- **关键技术点**：此前工作（AAD、TCD 等）认为 LALM 幻觉源于音频注意力占比不足，通过解码期增强音频证据缓解，但存在对"不足"的过度解释——真实事件与幻觉事件的音频注意力总量可相当，仅靠注意力强度无法判别幻觉，且盲目掩蔽音频会伤及真实内容。
+- **主要指标**：- 检测 F1（事件/样本级，AudioSet-Flamingo3）：0.7466 / 0.7897，优于最强基线 RAUQ Entropy 0.5977/0.7067 - 检测 Qwen2.5-Omni-AudioSet 样本级：精确率 0.5020→0.6808 同时召回保持 0.8327，F1
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [When Sounds Turn Heads: Recovering Event Timing That Audio LLMs Fail to Say](https://arxiv.org/abs/2611.25960)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-20
+- **一句话贡献**：音频大模型（Audio LLM）在时间定位（temporal grounding）上常给出错误的起止时间戳。本文发现：模型内部存在少数注意力头能准确追踪被查询声音的时刻，但生成答案并未表达这一信息，属于"听得到却说不出"。作者定义"查询跟随度"（QF）选出 K=8 个关键头，通过查询替换、声音平移、阻断与置零三种干预证明这些头确实塑造时间戳；进一步提出无需训练的 head-guided decod
+- **关键技术点**：Audio LLM 能识别声音却给出有偏时间戳。既有改进方案要么微调加时间编码/token，要么依赖裁剪窗口或已知金标时长；而"注意力定位"类方法（如视频 TG-Heads）在音频上面临头对静音也有响应、目标声音可能缺失、短暂事件夹在长音频中三大障碍。
+- **主要指标**：- RealDESED recording mIoU：Omni/Qwen2-Audio/AF3 由答案的 0.359/0.066/0.108 升至 head-guided 的 0.533/0.480/0.559 - UnAV-100(held-out) mIoU：Omni 0.210→0.346(+
+- **代码**：暂无（论文声明"代码、所选头与设置将公开发布"） | **Demo**：暂无
 
 ---

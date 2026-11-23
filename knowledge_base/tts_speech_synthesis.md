@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 145 篇
+共 146 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -711,6 +711,15 @@
 - **关键技术点**：零-shot TTS 拼接短片段生成长语音有音色漂移、停顿不自然、韵律断裂问题；现有长语音模型（HALL-E、MOSS-TTSD 等）缺大规模含表现力标注的长时训练语料，公开长时基准又在说话人数与参考音频覆盖上不足。
 - **主要指标**：- TTSD-Eval：NAR 中文 CER 5.27%、英文 WER 9.93%，低于最强基线 8B MOSS-TTSD（6.08%/11.09%）约 0.8/1.2 点，ACC 95.30/94.89 几乎持平（MOSS 95.36/95.00） - InstructTTSEval：AR 均值 
 - **代码**：暂无 | **Demo**：https://charlesnii.github.io/Emilia2-demo/
+
+---
+## [Joint Language Modeling for In-the-Wild Speech-Scene Generation with Distinct Token Representations](https://arxiv.org/abs/2611.25503)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-20
+- **一句话贡献**：论文针对语音-场景生成中"语音与环境声被压进单一混合表征、且训练依赖独立源仿真混叠"两大痛点，提出基于 LLM 的联合语言建模框架：用源感知神经音频编解码器从混合音频直接抽取时间对齐的语音流与环境流双 token 序列，由预训练 Qwen3-0.6B 以交错自回归方式联合生成两路 token，并支持在无隔离音源的真实录音上微调。在 AC-filtered AudioCaps 评测集上，模型 Mix
+- **关键技术点**：现有语音-场景生成（VoiceLDM、ImmersiveTTS、VoiceDiT 等）多基于文本到音频扩散模型，将语音与环境声建模为单一混合潜变量，两路异质信号互相干扰；而按独立录音相加构造的仿真场景又缺失真实声景中共享混响与录音条件的语音-环境依赖，难以直接利用野外数据训练。
+- **主要指标**：- Mix WER：6.43%（仿真预训练，ImmersiveTTS 7.91%、VoiceLDM-M 8.44%） - 真实适配后：CLAP 0.293、FAD 3.71（CFG 1/5），对比预训练 CLAP 0.255/FAD 4.76，基线最好 CLAP 仅 0.247 - MOS-SN /
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)
