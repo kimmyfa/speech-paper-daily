@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 42 篇
+共 44 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -207,6 +207,24 @@
 - **关键技术点**：现有可迁移 ASR 攻击多针对整条识别管线（依赖 CTC 等解码目标），成本高且掩盖了前端表征的作用；已有 tokenizer 研究只评估高斯噪声耐受性，而"抗随机噪声"并不等于"抗语义扰动"。攻击者无需目标模型梯度，仅凭代理模型即可生成对下游 ASR/LALM 通用有效的对抗样本，这是 LLM 化语音系统的安全缺口。
 - **主要指标**：- ASR 攻击效果：LibriTTS 平均 WER 61.35%（干净 2.50%），Seed-TTS-EN 81.87%、ZH 50.81%，E2E-VGuard 仅 23.15%/11.26% - 黑盒系统：讯飞 49.61%、GPT-4o-mini-transcribe 46.09%（Lib
 - **代码**：https://wxzyd123.github.io/t-semattack | **Demo**：https://wxzyd123.github.io/t-semattack
+
+---
+## [Factorized Self-Supervised Speech Tokenization](https://arxiv.org/abs/2611.18898)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-11-17
+- **一句话贡献**：针对现有语音分词器把内容、韵律、说话人、录音条件一股脑压进单流离散符号、导致码本膨胀与"微扰即崩"的痛点，Ubisoft La Forge 等提出 Facto：先对 WavLM 第六层自监督特征做线性因子分解 X≈CS，再用一个最小二乘线性估计器把闭集外新说话人的特征直接投影回共享内容空间，经 patch、PCA、k-means 得到低频单码本 token，配 FiLM 条件化 HiFiGAN 重
+- **关键技术点**：：离散语音单位需同时编码内容与所有说话人×演绎组合，码本大、下游 LM 复杂。已有解耦方法依赖信息瓶颈、对抗或文本监督，结构复杂且 token 对扰动脆弱；Kamper 等人的线性因子化鲁棒但仅服务闭集训练说话人，提取新音色需已知说话人变换的伪逆，无法开放集使用。
+- **主要指标**：- 噪声稳定性 UED：Facto 较基线降低约 50% - 12.5Hz 重合成 WER：5.0 vs Kanade 3.5、MOS 4.37、SIM 0.93 - Seed-TTS 12.5Hz：WER 2.7、SIM 0.94、Spoof-EER 46.4、MOS 4.36、MUSHRA 自然
+- **代码**：https://ubisoft-laforge.github.io/speech/facto | **Demo**：https://ubisoft-laforge.github.io/speech/facto
+
+---
+## [High-Fidelity Binarized Neural Vocoder](https://arxiv.org/abs/2611.22593)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-11-18
+- **一句话贡献**：本文提出首个面向1-bit权重/激活的二值化神经声码器BiVoC，解决现有高保真声码器全精度推理开销大、而直接二值化又导致频谱严重退化的矛盾。方法在其先前RNDVoC框架上，将逆问题建模、值域-零空间分解与细到粗非均匀子带引入1-bit设定，并设计二值卷积单元BCU与混合精度分配策略。LibriTTS上BiVoC仅1.08M参数、1.01G OPs即达PESQ 3.447、VISQOL 4.779
+- **关键技术点**：端侧TTS与嵌入式声学设备要求声码器在严格延迟、功耗与内存预算下持续运行，而主流高保真声码器依赖全精度卷积。BNN理论上可带来32倍权重压缩与最高64倍卷积计算削减，但声码合成需精确的谐波连续性与相位结构，把HiFiGAN/Vocos的卷积层逐层替换为二值版本会出现严重的频谱塌落，故BNN此前从未被系统用于神经声码。
+- **主要指标**：- LibriTTS：BiVoC M-STFT 0.962、PESQ 3.447、MCD 3.222、VISQOL 4.779、WER 6.98%，1.08M参数、1.01G OPs/5s - BNN对比：HiFiGAN+BNN PESQ 1.246 / Vocos+BNN PESQ 1.829，B
+- **代码**：https://github.com/Andong-Li-speech/BiVoC | **Demo**：暂无
 
 ---
 ## [P2PSynCodec: An Ultra-Low-Bitrate Neural Speech Codec with Plain-to-Pseudo Synergistic Vector Quantization](https://arxiv.org/abs/2606.05876)

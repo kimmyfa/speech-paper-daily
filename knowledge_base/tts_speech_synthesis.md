@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 146 篇
+共 151 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -713,6 +713,15 @@
 - **代码**：暂无 | **Demo**：https://charlesnii.github.io/Emilia2-demo/
 
 ---
+## [Rethinking Post-Training for Expressive Zero-Shot Text-to-Speech](https://arxiv.org/abs/2611.19787)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-15
+- **一句话贡献**：本文提出"文本自适应韵律合成"问题：零样本声音克隆中，参考音频应只提供"谁在说"的音色证据，而"怎么说"应由目标文本决定，但现有克隆模型会过度模仿参考的单调风格导致平淡出声。作者在不改架构、不加显式风格控制的条件下，用三阶段后训练把 Qwen3-TTS（1.7B、12Hz codec token）从"参考条件模仿"改造为"文本条件表达"：DPO 冷启动表达对齐、GSPO 多目标强化（韵律表现力+声
+- **关键技术点**：零样本 TTS 的核心卖点是复刻参考说话人，但参考的表现力天花板直接锁死合成质量；现有可控方法需显式情感/风格标签或接口，与"只给文本和参考"的克隆范式冲突。如何靠后训练而非重训架构获得文本自适应表达能力，以及各后训练范式贡献几何，此前缺乏系统研究。
+- **主要指标**：- Emotion 总分：18.5 → 81.2（Out-Set 4.9 → 72.4） - Paralinguistics 总分：38.4 → 73.9 - 客观：EN WER 1.23→1.55、UTMOS 3.35→3.36（基本持平），表达力提升不牺牲可懂度 - 主观：NMOS 4.00、P
+- **代码**：暂无 | **Demo**：https://hujingbin1.github.io/TTS-Post-Train/
+
+---
 ## [Joint Language Modeling for In-the-Wild Speech-Scene Generation with Distinct Token Representations](https://arxiv.org/abs/2611.25503)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-20
@@ -1307,6 +1316,24 @@
 - **代码**：暂无 | **Demo**：https://voxnexusai.github.io/RSE-TTS/
 
 ---
+## [ProTTS: End-to-End Prominence-aware Natural and Controllable Text-to-Speech via Automatic Word Stress Discovery](https://arxiv.org/abs/2611.19832)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-15
+- **一句话贡献**：本文针对"知道该重读哪个词"与"把重读合成出来"两个能力在现有系统中彼此割裂的问题，提出 ProTTS：在 FastSpeech 2 的 variance adaptor 内嵌入聚类头，从模型自身预测的音高/能量/时长特征中无监督发现词级重音（word stress），发现结果再驱动强调方差预测器修改重读词的韵律，全程不需任何重音标注。同一架构在推理时支持三种模式：纯重音检测、自动重音感知合成、用
+- **关键技术点**：SOTA TTS 仍无法可靠产出语境恰当的重音；重音检测研究（监督/无监督）与强调可控合成研究平行发展——后者依赖外部重音标签，假设"哪里该重读"已解决；级联"检测器+可控合成器"则因两模块优化目标不同，检测出的标签未必对应合成可用的韵律区分，且 TTS 内部已有的声学对比信号被浪费。
+- **主要指标**：- 重音检测 F1（ISLE）：0.839（GER）/0.861（ITA），无监督基线约 0.70、有监督基线约 0.82 均被超过 - 零样本迁移：Tatoeba F1 0.933 - 主观：MOS 3.96 vs 基线 3.12，自然度偏好率 83.5%;VCTK 上 3.04→4.02、Lib
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [VoxMel TTS Technical Report](https://arxiv.org/abs/2611.20254)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-15
+- **一句话贡献**：零样本TTS普遍自回归建模学习式codec或潜变量，合成质量受限于声学分词器。VoxMel提出免分词器框架：用固定且精确可逆的双轴Haar小波变换分解mel频谱，语言模型主干仅对紧凑的Coarse-Mel自回归，时间/频率两级非自回归残差流按依赖顺序并行预测且均不回流历史，避免误差累积并降低对声学历史的依赖。0.6B参数、100K小时训练的模型在Seed-TTS test-en达1.51% WER
+- **关键技术点**：直接对全带mel帧级自回归面临两大困难：帧间强时间冗余使模型在teacher forcing下倾向依赖声学历史而非文本条件；每帧采样（含细节误差）都回灌历史导致误差累积。帧patch、低帧率学习潜变量与token级coarse-to-fine方案仍将生成结果重新送入历史，问题未根除。
+- **主要指标**：- Seed-TTS test-en：WER 1.51%、SIM 0.738（优于DiTAR 1.69%/0.735与ZipVoice 1.70%/0.697） - Seed-TTS test-zh：CER 1.29%、SIM 0.755；LibriSpeech：WER 1.98%、SIM 0.72
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [CoTTAGE: An Explainable Judge for Text-to-Audio Generation](https://arxiv.org/abs/2611.17644)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-16
@@ -1314,5 +1341,23 @@
 - **关键技术点**：人工MOS评测昂贵难扩展；CLAPScore/ELSA等嵌入指标与人类判断相关性有限，Audiobox-Aesthetics四维美学分与合成音频OVL相关LCC最高仅0.34，无法替代专用标注；闭源模型虽能解释但成本高不可复现。
 - **主要指标**：- REL XACLE：LCC 0.685 / SRCC 0.652，对比Gemini-3.1 Pro 0.551、CLAPScore 0.472、Qwen2.5-Omni 0.162 - OVL PAM-Audio：LCC 0.611 / SRCC 0.614，优于专门模型PAM的0.587；Cl
 - **代码**：https://github.com/YuXiangLin1234/CoTTAGE | **Demo**：暂无
+
+---
+## [Beyond Controllability: Speaker Diversity in Instruction-Guided Text-to-Speech](https://arxiv.org/abs/2611.19030)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-17
+- **一句话贡献**：本文首次系统审计指令引导TTS（ITTS）的输出说话人多样性，指出只看可控性会遗漏"重复同一粗粒度描述却生成雷同音色"的坍缩问题。作者先对11个说话人编码器做校准、筛选出8个可靠编码器，再以Emilia真人语音为基线（Vendi 68.3）用Vendi Score/MPCD对比7个开源ITTS系统，并按性别、年龄、口音、情感做属性条件分析。结果显示所有系统多样性显著低于真人，女性提示下多样性塌陷（
+- **关键技术点**：现有ITTS评测聚焦指令遵循（可控性），无人将输出说话人多样性与真人基线对比，也无人分析其随属性取值的变化。批量合成语料依赖同一粗粒度描述（如"女声"）反复产出不同音色，若儿童或少数口音仅能生成有限音色，下游语音模型将继承该偏差。
+- **主要指标**：- Vendi（真人基线）：68.3，7个开源系统全部低于基线且八个编码器上一致成立 - 女性vs男性Vendi：Qwen3-TTS 16.6对28.1（仅59%），7系统中5系统女性池更小 - 性别可控性：6/7系统双性别召回>0.88，唯VoxInstruct男性召回0.776 - 口音可控性：
+- **代码**：https://github.com/dlion168/ITTS-Speaker-Diversity | **Demo**：暂无
+
+---
+## [21Codec: Decoder-side Speaker Control for Text-to-Speech](https://arxiv.org/abs/2611.24094)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-19
+- **一句话贡献**：现有音频编解码器把说话人身份隐含编进离散 token，流式 TTS 解码时每个短块只能从局部上下文重推身份，导致同一句话的音色在块间漂移到不同说话人。本文提出 21Codec：一个 800 bps、50 Hz 帧率的流式编解码器，用对抗说话人分类器与 NANSY 式共振峰移位增广主动压制 token 流中的可恢复身份信息，再在解码器端通过 DiT 风格自适应调制注入 ECAPA-TDNN 说话人 
+- **关键技术点**：自回归 TTS 普遍在离散音频 token 上运行，codec 成为管线中间表示；现有 codec 的解码器靠全局上下文推断偏静态的说话人身份，流式部署时被迫用短 chunk，每块重推身份导致可闻的音色漂移，与实时合成所需的短窗口根本冲突。作者主张这是表示问题而非解码问题。
+- **主要指标**：- 身份控制：SMOS 中改写语音被判与参考同一的评分接近真人同说话人对；跨语言参考时与源的相似度等同真人异说话人对，重复测量 ANOVA 主效应大且显著 - 探针可恢复性：无条件基线探针唯一正确 265 人 vs 本方法 154 人，token 流可恢复身份信息显著下降（配对 McNemar p<
+- **代码**：https://github.com/dcze4/21Codec（论文声明将发布） | **Demo**：暂无
 
 ---

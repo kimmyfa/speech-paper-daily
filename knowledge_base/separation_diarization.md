@@ -1,6 +1,6 @@
 # SEPARATION DIARIZATION（按评分降序）
 
-共 42 篇
+共 43 篇
 
 ## [Position-Aware Target Speaker Extraction for Long-Form Multi-Party Conversations](https://arxiv.org/abs/2606.29497)
 
@@ -369,6 +369,15 @@
 - **关键技术点**：既有 AVTSE 几乎全部基于普通视角视频，缺少带干净参考且畸变可控的同步视听数据；鱼眼图像的径向畸变随位置变化，常规唇读特征的 ROI 对齐与时序一致性受破坏，现有研究既无评测协议也无法在相同声学输入下对比视觉采集条件。
 - **主要指标**：- 鱼眼最优配置 SI-SDRi：11.84 dB（STOI 0.81、PESQ 2.96），同配置去 DA 为 10.47 dB，DA 增益 +1.37 dB - 普通相机基线 SI-SDRi：19.33 dB（STOI 0.90、PESQ 3.41），鱼眼最优仍落后 7.49 dB - 冻结唇编
 - **代码**：https://huggingface.co/datasets/phot0nqqq/AISHELL8-FISHEYE | **Demo**：https://e181d4.github.io/AISHELL8-FISHEYE/
+
+---
+## [MOUSSE: Multilingual Overlapped Speech Separation with Predictive Uncertainty Estimation](https://arxiv.org/abs/2611.19706)
+
+- **方向**：语音前端 | **子方向**：Separation | **评分**：7/10 | **日期**：2026-11-15
+- **一句话贡献**：本文针对多语言重叠语音分离被忽视且现有分离模型对帧级不确定性无感知的问题，首先构建英-韩双语分离基准 MuSSeD（37800 条混合、514 个说话人、2–4 人、0%–100% 重叠率），再提出 MOUSSE：一个基于 flow matching 的分离框架，引入边界感知训练加权与帧级预测不确定性（置换不变的 Gaussian NLL），并在采样时用预测尺度自适应调节 classifier-f
+- **关键技术点**：现有分离系统几乎都在单语（英语）、固定说话人数下训练评测；跨语言的音系与语调差异使"语言身份解耦"与"个体说话人恢复"同时成立更困难。同时判别式模型一次前向只给出一组源估计，无法对不确定的时频区域迭代修正；标准 CFG 对整条序列用统一引导强度，忽视了不同帧上说话人活动与重叠程度的差异。
+- **主要指标**：- SI-SDRi：13.18 dB（最强基线 SR-CorrNet 11.60 dB，提升 1.58 dB） - SDRi：13.20 dB；ESTOIi：0.175（基线范围 -0.072～0.092） - 消融：去边界加权 12.10 dB、去 NLL+固定引导 11.93 dB、仅 PIT 
+- **代码**：https://github.com/SHIM-SUYEON/MouSSe | **Demo**：数据集 https://huggingface.co/datasets/syshim/MuSSeD-EnKo
 
 ---
 ## [eDIAR: Training-Free Open-Speaker Streaming Diarization for Long Meetings and Large Archives via e-means](https://arxiv.org/abs/2611.18529)

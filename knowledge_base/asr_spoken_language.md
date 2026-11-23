@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 100 篇
+共 107 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -488,6 +488,15 @@
 - **代码**：暂无 | **Demo**：暂无
 
 ---
+## [Beyond Mimicry: Constrained Exploration with GRPO for Joint Multi-Talker ASR and Diarization under Unknown Speaker Counts](https://arxiv.org/abs/2611.22627)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-11-18
+- **一句话贡献**：针对说话人数未知的多talker重叠语音，SpeechLLM纯SFT对齐在密集重叠下易出现爆发式幻觉与畸形说话人/时间戳标签。本文提出两阶段生成式框架：先以CoT增强的SFT让模型在转写前显式推断全局说话人数，再用GRPO结合多维约束感知奖励MCAR做受约束在线探索，直接优化置换不变准确率并施加分辨计数、时序与结构约束。在Libri3Mix与自建Dynamic-Mix（2+3人混合）上分别取得cp
+- **关键技术点**：传统级联管线（分离+ASR+聚类diarization）误差传播严重；SOT/PIT专用模型虽强但缺乏SpeechLLM的推理与泛化能力；直接把SOT类模型接进LLM的混合方案仍需外挂前端。纯SFT因teacher forcing从不针对自身畸形输出训练，且cpWER等目标是序列级不可导的，在说话人数变化的场景下产生连续幻觉、时间边界退化与CoT计数-实际生成段数不一致。
+- **主要指标**：- Libri3Mix：cpWER 14.52%、WDER 1.95%、TE 0.10s（SFT+CoT为22.45%/4.03%/0.18s） - Dynamic-Mix：cpWER 9.24%、WDER 1.12%、CoT-Acc 99.72%（零样本仅69.3%/18.52%/32.25%） 
+- **代码**：https://github.com/caiyunrui/MT-GRPO | **Demo**：暂无
+
+---
 ## [Soft Posterior Speaker Injection for Multi-Talker Speech Recognition](https://arxiv.org/abs/2609.01287)
 
 - **方向**：语音大模型 | **子方向**：ASR | **评分**：8/10 | **日期**：2026-09-01
@@ -900,5 +909,59 @@
 - **关键技术点**：Aligner-Encoder 把帧到词的转导放进编码器自注意力，省去 transducer lattice 与 decoder cross-attention，解码快无格点，但对齐完全靠序列级监督，优化脆弱；掩码能奏效恰因执行对齐的模块本身可被 mask 直接干预。
 - **主要指标**：- LibriSpeech test-clean/other WER：faded path band 3.5/5.9，对比 Aligner baseline 3.9/6.4 降约 0.4–0.5 - oracle path band 达 1.2/2.9，远超 RNN-T teacher 2.2/5.
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Learning from Distribution: Rethinking One-Hot Supervision for ASR and QA in Speech Language Models](https://arxiv.org/abs/2611.20436)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-16
+- **一句话贡献**：语音大模型常出现"ASR微调后口语问答崩塌"的冲突，既往归因于灾难性遗忘与跨模态错位。本文从任务输入输出映射与one-hot监督的交互角度重审：ASR近似一对一映射叠加重参考监督会把对齐行为拉向纯转录，而QA一对多映射保留生成多样性，呈现显著任务不对称——仅ASR训练的CE模型QA准确率仅2.44%，仅QA训练仍保有8.23% WER。据此提出LFD：以冻结文本LLM为教师，沿同一回答轨迹做前向K
+- **关键技术点**：SLM做ASR专精化训练会牺牲通用语音理解，现有缓解（经验回放、参数高效适配、模型合并、跨模态蒸馏）都从"忘没忘"出发，未解释同为生成式建模、共享同套CE监督的两个任务为何相互影响不对称，监督目标本身的角色被忽视。
+- **主要指标**：- 不对称证据：CE-ASR QA仅2.44%而CE-QA WER保有8.23% - ASR-only下LFD：QA 2.44%升至40.20%，LibriSpeech WER 6.89%降至6.57% - QA-only下LFD：QA 43.35%升至43.93%，WER由8.23%降至7.20%
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Winning the Leaderboard, Losing the Distribution: Diagnosing and Mitigating Acoustic Narrowing in Low-Resource ASR](https://arxiv.org/abs/2611.18653)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-17
+- **一句话贡献**：（仅标题，未精读）
+- **关键技术点**：土耳其缺乏大型开放语料，公开评测集中于少数干净朗读/广播集，面向榜单的微调收缩了模型良好服务的声学范围，而同源选型代理无法探测该退化，导致"刷榜赢、部署输"。
+- **主要指标**：（仅标题，未精读）
+- **代码**：https://github.com/RsGoksel/acoustic-narrowing | **Demo**：https://huggingface.co/spaces/RsGoksel/turkish-asr-benchmark-stt
+
+---
+## [Latency, Speech Recognition and Turn-Taking in Voice Agents for Spanish Phone Negotiation: An Externally Measured Comparison of Pipecat, LiveKit and GPT-Live](https://arxiv.org/abs/2611.19118)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-17
+- **一句话贡献**：语音谈判代理既要答得快，也要听对钱数、在被插话或"嗯""ok"附和下不丢失话轮控制，而现有比较多依赖框架自测延迟，掩盖了传输开销。本研究搭建经已知延迟校验的听者侧测量harness，用47条录音西语货主台词（μ-law 8 kHz电话格式）在5个场景×每架构77通话下，统一对比Pipecat与LiveKit级联（Deepgram nova-3+gpt-4.1-mini+ElevenLabs）和端到
+- **关键技术点**：框架自测延迟起于其VAD判定的用户说完（晚于实际语音结束）、止于本地释放首帧音频（早于对方听到），Pipecat/LiveKit分别低估9%/22%；OpenAI公布的GPT-Live 0.8 s turn-taking指标亦不含音频在网络与服务中的往返，且WER对谈判中"值钱的词"（金额）错误不敏感，形成系统性评测空白。
+- **主要指标**：- 内容响应中位延迟：2,616.0 / 3,090.0 / 2,444.8 ms（Pipecat/LiveKit/GPT-Live） - 首声延迟：2,597.2 / 3,070.9 / 2,125.8 ms（GPT-Live比Pipecat快471.4 ms，CI不含零） - 工具调用代价：1,
+- **代码**：https://github.com/AILabFr8tech/voice-negotiation-agents | **Demo**：暂无
+
+---
+## [Low-Latency LLM-Based Streaming Multi-Talker ASR with Verifiable Rewards](https://arxiv.org/abs/2611.19136)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-17
+- **一句话贡献**：面向可穿戴设备双声道实时对话转写场景：近场佩戴者与远场对话者的声音需以串行输出训练（SOT）格式流式解码并路由到对话 UI 两侧，角色标签必须固定且前置。SFT 的 token 级交叉熵无法优化序列级指标、对稀疏说话人标签监督不足，且为确认说话人而拖延整段文本。本文提出 RLVR 后训练框架，用固定角色 SA-WER 评分器加轮次级 onset-delay 有界乘性奖励做联合优化，将 SA-WER
+- **关键技术点**：已有的流式多说话人 ASR 依赖专用多通道或解混架构（如多通道 RNN-T），而语音 LLM 结合神经波束成形加 SOT 的方案并非原生流式。产品约束还要求角色不可在打分时置换（cpWER 允许置换故不适用），且每轮必须以角色标签开头以便 UI 即时分流，这两个耦合约束无法被 SFT 充分优化。
+- **主要指标**：- SA-WER：SFT 20.51% → SA-WER RL 13.14% → 加延迟奖励 12.70% - 佩戴者/对话者 SAE：3.2%/5.0% → 0.5%/0.3%；删除率 12.2%/14.4% → 9.5%/8.1% - onset p50：0.918s → 0.320s（降 65
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Pixel-KWS: Rendered-Glyph Representations for Orthographically Robust Open-Vocabulary Keyword Spotting](https://arxiv.org/abs/2611.19389)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-17
+- **一句话贡献**：开放词表关键词唤醒（KWS）允许用户在推理期以文本注册任意关键词，但其字符或音素文本编码器依赖训练期学到的固定 embedding 词表，遇到同形（homoglyph）、l33tspeak、重音等未见或视觉相似符号时失效。作者提出 PIXEL-KWS，将关键词字符渲染为 16×16 灰度字形图像，用轻量 CNN 取代 embedding 查表，使文本侧从视觉形态而非固定词表泛化。在 LibriPh
+- **关键技术点**：现有开放词表 KWS 的文本编码器无论采用字符、G2P 还是 BPE/音素 tokenizer，都以可学习查表 embedding 表示符号，词表封闭。当用户复制粘贴或输入混入不同 Unicode 编码但字形近似的同形字符、数字替换时，符号落到词表外或被映射成不同子序列，匹配关系被破坏。NLP 已有视觉文本表示（Salesky、PIXEL）尚未引入开放词表 KWS。
+- **主要指标**：- LPH EER：9.57%（PIXEL-KWS-M）、LPE EER：0.41% - LPH-T AUROC：94.65%、LPE-T AUROC：99.97% - 同形字符 p=1 退化：LPH +11.2%、LPE +2.2%（基线 +31.3%、+25.2%） - l33tspeak p=
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Sada-ASR: A Production Multidialectal Arabic Speech Recognition System](https://arxiv.org/abs/2611.19512)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-17
+- **一句话贡献**：针对阿拉伯语客服语音中"识别器按MSA构建评测、用户实际说各方言"的根本错配，EchoNova公开其生产语音助手Sada的识别器Sada-ASR：由双流数据管线（自有标注平台+网络弱标注）训练的注意力编码器-解码器模型。在120小时、含MSA与8种方言的私有测试集上，其WER 11.69%、CER 4.76%，低于微软MAI-Transcribe-2等11个商用与开源系统中最强者；六个公开集平均W
+- **关键技术点**：阿拉伯语双层语言现象使方言在词汇、发音、形态上偏离MSA且无标准正字法，用户还常英阿混说；在级联语音智能体中，ASR是错误最先发生且用户无法目视纠正的环节，而现有基准（MGB、QASR、Whisper评测）以MSA或广播语音为主，对生产客服多方言场景覆盖不足。
+- **主要指标**：- 私有集WER：11.69%，比最强外部系统MAI-Transcribe-2（13.51%）低1.83点（95% CI 1.72–1.93，相对下降13.5%），受控子集仍领先0.74点 - 私有集CER：4.76%，九变体全部为十二系统最低 - 九变体宏平均WER：15.52% 对比 MAI-2
+- **代码**：https://github.com/echonova-ai-solutions/arabic-asr-benchmark | **Demo**：暂无
 
 ---

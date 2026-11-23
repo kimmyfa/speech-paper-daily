@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 54 篇
+共 55 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -198,6 +198,15 @@
 - **关键技术点**：现有LLM-based SimulST的前缀增量生成使KV缓存每步失效，计算量二次爆炸，只能外挂VAD强制切分，损害指代消解与长程连贯；而已有交错读写架构依赖MFA等静态启发式对齐构造监督轨迹，无法刻画人类译员的动态预测性，RL类方法又仍需离线对齐数据且难以多语扩展。
 - **主要指标**：- 不切分流式（τ=0.5）：MuST-C en-zh 73.73 COMET/LongYAAL 1.14s，en-de 85.96/0.76s；ACL 60/60 en-zh 79.45/1.49s，en-de 85.59/1.08s - 关键对比：ACL en-de上比StreamATT（70.
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Back to Mel: Learning to Bridge Fidelity and Perception in Generative Speech Enhancement](https://arxiv.org/abs/2611.22628)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：8/10 | **日期**：2026-11-18
+- **一句话贡献**：针对生成式语音增强中可学习latent牺牲声学保真、扩散采样多步低效的问题，本文重新审视Mel谱的两大互补先验——层级频率带结构与RND伪逆值域恢复+退化相位，提出流匹配框架BaME：以2.9%于DiT-331M参数的子带感知Transformer（SaT）做Mel增强，用融合退化相位的phase-aware声码器重建波形，并以质量引导双相位（QDV）与一步保真-感知对齐（OS-FPA）实现单步生
+- **关键技术点**：生成式SE大量转向VAE/NAC等学习latent，但其为压缩/合成设计，丢失说话人特质与细粒度谱细节，SSL语义保真不保声学保真；Mel带通结构先验长期未被利用，传统Mel+声码器管线完全抛弃相位先验；多步FM采样推理慢，一步化方法又常在保真与感知间失衡。
+- **主要指标**：- DNS-2020（无混响）：BaME PESQ 3.430、SpkSim 0.957、WER 1.607%、UTMOS 4.119；PESQ较最强基线BSRNN(3.347)+0.083 - EARS-WHAM_v2去噪：PESQ 2.673 vs CleanMel 2.531；EARS-Rev
+- **代码**：https://github.com/Andong-Li-speech/BAME | **Demo**：暂无
 
 ---
 ## [Separate First, Then Associate: A Two-Stage Approach for Real-World Audio-Visual Speech Enhancement](https://arxiv.org/abs/2608.14812)

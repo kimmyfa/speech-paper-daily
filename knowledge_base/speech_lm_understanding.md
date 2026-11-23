@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 299 篇
+共 303 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -2673,6 +2673,42 @@
 - **关键技术点**：现有说话人编码器（x-vector、ECAPA-TDNN、CAM++、Res2Net/ReDimNet 等）面向长语音池化的整句 embedding 优化，池化目标对帧级特征只有间接约束，单帧常依赖语言/声学内容即可完成区分，导致短片与逐帧表征不稳定；统计/注意力池化在帧数少时二阶统计不可靠，且长上下文易跨越发言人边界引入混合。
 - **主要指标**：- VoxCeleb1-O 整句 EER：0.670%（minDCF 0.0730，9.7M 参数 / 3.1G FLOPs，FLOPs 仅为最优 ReDimNet-B4 的 43%，后者 EER 0.574%） - 短语音 EER：0.5s 9.12%（ReDimNet-B4 11.25%）、1s
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [A Speech-LLM Framework for Enrollment-Free Wake-Word-Guided Target-Speaker Recognition in Complex Noisy Scenarios for Seamless Human-Machine Interaction](https://arxiv.org/abs/2611.19844)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-15
+- **一句话贡献**：本文面向智能家居"唤醒词+指令"的真实交互场景，提出免注册（enrollment-free）的唤醒词文本引导目标说话人识别 Speech-LLM 框架：把已知唤醒词文本经文本线索编码器以交叉注意力注入预训练语音编码器，使声学表征与念出唤醒词的那位说话人隐式绑定；LLM 解码器在一次自回归中要么转写出目标人的指令、要么输出显式拒绝 token 屏蔽非目标人语音，彻底绕开声纹注册、独立说话人验证模块与
+- **关键技术点**：传统 TS-ASR（SpeakerBeam、VoiceFilter、SQ-Whisper、Xiaomi-CocktailASR）依赖事先录制的干净目标人语音做声纹注册，共享家庭设备上不现实；anchored 方法虽改用唤醒词音频段当锚点，但短且带噪的唤醒段难以提取可靠说话人表征；"验证+分离+ASR"级联管线计算复杂且误差逐级传播；通用多说话人转写系统（SOT、MOSS-Transcribe-Diarize 等）还要额外匹配步骤关联唤醒人身份，对归因错误敏感。
+- **主要指标**：- 指令 pos-CER：16.15%（无门控参考系统 B1 为 32.21% 且拒绝率 0%） - 非目标说话人拒绝率 RR：91.56% - 统一得分：87.70% vs 最强免注册基线 71.70%（提升 16.0 个百分点） - 线索长度效应：更长唤醒词带来单调 CER 下降（AISHELL
+- **代码**：https://github.com/YuCeong-May/WakeCue-ASR | **Demo**：https://huggingface.co/spaces/YuCeong-May/WakeCue-ASR
+
+---
+## [Think2Listen: Evidence-Centric Learning For Agentic Audio Understanding With LALMS](https://arxiv.org/abs/2611.21083)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-16
+- **一句话贡献**：Think2Listen提出面向智能体式音频理解的"证据中心"学习框架，针对LALM"能听见却不会用作推理证据"的鸿沟，遵循evidence before commitment原则：actor将多步推理与对LALM的定向提问交替进行，主动索取能区分竞争候选答案的声学线索并据此修订候选判断。框架以Adaptive Audio Evidence Loop承载交互、以Transition-as-Cred
+- **关键技术点**：现有音频agent或调用预定义工具、或多agent堆叠文本证据，但额外推理与交互并不能自动弥合感知与证据使用：推理可能建立在缺乏声学基础的文字描述上，中间取证阶段甚至不如直接听；错误观察会使agent排除正确候选，而最终答案对错无法区分"仍不确定"与"被误导的过早承诺"，奖励信号严重欠指引。
+- **主要指标**：- 多步音频推理总体准确率：较竞品音频agent提升5.08%–17.67% - 音频理解与推理：较对应基线提升2.29%–13.10%，分类得分Sound 77.70%、Music 74.66%、Speech 69.57% - 对比最强端到端基线：超过Gemini 2.5 Flash（67.07%
+- **代码**：https://github.com/JinWang79/Think2Listen | **Demo**：暂无
+
+---
+## [Progressive Layer-wise Supervision: Deep-to-Shallow Supervision Annealing for Efficient and Robust Speech Deepfake Detection](https://arxiv.org/abs/2611.20630)
+
+- **方向**：语音前端 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-16
+- **一句话贡献**：语音基座模型微调做深度伪造检测时，XLS-R-128逐层探针显示24层中前15层几乎不携带反欺骗判别信息（层0-7平均EER超40%，层16起才低于12%），即"浅层休眠"，源于SSL表征冗余加仅末层监督。本文提出PLS：所有层共享一个线性分类器，层损失按随训练轮数指数退火的幂次加权，早期集中监督深层、后期均匀铺开唤醒浅层，并以奇偶轮交替锚定主目标。结果在层7提前退出即可用101M参数（原315M
+- **关键技术点**：SOTA反欺骗用SSL基座+Graph Attention/Transformer/Mamba等复杂后端，域外泛化仍脆弱。作者发现标准微调只激活网络顶端：末层分类器的梯度经逐层衰减，浅层停留在预训练几何上，判别信息集中于输出附近，既浪费200M参数容量，也让模型对末层表征形成脆弱的单一依赖。同时证明"从一开始就均匀多层监督"适得其反：过早冲击浅层会破坏预训练层级结构，末层EER相对退化2.2%。
+- **主要指标**：- PLS-Layer17：8数据集平均EER 6.03%，较标准微调7.61%相对降20.8% - OOD分项：25DF 12.99%、ITW 4.16%、DFADD 8.22%、LSV 1.18%、SC 17.68% - 对比Mamba后端SOTA（317M）：239M参数更优 - 早期退出：层
+- **代码**：暂无（论文提及GitHub但未给出URL） | **Demo**：暂无
+
+---
+## [OmniTag-LLM: Multilingual Multitask Speech Tagging](https://arxiv.org/abs/2611.18589)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-17
+- **一句话贡献**：针对多模态大模型缺少"一段音频一次联合标注"的多语言评测、现有基准按单任务打分且以英文为主的问题，本文提出OmniTag-Bench（en/de/es/fr/it五语言，VoxPopuli 8000句）与OmniTag-LLM：固定prompt输出一个含ASR转写、9类情绪、性别、LID、token级NER的JSON对象。评测10个开源MLLM后LoRA微调Qwen3-Omni：五语言汇总WER 
+- **关键技术点**：AIR-Bench、AudioBench、MMAU等套件大多一题一评、面向英文且接受自由格式答案，ML-SUPERB只评编码器表征不评生成；尚无评测考察单模型能否在多语言输入上做结构化五任务联合输出，传统级联需五个专家模型、成本高。
+- **主要指标**：（五语言汇总，OmniTag-LLM vs 基座Qwen3-Omni）： - WER：9.5%（基座10.4%，降0.9） - NER Entity-F1：39.7（基座32.7，+7.0/+21%相对；与同激活的Gemma-4-E4B持平） - 原生情绪集准确率：58.8%（基座29.0%，近乎翻
+- **代码**：暂无（承诺camera-ready开源prompt/scorer/标注管线） | **Demo**：暂无
 
 ---
 ## [From Attention to Semantics: Detecting and Mitigating Sound Event Hallucinations in Large Audio-Language Models](https://arxiv.org/abs/2611.25789)
