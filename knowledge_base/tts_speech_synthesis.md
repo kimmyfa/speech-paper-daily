@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 151 篇
+共 152 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -747,6 +747,15 @@
 - **关键技术点**：修改版Samba架构（Mamba-SWA-MLP），Convolutional Feature Extraction (CFE) block，4层encoder，HiFi-GAN vocoder。
 - **主要指标**：- 参数减少40.79%（32M vs 54.1M） - FLOPs减少13.33% - LSD: 1.07 vs 2.25 baseline（2.1x提升） - STOI: 0.61 vs 0.13（4.7x提升） - SI-SDR: -33.41 vs -41.96（1.25x提升） - MOS
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [PromptTTSD: Controllable Text to Spoken Dialogue Synthesis with Open-Ended Text Descriptions](https://arxiv.org/abs/2611.27601)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-20
+- **一句话贡献**：针对现有对话语音合成缺乏细粒度风格控制、且prompt-TTS数据受预定义标签集封闭约束的问题，本文提出从多人配音有声书自动构造"语音-文本-开放式描述"三元组的可扩展流水线，发布中文8383小时、英文120小时、79%句对带描述的多说话人对话语料PromptDialog。基于SoulX-Podcast（Qwen3-1.7B骨干）以prompt感知微调得到开源对话合成模型PromptTTSD，句级
+- **关键技术点**：对话中说话风格随语境动态变化，现有对话合成系统仅支持标签级控制；已有表达性数据集普遍"外部工具/人工打标签→LLM口头化"，无法覆盖表情、肢体动作、复合情绪、说话人特殊状态等工具难以标注的开放式风格，且缺少真实多人对话语音与叙述上下文的配对资源。
+- **主要指标**：- 对齐质量：句匹配率94.13%、词匹配率94.38%，对LibriHeavy分别+22.74pt、+5.26pt - 说话人归因错误率：LLM 0.29–0.50%，对比pyannoteAI日志器8.70% - 风格控制：PromptTTSD Q-MOS 4.52±0.63、UTMOS 3.43
+- **代码**：https://github.com/bigai-ai/PromptTTSD | **Demo**：https://huggingface.co/spaces/alphappp/PromptDialog-demo
 
 ---
 ## [UtterTune: LoRA-Based Target-Language Pronunciation Edit and Control in Multilingual Text-to-Speech](https://arxiv.org/abs/2508.09767)

@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 107 篇
+共 108 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -963,5 +963,14 @@
 - **关键技术点**：阿拉伯语双层语言现象使方言在词汇、发音、形态上偏离MSA且无标准正字法，用户还常英阿混说；在级联语音智能体中，ASR是错误最先发生且用户无法目视纠正的环节，而现有基准（MGB、QASR、Whisper评测）以MSA或广播语音为主，对生产客服多方言场景覆盖不足。
 - **主要指标**：- 私有集WER：11.69%，比最强外部系统MAI-Transcribe-2（13.51%）低1.83点（95% CI 1.72–1.93，相对下降13.5%），受控子集仍领先0.74点 - 私有集CER：4.76%，九变体全部为十二系统最低 - 九变体宏平均WER：15.52% 对比 MAI-2
 - **代码**：https://github.com/echonova-ai-solutions/arabic-asr-benchmark | **Demo**：暂无
+
+---
+## [Efficient Conversational Multi-Talker ASR with Predicted Speaker-Agnostic Activity Streams](https://arxiv.org/abs/2611.26796)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-19
+- **一句话贡献**：针对多说话人 ASR 中"逐说话人一遍识别 + 完整说话人日志前端"使开销随人数增长的问题，本文将 HEAT 启发式错误分配用于活动条件化 SAC-ASR 全链路：把任意人数合并为两条说话人无关流，识别固定两遍；并用冻结 WavLM+Conformer 的模型从音频单遍直接预测两流 powerset 掩码，彻底去掉滑窗日志与聚类，再以到达序+置换不变联合损失防坍缩。AMI/ICSI 上双流条件化较
+- **关键技术点**：目标说话人 ASR（如 DiCoW）需先做完整日志（滑窗+聚类）获得条件掩码，且每人跑一遍识别，前后端成本均随说话人数线性增长；已有 HEAT 双流方案若沿用标准"先占流"启发式会因流不均衡导致条件失效、两遍输出近乎相同。
+- **主要指标**：- AMI tcORC-WER：D-Casc 17.40%（RTFx 8.7）→ H-Casc 17.69%（RTFx 12.5，快 1.4×，相对代价 1.7%）→ H-Dir 19.11%（RTFx 15.6，总耗时为 D-Casc 的 56%，快 79%，相对代价 8.0–10%） - ICS
+- **代码**：暂无 | **Demo**：暂无
 
 ---

@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 303 篇
+共 304 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1314,6 +1314,15 @@
 - **关键技术点**：现有全双工数据依赖 CANDOR、Seamless Interaction 等自然双人录音或 DuplexDrama 等合成数据，规模受限；DialogueSidon 可从海量在野录音中联合恢复与分离，但两路输出并不等于两个持久参与者。排列不变训练与重叠拼接只能保证局部连续性，无法确定整段对话中每条轨属于谁。
 - **主要指标**：- CANDOR 错轨时间 WT：43.86% → 4.08%（相对降低 90.7%） - 对比注册波形重识别 WT：6.20%，本方法相对再降 34.2% - 最差会话 WT：17.14%，波形重识别为 42.72% - 长上下文（120 s/10 s）WT：1.89%，波形重识别 4.72%（相
 - **代码**：暂无 | **Demo**：https://elpsykongloo.github.io/beyond-two-tracks/
+
+---
+## [SLP-Bench: Evaluating and Improving Acoustic Claims of Reasoning Audio Language Models on Clinical Speech](https://arxiv.org/abs/2611.27810)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-20
+- **一句话贡献**：推理型音频语言模型（ALM）在临床上回答语音问题时会在思维链中做出关于嗓音的声学论断（如气息声、单调），但现有基准只评最终答案，论断是否属实从未对照临床医师的感知评分检验。本文提出SLP-Bench，用LLM抽取器将思维链映射为25个感知维度上的声学论断，与同录音的临床评分逐条对齐，评测事实性、重采样稳定性与跨提问一致性。10个开源推理ALM零样本论断平衡准确率仅0.52–0.58，且最一致的模型
+- **关键技术点**：推理ALM的思维链若包含错误的声学描述，临床医生便无法据此校验模型判断，而现有音频推理基准（MMAU、MMAR等）仅打最终答案分；已有的过程评测参照是通用音频或情绪语音的普通/模型评判，非临床医师感知评分，临床语音上论断的事实性问题基本未被度量。
+- **主要指标**：- 零样本论断BA：10个ALM范围0.52–0.58（随机基线0.5）；最事实为Step-Audio-R1/R1.1与Qwen3-Omni Thinking，最一致为MiniCPM-o 4.5与MOSS-Audio-8B-Thinking，两组不重合；零样本κ均值全部≤0.61 - GRPO cl
+- **代码**：暂无（benchmark需向各数据集提供方申请获批后提供） | **Demo**：暂无
 
 ---
 ## [Conversational Voice Aesthetic Model with Reinforcement Learning from Human Listeners](https://arxiv.org/abs/2610.10868)
