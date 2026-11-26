@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 150 篇
+共 153 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -549,6 +549,15 @@
 - **关键技术点**：现有 SpeechLLM 研究聚焦扩参数、改架构，数据配方很少被系统披露；而真正困难的能力（语码转换、重叠说话、娱乐域音频、推理式音频问答）恰是公共语料缺失的数据问题。此外各任务 token 预算悬殊（TTS/S2ST 输出远超 ASR），朴素混合会让生成任务主导损失、破坏识别核心能力。
 - **主要指标**：- ASR：MLS 6.89 WER（先前最佳 8.20，降 1.31）；VoxPopuli 7.84 vs Gemma4 11.78；FLEURS 5.33（94.7% 词准，超 Qwen3-Omni-30B） - CS-ASR：CS-FLEURS read 7.23 CER vs 32.30（降
 - **代码**：https://github.com/sony-speech/walrus | **Demo**：https://sony-speech.github.io/Walrus-Demo/
+
+---
+## [Granary-v2: Scalable Multilingual Speech Data Curation for Predictable and Controllable Model Outputs](https://arxiv.org/abs/2611.28248)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-24
+- **一句话贡献**：面向指令可控的语音-语言模型，现有语料每条录音通常只有一份转录，模型无法从单条音频学会输出多种有效形态。Granary-v2基于NeMo Curator构建元数据、ASR标注、文本生成三条可复用管线，以"忠实口语转录"为公共源派生对齐的多目标，语言从25种扩到48种，处理约84.36万小时音频，译入英语约14.28万小时。质量过滤实验显示同预算下英语Transformer-TDT九基准平均WER从
+- **关键技术点**：听写、语言学分析、语码转换、翻译等场景对同一录音输出约定不同，单一转录无法教会模型"按指令选择输出形态"，需要把音频与多个对齐目标及指令关联的可复现数据基础。
+- **主要指标**：- 平均WER：高质量标签4.67% vs 全量4.91%；AMI-Cleaned 7.84% vs 8.72% - 吞吐：元数据23音频小时/GPU小时、ASR标注281、质量过滤10400小时/CPU节点小时 - 下游：Nemotron 3.5 Transcribe 7语4.62% WER、FL
+- **代码**：https://github.com/NVIDIA-NeMo/Curator | **Demo**：https://huggingface.co/datasets/nvidia/Granary-v2
 
 ---
 ## [Reproducing the Speech Labels of Qwen3-Omni's Talker: Mimi in bf16, and a Last-Frame Pitfall](https://arxiv.org/abs/2611.32286)
@@ -1331,6 +1340,24 @@
 - **一句话贡献**：针对课堂录音角色划分既要无注册在线推理、又受 GDPR 与未成年人保护约束（原始音频不得离机）的双重难题，本文提出纯结构线索的教师识别流水线：Silero VAD、WeSpeaker 紧凑说话人嵌入、凝聚聚类与小型逻辑回归，用会话相对结构特征（核心是"中心度"）判定教师角色而非音色身份。在英德两语料 292 段录音、63 名教师上做留一教师交叉验证，教师 F1 达 0.81（英语近讲）与 0.87
 - **关键技术点**：说话人分离只解决"谁在何时说"，而课堂部署每节课遇到的都是陌生教师，必须在无注册音频、无逐会话标定的情况下识别教师；常用云端 GPU 大模型分离管线依赖注册且需外传原始音频，同时违反隐私约束，故需要 CPU 端、无标签推理的系统。
 - **主要指标**：- 教师 F1：英语 0.81、德语 0.87，均超伪注册、30 秒监督注册基线，且方差最小 - 对比 pyannote-3.1（8M 参数 CPU 参考）：德语胜出、英语略逊，整体持平 - 端侧部署：Samsung Galaxy S24+ 实时率 0.18，比匹配的 pyannote 快 4.8 
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [S2SCORE: A Textless Unified Evaluation Metric for Speech-to-Speech Translation Systems](https://arxiv.org/abs/2611.29557)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-24
+- **一句话贡献**：S2ST评测长期依赖ASR转写文本指标，只覆盖语义充分度，说话人相似度与自然度需另用工具拼成分裂流水线。本文提出无文本统一评测框架S2SCORE：SONAR、WavLM-SV与log-Mel三路特征经共享MLP送入三个任务头，以xCOMET-XXL、UTMOSv2等教师分数弱监督，再用人工总评校准聚合权重合成单一总分。在5个X-en语对上，无参考变体语义分与人工一致性ρ=0.631超BLASER 
+- **关键技术点**：端到端S2ST去掉中间文本，BLEU/COMET类指标须先ASR转写，引入转录误差且丢弃声学信息；已有语音域指标仍只针对语义单一维度，无法给出整体质量分。
+- **主要指标**：- 语义 vs 人工：S2SCORE-T-QE ρ=0.631 vs BLASER 2.0-QE 0.606（p<0.05） - 说话人相似度 vs 人工ρ=0.862；自然度 vs 人工ρ=0.879 - 统一总分 vs 人工总评：QE ρ=0.714；聚合权重α_T=0.47/α_S=0.28/
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CANDOR: A Multilingual Provenance-Documented Corpus for Dysarthric Speech Research](https://arxiv.org/abs/2611.28930)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-24
+- **一句话贡献**：构音障碍ASR研究受制于语料小、几乎全英语、单病因与许可碎片化。CANDOR汇编61个语料库、17种语言、五类病因，注册2,057名构音障碍说话人与19,538名健康对照，共4,469.7小时（含1,178.8小时障碍语音；732名障碍说话人分布14种非英语，194人说Qwen3-ASR完全不支持的6种语言）。以"可审计注册表"公开构成、许可与来源链，给出七语言ASR基线：held-out合成CE
+- **关键技术点**：领域标杆TORGO仅8名障碍说话人，综述发现每个非英语语言恰由唯一语料库支撑；跨语言结论建立在两三种语言上，病因效应与语料库效应相互混淆。
+- **主要指标**：- 开放许可占比仅语料库29.0%、小时8.2%，量化了再分发瓶颈 - 中文真实CER 33.73%（7人，CI[16.83,59.61]）vs同checkpoint合成4.72%——约7倍差 - 合成增强不迁移：真实+0.11（p=0.884）而匈牙利合成面-15.8点 - severity嵌入h
 - **代码**：暂无 | **Demo**：暂无
 
 ---

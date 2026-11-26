@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 109 篇
+共 110 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -972,6 +972,15 @@
 - **关键技术点**：目标说话人 ASR（如 DiCoW）需先做完整日志（滑窗+聚类）获得条件掩码，且每人跑一遍识别，前后端成本均随说话人数线性增长；已有 HEAT 双流方案若沿用标准"先占流"启发式会因流不均衡导致条件失效、两遍输出近乎相同。
 - **主要指标**：- AMI tcORC-WER：D-Casc 17.40%（RTFx 8.7）→ H-Casc 17.69%（RTFx 12.5，快 1.4×，相对代价 1.7%）→ H-Dir 19.11%（RTFx 15.6，总耗时为 D-Casc 的 56%，快 79%，相对代价 8.0–10%） - ICS
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [From Spatial Perception to Speech Recovery: Binaural Semantic Adaptation for Spatially Grounded Multi-Talker Transcription](https://arxiv.org/abs/2611.29012)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-24
+- **一句话贡献**：现有双耳音频大模型能定位声源却难完整转写重叠语音并正确方位归因。本文构建BiCP-Bench基准（1152条同步onset+384条错时onset、16kHz双耳混合），发现基座MiDashengLM-Spatial的空间感知与语音恢复断层：四选一识别69.27%而自由转录成功率仅26.91%，联合转写归因成功为0；切换参考耳使转录偏向翻转，证明单耳语义编码丢失双耳互补信息。据此提出BiSA：冻结
+- **关键技术点**：空间音频LLM在声源定位与空间问答表现良好，但无法在重叠语音中恢复每位说话人的完整话语并正确空间归因；现有方法把空间感知等同于语义恢复能力，忽视语义通路对双耳互补信息利用不足的根本瓶颈。
+- **主要指标**：- 联合转写正确归因成功率（同步）：57.81% vs 原始0% - 后说话人WER（错时）：29.58% vs 109.47%；错选早期说话人响应170/384→14/384 - 位置条件转录WER：18.12% vs 65.96%；CEC1目标说话人WER 39.60% vs 59.33% - 
+- **代码**：暂无（声明将发布） | **Demo**：暂无
 
 ---
 ## [ClusterVAD: Threshold-Free Unsupervised Voice Activity Detection with Pre-Trained Neural Representations](https://arxiv.org/abs/2611.33059)

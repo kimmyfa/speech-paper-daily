@@ -1,6 +1,6 @@
 # SPEECH LM CODEC（按评分降序）
 
-共 44 篇
+共 45 篇
 
 ## [EntangleCodec: A Unified Discrete Audio Tokenizer via Semantic-Acoustic Entanglement](https://arxiv.org/abs/2606.02739)
 
@@ -225,6 +225,15 @@
 - **关键技术点**：端侧TTS与嵌入式声学设备要求声码器在严格延迟、功耗与内存预算下持续运行，而主流高保真声码器依赖全精度卷积。BNN理论上可带来32倍权重压缩与最高64倍卷积计算削减，但声码合成需精确的谐波连续性与相位结构，把HiFiGAN/Vocos的卷积层逐层替换为二值版本会出现严重的频谱塌落，故BNN此前从未被系统用于神经声码。
 - **主要指标**：- LibriTTS：BiVoC M-STFT 0.962、PESQ 3.447、MCD 3.222、VISQOL 4.779、WER 6.98%，1.08M参数、1.01G OPs/5s - BNN对比：HiFiGAN+BNN PESQ 1.246 / Vocos+BNN PESQ 1.829，B
 - **代码**：https://github.com/Andong-Li-speech/BiVoC | **Demo**：暂无
+
+---
+## [BiSAT: Bidirectionally Aligned Semantic-Acoustic Tokenization for Speech Language Models](https://arxiv.org/abs/2611.30723)
+
+- **方向**：语音大模型 | **子方向**：Codec | **评分**：8/10 | **日期**：2026-11-24
+- **一句话贡献**：面向语音大模型的低比特率单流tokenizer需同时保留声学与语义信息，现有统一方案在单一特征空间内容易互相干扰，且依赖冻结语义教师的固定对齐目标。本文提出BiSAT：声学支（mel重建）与语义支（CTC）各配独立编码器、码本与解码器，通过共享索引量化按两支联合距离选码，实现无须教师的双向对齐，输出25Hz、375bps单码流。基于其构建BiSAT-TTS（0.5B自回归LM+条件流匹配解码器），
+- **关键技术点**：语义增强tokenizer丢弃声学细节、声学导向tokenizer保留过多不利于语言建模的变异；统一tokenizer要么融合表征导致目标干扰，要么以冻结SSL编码器为教师使语义目标静态化；对抗波形重建还会解耦重建质量与码内结构。
+- **主要指标**：- 重建（BiSAT-32k，375bps）：LibriSpeech-PC WER 2.15%、SIM 0.976，优于CosyVoice 3（2.26%/0.969）与X-Codec2（2.27%，800bps） - 冻结码理解：EN ASR WER 37.71%（CosyVoice 3为74.1
+- **代码**：暂无 | **Demo**：https://seekmind-lab.github.io/bisat-demo
 
 ---
 ## [P2PSynCodec: An Ultra-Low-Bitrate Neural Speech Codec with Plain-to-Pseudo Synergistic Vector Quantization](https://arxiv.org/abs/2606.05876)

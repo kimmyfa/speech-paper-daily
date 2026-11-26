@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 308 篇
+共 313 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1296,6 +1296,15 @@
 - **关键技术点**：主流 LALM（如 Qwen3-Omni）只消费单通道 log-mel 输入，方向、距离、运动信息随通道间相位差被丢弃；已有空间音频扩展要么绑定双耳或 FOA 固定格式，要么把空间 token 前置拼接、靠微调隐式学习时间对应，且多为 LoRA 适配，未考察空间适配对通用音频能力的影响。
 - **主要指标**：- SpheraQA 全答对率：60.18%，超 Spatial-Omni-7B（41.65%）18.53pp；仅收单通道 W 的 Gemini 3.1 Pro 为 42.73% - SO-Bench：66.94%（基线 64.61%）；TWNM：71.70%（+25.5pp） - 坐标 35.91
 - **代码**：暂无（论文承诺开源代码与 SpheraQA 基准） | **Demo**：暂无
+
+---
+## [Voice Agents: From Auditory Intelligence to Auditory Agency](https://arxiv.org/abs/2611.29465)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-24
+- **一句话贡献**：语音智能体正把流式语音、持久记忆、推理与工具执行整合进同一运行时，语音因此具备改变数字或物理状态的后果性，组件指标已无法刻画系统实际行为。本综述提出听觉智能与听觉Agency两个概念及统一框架：承诺边界刻画可修正语音证据转化为持久状态或可执行请求的位置，能动性闭环沿观察、验证、恢复补偿与结果沟通追踪授权动作。对744篇文献的梳理给出一致结论：整合进展快于端到端观测，代表性具身基准现实条件下pass
+- **关键技术点**：现有评估以单能力口径进行，而增量语义理解会在话轮未完成时提前触发推理与工具准备，造成过早承诺、越权执行与虚假成功报告；社区缺少区分"听得准"与"做对了"、并把评测证据对齐到agency声明的系统级框架。
+- **主要指标**：- DuplexSLA：900确定性工具案例85.56%@0.648s（级联91.33%@2.77s） - Full-Duplex-Bench v3：最优实时模型工具选择pass@1仅0.600、抢话率96%、任务延时6.89s - grounded服务基准：音频原生系统clean条件pass@1 
+- **代码**：暂无 | **Demo**：暂无
 
 ---
 ## [MOZAIC: An Audio-Video Deepfake Benchmark for Telling What Is Fake](https://arxiv.org/abs/2611.31301)
@@ -2745,6 +2754,42 @@
 - **关键技术点**：Audio LLM 能识别声音却给出有偏时间戳。既有改进方案要么微调加时间编码/token，要么依赖裁剪窗口或已知金标时长；而"注意力定位"类方法（如视频 TG-Heads）在音频上面临头对静音也有响应、目标声音可能缺失、短暂事件夹在长音频中三大障碍。
 - **主要指标**：- RealDESED recording mIoU：Omni/Qwen2-Audio/AF3 由答案的 0.359/0.066/0.108 升至 head-guided 的 0.533/0.480/0.559 - UnAV-100(held-out) mIoU：Omni 0.210→0.346(+
 - **代码**：暂无（论文声明"代码、所选头与设置将公开发布"） | **Demo**：暂无
+
+---
+## [SWIFT: A Handcrafted, Arithmetic-Minimal FPGA Engine for Real-Time Audio Deepfake Detection](https://arxiv.org/abs/2611.29315)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-24
+- **一句话贡献**：现有深伪检测器依赖高功耗神经网络，难以部署到呼叫中心/IoT/移动取证等边缘硬件。SWIFT是无神经网络检测器：在工作合成伪影集中的高频噪声域设计整数前端与两级校准堆叠分类器。软件参考模型在8个基准上最高准确率99.86%、EER低至0.03%；定点前端加线性分类器映射到PYNQ-Z2 FPGA后单帧延迟7.85微秒（127.4k帧/秒）、功耗1.734W、LUT占用11.22%，验证边缘整数深伪
+- **关键技术点**：GAN判别器调优的检测器在扩散/codec LM上泛化差，主流方法依赖大型预训练编码器；边缘SoC缺乏运行这些模型或浮点单元的算力与功耗预算，已有硬件加速停留在数据中心图像/视频量化CNN。
+- **主要指标**：- Accuracy：MLAAD 99.86%、ShiftySpeech 99.78%；EER LibriTTS 0.03% - 对照：MLP 92.96%、单LightGBM 88.62%；SSL法91–93%（XLS-R+CL 93.42%） - FPGA（PYNQ-Z2，50MHz）：7.85
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [CAST: A Deployed Speech-to-Text Cascade for Closed Captioning of Entertainment Television](https://arxiv.org/abs/2611.31055)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-24
+- **一句话贡献**：长篇娱乐电视节目音乐音效密集、口音与串音复杂，冻结Whisper加单次VAD既漏低能量人声造成删除、又给近静音段诱发幻觉。CAST以完全不微调的Whisper large-v3为核心，串联Demucs人声分离、逐级放宽带语义+声学双门控的层级VAD与残差准入、便宜到昂贵的语言识别级联、歌词分流和重复修复。在100个共60.46小时内部资产上WER从6.99%降至5.36%，字幕编辑率从254.2降
+- **关键技术点**：娱乐字幕从混录母带出发，ASR漏词与幻觉被下游对齐不可逆放大；既有工作多只评识别器，几乎不公开商用STT组件的路由决策与失败模式。
+- **主要指标**：- WER：6.99%→5.36%（相对-23.31% vs WhisperX）；SubER 14.72%→11.18% - 删除每千词：28.79→19.06；编辑率254.2→221.9分钟/小时（Wilcoxon p=5.8e-11） - 公开集仅小幅改善：CORAAL 21.52→21.30
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Which Layer to Trust? Layer Selection in Frozen Speech Encoders for Singing-Voice Deepfake Detection under Signal Corruption](https://arxiv.org/abs/2611.29871)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-24
+- **一句话贡献**：冻结自监督语音编码器在歌声深伪检测中的层选择通常只靠开发集和干净音频，无法验证对污染与未见攻击是否泛化。本文在CtrSVDD上对冻结XEUS（19层）/XLS-R（24层）逐层与learned mix训练MHFA头，加噪/混响/编码10条件×4/2种子：干净音频L9-L12优于最后层1.99-5.5pp，mix不超最佳；开发集选层损失2.32-4.13pp EER；噪声/编码下最佳层仍在中间，混响
+- **关键技术点**：层或层加权和常由开发集干净音频挑选，但开发集与训练攻击重叠、测试为未见攻击A09-A14，部署还要扛噪声/混响/编码，两因素很少被同时评估；歌声检测器不易由语音直接迁移。
+- **主要指标**：- 干净main EER：XEUS最佳L10 7.50%，L19高1.99pp（4/4同向）；mix 8.84%劣于最佳单读 - dev选层损失：XEUS高2.32pp、XLS-R高4.13pp（ρ=0.36） - 噪声/编码：最佳层28/30 per-seed落在L9-L12；混响：XEUS L1
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Ultrasound Watermark: Real-time Acoustic Watermarking against Voice Scams on Smartphones](https://arxiv.org/abs/2611.30106)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-24
+- **一句话贡献**：针对TTS/VC声纹克隆诈骗中现有防御离线、遇电话编解码退化、易被自适应攻击绕过的问题，本文提出超声水印：主叫手机用自带扬声器持续发射20kHz六载波超声、麦克风采集口面部运动回波，将相位/幅度运动特征与语音经FiLM融合生成动态水印，被叫端同步生成器-检测器校验跨模态一致性。在22人、8机型、2.5小时同步语料上六类欺骗平均AUC 0.95、端到端延迟<200ms、PESQ 3.99。
+- **关键技术点**：深伪检测靠声学伪影且怕编解码；数字水印多离线、不校验实时性；活体检测只证"有人"无法绑定身份；四类方法均无法满足通话中实时、无需额外硬件、可防自适应攻击的来电验证。
+- **主要指标**：- 六类欺骗平均AUC 0.95 / FPR 0.12；训练TTS/TNR 0.93/0.99 - 同步超声replay/synthesis AUC 0.84/0.88（最难场景）；部分合成r=0.5/0.1 ASR 0.26/0.30 - VoIP：G.711 TPR 0.98、Opus-96k 
+- **代码**：暂无 | **Demo**：https://ultrasoundwatermark.github.io
 
 ---
 ## [Perfect Scores, Misplaced Explanations: A Controlled Study of Explainability in Audio Deepfake Detection](https://arxiv.org/abs/2611.32593)

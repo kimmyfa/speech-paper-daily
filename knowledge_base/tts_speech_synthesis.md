@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 152 篇
+共 155 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -729,6 +729,33 @@
 - **关键技术点**：现有语音-场景生成（VoiceLDM、ImmersiveTTS、VoiceDiT 等）多基于文本到音频扩散模型，将语音与环境声建模为单一混合潜变量，两路异质信号互相干扰；而按独立录音相加构造的仿真场景又缺失真实声景中共享混响与录音条件的语音-环境依赖，难以直接利用野外数据训练。
 - **主要指标**：- Mix WER：6.43%（仿真预训练，ImmersiveTTS 7.91%、VoiceLDM-M 8.44%） - 真实适配后：CLAP 0.293、FAD 3.71（CFG 1/5），对比预训练 CLAP 0.255/FAD 4.76，基线最好 CLAP 仅 0.247 - MOS-SN /
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [Tenlai-TTS 2.0: Continuous-Representation LLM-Based TTS System with End-to-End Training](https://arxiv.org/abs/2611.29226)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-24
+- **一句话贡献**：连续表征可规避离散词元TTS的量化信息损失，但现有方法先单独学习隐空间再在LLM训练前冻结，难以兼顾高保真重建与自回归可预测性。腾讯元宝提出Tenlai-TTS 2.0：能量归一化加固定方差噪声的容量控制高斯瓶颈，将编码器、LLM+AR-DiT头、流匹配解码器与多任务识别模型端到端联合训练，并以可微重建/识别反馈优化隐变量预测，再经DiffusionNFT强化学习。最终模型在Seed-TTS-ev
+- **关键技术点**：主流配方先用VAE学表征并在LLM训练前冻结，LLM无法影响表征的语义-声学平衡，回归/扩散损失不区分解码后改变字词或说话人与几乎无感的预测误差，且误差在长序列生成中累积。
+- **主要指标**：- test-zh：CER 0.77%、SIM 0.811；test-en：WER 1.08%、SIM 0.766（18系统最低WER、最高中文SIM）；test-hard CER 6.29% - 反馈阶段消融：zh CER 0.82%→0.74%、en WER 1.32%→1.27%、hard 8
+- **代码**：暂无 | **Demo**：https://tenlai-tts.github.io/Tenlai-TTS-2.0/
+
+---
+## [SpeechSplice: Pronunciation Control in Encoder-Decoder LLM-based TTS by Replacing Encoder Hidden States](https://arxiv.org/abs/2611.30927)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-24
+- **一句话贡献**：LLM-TTS把文本前端并入端到端序列模型，失去了G2P词典逐条修正发音的接口，常读错专有名词、同形异音词与数字。本文提出免训练的SpeechSplice：用同一冻结编码器分别编码原句与目标读音句，把实体token段的编码器隐状态直接拼回原序列，零权重改动即可推理时局部纠音。在10个系统、17个模型-语言条件上母语听者判定目标读音达98.6%-100.0%，MOS与原始合成无显著差异；并发现仅当解
+- **关键技术点**：VALL-E、CosyVoice2等单序列LLM-TTS取消了可编辑的G2P接口；已有补救（参考音频纠音、语音编辑、LoRA微调、权重编辑）或需目标词录音与优化，或离线进行且被报告引发音质退化乃至语音崩塌。
+- **主要指标**：- 听者选择注入版达目标读音：EN 99.4%、JA 98.6%、ZH 100.0%；日语基准45处基线误读全部纠正 - MOS：三语言均与基线无显著差异（p=0.45/0.74/0.96） - 关键对比：英语96.33% vs VoiceCraft 90.00%（+6.33）、EdiTTS 86.
+- **代码**：https://github.com/Kuri-san-jp/speechsplice | **Demo**：https://kuri-san-jp.github.io/speechsplice/
+
+---
+## [Synthetic Twins: Closing the Gap Between TTS Test Sets and Real Recordings in Turkish ASR Evaluation](https://arxiv.org/abs/2611.30694)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-24
+- **一句话贡献**：现成TTS引擎合成的ASR测试集信息价值很低，但既有研究只证明差距存在、未分解来源。本文为507条土耳其语Common Voice录音构建"合成孪生"阶梯R0-R4，逐级叠加说话人音高、克隆、真实录音通道与语速四个因子，并用预测驱动推断把保真度折算为等效真实录音条数。跨三引擎与6/19识别器面板，说话人克隆显著提升句级难度一致性（Spearman ρ .41→.55），最佳孪生体价值相当于70至1
+- **关键技术点**：已有工作确认合成语音与真实语音存在评测鸿沟——合成品触发21%至34%不存在的失败，但既没有分解缺口成因，也没有回答"合成测试集到底抵多少条真实录音"这一实操问题。
+- **主要指标**：- 句级难度一致性ρ：Chatterbox .41→.55、VoxCPM2 .50→.62（克隆vs现成音色） - 合成集价值：最佳孪生122条（6识别器）/70条（19识别器）vs现成音色9-10条；真实录音上限251/309条 - 误差水平：通道使|Δ|从5.8点缩小到1.9点 - MUSAN+
+- **代码**：https://huggingface.co/datasets/yagmurtuncer/turkasr-bench-twins | **Demo**：暂无
 
 ---
 ## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)
