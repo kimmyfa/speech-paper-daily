@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 304 篇
+共 308 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -1296,6 +1296,15 @@
 - **关键技术点**：主流 LALM（如 Qwen3-Omni）只消费单通道 log-mel 输入，方向、距离、运动信息随通道间相位差被丢弃；已有空间音频扩展要么绑定双耳或 FOA 固定格式，要么把空间 token 前置拼接、靠微调隐式学习时间对应，且多为 LoRA 适配，未考察空间适配对通用音频能力的影响。
 - **主要指标**：- SpheraQA 全答对率：60.18%，超 Spatial-Omni-7B（41.65%）18.53pp；仅收单通道 W 的 Gemini 3.1 Pro 为 42.73% - SO-Bench：66.94%（基线 64.61%）；TWNM：71.70%（+25.5pp） - 坐标 35.91
 - **代码**：暂无（论文承诺开源代码与 SpheraQA 基准） | **Demo**：暂无
+
+---
+## [MOZAIC: An Audio-Video Deepfake Benchmark for Telling What Is Fake](https://arxiv.org/abs/2611.31301)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：8/10 | **日期**：2026-11-25
+- **一句话贡献**：现有音视频深伪基准多只问"真假"，无法度量检测器依赖画面、声音还是编码痕迹。本文提出配对基准MOZAIC：VoxCeleb2的1000身份15014组源对，每组发布真假视频×音频四组合共137745条片段，伪造覆盖FaceFusion换脸、Wan2.2整帧生成与Seed-VC变声，另设BigVGAN声码对照与四个任务。评测显示最佳MLLM四分类仅35.6%，纯声音伪造检出率只有7.5%；PE-AV
+- **关键技术点**：以往基准为二分类标签，假音频常由TTS生成并连带改变时序与唇动；每条片段的多模态真假组合、身份核验任务均付阙如，总体精度无法归因到具体模态线索。
+- **主要指标**：- T1：最佳MLLM Gemini 3.1 Pro仅35.6%（随机25%）；视频伪造检出43.6%对声音伪造7.5% - 训练检测器：PE-AV T1 98.4%、DFD-HR T2 99.9%，较零样本最佳高约63个百分点 - 留出泛化：FaceFusion不参与训练时最佳检测器降至78.3%
+- **代码**：https://github.com/VectorInstitute/mozaic | **Demo**：https://vectorinstitute.github.io/mozaic/
 
 ---
 ## [Cleaner Speech, Weaker Generalization: Revisiting Pitt-Derived Benchmarks for Alzheimer's Disease Detection](https://arxiv.org/abs/2609.00276)
@@ -2736,5 +2745,32 @@
 - **关键技术点**：Audio LLM 能识别声音却给出有偏时间戳。既有改进方案要么微调加时间编码/token，要么依赖裁剪窗口或已知金标时长；而"注意力定位"类方法（如视频 TG-Heads）在音频上面临头对静音也有响应、目标声音可能缺失、短暂事件夹在长音频中三大障碍。
 - **主要指标**：- RealDESED recording mIoU：Omni/Qwen2-Audio/AF3 由答案的 0.359/0.066/0.108 升至 head-guided 的 0.533/0.480/0.559 - UnAV-100(held-out) mIoU：Omni 0.210→0.346(+
 - **代码**：暂无（论文声明"代码、所选头与设置将公开发布"） | **Demo**：暂无
+
+---
+## [Perfect Scores, Misplaced Explanations: A Controlled Study of Explainability in Audio Deepfake Detection](https://arxiv.org/abs/2611.32593)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-25
+- **一句话贡献**：针对音频深伪检测可解释性评估中"fidelity/faithfulness指标可能失效"的问题，本文把摊还式优化掩码解释器（U-Net输出时频软掩码，经可微iSTFT回接冻结wav2vec2 XLS-R 2B检测器，EER 7.4%）与已知位置的受控频带扰动协议结合：该方法在标准指标上接近满分（约1.0/1.0），但定位仅在扰动频带固定时有效（AUC 0.811），频带变动即跌至随机（0.505）
+- **关键技术点**：基于SSL特征的高性能深伪检测器只能判断"是否伪造"而无法说明"哪里泄露伪造"；已有工作直接采用fidelity/faithfulness评价解释质量。本文质疑：当解释器本身按这两个指标优化时，指标满分是否意味着解释真的定位到伪造痕迹。
+- **主要指标**：- 检测器EER：真实场景7.4%，受控固定/变动频带0.0%/0.04% - FID/FTH：优化填充方案1.000/0.999（MLAAD），受控两设置均约1.0 - 定位AUC：固定频带0.811 vs 变动频带0.505（随机0.50）；RMA 0.289 vs 0.124（随机基线0.12
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [DiaCap: Jointly Learning Who Speaks When for Audiovisual Dialogue Captioning](https://arxiv.org/abs/2611.33153)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-25
+- **一句话贡献**：音视频对话字幕要求为每句话同时给出文本、时间戳和说话人外观描述，通用模型难以可靠联合判断"何时说"与"谁在说"。本文提出DiaCap，把话语时间定位与音视频说话人分离在单一模型内联合学习：先用225K合成标注片段SFT，再用2.9K人工校正片段以细粒度奖励做RL。在扩展DiaDemBench-NoSub上时间戳精度TIME达76.59，显著超过Gemini 4 Argon的42.76，音视频分离R
+- **关键技术点**：现有音视频说话人分离只输出匿名聚类，字幕模型时间戳粗糙；根本症结在于话语时序与说话人归属被分开学习，而二者互为依赖——知道谁在说有助于定位边界，准确边界又是正确绑定的前提。
+- **主要指标**：- NoSub预测转写：DiaCap REF 71.70 / ASR 78.99 / TIME 76.59 - 关键对比：TIME较Gemini 4 Argon（42.76）+33.83；GT转写下REF 81.05/80.87、TIME 88.76（+40.68） - 多语言71.67 REF、9
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [BEARING: Who Is Talking to Whom? Grounding Acoustic Direction in Vision for Online Multi-Party Conversation](https://arxiv.org/abs/2611.31735)
+
+- **方向**：语音前端 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-25
+- **一句话贡献**：面向多方会话"谁在对谁说话"，现有系统离线跑单声道片段、用模型自评奖励对齐，丢弃了阵列空间信息。本文提出BEARING：以几何为先，用SRP-PHAT测声源到达方向（DOA），经无标签标定注册进相机图像，兼作视觉提示、活动说话人检测的可靠性加权融合输入和可验证奖励。在AMI与EasyCom共9498条语句上，方向提示把说话人准确率从54%提升至74%；可验证奖励较自评奖励在GRPO下高4.6个百分
+- **关键技术点**：重叠语音、遮挡与画外说话使纯视觉系统难判说话人与受话人；现有基准默认离线访问未来上下文、音频单声道，物理阵列方位信息完全丢弃，且RL对齐依赖模型自评，无法被物理量检验。
+- **主要指标**：- 说话人准确率：视觉54%→视觉+方向74%（池化+20.6点[15.8,24.5]） - GRPO：可验证奖励64.5% vs 自评59.9%（+4.6点[3.8,5.4]）；DPO受话人macro-F1 +23.6点 - 共位验证（AVDIAR<15°）：方向单独59% vs 视觉规则95%，
+- **代码**：暂无（声明将发布） | **Demo**：暂无
 
 ---

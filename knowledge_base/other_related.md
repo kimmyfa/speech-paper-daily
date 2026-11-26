@@ -1,6 +1,6 @@
 # OTHER RELATED（按评分降序）
 
-共 146 篇
+共 150 篇
 
 ## [Autoregressive Guidance of Deep Spatially Selective Filters using Bayesian Tracking for Efficient Extraction of Moving Speakers](https://arxiv.org/abs/2603.23723)
 
@@ -549,6 +549,24 @@
 - **关键技术点**：现有 SpeechLLM 研究聚焦扩参数、改架构，数据配方很少被系统披露；而真正困难的能力（语码转换、重叠说话、娱乐域音频、推理式音频问答）恰是公共语料缺失的数据问题。此外各任务 token 预算悬殊（TTS/S2ST 输出远超 ASR），朴素混合会让生成任务主导损失、破坏识别核心能力。
 - **主要指标**：- ASR：MLS 6.89 WER（先前最佳 8.20，降 1.31）；VoxPopuli 7.84 vs Gemma4 11.78；FLEURS 5.33（94.7% 词准，超 Qwen3-Omni-30B） - CS-ASR：CS-FLEURS read 7.23 CER vs 32.30（降
 - **代码**：https://github.com/sony-speech/walrus | **Demo**：https://sony-speech.github.io/Walrus-Demo/
+
+---
+## [Reproducing the Speech Labels of Qwen3-Omni's Talker: Mimi in bf16, and a Last-Frame Pitfall](https://arxiv.org/abs/2611.32286)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-25
+- **一句话贡献**：Qwen3-Omni的Talker以12.5Hz预测16个codebook生成语音，但其训练标签编码器未随模型发布，社区无法构造匹配标签做音色微调。本文用三路探针逆向识别该编码器：白盒岭回归证实Talker/MTP/Code2Wav的codebook嵌入逐层对应Mimi前16层（MTP R²=0.77–0.89），以13个码LM校准的Talker似然测试证明标签来自moshi包bf16权重的Mim
+- **关键技术点**：社区已知Qwen3-Omni的码可被Mimi解码器解出并直接用Mimi造标签，但"能解码"不等于实现一致：权重是否微调、fp32还是低精度、moshi还是transformers移植、是否预处理均未知，而这些差异在codebook 1–4上分别改变12%（bf16）、15%（换库）、40%（16k带宽限）、67%（响度归一）的码，足以破坏微调对齐。
+- **主要指标**：- Talker对moshi bf16标签的偏好：Λ=-1.212 nats/帧（剔除末帧），22种实现变体中唯一与校准模型排序一致者；transformers bf16仅-0.509 - 末帧能量跳变：未补齐中文+22.3 dB，补齐后-4.9 dB；噪声爆破末句比例49%/55%降至0%/0.3
+- **代码**：https://github.com/elpsykongloo/qwen3-omni-talker-finetune | **Demo**：暂无
+
+---
+## [Lossless Re-Encoding of Vorbis and Opus Audio Files](https://arxiv.org/abs/2611.32641)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：8/10 | **日期**：2026-11-25
+- **一句话贡献**：Vorbis与Opus的熵编码（静态Huffman、固定概率表range coding）不随录音统计自适应，通用压缩器对此类码流仅省0.1-4.1%。本文提出Balrogg——首个Vorbis/Opus无损重压缩器：解析到熵编码阶段解出符号，用自适应上下文混合模型与以编解码器概率表为先验的模型重编码，解码可逐位还原原文件。默认设置下Vorbis音乐省16.2%、Vorbis语音省10.6%、Opu
+- **关键技术点**：Vorbis用静态Huffman码编码码本条目，Opus的CELT层PVQ索引按均匀分布编码，均不利用单个录音的统计冗余；xz、zstd、ZPAQ、bzip3等通用压缩器直接压码流最多省4.1%，而OptiVorbis输出比特不同，不适用校验和/签名需不变的归档场景。
+- **主要指标**：- Vorbis音乐压缩至83.8%（省16.2%），Vorbis语音89.4%，Opus语音94.6% - 关键对比：xz -9e同文件仅省0.5-3.1%，ZPAQ省0.4-4.1%，Balrogg至少多省5.4个百分点；OptiVorbis的2.6-5.8倍节省量且可继续压缩其输出 - 吞吐与
+- **代码**：https://github.com/iczelia/balrogg | **Demo**：暂无
 
 ---
 ## [Speech Entrainment in Multi-Party Conversations with a Digital Agent](https://arxiv.org/abs/2607.22939)
@@ -1313,6 +1331,24 @@
 - **一句话贡献**：针对课堂录音角色划分既要无注册在线推理、又受 GDPR 与未成年人保护约束（原始音频不得离机）的双重难题，本文提出纯结构线索的教师识别流水线：Silero VAD、WeSpeaker 紧凑说话人嵌入、凝聚聚类与小型逻辑回归，用会话相对结构特征（核心是"中心度"）判定教师角色而非音色身份。在英德两语料 292 段录音、63 名教师上做留一教师交叉验证，教师 F1 达 0.81（英语近讲）与 0.87
 - **关键技术点**：说话人分离只解决"谁在何时说"，而课堂部署每节课遇到的都是陌生教师，必须在无注册音频、无逐会话标定的情况下识别教师；常用云端 GPU 大模型分离管线依赖注册且需外传原始音频，同时违反隐私约束，故需要 CPU 端、无标签推理的系统。
 - **主要指标**：- 教师 F1：英语 0.81、德语 0.87，均超伪注册、30 秒监督注册基线，且方差最小 - 对比 pyannote-3.1（8M 参数 CPU 参考）：德语胜出、英语略逊，整体持平 - 端侧部署：Samsung Galaxy S24+ 实时率 0.18，比匹配的 pyannote 快 4.8 
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [ToneMamba: Learning Contextualized Tonal Contours with Boundary-Reset State Space Models](https://arxiv.org/abs/2611.31267)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-25
+- **一句话贡献**：针对普通话连读语音中协同发音与时长变异重塑F0轮廓、而Transformer系ToneNet静态边界嵌入无法约束注意力不越语言边界的问题，本文提出边界感知SSM ToneMamba：在Mamba-2中以音节/词/IPU三级边界触发显式状态重置，结合共享权重双向扫描的通道级融合、Gumbel-Softmax动态音节池化与节奏条件门控。在朗读库FCU-VOICE-360与对话库MCDC-8上分别取得9
+- **关键技术点**：连读语音中音节F0轨迹受邻近声调上下文与时长变异共同塑造；ToneNet虽用静态边界嵌入标记音节/词结构，但注意力本质上无法阻止token跨语言边界聚合，对时长变异大的自发对话建模不足。
+- **主要指标**：- 朗读准确率97.9%，对话准确率74.8% - 关键对比：较ToneNet（97.0%/58.9%）提升+0.9/+15.9个百分点，参数更少（5.4M vs 6.9M） - 消融：仅CE单层重置词级最优（96.2%/63.3%）；节奏修饰器对对话增益最大（72.9%→74.8%） - 表征分析
+- **代码**：https://github.com/fcu-slp/ToneMamba | **Demo**：暂无
+
+---
+## [Lexical Tone and Word Order Matter in Translation: Prosodic Correspondence Across Languages](https://arxiv.org/abs/2611.31276)
+
+- **方向**：语音大模型 | **子方向**：Other | **评分**：7/10 | **日期**：2026-11-25
+- **一句话贡献**：既有翻译语音韵律对应研究仅限欧洲非声调语言（词级音高相关约0.23-0.25）。本文首次系统开展英语与中、泰、越、日、韩五语言的词级基频与能量对应分析，并提出交叉拟合的词调调节与重排覆盖度分析。结果显示亚洲语言对音高相关（0.082-0.151）全部低于同管线法语参照（0.221）；声调调节提升+0.013~+0.027但差距仍在；日韩时间序配对显著高于语义配对（+0.090/+0.116），表明
+- **关键技术点**：先前工作在欧洲配音对上报告词对齐后的正音高/能量相关，但声调语言中F0兼具词义区别功能，可能压低语义对应词的韵律相似度；且原工作假定词序相近，无法区分局部韵律对应与话语级趋势。
+- **主要指标**：- 英-中音高ρ 0.129→调节后0.143（+0.015）；英-越0.113→0.140（+0.027）；英-泰0.151→0.164（+0.013），均仍低于英-法参照0.221 - 英-日0.082、英-韩0.124，证实低对应非声调特有 - 重排：平均Kendall距离日0.241、韩0.
 - **代码**：暂无 | **Demo**：暂无
 
 ---

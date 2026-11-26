@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 108 篇
+共 109 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -972,5 +972,14 @@
 - **关键技术点**：目标说话人 ASR（如 DiCoW）需先做完整日志（滑窗+聚类）获得条件掩码，且每人跑一遍识别，前后端成本均随说话人数线性增长；已有 HEAT 双流方案若沿用标准"先占流"启发式会因流不均衡导致条件失效、两遍输出近乎相同。
 - **主要指标**：- AMI tcORC-WER：D-Casc 17.40%（RTFx 8.7）→ H-Casc 17.69%（RTFx 12.5，快 1.4×，相对代价 1.7%）→ H-Dir 19.11%（RTFx 15.6，总耗时为 D-Casc 的 56%，快 79%，相对代价 8.0–10%） - ICS
 - **代码**：暂无 | **Demo**：暂无
+
+---
+## [ClusterVAD: Threshold-Free Unsupervised Voice Activity Detection with Pre-Trained Neural Representations](https://arxiv.org/abs/2611.33059)
+
+- **方向**：语音前端 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-25
+- **一句话贡献**：VAD是语音管线首步：监督检测器需标注且继承训练域限制，无监督方法依赖手工特征、远场噪声易退化。本文提出ClusterVAD：基于冻结语音基础模型表示，在1.8小时未转写语音上PCA白化+k-means聚类、用响度（sonority）标簇，推理时软分配算帧级语音概率、每条录音拟合双状态HMM做无阈值判决。在12个跨域基准上，7个停顿级参考取得最低DetER（如AMI 8.1%），无需训练即媲美监督
+- **关键技术点**：监督VAD域外不可靠且受标注约定束缚；rVAD、WebRTC等知识驱动方法无法从数据规模获益，在远场、噪声或构音障碍语音上明显退化。核心矛盾是监督可受益于数据、无监督可跨域泛化，二者难以兼得。
+- **主要指标**：- DetER（AMI停顿级）：OLIVE-J调阈值8.1%±0.8，优于Silero 10.8%、INA SSL-VAD 10.6%、rVAD 16.8% - DetER（AMI话轮级）：HuBERT-L无阈值8.4%±2.3（域内pyannote 6.2%仍最低） - LibriVAD：6.5%
+- **代码**：暂无（承诺录用后开源） | **Demo**：https://karlhajal.github.io/ClusterVAD
 
 ---
