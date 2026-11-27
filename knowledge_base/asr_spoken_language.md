@@ -1,6 +1,6 @@
 # ASR SPOKEN LANGUAGE（按评分降序）
 
-共 110 篇
+共 111 篇
 
 ## [VIB-AVSR: Variational Information Bottleneck for Audio-Visual Speech Recognition](https://arxiv.org/abs/2606.29632)
 
@@ -990,5 +990,14 @@
 - **关键技术点**：监督VAD域外不可靠且受标注约定束缚；rVAD、WebRTC等知识驱动方法无法从数据规模获益，在远场、噪声或构音障碍语音上明显退化。核心矛盾是监督可受益于数据、无监督可跨域泛化，二者难以兼得。
 - **主要指标**：- DetER（AMI停顿级）：OLIVE-J调阈值8.1%±0.8，优于Silero 10.8%、INA SSL-VAD 10.6%、rVAD 16.8% - DetER（AMI话轮级）：HuBERT-L无阈值8.4%±2.3（域内pyannote 6.2%仍最低） - LibriVAD：6.5%
 - **代码**：暂无（承诺录用后开源） | **Demo**：https://karlhajal.github.io/ClusterVAD
+
+---
+## [UMAI: UM Aware Inference with a Frozen Qwen3-ASR](https://arxiv.org/abs/2611.34256)
+
+- **方向**：语音大模型 | **子方向**：ASR | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：逐字转写需保留语气词，但Qwen3-ASR-1.7B在AMI eval上语气词F1仅12.2，微调恢复又会改变其余输出。本文提出UMAI：仅用冻结模型一次贪心解码记录的内部状态（28层解码器输出、注意力对齐、帧级后验），经两级带OAS收缩的五类LDA与保序回归校准，在词间隙插入[uh]/[um]，全程无梯度训练。AMI eval语气词F1升至82.6，Nyra从37.2升至96.5，额外耗时仅14
+- **关键技术点**：临床言语评估、不流利分析与TTS数据管线依赖逐字转写，主流识别器大量丢弃语气词；微调/提示/偏置解码会连带改变措辞、标点与数字格式，且已有不流利检测器基于文本或外部特征，无法定位音频中的语气词区间。
+- **主要指标**：- AMI eval语气词F1：12.2→82.6（τ=0.75），召回6.6%→74.0%、精确率保持93.3% - Nyra F1：37.2→96.5（阈值在此选定，作者自注偏乐观） - Exact F1（含uh/um形式正确）：AMI 80.0、Nyra 94.9 - 开销：RTF 0.139
+- **代码**：https://github.com/kdrkdrkdr/umai | **Demo**：暂无
 
 ---

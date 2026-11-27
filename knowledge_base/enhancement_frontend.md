@@ -1,6 +1,6 @@
 # ENHANCEMENT FRONTEND（按评分降序）
 
-共 55 篇
+共 56 篇
 
 ## [faster-enhancer.c: A Dependency-Free int8 Runtime for Streaming Speech Enhancement on Commodity CPUs](https://arxiv.org/abs/2607.25350)
 
@@ -495,5 +495,14 @@
 - **关键技术点**：注册语音/摄像头/阵列几何等条件常缺失；LLM 嵌入器计算重且需 LoRA 微调；冻结 CLAP 对指令极性不敏感（keep/remove 余弦近重合）；既有工作不联合单/多通道、不支持任意 keep/remove 组合或相对空间关系。
 - **主要指标**：- 属性提取：MC SI-SDR 11.11 dB / STOI 0.797 / WER 76.1→33.3%；SC 10.83 dB（语义提示下第二麦仅 +0.28 dB，作者如实分析） - 空间引导提取：SI-SDR 10.53 dB，接近用 oracle DOA 的 SSF 与 oracle 
 - **代码**：暂无 | **Demo**：https://aviad3189.github.io/Textraction/
+
+---
+## [Learning Temporal Stabilization for Double-Talk-Robust Delay Estimation in Acoustic Echo Cancellation](https://arxiv.org/abs/2611.33689)
+
+- **方向**：语音前端 | **子方向**：Enhancement | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：AEC自适应滤波器须先补偿远端参考与麦克风的体时延才收敛，GCC-PHAT在短分析窗持续双讲下产生与真峰同样尖锐的伪峰，灾难性时延跳变且经典中值滤波/置信门控都难压制。本文保留GCC-PHAT为完全不可训练backbone，仅在时延-滞后相关图上叠加13.2K参数因果2D CNN稳定器，利用"真实时延呈持续脊线、双讲伪峰为瞬时尖峰"时序先验甄别。对比调优经典估计器与WebRTC AEC3匹配滤波器
+- **关键技术点**：作者压力测试表明学习型TDE在干扰/低SNR/强混响/喇叭非线性/噪声参考下不如GCC-PHAT，全学习前端MAE高达100-200ms——替换前端路线失败；真正脆弱点仅在算法时延受限下的短窗持续双讲，中值滤波只消一半损伤（21.5→11.7ms），峰锐度门控几乎无效，遗留问题本质是峰的时序可信度判别。
+- **主要指标**：- 恒延+持续双讲：MAE 2.0ms（经典GCC-HT 10.1/AEC3-mf 9.8ms）、粗差2.7%（vs 17.3%/15.3%） - 频繁跳变：3.9ms vs AEC3-mf 20.5ms（约5倍）；真实1A/1B：4.1/5.3ms vs 12.2/14.7ms；100-400ms
+- **代码**：暂无 | **Demo**：暂无
 
 ---

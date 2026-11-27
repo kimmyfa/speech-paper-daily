@@ -1,6 +1,6 @@
 # TTS SPEECH SYNTHESIS（按评分降序）
 
-共 155 篇
+共 159 篇
 
 ## [NepTTS-Bench: Native-Speaker Benchmarking and NepaliMOS for Nepali Text-to-Speech](https://arxiv.org/abs/2611.03718)
 
@@ -758,6 +758,15 @@
 - **代码**：https://huggingface.co/datasets/yagmurtuncer/turkasr-bench-twins | **Demo**：暂无
 
 ---
+## [TigerTTS: Draft-Guided Multi-Frame Parallel Speech-Token Language Model for Fast and Robust Text-to-Speech](https://arxiv.org/abs/2611.34241)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-11-26
+- **一句话贡献**：针对自回归语音token语言模型TTS延迟随序列增长、缺显式对齐致丢字重复、离散codebook限制保真度三大瓶颈，提出TigerTTS：轻量NAR模型显式对齐全句draft，0.15B紧凑AR LLM逐帧精修，每步并行预测3帧×4组共12 token。RTX 4090上CUDA-Graph解码RTF 0.05（约20倍实时），比VoxCPM2快5倍、CosyVoice 2快16倍；SEED上CE
+- **关键技术点**：NAR声学模型快但L1/L2回归只恢复条件均值致过平滑；token LM建模好一对多映射却逐token慢，长句、罕见词、数字串因无对齐而丢词、重复、提前停或跑过末尾。需同时拿到速度与对齐鲁棒性。
+- **主要指标**：- SEED：test-zh CER 1.09（CosyVoice2 1.45）、test-en WER 1.67（2.57） - LibriSpeech test-clean：WER 2.22、N-MOS 4.36、SIM 0.820（CosyVoice2为2.47/3.96/0.745） - R
+- **代码**：暂无 | **Demo**：暂无
+
+---
 ## [Staged Depth-Pruning Distillation of a Flow-Matching Text-to-Speech Teacher: A Compact Hindi Speech Synthesizer](https://arxiv.org/abs/2607.18662)
 
 - **方向**：语音大模型 | **子方向**：TTS | **评分**：8/10 | **日期**：2026-07-19
@@ -1395,5 +1404,32 @@
 - **关键技术点**：自回归 TTS 普遍在离散音频 token 上运行，codec 成为管线中间表示；现有 codec 的解码器靠全局上下文推断偏静态的说话人身份，流式部署时被迫用短 chunk，每块重推身份导致可闻的音色漂移，与实时合成所需的短窗口根本冲突。作者主张这是表示问题而非解码问题。
 - **主要指标**：- 身份控制：SMOS 中改写语音被判与参考同一的评分接近真人同说话人对；跨语言参考时与源的相似度等同真人异说话人对，重复测量 ANOVA 主效应大且显著 - 探针可恢复性：无条件基线探针唯一正确 265 人 vs 本方法 154 人，token 流可恢复身份信息显著下降（配对 McNemar p<
 - **代码**：https://github.com/dcze4/21Codec（论文声明将发布） | **Demo**：暂无
+
+---
+## [InstructTTS-OPD: On-Policy Distillation for Multi-Objective Instruction-Following TTS](https://arxiv.org/abs/2611.33937)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：指令TTS需同时满足指令遵循（IF）、发音可懂（CER）、自然度（MOS），单一标量奖励GRPO联合优化时目标竞争产生跷跷板。本文将图像生成的在线蒸馏OPD迁入语音：各轴先训三个单目标GRPO teacher，再在学生自身SDE rollout上按速度场匹配融合；奖励逐轴选型（Qwen-Omni蒸馏代理替代Gemini judge r=0.95、WER去方言数据、DNSMOS替代有语言偏差的UTM
+- **关键技术点**：标量化合并三目标丢弃方向信息，两轴分歧时贡献抵消、更新漂向最易改进目标；重加权只移动平衡点不消除张力，缺在连续速度场上表达折衷的融合机制。
+- **主要指标**：- IF（Gemini判）：81.1，较标量GRPO 77.0提升4.1pp，逼近IF teacher上限82.1 - CER 2.25（标量GRPO 2.34）、DNSMOS 3.28（2.81→显著超base）、归一化Avg 0.82 vs 0.75 - 盲听偏好：after-RL较base净胜
+- **代码**：暂无 | **Demo**：https://cucl-2.github.io/InstructTTS-OPD
+
+---
+## [A Head-Level Investigative Study of Self-Supervised Backbones for Synthetic Speech Detection](https://arxiv.org/abs/2611.34426)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：SSL骨干深伪检测研究长期止步于层级探针，层内12个注意力头谁在计算伪声判决无人知。本文首次在ASVspoof 5上对冻结WavLM-base与WavLM/Wav2Vec2做头级因果分析：逐头消融发现判决集中在少数检测头、另有头主动干扰，直接置零干扰头无需重训即相对降EER 13%（5.66→4.92）与22%（6.85→5.31）；并找到免探针注意力熵签名——伪声注意力更聚焦，144维熵值逻辑回
+- **关键技术点**：层级探针确认证据集中在SSL中间层，但层一直被视为不可分割原子；模型对未见攻击泛化失效被怀疑与部分头有关，此前无人在反欺骗场景做头级考察。
+- **主要指标**：- 剔除干扰头（无重训）：WavLM EER 5.66%→4.92%、Wav2Vec2 6.85%→5.31% - 熵签名：WavLM train→dev 5.95%（LOAO均值2.98）、Wav2Vec2 9.69% - 单头独立检测最优仅11.3%（全层5.4%）；攻击身份全头可解码76-82
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Evaluating Cine and Tagged MRI-to-Speech Synthesis with Complementary Metrics and MRI-Free Controls](https://arxiv.org/abs/2611.33786)
+
+- **方向**：语音大模型 | **子方向**：TTS | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：舌运动MRI转语音合成过去用Corr2D绝对值夸耀影像贡献，但从不对照"不用MRI也能得到多少"。本文在同一骨干固定下构造两个仅用训练集录音的MRI-free阴性对照——静态平均谱基线与时间对齐队列模板，44人留一人交叉：从未见过MRI的模板Corr2D达0.745/0.664，静态基线占其87-89%；八次确认族对比中七次所有训练配置显著低于模板，CEPSTRAL/ESTOI全败。核心结论：绝对
+- **关键技术点**：受试只念"a souk""a geese"两句节拍器脚本，队列模板即可命中大部分共有结构；被用的0.665-0.820 Corr2D来自被试内共享框架，混入了表征、语料与静态谱偏置三个非影像成分而无校准。
+- **主要指标**：- 模板Corr2D 0.7445(a souk)/0.6638(a geese)全表最优；静态基线0.6631/0.5743（87-89%） - 训练配置cine 0.7393与模板打平（p=0.36），换硬件重训即显著落后（p=0.021）；a geese四配置0.586-0.626全落后（p<
+- **代码**：暂无 | **Demo**：暂无
 
 ---

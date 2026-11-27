@@ -1,6 +1,6 @@
 # SPEECH LM UNDERSTANDING（按评分降序）
 
-共 313 篇
+共 317 篇
 
 ## [VoxPrivacy: A Benchmark for Evaluating Interactional Privacy of Speech Language Models](https://arxiv.org/abs/2601.19956)
 
@@ -2817,5 +2817,41 @@
 - **关键技术点**：重叠语音、遮挡与画外说话使纯视觉系统难判说话人与受话人；现有基准默认离线访问未来上下文、音频单声道，物理阵列方位信息完全丢弃，且RL对齐依赖模型自评，无法被物理量检验。
 - **主要指标**：- 说话人准确率：视觉54%→视觉+方向74%（池化+20.6点[15.8,24.5]） - GRPO：可验证奖励64.5% vs 自评59.9%（+4.6点[3.8,5.4]）；DPO受话人macro-F1 +23.6点 - 共位验证（AVDIAR<15°）：方向单独59% vs 视觉规则95%，
 - **代码**：暂无（声明将发布） | **Demo**：暂无
+
+---
+## [Psychophysics of Duration Perception in Multimodal Large Language Models](https://arxiv.org/abs/2611.33176)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：多模态模型音频侧时长感知极限缺乏量化。本文把Warren(1991)经典旋律时伸缩心理物理实验移植到21个MLLM：将英语耳熟能详儿歌渲染为正弦波旋律，40-3600ms/note共14档探测旋律"丧失整体性"的识别阈值，对照人类中位识别窗（160-1280ms）。零样本全部模型筛查失败；带标注上下文范例后仅7个通过且多在人类窗口内达峰，但峰值随范例语速右移、旋律标题诱发偏差（中性编号后峰值从约5
+- **关键技术点**：LLM时间感知研究集中在文本模态；音频基准只测远高于人类阈值的粗粒度物理量，音乐基准做固定音集类别判断，均未以变化音符时值测量"时长依赖的时间分组崩溃点"，缺少与人类基线可比的心理物理阈值。
+- **主要指标**：- 零样本筛查最高仅38%（Qwen3.5 Omni Plus），21模型全失败；上下文筛查7模型通过（text+audio）vs 4个（audio-only） - 时值组GLMM峰值约50%、落在人类中位窗内；<160ms全员崩解（疑因160ms音频分词块） - Gemini 3.1 Pro：36
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Line-Level Singer Diarization in Multi-Member Pop Songs: A Benchmark, Lead-Vocal Isolation, and Song-Level Decoding](https://arxiv.org/abs/2611.33247)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：粉丝为多成员流行团逐行标注主唱/伴唱，但语音diarization无法迁移：商用服务在5人团平均只认出1.35个说话人、43首中33首塌成单簇。本文定义逐行歌手分离任务，发布ColorCoded-SD基准（K-pop 43首、1740行、3-8人/首、人类一致性89.1%），并提出"主唱隔离+歌唱自适应嵌入+免训练歌级解码"管线，B3-F1较标准管线在ColorCoded-SD提升+0.058（0
+- **关键技术点**：语音diarization假设声纹差异大；偶像团音色刻意趋同、共享制作与音域、乐句间多和声，任务实质是"线已对齐、声纹难分"的分组问题，需重设输入、嵌入与解码三层。
+- **主要指标**：- ColorCoded-SD：B3-F1 0.699、Acc 72.4%（标准管线0.641/66.3%，p=0.012） - IdolSongsJp未见歌手：0.867 vs 0.800（p=0.040），最优组合0.875 - ElevenLabs Scribe v2商用仅0.386 B3-F
+- **代码**：https://huggingface.co/datasets/nagiflow/colorcoded-sd | **Demo**：https://huggingface.co/datasets/nagiflow/colorcoded-sd
+
+---
+## [An offset-drift Kalman filter for continuous emotion recognition and annotation from sparse human reviews](https://arxiv.org/abs/2611.34857)
+
+- **方向**：语音大模型 | **子方向**：Speaker/Verification | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：连续情感识别（CER）预测常成片偏离人工评分，而连续标注需评审实时打分成本高昂。本文提出偏移-漂移卡尔曼滤波器ODKF：把预测误差建模为"每段常数偏移+慢速AR(1)漂移"，以被评审窗口的误差为观测，在线估计状态并直接校正全部未评审窗口，预测器不动。MSP-Conversation上48组配对比较全胜四种简单校正；评审20%窗口后唤醒度逐段CCC从0.47升至0.58、效价从0.33升至0.52。
+- **关键技术点**：预测误差在时间上高度相关（可长时间停在评分均值一侧），理论上次评审应惠及邻域；现有动力学模型建的是情绪本身而非预测误差，自适应/拒识/主动学习要么不用测试时人工输入、要么只决定交接窗口，均未把稀疏评审用于校正未评审窗口。
+- **主要指标**：- 未评审窗口校正损失：唤醒度ODKF −10.60×10⁻⁴ vs Offset-only −9.33、EWMA −9.12；效价−32.64 vs −25.55；48/48配对比较显著 - CCC（20%均匀评审）：唤醒0.470→0.584（pooled 0.627→0.808）、效价0.32
+- **代码**：暂无 | **Demo**：暂无
+
+---
+## [Modality-Shift Contrastive Decoding for Temporally Grounded Audio-Visual Understanding](https://arxiv.org/abs/2611.34162)
+
+- **方向**：语音大模型 | **子方向**：SpeechLM | **评分**：7/10 | **日期**：2026-11-26
+- **一句话贡献**：AV-LLM虽显式建模时间结构，但本文在DAVE上平移音轨做受控探测发现：改变后新对齐事件仅22.7-29.4%被选中，模型仍以34.3-38.0%偏向原对齐事件——对齐没被真正使用。提出免训练解码MSCD：30秒窗内循环半段对调平移已编码音频/视频特征，用（原始−音移−移视+双移）四元组对数差代数消去单模态重排干扰、放大跨模态对齐。OmniVinci/video-SALMONN 2+上DAVE 
+- **关键技术点**：AV-LLM用时间分组/交错token/时间嵌入表示时间结构，但"能表示"≠"会用"；现有免训练解码（AVCD/MAD/CAD等）都针对幻觉抑制，无解码期强化音视时间对齐的方法。
+- **主要指标**：- DAVE：44.3→49.8%（+5.5）/42.5→45.5%（+3.0）；Daily-Omni 61.2→63.3/61.6→64.4（+2.2/+2.8）；AVUT +1.2/+0.6 - 唯一在2骨干×3基准均正增益的解码法（AVCD/MAD/CAD多数持平或负） - ±16s移位"新对
+- **代码**：暂无 | **Demo**：暂无
 
 ---
